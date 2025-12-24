@@ -3,23 +3,30 @@
   "version": "1.0.0",
   "private": true,
   "workspaces": [
-    "apps/*",
-    "apps/planai/*",
-    "apps/mobile/*",
-    "packages/*",
-    "services/*"
-  ],
+  "apps/*",
+  "apps/*/*",
+  "packages/*",
+  "services/*"
+],
   "scripts": {
     "dev": "turbo run dev",
+    "dev:amebogist": "turbo run dev --filter=@boldmind/amebogist",
+    "dev:educenter": "turbo run dev --filter=@boldmind/educenter",
+    "dev:boldmind-os": "turbo run dev --filter=@boldmind/boldmind-os",
+    "dev:boldmind-hub": "turbo run dev --filter=@boldmind/boldmind-hub",
+    "dev:naija-fither": "turbo run dev --filter=@boldmind/naija-fither",
+    "dev:emailscraper": "turbo run dev --filter=@boldmind/emailscraper",
+    "dev:safe-ai": "turbo run dev --filter=@boldmind/safe-ai",
+    "dev:planai": "turbo run dev --filter=@boldmind/planai",
     "build": "turbo run build",
     "test": "turbo run test",
     "lint": "turbo run lint",
     "clean": "turbo run clean && rm -rf node_modules"
   },
   "devDependencies": {
-    "turbo": "^2.0.0",
-    "prettier": "^3.0.0",
     "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "turbo": "^2.0.0",
     "typescript": "^5.3.0"
   },
   "packageManager": "pnpm@8.15.0",
