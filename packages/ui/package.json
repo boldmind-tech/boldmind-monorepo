@@ -1,21 +1,39 @@
 {
   "name": "@boldmind/ui",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
   "main": "./src/index.ts",
   "types": "./src/index.ts",
-  "exports": {
-    ".": "./src/index.ts"
+  "files": [
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "build": "tailwindcss -i ./src/styles/globals.css -o ./dist/globals.css --minify",
+    "dev": "tailwindcss -i ./src/styles/globals.css -o ./dist/globals.css --watch"
   },
-  "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "typescript": "^5.3.0"
+    "@types/node": "^20.11.3",
+    "@types/react": "^18.3.27",
+    "@types/react-dom": "^18.3.7",
+    "autoprefixer": "^10.4.19",
+    "canvas": "^3.2.0",
+    "next": "^14.2.35",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.4.5"
+  },
+  "peerDependencies": {
+    "@types/node": "^20.11.3",
+    "next": "^14.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   }
 }

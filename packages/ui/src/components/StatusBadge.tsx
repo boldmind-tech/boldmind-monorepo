@@ -1,18 +1,13 @@
+// packages/ui/src/components/StatusBadge.tsx
+import React from 'react';
+
 interface StatusBadgeProps {
-  status: '✅ LIVE' | '🔨 BUILDING' | '📋 PLANNED' | '💡 CONCEPT'
+  status: string;
+  color?: string;
 }
 
-const statusColors = {
-  '✅ LIVE': 'text-green-400',
-  '🔨 BUILDING': 'text-yellow-400',
-  '📋 PLANNED': 'text-blue-400',
-  '💡 CONCEPT': 'text-purple-400',
-}
+const StatusBadge: React.FC<StatusBadgeProps> = ({ status, color = 'text-green-400' }) => {
+  return <span className={`text-xs font-bold px-3 py-1 rounded-full bg-black/30 ${color}`}>{status}</span>;
+};
 
-export function StatusBadge({ status }: StatusBadgeProps) {
-  return (
-    <span className={`text-xs font-bold px-3 py-1 rounded-full bg-black/30 ${statusColors[status]}`}>
-      {status}
-    </span>
-  )
-}
+export default StatusBadge;

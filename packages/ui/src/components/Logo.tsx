@@ -1,26 +1,60 @@
+import React from 'react';
+
 interface LogoProps {
-  size?: 'sm' | 'md' | 'lg' | 'xl'
-  className?: string
+  src?: string;
+  size?: 'sm' | 'md' | 'lg' | 'xl' | number;
+  className?: string;
+  alt?: string;
 }
 
-const sizeMap = {
-  sm: 'w-8 h-8 text-xl',
-  md: 'w-12 h-12 text-2xl',
-  lg: 'w-16 h-16 text-4xl',
-  xl: 'w-24 h-24 text-6xl'
-}
+const Logo: React.FC<LogoProps> = ({ 
+  src, 
+  size = 'md',
+  className = '',
+  alt = 'BoldMind Logo'
+}) => {
+  // Handle both string sizes and numeric sizes
+  const getSize = () => {
+    if (typeof size === 'number') return size;
+    
+    const sizeMap = {
+      sm: 32,
+      md: 48,
+      lg: 64,
+      xl: 96
+    };
+    return sizeMap[size];
+  };
 
-export function Logo({ size = 'md', className = '' }: LogoProps) {
+  const pixelSize = getSize();
+
+  // If src is provided, use img tag (compatible with all React apps)
+  if (src) {
+    return (
+      <div className={`inline-block ${className}`}>
+        <img 
+          src={src}
+          alt={alt}
+          width={pixelSize}
+          height={pixelSize}
+          className="object-contain rounded-full"
+          style={{ width: pixelSize, height: pixelSize }}
+        />
+      </div>
+    );
+  }
+
+  // Fallback to styled text logo if no image
   return (
-    <div className={`relative ${className}`}>
-      <div className={`relative ${sizeMap[size]}`}>
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#FFC107] to-[#FFCC00] animate-pulse-slow" />
-        <div className="absolute inset-0.5 rounded-full bg-gradient-to-br from-[#0A1D37] via-[#1a3a5c] to-[#0A1D37] flex items-center justify-center border-2 border-[#FFC107]">
-          <span className={`${sizeMap[size].split(' ')[2]} font-black text-[#FFC107] font-serif select-none`}>
-            B
-          </span>
-        </div>
+    <div className={`flex items-center ${className}`}>
+      <div 
+        className="rounded-full bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center text-white font-bold"
+        style={{ width: pixelSize, height: pixelSize }}
+      >
+        {size === 'sm' || pixelSize <= 32 ? 'BM' : 'BM'}
       </div>
     </div>
-  )
-}
+  );
+};
+
+export default Logo;

@@ -1,6 +1,7 @@
-// app/planai/page.tsx - UPDATED WITH PRODUCT LINKS & DYNAMIC FOOTER
+// apps/web/boldmind-hub/app/planai/page.tsx
 import Link from 'next/link'
-import Image from 'next/image'
+import { Navbar, Footer } from '../../../../../packages/ui/src';
+
 
 const products = [
   {
@@ -18,6 +19,7 @@ const products = [
       'Multi-tenant dashboard'
     ],
     pricing: '₦20k-₦50k/month per client',
+    comingSoon: false,
   },
   {
     name: 'Social Media Content Factory',
@@ -34,6 +36,7 @@ const products = [
       'Analytics aggregation'
     ],
     pricing: '₦30k-₦100k/month',
+    comingSoon: true,
   },
   {
     name: 'Professional Credibility Hubs',
@@ -50,6 +53,7 @@ const products = [
       'Custom domain support'
     ],
     pricing: '₦5k-₦15k one-time',
+    comingSoon: true,
   },
   {
     name: 'AI Business Planning',
@@ -66,6 +70,7 @@ const products = [
       'Competitor analysis'
     ],
     pricing: '₦10k per business plan',
+    comingSoon: true,
   },
   {
     name: 'Financial Forecasting',
@@ -82,6 +87,7 @@ const products = [
       'Scenario planning'
     ],
     pricing: '₦8k/month subscription',
+    comingSoon: true,
   },
   {
     name: 'Investor Readiness Suite',
@@ -98,6 +104,7 @@ const products = [
       'Due diligence checklists'
     ],
     pricing: '₦50k one-time + ₦10k/month',
+    comingSoon: true,
   },
   {
     name: 'Branding & Design Tools',
@@ -114,6 +121,7 @@ const products = [
       'Social media asset packs'
     ],
     pricing: '₦3k per design package',
+    comingSoon: true,
   },
   {
     name: 'Digital Storefronts',
@@ -130,6 +138,7 @@ const products = [
       'Mobile-optimized checkout'
     ],
     pricing: '₦5k setup + ₦2k/month',
+    comingSoon: true,
   },
   {
     name: 'Marketing Automation',
@@ -146,6 +155,7 @@ const products = [
       'A/B testing automation'
     ],
     pricing: '₦10k/month',
+    comingSoon: true,
   },
   {
     name: 'Analytics Dashboard',
@@ -162,27 +172,49 @@ const products = [
       'Real-time dashboards'
     ],
     pricing: '₦8k/month',
+    comingSoon: true,
   },
 ]
 
 export default function PlanAIPage() {
+const navLinks = [
+    { href: "#products", label: "Products" },
+    { href: "#about", label: "About" },
+    { href: "#contact", label: "Contact" }
+  ];
+ const navCta = { href: "https://wa.me/2349138349271", label: "Get Started" };
+  const footerSections = [
+    {
+      title: "Products",
+      links: [
+        { href: "https://amebogist.ng", label: "AmeboGist" },
+        { href: "https://educenter.com.ng", label: "EduCenter" },
+        { href: "/planai", label: "PlanAI" }
+      ]
+    },
+    {
+      title: "Company",
+      links: [
+        { href: "#about", label: "About Us" },
+        { href: "#contact", label: "Contact" },
+        { href: "https://x.com/VillageCircle", label: "Blog" }
+      ]
+    },
+    {
+      title: "Legal",
+      links: [
+        { href: "/privacy-policy", label: "Privacy Policy" },
+        { href: "/terms-of-service", label: "Terms of Service" }
+      ]
+    }
+  ];
   return (
     <main className="relative min-h-screen bg-[#0A1D37] text-white">
       {/* Grain texture */}
       <div className="fixed inset-0 opacity-10 pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXhpeCB0eXBlPSJzYXR1cmF0ZSIgdmFsdWVzPSIwIi8+PC9maWx0ZXI+PHBhdGggZD0iTTAgMGgzMDB2MzAwSDB6IiBmaWx0ZXI9InVybCgjYSkiIG9wYWNpdHk9Ii4wNSIvPjwvc3ZnPg==')]" />
 
       {/* HEADER - Matched home style */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0A1D37]/90 backdrop-blur-lg border-b border-[#FFC107]/20">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link href="/" className="flex items-center gap-3">
-            <Image src="/boldmind-logo.png" alt="BoldMind Logo" width={40} height={40} className="rounded-full" />
-            <span className="font-black text-xl">PlanAI Suite</span>
-          </Link>
-          <Link href="/" className="text-[#FFC107] hover:text-[#FFCC00] font-semibold">
-            ← Back to Home
-          </Link>
-        </div>
-      </nav>
+     <Navbar logoSrc="/boldmind-logo.png" links={navLinks} cta={navCta} />
 
       {/* Hero */}
       <section className="relative py-20 px-6 pt-32">
@@ -229,7 +261,11 @@ export default function PlanAIPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {products.map((product, index) => (
-              <Link key={index} href={`/planai/${product.slug}`} className="group relative block">
+              <Link 
+                key={index} 
+                href={product.comingSoon ? '#' : `/planai/${product.slug}`} 
+                className={`group relative block ${product.comingSoon ? 'cursor-not-allowed' : ''}`}
+              >
                 <div className="bg-gradient-to-br from-[#1a3a5c] to-[#0A1D37] p-8 rounded-2xl border-2 border-[#FFC107]/20 hover:border-[#FFC107] transition-all hover:scale-105">
                   <div className="flex items-start justify-between mb-6">
                     <div>
@@ -254,8 +290,9 @@ export default function PlanAIPage() {
                     ))}
                   </ul>
 
-                  <div className="pt-6 border-t border-[#FFC107]/20">
+                  <div className="pt-6 border-t border-[#FFC107]/20 flex justify-between items-center">
                     <p className="text-[#FFC107] font-bold text-lg">{product.pricing}</p>
+                    {product.comingSoon && <span className="text-xs text-blue-400 font-bold">Coming Soon</span>}
                   </div>
                 </div>
               </Link>
@@ -281,49 +318,7 @@ export default function PlanAIPage() {
       </section>
 
       {/* FOOTER - Dynamic year like home */}
-      <footer className="relative py-12 px-6 border-t border-[#FFC107]/20">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <Image src="/boldmind-logo.png" alt="BoldMind Logo" width={60} height={60} className="rounded-full mb-4" />
-              <p className="text-[#E0E0E0] text-sm">Part of the BoldMind Technology Solution Enterprise</p>
-            </div>
-
-            <div>
-              <h4 className="font-black text-white mb-4">Products</h4>
-              <ul className="space-y-2 text-[#E0E0E0] text-sm">
-                <li><a href="https://amebogist.ng" target="_blank" rel="noopener noreferrer" className="hover:text-[#FFC107]">AmeboGist</a></li>
-                <li><a href="https://educenter.com.ng" target="_blank" rel="noopener noreferrer" className="hover:text-[#FFC107]">EduCenter</a></li>
-                <li><Link href="/planai" className="hover:text-[#FFC107]">PlanAI Suite</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-black text-white mb-4">Company</h4>
-              <ul className="space-y-2 text-[#E0E0E0] text-sm">
-                <li><Link href="/#about" className="hover:text-[#FFC107]">About</Link></li>
-                <li><Link href="/#contact" className="hover:text-[#FFC107]">Contact</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-black text-white mb-4">Connect</h4>
-              <div className="flex gap-4">
-                <a href="https://x.com/VillageCircle" target="_blank" rel="noopener noreferrer" className="text-[#E0E0E0] hover:text-[#FFC107]">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
-                </a>
-                <a href="https://www.linkedin.com/company/boldmind-technology-solution-enterprise" target="_blank" rel="noopener noreferrer" className="text-[#E0E0E0] hover:text-[#FFC107]">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div className="text-center text-[#E0E0E0] text-sm pt-8 border-t border-[#FFC107]/20">
-            © {new Date().getFullYear()} BoldMind Technology Solution Enterprise. All rights reserved.
-          </div>
-        </div>
-      </footer>
+    <Footer logoSrc="/logo.png" sections={footerSections} />
     </main>
   )
 }

@@ -1,13 +1,43 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "lib": ["DOM", "ES2022"],
-    "strict": true,
-    "skipLibCheck": true,
-    "isolatedModules": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "checkJs": false,
+    "jsx": "preserve",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "removeComments": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true
-  }
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@boldmind/ui": ["./packages/ui/src"],
+      "@boldmind/ui/*": ["./packages/ui/src/*"],
+      "@boldmind/ai": ["./packages/ai/src"],
+      "@boldmind/ai/*": ["./packages/ai/src/*"],
+      "@boldmind/auth": ["./packages/auth/src"],
+      "@boldmind/auth/*": ["./packages/auth/src/*"],
+      "@boldmind/api-client": ["./packages/api-client/src"],
+      "@boldmind/api-client/*": ["./packages/api-client/src/*"],
+      "@boldmind/database": ["./packages/database/src"],
+      "@boldmind/database/*": ["./packages/database/src/*"],
+      "@boldmind/utils": ["./packages/utils/src"],
+      "@boldmind/utils/*": ["./packages/utils/src/*"],
+      "@boldmind/payments": ["./packages/payments/src"],
+      "@boldmind/payments/*": ["./packages/payments/src/*"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "dist", ".next", "build"]
 }

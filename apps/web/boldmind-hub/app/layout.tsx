@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Footer } from "../../../../packages/ui/src/components/Footer";
 
 
 import "./globals.css";

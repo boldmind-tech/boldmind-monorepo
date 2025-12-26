@@ -1,49 +1,60 @@
-// app/page.tsx - WITH REAL LOGO
+// apps/web/boldmind-hub/app/page.tsx
+"use client";
+import { Navbar, Footer } from '../../../../packages/ui/src';
 import Link from 'next/link'
 import Image from 'next/image'
+import { useState } from 'react'
 
 export default function Home() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // Keep for compatibility if needed, but Navbar has internal state
+
+  const navLinks = [
+    { href: "#products", label: "Products" },
+    { href: "#about", label: "About" },
+    { href: "#contact", label: "Contact" }
+  ];
+
+  const navCta = { href: "https://wa.me/2349138349271", label: "Get Started" };
+
+   const footerSections = [
+    {
+      title: "Products",
+      links: [
+        { href: "https://amebogist.ng", label: "AmeboGist" },
+        { href: "https://educenter.com.ng", label: "EduCenter" },
+        { href: "/planai", label: "PlanAI" }
+      ]
+    },
+    {
+      title: "Company",
+      links: [
+        { href: "#about", label: "About Us" },
+        { href: "#contact", label: "Contact" },
+        { href: "https://x.com/VillageCircle", label: "Blog" }
+      ]
+    },
+    {
+      title: "Legal",
+      links: [
+        { href: "/privacy-policy", label: "Privacy Policy" },
+        { href: "/terms-of-service", label: "Terms of Service" }
+      ]
+    }
+  ];
+
   return (
     <main className="relative min-h-screen bg-[#0A1D37] text-white overflow-x-hidden">
       {/* Grain texture overlay */}
-      <div className="fixed inset-0 opacity-10 pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXhpeCB0eXBlPSJzYXR1cmF0ZSIgdmFsdWVzPSIwIi8+PC9maWx0ZXI+PHBhdGggZD0iTTAgMGgzMDB2MzAwSDB6IiBmaWx0ZXI9InVybCgjYSkiIG9wYWNpdHk9Ii4wNSIvPjwvc3ZnPg==')]" />
+      <div className="fixed inset-0 opacity-10 pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZWRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXhpeCB0eXBlPSJzYXR1cmF0ZSIgdmFsdWVzPSIwIi8+PC9maWx0ZXI+PHBhdGggZD0iTTAgMGgzMDB2MzAwSDB6IiBmaWx0ZXI9InVybCgjYSkiIG9wYWNpdHk9Ii4wNSIvPjwvc3ZnPg==')]" />
 
-      {/* NAVIGATION BAR */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0A1D37]/90 backdrop-blur-lg border-b border-[#FFC107]/20">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link href="/" className="flex items-center gap-3">
-            <Image 
-              src="/boldmind-logo.png" 
-              alt="BoldMind Logo" 
-              width={40} 
-              height={40}
-              className="rounded-full"
-            />
-            <span className="font-black text-xl hidden md:block">BoldMind</span>
-          </Link>
-
-          <div className="hidden md:flex items-center gap-8">
-            <Link href="#products" className="text-[#E0E0E0] hover:text-[#FFC107] transition-colors font-semibold">Products</Link>
-            <Link href="#about" className="text-[#E0E0E0] hover:text-[#FFC107] transition-colors font-semibold">About</Link>
-            <Link href="#contact" className="text-[#E0E0E0] hover:text-[#FFC107] transition-colors font-semibold">Contact</Link>
-            <a href="https://wa.me/2349138349271" target="_blank" rel="noopener noreferrer" className="px-6 py-2 bg-[#FFC107] text-[#0A1D37] font-bold rounded-lg hover:bg-[#FFCC00] transition-all">
-              Get Started
-            </a>
-          </div>
-
-          <button className="md:hidden text-[#FFC107]">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-        </div>
-      </nav>
+      {/* NAVIGATION BAR - Use shared Navbar */}
+      <Navbar logoSrc="/logo.png" links={navLinks} cta={navCta} />
 
       {/* HERO SECTION */}
       <section className="relative min-h-screen flex flex-col items-center justify-center px-6 py-20 pt-32">
         <div className="relative mb-12">
           <Image 
-            src="/boldmind-logo.png" 
+            src="/logo.png" 
             alt="BoldMind Logo" 
             width={256} 
             height={256}
@@ -206,60 +217,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+    <Footer logoSrc="/logo.png" sections={footerSections} />
 
-      {/* FOOTER */}
-      <footer className="relative py-12 px-6 border-t border-[#FFC107]/20">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <Image 
-                src="/boldmind-logo.png" 
-                alt="BoldMind Logo" 
-                width={60} 
-                height={60}
-                className="rounded-full mb-4"
-              />
-              <p className="text-[#E0E0E0] text-sm">
-                Empowering 1 million Nigerian entrepreneurs by 2030.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="font-black text-white mb-4">Products</h4>
-              <ul className="space-y-2 text-[#E0E0E0] text-sm">
-                <li><a href="https://amebogist.ng" target="_blank" rel="noopener noreferrer" className="hover:text-[#FFC107] transition-colors">AmeboGist</a></li>
-                <li><a href="https://educenter.com.ng" target="_blank" rel="noopener noreferrer" className="hover:text-[#FFC107] transition-colors">EduCenter</a></li>
-                <li><Link href="/planai" className="hover:text-[#FFC107] transition-colors">PlanAI</Link></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="font-black text-white mb-4">Company</h4>
-              <ul className="space-y-2 text-[#E0E0E0] text-sm">
-                <li><Link href="#about" className="hover:text-[#FFC107] transition-colors">About Us</Link></li>
-                <li><Link href="#contact" className="hover:text-[#FFC107] transition-colors">Contact</Link></li>
-                <li><a href="https://x.com/VillageCircle" target="_blank" rel="noopener noreferrer" className="hover:text-[#FFC107] transition-colors">Blog</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="font-black text-white mb-4">Legal</h4>
-              <ul className="space-y-2 text-[#E0E0E0] text-sm">
-                <li><a href="/privacy-policy" className="hover:text-[#FFC107] transition-colors">
-                  Privacy Policy
-                </a></li>
-                <li><a href="/terms-of-service" className="hover:text-[#FFC107] transition-colors">
-                  Terms of Service
-                </a></li>
-              </ul>
-            </div>
-          </div>
-
-          <p className="text-center text-sm text-[#E0E0E0]/50">
-            &copy; {new Date().getFullYear()} BoldMind Technology Solution Enterprise. All rights reserved.
-          </p>
-        </div>
-      </footer>
     </main>
   )
 }
