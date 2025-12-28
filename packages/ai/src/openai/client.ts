@@ -53,16 +53,40 @@ export async function generateImage(
     size,
     quality,
   });
+  const imageData = response.data?.[0];
 
-  return response.data[0]?.url || '';
+  if (!imageData?.url) {
+    throw new Error('Failed to generate image');
+  }
+
+  return imageData.url;
+
 }
 
-export async function transcribeAudio(audioBuffer: Buffer) {
-  const file = new File([audioBuffer], 'audio.mp3', { type: 'audio/mpeg' });
-  
+// Alternative transcription using OpenAI SDK directly - QUICK FIX
+export async function transcribeAudioWithSDK(audioData: File | Buffer | Uint8Array) {
+  let fileToTranscribe: File;
+
+  if (audioData instanceof File) {
+    fileToTranscribe = audioData;
+  } else if (Buffer.isBuffer(audioData)) {
+    // Convert Buffer to Uint8Array first
+    const uint8Array = new Uint8Array(
+      audioData.buffer,
+      audioData.byteOffset,
+      audioData.byteLength
+    ) as any; // Type assertion
+
+    fileToTranscribe = new File([uint8Array], 'audio.mp3', { type: 'audio/mpeg' });
+  } else {
+    // Type assertion for Uint8Array
+    const data = audioData as any;
+    fileToTranscribe = new File([data], 'audio.mp3', { type: 'audio/mpeg' });
+  }
+
   const transcription = await openai.audio.transcriptions.create({
-    file,
-    model: 'whisper-1',
+    file: fileToTranscribe,
+    model: "whisper-1",
   });
 
   return transcription.text;

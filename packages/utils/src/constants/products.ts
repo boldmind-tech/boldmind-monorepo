@@ -1,4 +1,4 @@
-export type ProductStatus = 'draft' | 'building' | 'beta' | 'live' | 'archived' | 'concept';
+export type ProductStatus = 'live' | 'building' | 'new' | 'planned' | 'concept';
 export type ProductCategory = 'media' | 'education' | 'ai' | 'productivity' | 'security' | 'health' | 'marketplace' | 'fintech' | 'utilities' | 'social';
 
 export interface Product {

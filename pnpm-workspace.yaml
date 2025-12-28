@@ -1,8 +1,7 @@
 packages:
-  - 'apps/*'
-  - 'apps/*/*'
-  - 'apps/planai/*'
-  - 'apps/mobile/*'
-  - 'packages/*'
-  - 'services/*'
-  - 'tools/*'
+  - "apps/*"
+  - "apps/web/*"
+  - "apps/planai/*"
+  - "apps/mobile/*"
+  - "packages/*"
+  - "services/*"

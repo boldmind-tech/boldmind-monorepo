@@ -1,4 +1,4 @@
-import client, { api } from './client';
+import client from './client';
 
 // Type-safe wrapper
 export const typedApi = {

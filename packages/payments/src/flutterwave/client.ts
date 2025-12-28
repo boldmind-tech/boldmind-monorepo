@@ -4,8 +4,7 @@ import { PaymentData, PaymentResponse, PaymentVerificationResponse, PaymentConfi
 export class FlutterwaveClient {
   private baseURL = 'https://api.flutterwave.com/v3';
   private secretKey: string;
-  private publicKey: string;
-
+  public publicKey: string;
   constructor(config: PaymentConfig) {
     this.secretKey = config.secretKey;
     this.publicKey = config.publicKey;

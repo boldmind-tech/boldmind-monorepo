@@ -1,200 +1,111 @@
 'use client';
-
+import { Video, Calendar, TrendingUp, Instagram, Youtube, Facebook, Twitter } from 'lucide-react';
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@boldmind/ui/components/Card';
-import { Button } from '@boldmind/ui/components/Button';
-import { Input } from '@boldmind/ui/components/Input';
-import { Textarea } from '@boldmind/ui/components/Textarea';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@boldmind/ui/components/Tabs';
-import { useAI } from '@boldmind/ai';
-import { toast } from 'react-hot-toast';
 
-export default function SocialFactoryPage() {
-  const [topic, setTopic] = useState('');
-  const [platform, setPlatform] = useState('instagram');
-  const [tone, setTone] = useState('professional');
-  const [loading, setLoading] = useState(false);
-  const [content, setContent] = useState('');
-  
-  const { generateContent } = useAI();
-
-  const handleGenerate = async () => {
-    if (!topic.trim()) {
-      toast.error('Please enter a topic');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const result = await generateContent({
-        prompt: `Generate ${platform} content about ${topic} with ${tone} tone`,
-        type: 'social-media',
-        platform,
-      });
-      setContent(result.content);
-      toast.success('Content generated successfully!');
-    } catch (error) {
-      toast.error('Failed to generate content');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const platforms = [
-    { id: 'instagram', name: 'Instagram', icon: '📸' },
-    { id: 'twitter', name: 'Twitter', icon: '🐦' },
-    { id: 'linkedin', name: 'LinkedIn', icon: '💼' },
-    { id: 'facebook', name: 'Facebook', icon: '👥' },
-    { id: 'tiktok', name: 'TikTok', icon: '🎵' },
-  ];
-
-  const tones = [
-    { id: 'professional', name: 'Professional' },
-    { id: 'casual', name: 'Casual' },
-    { id: 'funny', name: 'Funny' },
-    { id: 'inspirational', name: 'Inspirational' },
-    { id: 'educational', name: 'Educational' },
-  ];
+export default function Home() {
+  const [activePlatform, setActivePlatform] = useState('all');
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Social Media Content Factory
           </h1>
-          <p className="text-gray-600">
-            Generate, schedule, and publish content across all platforms
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            AI-powered video generation and multi-platform publishing automation.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Panel - Input */}
-          <Card className="lg:col-span-1">
-            <CardHeader>
-              <CardTitle>Content Generator</CardTitle>
-              <CardDescription>
-                Create amazing content in seconds
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Topic</label>
-                <Input
-                  placeholder="What's your content about?"
-                  value={topic}
-                  onChange={(e) => setTopic(e.target.value)}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Platform</label>
-                <div className="flex flex-wrap gap-2">
-                  {platforms.map((p) => (
-                    <Button
-                      key={p.id}
-                      variant={platform === p.id ? 'default' : 'outline'}
-                      onClick={() => setPlatform(p.id)}
-                      className="flex items-center gap-2"
-                    >
-                      <span>{p.icon}</span>
-                      {p.name}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Tone</label>
-                <div className="flex flex-wrap gap-2">
-                  {tones.map((t) => (
-                    <Button
-                      key={t.id}
-                      variant={tone === t.id ? 'default' : 'outline'}
-                      onClick={() => setTone(t.id)}
-                    >
-                      {t.name}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-
-              <Button
-                onClick={handleGenerate}
-                disabled={loading}
-                className="w-full"
-                size="lg"
-              >
-                {loading ? 'Generating...' : 'Generate Content'}
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Right Panel - Output & Features */}
-          <div className="lg:col-span-2 space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Generated Content</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {content ? (
-                  <div className="space-y-4">
-                    <Textarea
-                      value={content}
-                      onChange={(e) => setContent(e.target.value)}
-                      className="min-h-[200px]"
-                    />
-                    <div className="flex gap-2">
-                      <Button variant="outline">Copy</Button>
-                      <Button variant="outline">Save Draft</Button>
-                      <Button>Schedule Post</Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center py-12 text-gray-500">
-                    <div className="text-6xl mb-4">✨</div>
-                    <p>Your content will appear here</p>
-                    <p className="text-sm">Enter a topic and click generate</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            <Tabs defaultValue="calendar">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="calendar">Content Calendar</TabsTrigger>
-                <TabsTrigger value="analytics">Analytics</TabsTrigger>
-                <TabsTrigger value="automation">Automation</TabsTrigger>
-              </TabsList>
-              <TabsContent value="calendar">
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="text-center py-8 text-gray-500">
-                      Content calendar coming soon...
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              <TabsContent value="analytics">
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="text-center py-8 text-gray-500">
-                      Analytics dashboard coming soon...
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              <TabsContent value="automation">
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="text-center py-8 text-gray-500">
-                      Automation workflows coming soon...
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
+        {/* Platform Tabs */}
+        <div className="flex justify-center mb-12">
+          <div className="inline-flex bg-white rounded-lg p-1 shadow-sm">
+            <button
+              onClick={() => setActivePlatform('all')}
+              className={`px-4 py-2 rounded-md ${activePlatform === 'all' ? 'bg-blue-600 text-white' : 'text-gray-600'}`}
+            >
+              All Platforms
+            </button>
+            <button
+              onClick={() => setActivePlatform('youtube')}
+              className={`px-4 py-2 rounded-md flex items-center ${activePlatform === 'youtube' ? 'bg-red-600 text-white' : 'text-gray-600'}`}
+            >
+              <Youtube className="h-4 w-4 mr-2" />
+              YouTube
+            </button>
+            <button
+              onClick={() => setActivePlatform('instagram')}
+              className={`px-4 py-2 rounded-md flex items-center ${activePlatform === 'instagram' ? 'bg-pink-600 text-white' : 'text-gray-600'}`}
+            >
+              <Instagram className="h-4 w-4 mr-2" />
+              Instagram
+            </button>
+            <button
+              onClick={() => setActivePlatform('facebook')}
+              className={`px-4 py-2 rounded-md flex items-center ${activePlatform === 'facebook' ? 'bg-blue-700 text-white' : 'text-gray-600'}`}
+            >
+              <Facebook className="h-4 w-4 mr-2" />
+              Facebook
+            </button>
+            <button
+              onClick={() => setActivePlatform('twitter')}
+              className={`px-4 py-2 rounded-md flex items-center ${activePlatform === 'twitter' ? 'bg-blue-400 text-white' : 'text-gray-600'}`}
+            >
+              <Twitter className="h-4 w-4 mr-2" />
+              Twitter
+            </button>
           </div>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+          <div className="bg-white p-6 rounded-xl shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-lg bg-purple-50 text-purple-600">
+                <Video className="h-6 w-6" />
+              </div>
+              <span className="text-green-600 text-sm font-semibold">+24%</span>
+            </div>
+            <div className="text-2xl font-bold text-gray-900">1,247</div>
+            <div className="text-gray-500 text-sm">Videos Generated</div>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-lg bg-blue-50 text-blue-600">
+                <Calendar className="h-6 w-6" />
+              </div>
+              <span className="text-green-600 text-sm font-semibold">+12%</span>
+            </div>
+            <div className="text-2xl font-bold text-gray-900">324</div>
+            <div className="text-gray-500 text-sm">Posts Scheduled</div>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-lg bg-green-50 text-green-600">
+                <TrendingUp className="h-6 w-6" />
+              </div>
+              <span className="text-green-600 text-sm font-semibold">+18%</span>
+            </div>
+            <div className="text-2xl font-bold text-gray-900">89%</div>
+            <div className="text-gray-500 text-sm">Engagement Rate</div>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-lg bg-yellow-50 text-yellow-600">
+                <Video className="h-6 w-6" />
+              </div>
+              <span className="text-green-600 text-sm font-semibold">-15%</span>
+            </div>
+            <div className="text-2xl font-bold text-gray-900">2.4h</div>
+            <div className="text-gray-500 text-sm">Time Saved/Day</div>
+          </div>
+        </div>
+
+        {/* Generate Button */}
+        <div className="text-center">
+          <button className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700">
+            Generate AI Video Content
+          </button>
         </div>
       </div>
     </div>

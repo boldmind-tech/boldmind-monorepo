@@ -4,7 +4,7 @@ import { PaymentData, PaymentResponse, PaymentVerificationResponse, PaymentConfi
 export class PaystackClient {
   private baseURL = 'https://api.paystack.co';
   private secretKey: string;
-  private publicKey: string;
+  public publicKey: string;
 
   constructor(config: PaymentConfig) {
     this.secretKey = config.secretKey;

@@ -1,0 +1,33 @@
+{
+  "web": {
+    "boldmind-hub": 3000,
+    "amebogist": 3001,
+    "educenter": 3002,
+    "boldmind-os": 3003,
+    "naija-fither": 3004,
+    "emailscraper-pro": 3005,
+    "safe-naija": 3006,
+    "afrohustle-os": 3017,
+    "naijagig-matcher": 3018,
+    "kolo-ai": 3019,
+    "borderless-remit": 3020,
+    "receipt-genius": 3021,
+    "power-alert": 3022,
+    "farmgate-direct": 3023,
+    "afrocopy-ai": 3024,
+    "skill2cash": 3025,
+    "anontruth-mic": 3026
+  },
+  "planai": {
+    "receptionist": 3007,
+    "social-factory": 3008,
+    "credibility-hubs": 3009,
+    "business-planning": 3010,
+    "financial-forecasting": 3011,
+    "investor-readiness": 3012,
+    "branding-design": 3013,
+    "digital-storefronts": 3014,
+    "marketing-automation": 3015,
+    "analytics-dashboard": 3016
+  }
+}

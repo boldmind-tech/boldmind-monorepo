@@ -64,7 +64,7 @@ const Footer: React.FC<FooterProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
           {/* Logo and Description */}
           <div className="md:col-span-2">
-            <Logo size="lg" />
+            <Logo size="lg" src="/logo.png"/>
             <p className="mt-4 text-gray-300 max-w-md">
               Naija-authentic, AI-first, execution-focused technology solutions. 
               Empowering 1 million Nigerian entrepreneurs by 2030 through our complete ecosystem.

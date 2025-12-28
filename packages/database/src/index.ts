@@ -1,28 +1,28 @@
-export * from './mongodb/client';
-export * from './mongodb/models';
+// Re-export MongoDB
+export { connectToDatabase, disconnectFromDatabase } from './mongodb/client';
+export type { DatabaseConnection } from './mongodb/client';
+
+// Re-export models
+export { User, Product, Subscription, Lead } from './mongodb/models';
+export type { IUser, IProduct, ISubscription, ILead } from './mongodb/models';
 
 // PostgreSQL exports (for SAFE AI)
 export { getPostgresClient } from './postgres/client';
 export type { PostgresClient } from './postgres/client';
 
-// Prisma client will be imported dynamically
-
-// MongoDB connection helper
-export { connectToDatabase } from './mongodb/client';
-
-// Models for easy import
-export { User, Product, Subscription, Lead } from './mongodb/models';
-export type { IUser, IProduct, ISubscription, ILead } from './mongodb/models';
-
-// Utility functions
+// Utility functions - FIXED VERSION
 export async function healthCheck() {
   try {
-    // Check MongoDB
+    // Dynamically import to avoid circular dependencies
+    const { connectToDatabase } = await import('./mongodb/client');
     const { db: mongoDb } = await connectToDatabase();
-    await mongoDb.command({ ping: 1 });
+    
+    // Use proper mongoose method for health check
+    const adminDb = mongoDb.db?.admin();
+    const pingResult = await adminDb?.ping();
     
     return {
-      mongodb: 'connected',
+      mongodb: pingResult?.ok === 1 ? 'connected' : 'disconnected',
       timestamp: new Date().toISOString()
     };
   } catch (error) {
@@ -31,15 +31,16 @@ export async function healthCheck() {
   }
 }
 
-// Initialize database connections
+// Initialize database connections - FIXED VERSION
 export async function initializeDatabases() {
   try {
-    // Connect to MongoDB
-    const mongoClient = await connectToDatabase();
+    // Dynamically import to avoid circular dependencies
+    const { connectToDatabase } = await import('./mongodb/client');
+    const connection = await connectToDatabase();
     console.log('✅ MongoDB connected successfully');
     
     return {
-      mongo: mongoClient
+      mongo: connection
     };
   } catch (error) {
     console.error('❌ Failed to initialize databases:', error);
@@ -47,11 +48,12 @@ export async function initializeDatabases() {
   }
 }
 
-// Graceful shutdown
+// Graceful shutdown - FIXED VERSION
 export async function disconnectDatabases() {
   try {
-    const { client: mongoClient } = await connectToDatabase();
-    await mongoClient.close();
+    // Dynamically import to avoid circular dependencies
+    const { disconnectFromDatabase } = await import('./mongodb/client');
+    await disconnectFromDatabase();
     console.log('✅ MongoDB disconnected');
   } catch (error) {
     console.error('Error disconnecting databases:', error);
