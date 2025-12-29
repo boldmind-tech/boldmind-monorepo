@@ -2,9 +2,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Navbar, Footer } from '@boldmind/ui';
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://boldmind.ng';
+const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || 'BoldMind Technology Solutions';
 
 export default function HomePage() {
   const [entrepreneurs, setEntrepreneurs] = useState(0);
@@ -288,11 +290,10 @@ export default function HomePage() {
               </span>
             </h1>
 
-            <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed">
-              We're a Nigerian tech ecosystem creating{' '}
-              <span className="text-[#FFC800] font-semibold">impact-driven products</span>
-              that solve fundamental problems through authentic media, structured education, and
-              AI-powered technology.
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed">
+              Welcome to <span className="font-bold">{SITE_NAME}</span> - 
+              a Nigerian tech ecosystem creating impact-driven products
+              that solve fundamental problems.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">

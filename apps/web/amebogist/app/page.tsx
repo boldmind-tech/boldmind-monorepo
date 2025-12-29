@@ -1,4 +1,4 @@
-import { Rocket, Users, Zap, Shield, Sparkles, ArrowRight } from 'lucide-react';
+import { Rocket, Users, Zap, Shield, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Home() {

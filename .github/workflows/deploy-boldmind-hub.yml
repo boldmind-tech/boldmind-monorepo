@@ -1,28 +1,47 @@
-ame: Deploy BoldMind Hub
+# .github/workflows/deploy-boldmind-hub.yml
+name: Deploy BoldMind Hub
+
 on:
   push:
     branches: [main]
     paths:
       - 'apps/web/boldmind-hub/**'
-      - 'packages/**'
+      - 'packages/ui/**'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
       
-      - name: Install Vercel CLI
-        run: npm install -g vercel@latest
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
       
-      - name: Pull Vercel Environment
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      
+      - name: Install dependencies
+        run: pnpm install
+      
+      - name: Build UI package
+        run: pnpm build:ui
+      
+      - name: Build BoldMind Hub
+        run: |
+          cd apps/web/boldmind-hub
+          npm run build
+      
+      - name: Deploy to Vercel
+        run: |
+          npm install -g vercel
+          cd apps/web/boldmind-hub
+          vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_HUB }}
-      
-      - name: Build Project
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-      
-      - name: Deploy to Vercel
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
