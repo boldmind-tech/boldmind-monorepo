@@ -1,7 +1,9 @@
 // apps/web/boldmind-hub/app/planai/page.tsx
-import Link from 'next/link'
-import { Navbar, Footer } from '../../../../../packages/ui/src';
+'use client';
 
+import Link from 'next/link';
+import { Navbar, Footer } from '@boldmind/ui';
+import { motion } from 'framer-motion';
 
 const products = [
   {
@@ -174,15 +176,17 @@ const products = [
     pricing: '₦8k/month',
     comingSoon: true,
   },
-]
+];
 
 export default function PlanAIPage() {
-const navLinks = [
+  const navLinks = [
+    { href: "/", label: "Home" },
     { href: "#products", label: "Products" },
-    { href: "#about", label: "About" },
-    { href: "#contact", label: "Contact" }
+    { href: "/planai", label: "PlanAI" },
   ];
- const navCta = { href: "https://wa.me/2349138349271", label: "Get Started" };
+  
+  const navCta = { href: "https://wa.me/2349138349271", label: "Get Started" };
+  
   const footerSections = [
     {
       title: "Products",
@@ -195,7 +199,7 @@ const navLinks = [
     {
       title: "Company",
       links: [
-        { href: "#about", label: "About Us" },
+        { href: "/", label: "Home" },
         { href: "#contact", label: "Contact" },
         { href: "https://x.com/VillageCircle", label: "Blog" }
       ]
@@ -208,94 +212,113 @@ const navLinks = [
       ]
     }
   ];
-  return (
-    <main className="relative min-h-screen bg-[#0A1D37] text-white">
-      {/* Grain texture */}
-      <div className="fixed inset-0 opacity-10 pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXhpeCB0eXBlPSJzYXR1cmF0ZSIgdmFsdWVzPSIwIi8+PC9maWx0ZXI+PHBhdGggZD0iTTAgMGgzMDB2MzAwSDB6IiBmaWx0ZXI9InVybCgjYSkiIG9wYWNpdHk9Ii4wNSIvPjwvc3ZnPg==')]" />
 
-      {/* HEADER - Matched home style */}
-     <Navbar logoSrc="/logo.png" links={navLinks} cta={navCta} />
+  return (
+    <main className="relative min-h-screen bg-[#00143C] text-white">
+      {/* Navigation */}
+      <Navbar links={navLinks} cta={navCta} />
 
       {/* Hero */}
       <section className="relative py-20 px-6 pt-32">
-        <div className="max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="max-w-7xl mx-auto"
+        >
           <div className="text-center mb-16">
-            <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-[#FFC107] mb-8 animate-pulse-slow">
-              <svg viewBox="0 0 24 24" fill="none" className="w-12 h-12 text-[#0A1D37]">
+            <motion.div
+              animate={{ rotate: [0, 360] }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-[#FFC800] mb-8"
+            >
+              <svg viewBox="0 0 24 24" fill="none" className="w-12 h-12 text-[#00143C]">
                 <path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9L12 2Z" fill="currentColor"/>
               </svg>
-            </div>
+            </motion.div>
 
             <h1 className="text-5xl md:text-7xl font-black mb-6">PlanAI Suite</h1>
-            <p className="text-xl md:text-2xl text-[#E0E0E0] max-w-3xl mx-auto mb-4">
+            <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-4">
               The machine that turns leads into gold.
             </p>
-            <p className="text-lg text-[#FFC107] font-semibold">
+            <p className="text-lg text-[#FFC800] font-semibold">
               AI-Powered Business Automation for Nigerian Entrepreneurs
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-            <div className="text-center p-6 bg-gradient-to-br from-[#1a3a5c] to-[#0A1D37] rounded-2xl border-2 border-[#FFC107]/20">
-              <p className="text-4xl font-black text-[#FFC107] mb-2">10+</p>
-              <p className="text-[#E0E0E0]">Automation Tools</p>
-            </div>
-            <div className="text-center p-6 bg-gradient-to-br from-[#1a3a5c] to-[#0A1D37] rounded-2xl border-2 border-[#FFC107]/20">
-              <p className="text-4xl font-black text-[#FFC107] mb-2">1</p>
-              <p className="text-[#E0E0E0]">Client Live (Sleepless)</p>
-            </div>
-            <div className="text-center p-6 bg-gradient-to-br from-[#1a3a5c] to-[#0A1D37] rounded-2xl border-2 border-[#FFC107]/20">
-              <p className="text-4xl font-black text-[#FFC107] mb-2">₦20k-₦100k</p>
-              <p className="text-[#E0E0E0]">Monthly Revenue per Client</p>
-            </div>
+            {[
+              { number: '10+', label: 'Automation Tools' },
+              { number: '1', label: 'Client Live (Sleepless)' },
+              { number: '₦20k-₦100k', label: 'Monthly Revenue per Client' }
+            ].map((stat, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.2 }}
+                className="text-center p-6 bg-gradient-to-br from-[#1a3a5c] to-[#00143C] rounded-2xl border-2 border-[#FFC800]/20 hover:border-[#FFC800] transition-all"
+              >
+                <p className="text-4xl font-black text-[#FFC800] mb-2">{stat.number}</p>
+                <p className="text-gray-300">{stat.label}</p>
+              </motion.div>
+            ))}
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Products Grid */}
-      <section className="relative py-20 px-6">
+      <section id="products" className="relative py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl md:text-5xl font-black text-center mb-16">
-            Complete Business <span className="text-[#FFC107]">Automation Suite</span>
+            Complete Business <span className="text-[#FFC800]">Automation Suite</span>
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {products.map((product, index) => (
-              <Link 
-                key={index} 
-                href={product.comingSoon ? '#' : `/planai/${product.slug}`} 
-                className={`group relative block ${product.comingSoon ? 'cursor-not-allowed' : ''}`}
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -5 }}
               >
-                <div className="bg-gradient-to-br from-[#1a3a5c] to-[#0A1D37] p-8 rounded-2xl border-2 border-[#FFC107]/20 hover:border-[#FFC107] transition-all hover:scale-105">
-                  <div className="flex items-start justify-between mb-6">
-                    <div>
-                      <h3 className="text-2xl font-black text-white mb-1">{product.name}</h3>
-                      <p className="text-[#FFC107] text-sm font-semibold">{product.tagline}</p>
+                <Link 
+                  href={product.comingSoon ? '#' : `/planai/${product.slug}`} 
+                  className={`group relative block ${product.comingSoon ? 'cursor-not-allowed' : ''}`}
+                >
+                  <div className="bg-gradient-to-br from-[#1a3a5c] to-[#00143C] p-8 rounded-2xl border-2 border-[#FFC800]/20 hover:border-[#FFC800] transition-all">
+                    <div className="flex items-start justify-between mb-6">
+                      <div>
+                        <h3 className="text-2xl font-black text-white mb-1">{product.name}</h3>
+                        <p className="text-[#FFC800] text-sm font-semibold">{product.tagline}</p>
+                      </div>
+                      <span className={`text-xs font-bold px-3 py-1 rounded-full bg-black/30 ${product.statusColor}`}>
+                        {product.status}
+                      </span>
                     </div>
-                    <span className={`text-xs font-bold px-3 py-1 rounded-full bg-black/30 ${product.statusColor}`}>
-                      {product.status}
-                    </span>
+
+                    <p className="text-gray-300 text-base leading-relaxed mb-6">{product.description}</p>
+
+                    <ul className="space-y-2 mb-6">
+                      {product.features.map((feature, i) => (
+                        <li key={i} className="flex items-start text-sm text-gray-300">
+                          <svg className="w-5 h-5 text-[#FFC800] mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="pt-6 border-t border-[#FFC800]/20 flex justify-between items-center">
+                      <p className="text-[#FFC800] font-bold text-lg">{product.pricing}</p>
+                      {product.comingSoon && <span className="text-xs text-blue-400 font-bold">Coming Soon</span>}
+                    </div>
                   </div>
-
-                  <p className="text-[#E0E0E0] text-base leading-relaxed mb-6">{product.description}</p>
-
-                  <ul className="space-y-2 mb-6">
-                    {product.features.map((feature, i) => (
-                      <li key={i} className="flex items-start text-sm text-[#E0E0E0]">
-                        <svg className="w-5 h-5 text-[#FFC107] mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="pt-6 border-t border-[#FFC107]/20 flex justify-between items-center">
-                    <p className="text-[#FFC107] font-bold text-lg">{product.pricing}</p>
-                    {product.comingSoon && <span className="text-xs text-blue-400 font-bold">Coming Soon</span>}
-                  </div>
-                </div>
-              </Link>
+                </Link>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -303,22 +326,39 @@ const navLinks = [
 
       {/* CTA Section */}
       <section className="relative py-20 px-6">
-        <div className="max-w-4xl mx-auto text-center">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="max-w-4xl mx-auto text-center"
+        >
           <h2 className="text-4xl md:text-5xl font-black mb-6">
-            Ready to <span className="text-[#FFC107]">Automate Your Business?</span>
+            Ready to <span className="text-[#FFC800]">Automate Your Business?</span>
           </h2>
-          <p className="text-xl text-[#E0E0E0] mb-8">
+          <p className="text-xl text-gray-300 mb-8">
             Join the waitlist for early access to PlanAI Suite. Limited slots available.
           </p>
-          <a href="https://wa.me/2349138349271?text=I'm%20interested%20in%20PlanAI%20Suite" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 px-10 py-4 bg-[#FFC107] text-[#0A1D37] font-bold text-lg rounded-lg hover:bg-[#FFCC00] transition-all hover:scale-105">
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          <motion.a
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            href="https://wa.me/2349138349271?text=I'm%20interested%20in%20PlanAI%20Suite" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="inline-flex items-center gap-3 px-10 py-4 bg-[#FFC800] text-[#00143C] font-bold text-lg rounded-lg hover:bg-[#FFCC00] transition-all"
+          >
+            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+            </svg>
             Get Early Access on WhatsApp
-          </a>
-        </div>
+          </motion.a>
+        </motion.div>
       </section>
 
-      {/* FOOTER - Dynamic year like home */}
-    <Footer logoSrc="/logo.png" sections={footerSections} />
+      {/* Footer */}
+      <Footer 
+        sections={footerSections}
+        copyright={`© ${new Date().getFullYear()} BoldMind Technology Solutions. Empowering 1M Nigerian Entrepreneurs by 2030.`}
+      />
     </main>
-  )
+  );
 }

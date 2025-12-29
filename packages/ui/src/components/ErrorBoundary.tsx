@@ -1,4 +1,5 @@
-'use client'; // ADD THIS LINE - makes it a client component
+// packages/ui/src/components/ErrorBoundary.tsx
+"use client";
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 
@@ -35,14 +36,35 @@ class ErrorBoundary extends Component<Props, State> {
       }
       
       return (
-        <div className="p-4 border border-red-300 bg-red-50 rounded-lg">
-          <h2 className="text-lg font-semibold text-red-800">Something went wrong</h2>
-          <p className="text-red-600 mt-2">
+        <div style={{
+          padding: '1rem',
+          border: '1px solid #FCA5A5',
+          backgroundColor: '#FEF2F2',
+          borderRadius: '0.5rem',
+        }}>
+          <h2 style={{ 
+            fontSize: '1.125rem', 
+            fontWeight: 600,
+            color: '#991B1B' 
+          }}>
+            Something went wrong
+          </h2>
+          <p style={{ color: '#DC2626', marginTop: '0.5rem' }}>
             {this.state.error?.message || 'An unexpected error occurred'}
           </p>
           <button
             onClick={() => this.setState({ hasError: false })}
-            className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            style={{
+              marginTop: '1rem',
+              padding: '0.5rem 1rem',
+              backgroundColor: '#DC2626',
+              color: 'white',
+              borderRadius: '0.375rem',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'background-color 0.2s',
+              ':hover': { backgroundColor: '#B91C1C' }
+            } as React.CSSProperties}
           >
             Try again
           </button>
