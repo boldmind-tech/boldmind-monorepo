@@ -22,13 +22,13 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.0.0
@@ -46,7 +46,7 @@ importers:
         specifier: ^9.2.1
         version: 9.2.1
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -89,19 +89,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -138,19 +138,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -187,19 +187,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -236,19 +236,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -285,19 +285,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -334,19 +334,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -383,19 +383,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -432,19 +432,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -532,7 +532,7 @@ importers:
         version: 3.25.76
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.0.0
@@ -541,7 +541,7 @@ importers:
         specifier: ^6.0.0
         version: 6.21.0(eslint@8.57.1)(typescript@5.9.3)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -569,19 +569,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -618,19 +618,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -667,19 +667,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -863,13 +863,13 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       '@types/sanitize-html':
         specifier: ^2.15.0
@@ -878,7 +878,7 @@ importers:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -924,19 +924,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -973,19 +973,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1025,19 +1025,19 @@ importers:
         version: 3.4.19
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1071,19 +1071,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1117,19 +1117,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1166,19 +1166,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1215,19 +1215,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1264,19 +1264,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1316,19 +1316,19 @@ importers:
         version: 3.4.19
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1362,19 +1362,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1411,19 +1411,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1460,19 +1460,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1509,19 +1509,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1558,19 +1558,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1601,13 +1601,13 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.0.0
@@ -1619,7 +1619,7 @@ importers:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1647,19 +1647,19 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1690,13 +1690,13 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.0.0
@@ -1708,7 +1708,7 @@ importers:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1751,13 +1751,13 @@ importers:
         specifier: ^9.0.10
         version: 9.0.10
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.0.0
@@ -1769,7 +1769,7 @@ importers:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1787,13 +1787,13 @@ importers:
   packages/config:
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.0.0
@@ -1805,7 +1805,7 @@ importers:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1848,13 +1848,13 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.0.0
@@ -1866,7 +1866,7 @@ importers:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1900,19 +1900,19 @@ importers:
         version: 2.1.0
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1943,13 +1943,13 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.0.0
@@ -1961,7 +1961,7 @@ importers:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -1979,19 +1979,19 @@ importers:
   packages/seo:
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -2009,19 +2009,19 @@ importers:
   packages/types:
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -2058,13 +2058,13 @@ importers:
         version: 3.4.0
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.1.0
@@ -2076,7 +2076,7 @@ importers:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -2110,13 +2110,13 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.0.0
@@ -2128,7 +2128,7 @@ importers:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
@@ -2198,16 +2198,16 @@ importers:
         specifier: ^29.5.0
         version: 29.5.14
       '@types/node':
-        specifier: ^20
+        specifier: ^20.11.3
         version: 20.19.27
       '@types/passport-jwt':
         specifier: ^4.0.0
         version: 4.0.1
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.27
         version: 18.3.27
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
       '@types/supertest':
         specifier: ^2.0.0
@@ -2222,7 +2222,7 @@ importers:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
