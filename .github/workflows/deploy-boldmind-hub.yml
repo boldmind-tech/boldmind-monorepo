@@ -7,13 +7,52 @@ on:
     paths:
       - 'apps/web/boldmind-hub/**'
       - 'packages/ui/**'
+      - 'packages/**/package.json'
+      - 'pnpm-lock.yaml'
+      - 'package.json'
+      - 'turbo.json'
+      - 'scripts/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'apps/web/boldmind-hub/**'
+      - 'packages/ui/**'
+
+# Add workflow permissions for deployments
+permissions:
+  contents: read
+  deployments: write
 
 jobs:
-  deploy:
+  test-build:
     runs-on: ubuntu-latest
+    outputs:
+      should_deploy: ${{ steps.check-changes.outputs.should_deploy }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Detect changes
+        id: check-changes
+        run: |
+          # Check if UI package changed (affects all apps)
+          if git diff --name-only HEAD~1 HEAD | grep -q "^packages/ui/"; then
+            echo "UI package changed - will deploy"
+            echo "should_deploy=true" >> $GITHUB_OUTPUT
+          # Check if boldmind-hub changed
+          elif git diff --name-only HEAD~1 HEAD | grep -q "^apps/web/boldmind-hub/"; then
+            echo "BoldMind Hub changed - will deploy"
+            echo "should_deploy=true" >> $GITHUB_OUTPUT
+          # Check if shared configs changed
+          elif git diff --name-only HEAD~1 HEAD | grep -q "package.json\|pnpm-lock.yaml\|turbo.json"; then
+            echo "Dependencies changed - will deploy"
+            echo "should_deploy=true" >> $GITHUB_OUTPUT
+          else
+            echo "No relevant changes - skipping deploy"
+            echo "should_deploy=false" >> $GITHUB_OUTPUT
+          fi
       
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -26,22 +65,167 @@ jobs:
         with:
           version: 8
       
+      - name: Get number of CPU cores
+        id: cpu-cores
+        run: echo "cores=$(nproc)" >> $GITHUB_OUTPUT
+      
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: |
+          # Use --no-frozen-lockfile to avoid CI failures
+          pnpm install --no-frozen-lockfile --prefer-offline
+          echo "✅ Dependencies installed"
+      
+      - name: Sync dependency versions
+        run: |
+          # Run sync script if it exists
+          if [ -f "scripts/sync-deps.sh" ]; then
+            chmod +x scripts/sync-deps.sh
+            ./scripts/sync-deps.sh
+          else
+            echo "⚠️ No sync script found, continuing..."
+          fi
+      
+      - name: Build UI package with cache
+        id: build-ui
+        uses: actions/cache@v3
+        with:
+          path: packages/ui/dist
+          key: ui-${{ hashFiles('packages/ui/**', 'pnpm-lock.yaml') }}
       
       - name: Build UI package
-        run: pnpm build:ui
+        if: steps.build-ui.outputs.cache-hit != 'true'
+        run: |
+          echo "Building UI package..."
+          cd packages/ui
+          pnpm build
+          echo "✅ UI package built"
       
       - name: Build BoldMind Hub
         run: |
+          echo "Building BoldMind Hub..."
+          # Build with turbo for better caching
+          npx turbo run build --filter=@boldmind/boldmind-hub \
+            --output-logs=errors-only \
+            --concurrency=${{ steps.cpu-cores.outputs.cores }}
+          
+          # Verify build output
+          if [ -d "apps/web/boldmind-hub/.next" ]; then
+            echo "✅ Build successful!"
+            echo "Build size:"
+            du -sh apps/web/boldmind-hub/.next
+          else
+            echo "❌ Build failed - .next directory not found"
+            exit 1
+          fi
+      
+      - name: Run lint checks
+        run: |
+          npx turbo run lint --filter=@boldmind/boldmind-hub \
+            --output-logs=errors-only
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        if: success()
+        with:
+          name: boldmind-hub-build
+          path: |
+            apps/web/boldmind-hub/.next
+            apps/web/boldmind-hub/public
+          retention-days: 7
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test-build
+    if: needs.test-build.outputs.should_deploy == 'true'
+    environment:
+      name: Production
+      url: https://boldmind.ng
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: boldmind-hub-build
+          path: apps/web/boldmind-hub
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      
+      - name: Install only production dependencies
+        run: |
+          # Install minimal dependencies for deployment
           cd apps/web/boldmind-hub
-          npm run build
+          pnpm install --prod --no-optional --no-frozen-lockfile
       
       - name: Deploy to Vercel
+        id: deploy
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_HUB }}
+          vercel-args: '--prod --confirm'
+          working-directory: apps/web/boldmind-hub
+      
+      - name: Get deployment URL
+        id: deployment-url
         run: |
-          npm install -g vercel
-          cd apps/web/boldmind-hub
-          vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
+          DEPLOYMENT_URL=$(echo '${{ steps.deploy.outputs.deployment-url }}' | jq -r '.url')
+          echo "Deployment URL: $DEPLOYMENT_URL"
+          echo "url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
+      
+      - name: Post to Slack on failure
+        if: failure()
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "❌ BoldMind Hub deployment failed",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*❌ BoldMind Hub Deployment Failed*\nRepository: ${{ github.repository }}\nCommit: ${{ github.sha }}\nRun: ${{ github.run_id }}"
+                  }
+                }
+              ]
+            }
         env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_HUB }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  notify-success:
+    runs-on: ubuntu-latest
+    needs: [test-build, deploy]
+    if: always() && needs.test-build.result == 'success' && needs.deploy.result == 'success'
+    steps:
+      - name: Post deployment success
+        if: success()
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "✅ BoldMind Hub deployed successfully",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*✅ BoldMind Hub Deployed Successfully*\n• Environment: Production\n• URL: https://boldmind-hub.vercel.app\n• Commit: ${{ github.sha }}\n• Triggered by: ${{ github.actor }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

@@ -9,10 +9,20 @@
   },
   "dependencies": {
     "react-email": "^2.0.0",
-    "resend": "^2.0.0"
+    "resend": "^2.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "next": "^14.2.35"
   },
   "devDependencies": {
-    "@types/react": "^18.2.0",
-    "typescript": "^5.0.0"
+    "@types/react": "^18",
+    "typescript": "^5.4.5",
+    "@types/node": "^20",
+    "@types/react-dom": "^18",
+    "tailwindcss": "^3.4.1",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.35"
   }
 }

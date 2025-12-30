@@ -985,6 +985,18 @@ pnpm clean
 
 # Generate icons for all apps
 pnpm icons:generate
+
+# ALWAYS use these patterns:
+
+# 1. Add to root (shared by all apps):
+pnpm add -w react@^18.2.0
+
+# 2. Add to specific app:
+cd apps/web/boldmind-hub
+pnpm add framer-motion@latest
+
+# 3. Update everything consistently:
+pnpm update --latest --recursive
 ```
 
 ## 🌐 Domains

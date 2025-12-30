@@ -1,29 +1,9 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**", "build/**"],
-      "env": [
-        "NEXT_PUBLIC_API_URL",
-        "MONGODB_URI",
-        "POSTGRES_URL",
-        "SUPABASE_URL",
-        "SUPABASE_ANON_KEY",
-        "OPENAI_API_KEY",
-        "WHISPER_API_KEY",
-        "PAYSTACK_PUBLIC_KEY",
-        "PAYSTACK_SECRET_KEY",
-        "META_APP_ID",
-        "META_APP_SECRET",
-        "PICTORY_API_KEY",
-        "N8N_WEBHOOK_URL",
-        "RESEND_API_KEY",
-        "CLOUDINARY_URL",
-        "GOOGLE_ANALYTICS_ID",
-        "VERCEL_URL"
-      ]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", "build/**"]
     },
     "dev": {
       "cache": false,
