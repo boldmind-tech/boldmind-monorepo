@@ -1,5 +1,3 @@
-# Update eslint to latest non-deprecated version
-cat > update-eslint.sh << 'EOF'
 #!/bin/bash
 echo "📦 Updating eslint to non-deprecated version..."
 
@@ -38,7 +36,3 @@ echo "🔄 Regenerating lockfile..."
 pnpm install --no-frozen-lockfile
 
 echo "✅ ESLint updated!"
-EOF
-
-chmod +x update-eslint.sh
-./update-eslint.sh

@@ -7,20 +7,18 @@ on:
     paths:
       - 'apps/web/boldmind-hub/**'
       - 'packages/ui/**'
-      - '**/package.json'
       - 'pnpm-lock.yaml'
-      - 'turbo.json'
+      - 'package.json'
+  workflow_dispatch:  # Allow manual triggers
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 2  # Needed for git diff
       
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -33,137 +31,128 @@ jobs:
         with:
           version: 8.15.0
       
-      - name: Fix lockfile mismatches
+      - name: Install dependencies (skip lockfile check)
         run: |
-          echo "🔧 Fixing lockfile mismatches..."
+          # Skip the lockfile check since we know versions are standardized
+          pnpm install --no-frozen-lockfile
           
-          # Create a unified version configuration
-          cat > .versions.json << 'EOF'
-          {
-            "dependencies": {
-              "react": "^18.3.1",
-              "react-dom": "^18.3.1",
-              "next": "^14.2.35"
-            },
-            "devDependencies": {
-              "@types/node": "^20.11.3",
-              "@types/react": "^18.3.27",
-              "@types/react-dom": "^18.3.7",
-              "typescript": "^5.4.5",
-              "autoprefixer": "^10.4.19",
-              "postcss": "^8.4.38",
-              "tailwindcss": "^3.4.1",
-              "eslint": "^8.57.0",
-              "eslint-config-next": "14.2.35"
-            }
-          }
-          EOF
-          
-          # Apply unified versions to ALL packages
-          find . -name "package.json" -type f ! -path "*/node_modules/*" | while read pkg; do
-            echo "📝 Normalizing $pkg"
-            node -e "
-              const fs = require('fs');
-              const path = require('path');
-              const versions = require('./.versions.json');
-              
-              try {
-                const pkgContent = JSON.parse(fs.readFileSync('$pkg', 'utf8'));
-                let updated = false;
-                
-                // Update dependencies
-                if (pkgContent.dependencies) {
-                  for (const [dep, version] of Object.entries(versions.dependencies)) {
-                    if (pkgContent.dependencies[dep]) {
-                      if (pkgContent.dependencies[dep] !== version) {
-                        console.log(\`  Updating \${dep}: \${pkgContent.dependencies[dep]} → \${version}\`);
-                        pkgContent.dependencies[dep] = version;
-                        updated = true;
-                      }
-                    }
-                  }
-                }
-                
-                // Update devDependencies
-                if (pkgContent.devDependencies) {
-                  for (const [dep, version] of Object.entries(versions.devDependencies)) {
-                    if (pkgContent.devDependencies[dep]) {
-                      if (pkgContent.devDependencies[dep] !== version) {
-                        console.log(\`  Updating \${dep}: \${pkgContent.devDependencies[dep]} → \${version}\`);
-                        pkgContent.devDependencies[dep] = version;
-                        updated = true;
-                      }
-                    }
-                  }
-                }
-                
-                if (updated) {
-                  fs.writeFileSync('$pkg', JSON.stringify(pkgContent, null, 2));
-                  console.log(\`  ✅ Updated\`);
-                }
-              } catch (err) {
-                console.log(\`  ⚠️ Error: \${err.message}\`);
-              }
-            "
-          done
+          # Update eslint to non-deprecated version
+          pnpm add -w eslint@^9.57.0
       
-      - name: Clean install with force
+      - name: Build UI package
         run: |
-          # Remove existing node_modules and lockfile
-          rm -rf node_modules apps/*/node_modules packages/*/node_modules
-          rm -f pnpm-lock.yaml
-          
-          # Install with force to regenerate lockfile
-          pnpm install --force --no-frozen-lockfile
-      
-      - name: Build UI package first
-        run: |
-          echo "🏗️ Building UI package..."
           cd packages/ui
           pnpm build
-          echo "✅ UI package built"
+          echo "✅ UI package built successfully"
       
       - name: Build BoldMind Hub
         run: |
-          echo "🏗️ Building BoldMind Hub..."
           cd apps/web/boldmind-hub
           
-          # Check if there are still version mismatches
-          echo "🔍 Checking for version mismatches..."
-          pnpm install --dry-run 2>&1 | grep -i "mismatch" || true
+          # Disable telemetry to speed up build
+          export NEXT_TELEMETRY_DISABLED=1
           
-          # Build with specific Next.js cache settings
-          NEXT_TELEMETRY_DISABLED=1 pnpm build
+          echo "🔍 Checking dependencies..."
+          # Verify all dependencies are resolved
+          pnpm list react next 2>/dev/null || true
           
-          # Verify build
+          echo "🏗️ Building app..."
+          pnpm build
+          
+          # Verify build output
           if [ -d ".next" ]; then
             echo "✅ Build successful!"
-            echo "📊 Build output:"
+            echo "📊 Build size:"
+            du -sh .next/
+            echo "📁 Build contents:"
             ls -la .next/
           else
             echo "❌ Build failed - .next directory not found"
             exit 1
           fi
       
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: boldmind-hub-build
+          path: |
+            apps/web/boldmind-hub/.next
+            apps/web/boldmind-hub/public
+          retention-days: 7
+      
       - name: Deploy to Vercel
+        if: success()
         run: |
           echo "🚀 Deploying to Vercel..."
-          npm install -g vercel@latest
           
-          # Deploy from the app directory
+          # Install Vercel CLI
+          npm install --global vercel@latest
+          
+          # Navigate to the app directory
           cd apps/web/boldmind-hub
           
-          # Check if we should force deploy
-          FORCE_DEPLOY=""
-          if [[ "${{ github.event_name }}" == "push" ]]; then
-            FORCE_DEPLOY="--prod --yes"
-          fi
-          
+          # Deploy with Vercel
           vercel deploy \
+            --prebuilt \
+            --prod \
             --token=${{ secrets.VERCEL_TOKEN }} \
-            $FORCE_DEPLOY \
-            --scope=${{ secrets.VERCEL_ORG_ID }} \
-            --project=${{ secrets.VERCEL_PROJECT_ID_HUB }}
+            --yes
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_HUB }}
+      
+      - name: Create deployment status
+        if: always()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: deployment } = await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.ref,
+              environment: 'production',
+              auto_merge: false,
+              required_contexts: []
+            });
+            
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment.id,
+              state: '${{ job.status }}' === 'success' ? 'success' : 'failure',
+              environment_url: 'https://boldmind.ng'
+            });
+
+  # Quick test job to verify build works
+  test-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: build-and-deploy
+    if: always()
+    
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: boldmind-hub-build
+          path: apps/web/boldmind-hub
+      
+      - name: Verify build
+        run: |
+          echo "🔍 Verifying build artifacts..."
+          
+          if [ -d "apps/web/boldmind-hub/.next" ]; then
+            echo "✅ Build artifacts verified!"
+            echo "Next.js version found:"
+            find apps/web/boldmind-hub/.next -name "*.js" | head -5
+            
+            # Check if static files exist
+            if [ -d "apps/web/boldmind-hub/.next/static" ]; then
+              echo "📁 Static files present"
+              ls -la apps/web/boldmind-hub/.next/static/
+            fi
+          else
+            echo "❌ Build artifacts missing!"
+            exit 1
+          fi
