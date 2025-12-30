@@ -1,4 +1,3 @@
-cat > update-all-versions.sh << 'EOF'
 #!/bin/bash
 echo "🔄 Updating all package.json to match lockfile versions..."
 
@@ -43,4 +42,3 @@ rm -f pnpm-lock.yaml
 pnpm install
 
 echo "✅ Done! Versions now match."
-EOF
