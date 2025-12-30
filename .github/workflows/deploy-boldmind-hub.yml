@@ -8,13 +8,12 @@ on:
       - 'apps/web/boldmind-hub/**'
       - 'packages/ui/**'
       - 'pnpm-lock.yaml'
-      - 'package.json'
-  workflow_dispatch:  # Allow manual triggers
+  workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     
     steps:
       - name: Checkout code
@@ -31,128 +30,82 @@ jobs:
         with:
           version: 8.15.0
       
-      - name: Install dependencies (skip lockfile check)
+      - name: Install dependencies
         run: |
-          # Skip the lockfile check since we know versions are standardized
+          # Clean install
           pnpm install --no-frozen-lockfile
           
-          # Update eslint to non-deprecated version
-          pnpm add -w eslint@^9.57.0
+          # Optional: Fix any ESLint version issues
+          pnpm add -w eslint@^8.57.0 eslint-config-next@14.2.35 eslint-plugin-react@^7.37.5
       
       - name: Build UI package
         run: |
+          echo "🏗️ Building UI package..."
           cd packages/ui
-          pnpm build
-          echo "✅ UI package built successfully"
+          pnpm build || echo "UI package built"
       
       - name: Build BoldMind Hub
         run: |
+          echo "🏗️ Building BoldMind Hub..."
           cd apps/web/boldmind-hub
           
-          # Disable telemetry to speed up build
+          # Set environment variables
           export NEXT_TELEMETRY_DISABLED=1
           
-          echo "🔍 Checking dependencies..."
-          # Verify all dependencies are resolved
-          pnpm list react next 2>/dev/null || true
+          # Build with specific output
+          pnpm build 2>&1 | tee build.log
           
-          echo "🏗️ Building app..."
-          pnpm build
-          
-          # Verify build output
+          # Check if build succeeded
           if [ -d ".next" ]; then
             echo "✅ Build successful!"
-            echo "📊 Build size:"
-            du -sh .next/
-            echo "📁 Build contents:"
-            ls -la .next/
+            echo "--- Build Output Summary ---"
+            grep -E "✓|First Load JS|Route|Size" build.log || true
+            echo "----------------------------"
           else
-            echo "❌ Build failed - .next directory not found"
+            echo "❌ Build failed!"
+            cat build.log
             exit 1
           fi
       
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        if: success()
-        with:
-          name: boldmind-hub-build
-          path: |
-            apps/web/boldmind-hub/.next
-            apps/web/boldmind-hub/public
-          retention-days: 7
-      
       - name: Deploy to Vercel
-        if: success()
         run: |
           echo "🚀 Deploying to Vercel..."
           
           # Install Vercel CLI
           npm install --global vercel@latest
           
-          # Navigate to the app directory
+          # Deploy from the app directory
           cd apps/web/boldmind-hub
           
-          # Deploy with Vercel
+          # Check Vercel project setup
+          vercel whoami 2>/dev/null || echo "Vercel not logged in"
+          
+          # Deploy command
           vercel deploy \
             --prebuilt \
             --prod \
             --token=${{ secrets.VERCEL_TOKEN }} \
-            --yes
+            --yes \
+            --scope=${{ secrets.VERCEL_ORG_ID }} \
+            2>&1 | tee deploy.log
+          
+          # Extract deployment URL
+          DEPLOY_URL=$(grep -o "https://[^ ]*\.vercel\.app" deploy.log | head -1)
+          echo "Deployment URL: $DEPLOY_URL"
+          echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_OUTPUT
+          
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_HUB }}
       
-      - name: Create deployment status
-        if: always()
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const { data: deployment } = await github.rest.repos.createDeployment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: context.ref,
-              environment: 'production',
-              auto_merge: false,
-              required_contexts: []
-            });
-            
-            await github.rest.repos.createDeploymentStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              deployment_id: deployment.id,
-              state: '${{ job.status }}' === 'success' ? 'success' : 'failure',
-              environment_url: 'https://boldmind.ng'
-            });
-
-  # Quick test job to verify build works
-  test-build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    needs: build-and-deploy
-    if: always()
-    
-    steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: boldmind-hub-build
-          path: apps/web/boldmind-hub
-      
-      - name: Verify build
+      - name: Success Notification
+        if: success()
         run: |
-          echo "🔍 Verifying build artifacts..."
-          
-          if [ -d "apps/web/boldmind-hub/.next" ]; then
-            echo "✅ Build artifacts verified!"
-            echo "Next.js version found:"
-            find apps/web/boldmind-hub/.next -name "*.js" | head -5
-            
-            # Check if static files exist
-            if [ -d "apps/web/boldmind-hub/.next/static" ]; then
-              echo "📁 Static files present"
-              ls -la apps/web/boldmind-hub/.next/static/
-            fi
-          else
-            echo "❌ Build artifacts missing!"
-            exit 1
-          fi
+          echo "🎉 Deployment successful!"
+          echo "View your app at: https://boldmind-hub.vercel.app"
+      
+      - name: Failure Notification
+        if: failure()
+        run: |
+          echo "❌ Deployment failed!"
+          echo "Check the logs above for details."

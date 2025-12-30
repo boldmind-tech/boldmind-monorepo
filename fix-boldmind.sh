@@ -1,44 +1,57 @@
-# Update eslint to latest non-deprecated version
-cat > update-eslint.sh << 'EOF'
+# Option B: Fix ESLint v8 compatibility (quicker)
+cat > fix-eslint.sh << 'EOF'
 #!/bin/bash
-echo "📦 Updating eslint to non-deprecated version..."
+echo "🔧 Fixing ESLint v8 compatibility..."
 
-# Update root package.json
-node -e "
-  const fs = require('fs');
-  const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-  
-  // Update eslint to latest stable
-  if (pkg.devDependencies && pkg.devDependencies.eslint) {
-    pkg.devDependencies.eslint = '^9.57.0';
-  }
-  
-  fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
-"
+# Add missing es-abstract dependency
+pnpm add -w es-abstract@^1.23.9
 
-# Update all app package.json files
-find apps -name "package.json" -type f | while read pkg; do
-  if [[ $pkg != *"node_modules"* ]]; then
-    echo "Updating $pkg..."
-    node -e "
-      const fs = require('fs');
-      try {
-        const pkgContent = JSON.parse(fs.readFileSync('$pkg', 'utf8'));
-        if (pkgContent.devDependencies && pkgContent.devDependencies.eslint) {
-          pkgContent.devDependencies.eslint = '^9.57.0';
-          fs.writeFileSync('$pkg', JSON.stringify(pkgContent, null, 2));
-        }
-      } catch(e) {}
-    "
-  fi
-done
+# Update all eslint related packages to compatible versions
+pnpm add -w \
+  eslint@^8.57.0 \
+  eslint-plugin-react@^7.37.5 \
+  eslint-plugin-react-hooks@^4.6.0 \
+  @typescript-eslint/eslint-plugin@^6.21.0 \
+  @typescript-eslint/parser@^6.21.0 \
+  eslint-config-prettier@^9.1.0
 
-# Regenerate lockfile
-echo "🔄 Regenerating lockfile..."
-pnpm install --no-frozen-lockfile
+# Update .eslintrc.js to use Next.js config
+cat > .eslintrc.js << 'EOF2'
+module.exports = {
+  extends: [
+    "next/core-web-vitals",  // Use Next.js built-in config
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "prettier"
+  ],
+  plugins: ["@typescript-eslint", "react", "react-hooks"],
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaVersion: 2020,
+    sourceType: "module",
+    ecmaFeatures: {
+      jsx: true
+    }
+  },
+  settings: {
+    react: {
+      version: "detect"
+    }
+  },
+  rules: {
+    "react/react-in-jsx-scope": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "no-console": ["warn", { "allow": ["warn", "error"] }]
+  },
+  ignorePatterns: ["node_modules/", "dist/", ".next/", "build/"]
+}
+EOF2
 
-echo "✅ ESLint updated!"
+echo "✅ ESLint compatibility fixed!"
 EOF
 
-chmod +x update-eslint.sh
-./update-eslint.sh
+chmod +x fix-eslint.sh
+./fix-eslint.sh
