@@ -1,0 +1,25 @@
+name: Test All
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [amebogist, educenter, boldmind-hub, boldmind-os, naija-fither, emailscraper-pro, safe-naija]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "pnpm"
+      - run: pnpm install
+      - name: Build dependencies
+        run: pnpm build:packages
+      - name: Test ${{ matrix.app }}
+        run: pnpm test --filter=@boldmind/${{ matrix.app }}

@@ -1,0 +1,5 @@
+{
+  "buildCommand": "cd ../../.. && pnpm build --filter=boldmind-hub",
+  "installCommand": "pnpm install",
+  "framework": "nextjs"
+}

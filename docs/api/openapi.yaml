@@ -1,0 +1,67 @@
+openapi: 3.0.0
+info:
+  title: BoldMind API
+  description: API documentation for BoldMind products
+  version: 1.0.0
+  contact:
+    name: BoldMind Team
+    email: contact@boldmind.ng
+
+servers:
+  - url: https://api.boldmind.ng/v1
+    description: Production server
+  - url: http://localhost:3000/api
+    description: Development server
+
+paths:
+  /auth/login:
+    post:
+      summary: User login
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        200:
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string

@@ -1,0 +1,1163 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+// Enums
+enum UserRole {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum ProductStatus {
+  DRAFT
+  BUILDING
+  BETA
+  LIVE
+  ARCHIVED
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  PAST_DUE
+  TRIALING
+  INCOMPLETE
+}
+
+enum PaymentProvider {
+  PAYSTACK
+  FLUTTERWAVE
+  MANUAL
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  UNQUALIFIED
+  CONVERTED
+}
+
+// User model (for all BoldMind products)
+model User {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  name            String?
+  passwordHash    String?
+  avatar          String?
+  role            UserRole  @default(USER)
+  emailVerified   Boolean   @default(false)
+  verificationToken String?
+  resetPasswordToken String?
+  resetPasswordExpires DateTime?
+  lastLogin       DateTime?
+  
+  // Preferences
+  preferences     Json?     @default("{}")
+  
+  // Timestamps
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  // Relations
+  products        Product[]
+  subscriptions   Subscription[]
+  payments        Payment[]
+  leads           Lead[]
+  
+  // Auth
+  accounts        Account[]
+  sessions        Session[]
+  
+  // AmeboGist specific
+  posts           Post[]
+  
+  // EduCenter specific
+  courses         Course[]
+  enrollments     Enrollment[]
+  
+  // Najja FitHer specific
+  mealPlans       MealPlan[]
+  workouts        Workout[]
+  progressLogs    ProgressLog[]
+  
+  // SAFE AI specific
+  incidents       Incident[]
+  cases           Case[]
+  
+  @@index([email])
+  @@index([role])
+  @@index([createdAt])
+}
+
+// Auth models (NextAuth.js compatible)
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Product Registry (All 31+ products)
+model Product {
+  id          String         @id @default(cuid())
+  name        String
+  slug        String         @unique
+  description String?
+  category    String
+  status      ProductStatus  @default(DRAFT)
+  version     String         @default("1.0.0")
+  
+  // Pricing
+  pricing     Json?          @default("{}")
+  
+  // Features
+  features    String[]
+  settings    Json?          @default("{}")
+  
+  // Stats
+  stats       Json?          @default("{}")
+  
+  // Timestamps
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  
+  // Relations
+  ownerId     String?
+  owner       User?          @relation(fields: [ownerId], references: [id])
+  subscriptions Subscription[]
+  
+  @@index([slug])
+  @@index([category])
+  @@index([status])
+  @@index([ownerId])
+}
+
+// Subscription model (for all paid products)
+model Subscription {
+  id                   String             @id @default(cuid())
+  userId               String
+  productId            String
+  planId               String
+  status               SubscriptionStatus @default(ACTIVE)
+  
+  // Period
+  currentPeriodStart   DateTime
+  currentPeriodEnd     DateTime
+  cancelAtPeriodEnd    Boolean            @default(false)
+  
+  // Provider info
+  provider             PaymentProvider    @default(PAYSTACK)
+  providerSubscriptionId String?
+  providerCustomerId   String?
+  
+  // Metadata
+  metadata             Json?              @default("{}")
+  
+  // Timestamps
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  canceledAt           DateTime?
+  
+  // Relations
+  user                 User               @relation(fields: [userId], references: [id])
+  product              Product            @relation(fields: [productId], references: [id])
+  payments             Payment[]
+  
+  @@unique([userId, productId])
+  @@index([userId])
+  @@index([productId])
+  @@index([status])
+  @@index([currentPeriodEnd])
+  @@index([providerSubscriptionId])
+}
+
+// Payment model
+model Payment {
+  id           String   @id @default(cuid())
+  amount       Float
+  currency     String   @default("NGN")
+  status       String   @default("pending")
+  reference    String   @unique
+  provider     PaymentProvider @default(PAYSTACK)
+  providerPaymentId String?
+  
+  // User info
+  userId       String
+  email        String
+  name         String?
+  
+  // Product info
+  productId    String?
+  productName  String?
+  planId       String?
+  
+  // Subscription info
+  subscriptionId String?
+  
+  // Metadata
+  metadata     Json?    @default("{}")
+  verified     Boolean  @default(false)
+  verificationData Json?
+  
+  // Timestamps
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  paidAt       DateTime?
+  
+  // Relations
+  user         User     @relation(fields: [userId], references: [id])
+  product      Product? @relation(fields: [productId], references: [id])
+  subscription Subscription? @relation(fields: [subscriptionId], references: [id])
+  
+  @@index([userId])
+  @@index([reference])
+  @@index([status])
+  @@index([createdAt])
+  @@index([email])
+}
+
+// Lead model (EmailScraper Pro)
+model Lead {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  firstName    String?
+  lastName     String?
+  company      String?
+  position     String?
+  website      String?
+  phone        String?
+  source       String
+  status       LeadStatus @default(NEW)
+  
+  // User relation
+  userId       String?
+  
+  // Verification
+  verified     Boolean    @default(false)
+  verificationDate DateTime?
+  
+  // Enrichment data
+  enrichedData Json?      @default("{}")
+  
+  // Notes and tags
+  notes        String[]
+  tags         String[]
+  
+  // Metadata
+  metadata     Json?      @default("{}")
+  lastContacted DateTime?
+  
+  // Timestamps
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  
+  // Relations
+  user         User?      @relation(fields: [userId], references: [id])
+  
+  @@index([email])
+  @@index([userId])
+  @@index([status])
+  @@index([company])
+  @@index([createdAt])
+  @@index([lastContacted])
+}
+
+// AmeboGist specific models
+model Post {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String
+  excerpt     String?
+  category    String
+  authorId    String
+  published   Boolean  @default(false)
+  publishedAt DateTime?
+  
+  // Stats
+  views       Int      @default(0)
+  likes       Int      @default(0)
+  shares      Int      @default(0)
+  
+  // SEO
+  seoTitle    String?
+  seoDescription String?
+  keywords    String[]
+  
+  // Media
+  featuredImage String?
+  images      String[]
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  author      User     @relation(fields: [authorId], references: [id])
+  
+  @@index([category])
+  @@index([published])
+  @@index([publishedAt])
+  @@index([authorId])
+}
+
+// EduCenter specific models
+model Course {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String
+  content     String?
+  
+  // Pricing
+  price       Float    @default(0)
+  isFree      Boolean  @default(false)
+  
+  // Course details
+  duration    Int      // in hours
+  level       String   @default("Beginner")
+  category    String
+  tags        String[]
+  
+  // Media
+  thumbnail   String?
+  videos      String[]
+  resources   String[]
+  
+  // Instructor
+  instructorId String
+  instructor  User     @relation(fields: [instructorId], references: [id])
+  
+  // Status
+  published   Boolean  @default(false)
+  featured    Boolean  @default(false)
+  
+  // Stats
+  enrollments Int      @default(0)
+  rating      Float    @default(0)
+  reviews     Int      @default(0)
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  modules     Module[]
+  enrollments Enrollment[]
+  
+  @@index([slug])
+  @@index([instructorId])
+  @@index([published])
+  @@index([category])
+}
+
+model Module {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  content     String?
+  order       Int
+  duration    Int      // in minutes
+  
+  // Media
+  videoUrl    String?
+  resources   String[]
+  
+  // Course relation
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([courseId])
+  @@index([order])
+}
+
+model Enrollment {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  progress  Float    @default(0)
+  completed Boolean  @default(false)
+  
+  // Certificate
+  certificateUrl String?
+  completedAt    DateTime?
+  
+  // Timestamps
+  enrolledAt DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  // Relations
+  user      User     @relation(fields: [userId], references: [id])
+  course    Course   @relation(fields: [courseId], references: [id])
+  
+  @@unique([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
+  @@index([completed])
+}
+
+// Najja FitHer specific models
+model MealPlan {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  
+  // Nutrition
+  calories    Int
+  protein     Int
+  carbs       Int
+  fat         Int
+  
+  // Duration
+  days        Int      @default(7)
+  mealsPerDay Int      @default(3)
+  
+  // Meal data
+  meals       Json     // Array of daily meals
+  
+  // User relation
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([calories])
+}
+
+model Workout {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  
+  // Details
+  duration    Int      // in minutes
+  difficulty  String   @default("Beginner")
+  equipment   String[]
+  targetAreas String[]
+  
+  // Exercises
+  exercises   Json     // Array of exercises
+  
+  // Media
+  videoUrl    String?
+  images      String[]
+  
+  // User relation
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  
+  // Stats
+  completedCount Int    @default(0)
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([difficulty])
+  @@index([duration])
+}
+
+model ProgressLog {
+  id          String   @id @default(cuid())
+  
+  // Measurements
+  weight      Float
+  weightUnit  String   @default("kg")
+  measurements Json?   // Body measurements
+  
+  // Health metrics
+  energyLevel Int?     // 1-10
+  mood        String?
+  notes       String?
+  
+  // Photo evidence
+  photoUrl    String?
+  
+  // User relation
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  
+  // Timestamps
+  loggedAt    DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([loggedAt])
+}
+
+// SAFE AI specific models (Note: Most sensitive data is in PostgreSQL)
+model Incident {
+  id          String   @id @default(cuid())
+  incidentCode String  @unique
+  title       String
+  description String
+  type        String
+  severity    String   @default("medium")
+  status      String   @default("pending")
+  
+  // Location (basic info only, full encrypted data in PostgreSQL)
+  location    Json?
+  
+  // People
+  reporterId  String
+  officerId   String?
+  
+  // Timestamps
+  incidentTime DateTime
+  reportedAt  DateTime  @default(now())
+  resolvedAt  DateTime?
+  
+  // Relations
+  reporter    User     @relation(fields: [reporterId], references: [id])
+  officer     User?    @relation(fields: [officerId], references: [id])
+  cases       Case[]
+  
+  @@index([type])
+  @@index([status])
+  @@index([severity])
+  @@index([incidentTime])
+}
+
+model Case {
+  id          String   @id @default(cuid())
+  caseNumber  String   @unique
+  title       String
+  description String?
+  type        String
+  priority    String   @default("medium")
+  status      String   @default("open")
+  
+  // Assignment
+  leadOfficerId String?
+  
+  // Related incidents
+  incidentIds  String[]
+  
+  // Timelines
+  openedAt    DateTime @default(now())
+  closedAt    DateTime?
+  estimatedCompletionDate DateTime?
+  
+  // Relations
+  leadOfficer User?    @relation(fields: [leadOfficerId], references: [id])
+  incidents   Incident[]
+  
+  @@index([caseNumber])
+  @@index([status])
+  @@index([type])
+  @@index([leadOfficerId])
+}
+
+// PlanAI Suite models
+model Conversation {
+  id          String   @id @default(cuid())
+  clientId    String
+  platform    String   // whatsapp, messenger, instagram, etc.
+  platformId  String
+  status      String   @default("active")
+  
+  // Messages
+  messages    Json     // Array of messages
+  
+  // Assignment
+  assignedTo  String?
+  
+  // Last activity
+  lastMessageAt DateTime @default(now())
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([platform, platformId])
+  @@index([clientId])
+  @@index([status])
+  @@index([assignedTo])
+}
+
+model ContentCalendar {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  
+  // Content
+  content     Json?
+  media       String[]
+  
+  // Scheduling
+  platforms   String[]
+  scheduledAt DateTime
+  status      String   @default("draft") // draft, scheduled, published, failed
+  
+  // Publishing
+  publishedAt DateTime?
+  publishData Json?
+  
+  // User relation
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([scheduledAt])
+  @@index([status])
+}
+
+// Analytics models
+model AnalyticsEvent {
+  id          String   @id @default(cuid())
+  eventName   String
+  eventData   Json?
+  
+  // User info
+  userId      String?
+  sessionId   String?
+  
+  // Context
+  userAgent   String?
+  ipAddress   String?
+  referrer    String?
+  url         String?
+  
+  // Product context
+  productId   String?
+  feature     String?
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  
+  @@index([eventName])
+  @@index([userId])
+  @@index([productId])
+  @@index([createdAt])
+}
+
+// Email campaigns (Marketing Automation)
+model EmailCampaign {
+  id          String   @id @default(cuid())
+  name        String
+  subject     String
+  content     String
+  status      String   @default("draft") // draft, scheduled, sending, sent, cancelled
+  
+  // Audience
+  segment     Json?
+  recipients  String[]
+  
+  // Scheduling
+  scheduledAt DateTime?
+  sentAt      DateTime?
+  
+  // Stats
+  sentCount   Int      @default(0)
+  openedCount Int      @default(0)
+  clickedCount Int     @default(0)
+  
+  // User relation
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([status])
+  @@index([scheduledAt])
+}
+
+// Website/Store models (Digital Storefronts)
+model Store {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  
+  // Settings
+  settings    Json?    @default("{}")
+  theme       Json?    @default("{}")
+  
+  // Products
+  products    StoreProduct[]
+  
+  // User relation
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  
+  // Stats
+  visits      Int      @default(0)
+  orders      Int      @default(0)
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([slug])
+  @@index([ownerId])
+}
+
+model StoreProduct {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  price       Float
+  currency    String   @default("NGN")
+  
+  // Inventory
+  sku         String?
+  stock       Int      @default(0)
+  images      String[]
+  
+  // Store relation
+  storeId     String
+  store       Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  
+  // Categories
+  category    String?
+  tags        String[]
+  
+  // Status
+  published   Boolean  @default(true)
+  featured    Boolean  @default(false)
+  
+  // Stats
+  views       Int      @default(0)
+  sales       Int      @default(0)
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([storeId])
+  @@index([category])
+  @@index([published])
+}
+
+model Order {
+  id          String   @id @default(cuid())
+  orderNumber String   @unique
+  status      String   @default("pending") // pending, processing, shipped, delivered, cancelled
+  
+  // Customer info
+  customerName String
+  customerEmail String
+  customerPhone String?
+  shippingAddress Json?
+  
+  // Items
+  items       Json     // Array of order items
+  
+  // Totals
+  subtotal    Float
+  shipping    Float    @default(0)
+  tax         Float    @default(0)
+  total       Float
+  
+  // Payment
+  paymentMethod String?
+  paymentStatus String  @default("pending")
+  paymentReference String?
+  paidAt       DateTime?
+  
+  // Store relation
+  storeId     String
+  store       Store    @relation(fields: [storeId], references: [id])
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([orderNumber])
+  @@index([storeId])
+  @@index([customerEmail])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// Business Planning models
+model BusinessPlan {
+  id          String   @id @default(cuid())
+  name        String
+  industry    String
+  description String?
+  
+  // Plan data
+  executiveSummary String?
+  marketAnalysis   Json?
+  productsServices Json?
+  marketingPlan    Json?
+  financialProjections Json?
+  
+  // Status
+  status      String   @default("draft") // draft, completed, exported
+  
+  // User relation
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  completedAt DateTime?
+  
+  @@index([userId])
+  @@index([industry])
+  @@index([status])
+}
+
+// Credibility Hub models
+model Portfolio {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  tagline     String?
+  bio         String?
+  
+  // Sections
+  sections    Json?    @default("[]")
+  
+  // Customization
+  theme       Json?    @default("{}")
+  settings    Json?    @default("{}")
+  
+  // Social links
+  socialLinks Json?    @default("{}")
+  
+  // Contact
+  contactInfo Json?    @default("{}")
+  
+  // User relation
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  
+  // Stats
+  views       Int      @default(0)
+  
+  // Status
+  published   Boolean  @default(false)
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([userId])
+  @@index([slug])
+  @@index([userId])
+  @@index([published])
+}
+
+// Investment models (Investor Readiness)
+model DataRoom {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  
+  // Documents
+  documents   Json?    @default("[]")
+  
+  // Access control
+  accessList  Json?    @default("[]")
+  
+  // User relation
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([userId])
+}
+
+// AfroCopy AI specific (Content generation history)
+model GeneratedContent {
+  id          String   @id @default(cuid())
+  prompt      String
+  response    String
+  model       String?
+  
+  // Content type
+  contentType String   // social, email, blog, ad, etc.
+  tone        String?
+  language    String   @default("english")
+  
+  // User relation
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  
+  // Usage tracking
+  tokensUsed  Int?
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  
+  @@index([userId])
+  @@index([contentType])
+  @@index([createdAt])
+}
+
+// PowerAlert NG specific
+model PowerStatus {
+  id          String   @id @default(cuid())
+  area        String
+  status      String   // on, off, partial
+  reportedAt  DateTime
+  source      String   // user, official, sensor
+  
+  // Location
+  latitude    Float?
+  longitude   Float?
+  
+  // Details
+  estimatedRestoration DateTime?
+  notes       String?
+  
+  // Verification
+  verified    Boolean  @default(false)
+  verificationCount Int @default(0)
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([area])
+  @@index([status])
+  @@index([reportedAt])
+}
+
+// NaijaGig Matcher specific
+model Gig {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  category    String
+  skills      String[]
+  
+  // Location
+  location    String
+  latitude    Float?
+  longitude   Float?
+  
+  // Pricing
+  budgetType  String   @default("fixed") // fixed, hourly, negotiable
+  budget      Float?
+  currency    String   @default("NGN")
+  
+  // Duration
+  duration    String?  // e.g., "2 days", "1 week"
+  
+  // Client
+  clientId    String
+  client      User     @relation(fields: [clientId], references: [id])
+  
+  // Status
+  status      String   @default("open") // open, assigned, completed, cancelled
+  
+  // Worker
+  workerId    String?
+  worker      User?    @relation(fields: [workerId], references: [id])
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  assignedAt  DateTime?
+  completedAt DateTime?
+  
+  @@index([category])
+  @@index([location])
+  @@index([clientId])
+  @@index([workerId])
+  @@index([status])
+}
+
+// KoloAI specific (Thrift groups)
+model ThriftGroup {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  
+  // Settings
+  amount      Float
+  currency    String   @default("NGN")
+  cycle       String   @default("monthly") // daily, weekly, monthly
+  slotCount   Int
+  startDate   DateTime
+  
+  // Members
+  members     Json?    @default("[]")
+  
+  // Status
+  status      String   @default("active") // active, completed, cancelled
+  
+  // Creator
+  creatorId   String
+  creator     User     @relation(fields: [creatorId], references: [id])
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([creatorId])
+  @@index([status])
+  @@index([cycle])
+}
+
+// AnonTruth Mic specific
+model AnonymousDrop {
+  id          String   @id @default(cuid())
+  content     String
+  contentType String   @default("text") // text, audio, image
+  mediaUrl    String?
+  
+  // Location targeting
+  location    String?  // State, LGA, or null for global
+  latitude    Float?
+  longitude   Float?
+  
+  // Visibility
+  visibility  String   @default("public") // public, followers, private
+  expiresAt   DateTime?
+  
+  // Engagement
+  views       Int      @default(0)
+  reactions   Json?    @default("{}")
+  comments    Json?    @default("[]")
+  
+  // Boost
+  boosted     Boolean  @default(false)
+  boostedUntil DateTime?
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([contentType])
+  @@index([location])
+  @@index([expiresAt])
+  @@index([boosted])
+  @@index([createdAt])
+}
+
+// System-wide notifications
+model Notification {
+  id          String   @id @default(cuid())
+  userId      String
+  title       String
+  message     String
+  type        String   @default("info") // info, success, warning, error
+  read        Boolean  @default(false)
+  
+  // Action
+  actionUrl   String?
+  actionLabel String?
+  
+  // Metadata
+  metadata    Json?    @default("{}")
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  readAt      DateTime?
+  
+  // Relations
+  user        User     @relation(fields: [userId], references: [id])
+  
+  @@index([userId])
+  @@index([read])
+  @@index([createdAt])
+}
+
+// API keys for services
+model ApiKey {
+  id          String   @id @default(cuid())
+  name        String
+  key         String   @unique
+  secret      String?
+  userId      String
+  permissions String[]
+  expiresAt   DateTime?
+  lastUsedAt  DateTime?
+  
+  // Status
+  active      Boolean  @default(true)
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  user        User     @relation(fields: [userId], references: [id])
+  
+  @@index([userId])
+  @@index([key])
+  @@index([active])
+}
+
+// Activity logs for admin monitoring
+model ActivityLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  action      String
+  resource    String?
+  resourceId  String?
+  details     Json?
+  ipAddress   String?
+  userAgent   String?
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  
+  @@index([userId])
+  @@index([action])
+  @@index([resource])
+  @@index([createdAt])
+}
