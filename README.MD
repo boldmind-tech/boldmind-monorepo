@@ -19,7 +19,7 @@ pnpm build
 
 # Deploy all apps
 pnpm deploy:all
-```
+
 
 ## 📦 Products
 
@@ -45,9 +45,9 @@ AfroHustle OS, NaijaGig Matcher, KoloAI, BorderlessRemit, ReceiptGenius, PowerAl
 
 ## 📁 Structure
 
-```
+
 # 🏗 BOLDMIND COMPLETE MONOREPO - ALL 31 PRODUCTS
-```
+
 boldmind-monorepo/
 │
 ├── .github/
@@ -93,7 +93,6 @@ boldmind-monorepo/
 │ │ │ ├── tsconfig.json
 │ │ │ └── .env.local.example
 │ │ │
-
 │ │ ├── amebogist/ # AmeboGist.ng (LIVE ✅)
 │ │ │ ├── app/
 │ │ │ │ ├── (home)/
@@ -142,7 +141,6 @@ boldmind-monorepo/
 │ │ │ │ │ ├── payments/
 │ │ │ │ │ │ ├── paystack/route.ts # Paystack webhook
 │ │ │ │ │ │ └── verify/route.ts
-
 │ │ │ │ │ ├── courses/route.ts
 │ │ │ │ │ └── questions/route.ts
 │ │ │ │ └── layout.tsx
@@ -191,7 +189,6 @@ boldmind-monorepo/
 │ │ │ │ ├── whisper.ts
 │ │ │ │ └── n8n.ts
 │ │ │ ├── package.json
-
 │ │ │ └── .env.local.example
 │ │ │
 │ │ ├── naija-fither/ # Naija FitHer (NEW 🆕)
@@ -240,7 +237,6 @@ boldmind-monorepo/
 │ │ │ │ │ │ ├── page.tsx # Email finder UI
 │ │ │ │ │ │ └── results/page.tsx
 │ │ │ │ │ ├── verifier/page.tsx # Email verifier
-
 │ │ │ │ │ ├── enrichment/page.tsx # Lead enrichment
 │ │ │ │ │ ├── bulk/page.tsx # Bulk operations
 │ │ │ │ │ ├── api-keys/page.tsx # API key management
@@ -289,7 +285,6 @@ boldmind-monorepo/
 │ │ │ │ │ └── voice-to-text/route.ts # Whisper API (Pidgin)
 │ │ │ │ └── layout.tsx
 │ │ │ ├── components/
-
 │ │ │ │ ├── IncidentForm.tsx
 │ │ │ │ ├── CrimeMap.tsx
 │ │ │ │ ├── VoiceRecorder.tsx
@@ -338,7 +333,6 @@ boldmind-monorepo/
 │ │ │ │ ├── generator/page.tsx
 │ │ │ │ └── api/route.ts
 │ │ │ ├── package.json
-
 │ │ │ └── README.md
 │ │ │
 │ │ ├── power-alert/ # PowerAlert NG (CONCEPT 💡)
@@ -387,7 +381,6 @@ boldmind-monorepo/
 │ │ │ │ │ ├── dashboard/page.tsx
 │ │ │ │ │ ├── clients/
 │ │ │ │ │ │ ├── page.tsx # All clients
-
 │ │ │ │ │ │ └── [id]/page.tsx # Client dashboard
 │ │ │ │ │ ├── leads/page.tsx # Lead management
 │ │ │ │ │ ├── conversations/page.tsx # Chat history
@@ -436,7 +429,6 @@ boldmind-monorepo/
 │ │ │ │ ├── n8n.ts
 │ │ │ │ └── social-apis.ts
 │ │ │ ├── package.json
-
 │ │ │ └── .env.local.example
 │ │ │
 │ │ ├── credibility-hubs/ # Professional Credibility Hubs (PLANNED 📋)
@@ -485,7 +477,6 @@ boldmind-monorepo/
 │ │ │ │ ├── builder/page.tsx
 │ │ │ │ ├── products/page.tsx
 │ │ │ │ └── api/route.ts
-
 │ │ │ ├── package.json
 │ │ │ └── README.md
 │ │ │
@@ -534,7 +525,6 @@ boldmind-monorepo/
 │ │
 │ └── safe-naija-native/ # SAFE AI (Full React Native)
 │ ├── android/
-
 │ ├── ios/
 │ ├── src/
 │ │ ├── screens/
@@ -583,7 +573,6 @@ boldmind-monorepo/
 │ │ │ ├── helpers/
 │ │ │ │ ├── date.ts # Date formatting
 │ │ │ │ ├── currency.ts # ₦ formatting
-
 │ │ │ │ ├── string.ts # String utils
 │ │ │ │ ├── array.ts # Array utils
 │ │ │ │ └── validation.ts # Input validation
@@ -632,7 +621,6 @@ boldmind-monorepo/
 │ │ │ │ │ ├── Subscription.ts
 │ │ │ │ │ ├── Lead.ts
 │ │ │ │ │ └── index.ts
-
 │ │ │ │ └── schemas/
 │ │ │ │ └── user.schema.ts
 │ │ │ ├── postgres/
@@ -681,7 +669,6 @@ boldmind-monorepo/
 │ │ ├── src/
 │ │ │ ├── openai/
 │ │ │ │ ├── client.ts # OpenAI client
-
 │ │ │ │ ├── chat.ts # Chat completions
 │ │ │ │ ├── embeddings.ts
 │ │ │ │ └── assistants.ts
@@ -730,7 +717,6 @@ boldmind-monorepo/
 │ │
 │ ├── seo/ # SEO utilities
 │ │ ├── src/
-
 │ │ │ ├── metadata.ts # Generate metadata
 │ │ │ ├── sitemap.ts # Generate sitemaps
 │ │ │ ├── robots.ts # Generate robots.txt
@@ -779,7 +765,6 @@ boldmind-monorepo/
 │ │ │ └── configuration.ts
 │ │ ├── test/
 │ │ ├── nest-cli.json
-
 │ │ ├── package.json
 │ │ ├── tsconfig.json
 │ │ └── .env.example
@@ -828,7 +813,6 @@ boldmind-monorepo/
 │ │ ├── Dockerfile.api # For NestJS services
 │ │ ├── Dockerfile.n8n # For n8n workflows
 │ │ └── docker-compose.yml
-
 │ │
 │ ├── kubernetes/
 │ │ ├── deployments/
@@ -877,7 +861,6 @@ boldmind-monorepo/
 │ │
 │ ├── architecture/
 │ │ ├── overview.md
-
 │ │ ├── monorepo-structure.md
 │ │ ├── database-schema.md
 │ │ ├── api-gateway.md
@@ -922,8 +905,7 @@ boldmind-monorepo/
 ├── CONTRIBUTING.md # Contribution guidelines
 ├── LICENSE
 └── CHANGELOG.md # Version history
-```
----
+
 
 ## 📊 PRODUCT STATUS SUMMARY
 ### **✅ LIVE (3 products)**
@@ -966,11 +948,11 @@ boldmind-monorepo/
 32. SAFE AI Native - `apps/mobile/safe-naija-native/`
 **TOTAL: 32 Products (31 web/concepts + 1 extra mobile)**
 
-```
+
 
 ## 🔧 Development
 
-```bash
+
 # Run tests
 pnpm test
 
@@ -997,7 +979,7 @@ pnpm add framer-motion@latest
 
 # 3. Update everything consistently:
 pnpm update --latest --recursive
-```
+
 
 ## 🌐 Domains
 
@@ -1010,9 +992,10 @@ pnpm update --latest --recursive
 - **email.boldmind.ng** - EmailScraper Pro
 - **safe.boldmind.ng** - SAFE AI
 
+
 ## 📚 Documentation
 
-See `/docs` folder for:
+See `/docs` folder for
 - Architecture overview
 - Setup guide
 - Deployment guide
@@ -1022,7 +1005,4 @@ See `/docs` folder for:
 ## 🎯 Mission
 
 **Empower 1 million Nigerian entrepreneurs by 2030.**
-
----
-
 Built with 💛 by BoldMind Technology Solution Enterprise
