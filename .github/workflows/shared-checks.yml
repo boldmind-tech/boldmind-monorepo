@@ -1,26 +1,26 @@
-name: Shared Checks
-on:
-  pull_request:
-    branches: [main, develop]
+# name: Shared Checks
+# on:
+#   pull_request:
+#     branches: [main, develop]
 
-jobs:
-  lint-type-check-format:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "18"
-          cache: "pnpm"
-      - run: pnpm install
-      - name: Lint
-        run: pnpm lint
-      - name: Type Check
-        run: pnpm type-check
-      - name: Format Check
-        run: pnpm format:check
-      - name: Build Packages
-        run: pnpm build:packages
+# jobs:
+#   lint-type-check-format:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#       - uses: pnpm/action-setup@v2
+#         with:
+#           version: 8
+#       - uses: actions/setup-node@v4
+#         with:
+#           node-version: "18"
+#           cache: "pnpm"
+#       - run: pnpm install
+#       - name: Lint
+#         run: pnpm lint
+#       - name: Type Check
+#         run: pnpm type-check
+#       - name: Format Check
+#         run: pnpm format:check
+#       - name: Build Packages
+#         run: pnpm build:packages

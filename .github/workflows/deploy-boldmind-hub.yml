@@ -1,91 +1,25 @@
-# .github/workflows/deploy.yml
 name: Deploy BoldMind Hub
-
 on:
   push:
     branches: [main]
-    paths:
-      - 'apps/web/boldmind-hub/**'
-      - 'packages/ui/**'
-      - 'pnpm-lock.yaml'
-  workflow_dispatch:
+    paths: ['apps/web/boldmind-hub/**']
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v3
         with:
-          node-version: '20'
-          cache: 'pnpm'
-      
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8.15.0
-      
-      - name: Fix missing es-abstract dependency
-        run: |
-          # Add the missing module
-          pnpm add -w es-abstract@^1.23.0
+          node-version: '18'
       
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
-      
-      - name: Build BoldMind Hub (skip ESLint errors)
-        run: |
-          cd apps/web/boldmind-hub
-          
-          # Disable ESLint completely
-          export NEXT_DISABLE_ESLINT_PLUGIN=true
-          export DISABLE_ESLINT_PLUGIN=true
-          
-          # Build with ESLint disabled
-          pnpm build
-          
-          # Verify build
-          if [ -d ".next" ]; then
-            echo "✅ Build successful!"
-            echo "📊 Build stats:"
-            echo "  - Pages built: 8"
-            echo "  - First load JS: ~153 kB"
-            echo "  - Static pages: 6"
-          else
-            echo "❌ Build failed - .next directory missing"
-            exit 1
-          fi
+        run: pnpm install
       
       - name: Deploy to Vercel
         run: |
           cd apps/web/boldmind-hub
-          
-          # Install Vercel CLI
-          npm install -g vercel@latest
-          
-          # Deploy with prebuilt
-          vercel deploy \
-            --prebuilt \
-            --prod \
-            --token=${{ secrets.VERCEL_TOKEN }} \
-            --yes
-          
+          npx vercel --token ${{ secrets.VERCEL_TOKEN }} --prod --yes
         env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_HUB }}
-      
-      - name: Success
-        if: success()
-        run: |
-          echo "🎉 Deployment successful!"
-          echo "🌐 Your app is live at: https://boldmind-hub.vercel.app"
-          echo ""
-          echo "📊 Build Summary:"
-          echo "  - 8 pages generated"
-          echo "  - 6 static routes"
-          echo "  - 153 kB first load JS"
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}

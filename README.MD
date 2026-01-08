@@ -4,7 +4,7 @@
 
 ## 🚀 Quick Start
 
-```bash
+
 # Install dependencies
 pnpm install
 
