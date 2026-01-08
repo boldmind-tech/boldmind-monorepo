@@ -954,7 +954,7 @@ importers:
   apps/web/boldmind-hub:
     dependencies:
       '@boldmind/ui':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../../packages/ui
       framer-motion:
         specifier: ^10.16.16
@@ -982,7 +982,7 @@ importers:
         specifier: ^18
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
-        specifier: ^10.4.23
+        specifier: ^10.0.1
         version: 10.4.23(postcss@8.5.6)
       eslint:
         specifier: ^8
@@ -991,10 +991,10 @@ importers:
         specifier: 14.2.0
         version: 14.2.0(eslint@8.57.1)(typescript@5.9.3)
       postcss:
-        specifier: ^8.5.6
+        specifier: ^8
         version: 8.5.6
       tailwindcss:
-        specifier: ^3.4.19
+        specifier: ^3.4.0
         version: 3.4.19
       typescript:
         specifier: ^5
