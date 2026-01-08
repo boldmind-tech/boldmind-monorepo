@@ -21,9 +21,16 @@ jobs:
           version: 8
       
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
       
-      # ✅ Better: Use Vercel Action
+      - name: Build UI package
+        run: pnpm --filter @boldmind/ui build
+      
+      - name: Build boldmind-hub
+        run: |
+          cd apps/web/boldmind-hub
+          pnpm build
+      
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
         with:
