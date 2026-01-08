@@ -1,11 +1,5 @@
 {
-  "framework": "nextjs",
-  "buildCommand": "pnpm build",
-  "outputDirectory": ".next",
-  "installCommand": "pnpm install",
-  "devCommand": "pnpm dev",
-  "regions": ["fra1"],
-  "env": {
-    "NEXT_PUBLIC_APP_URL": "https://boldmind.ng"
-  }
+  "installCommand": "cd ../../.. && pnpm install",
+  "buildCommand": "cd ../../.. && pnpm --filter @boldmind/ui build && cd apps/web/boldmind-hub && pnpm build",
+  "outputDirectory": ".next"
 }
