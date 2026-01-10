@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Navbar, Footer } from '../ui-package';
+import { Navbar, Footer } from '@boldmind/ui';
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://boldmind.ng';
 const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || 'BoldMind Technology Solutions';

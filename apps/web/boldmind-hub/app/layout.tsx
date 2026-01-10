@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: 'BoldMind - Empowering 1M Nigerian Entrepreneurs by 2030',
   description: 'Nigerian tech ecosystem creating impact-driven products that solve fundamental problems through authentic media, education, and AI-powered technology.',
   keywords: ['Nigerian entrepreneurs', 'tech Nigeria', 'AI Nigeria', 'business automation', 'PlanAI', 'AmeboGist', 'EduCenter'],
-  authors: [{ name: 'BoldMind Technology Solutions' }],
+  authors: [{ name: 'BoldMind Technology Solution Enterprise' }],
   creator: 'BoldMind',
   publisher: 'BoldMind Technology Solution Enterprise',
   robots: {

@@ -2,7 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Navbar, Footer } from '../../ui-package';
+import { Navbar, Footer } from '@boldmind/ui';
 import { motion } from 'framer-motion';
 
 const products = [
