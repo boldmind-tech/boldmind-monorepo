@@ -1,6 +1,5 @@
 {
-  "buildCommand": "pnpm build",
-  "installCommand": "pnpm install",
-  "framework": "nextjs",
-  "outputDirectory": ".next"
+  "buildCommand": "cd ../../.. && pnpm build:ui && mkdir -p apps/web/boldmind-hub/ui-package && cp -r packages/ui/dist apps/web/boldmind-hub/ui-package/ && cp packages/ui/package.json apps/web/boldmind-hub/ui-package/ && cd apps/web/boldmind-hub && pnpm build",
+  "installCommand": "cd apps/web/boldmind-hub && pnpm install",
+  "outputDirectory": "apps/web/boldmind-hub/.next"
 }
