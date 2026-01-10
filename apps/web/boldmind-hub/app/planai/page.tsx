@@ -2,7 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Navbar, Footer } from '@boldmind/ui';
+import { Navbar, Footer } from '../../ui-package';
 import { motion } from 'framer-motion';
 
 const products = [
@@ -14,7 +14,7 @@ const products = [
     status: '✅ LIVE',
     statusColor: 'text-green-400',
     features: [
-      'Meta API integration (FB/IG/WhatsApp)',
+      'Meta API integration (FB/IG/WhtsApp)',
       'Auto-reply to comments and DMs',
       'Lead generation and qualification',
       'Appointment booking automation',
