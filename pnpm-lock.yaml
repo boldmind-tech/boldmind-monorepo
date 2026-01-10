@@ -956,6 +956,15 @@ importers:
       '@boldmind/ui':
         specifier: workspace:*
         version: link:../../../packages/ui
+      '@types/node':
+        specifier: ^20
+        version: 20.19.27
+      '@types/react':
+        specifier: ^18
+        version: 18.3.27
+      '@types/react-dom':
+        specifier: ^18
+        version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
         specifier: ^10.4.23
         version: 10.4.23(postcss@8.5.6)
@@ -980,25 +989,16 @@ importers:
       tailwindcss:
         specifier: ^3.4.19
         version: 3.4.19
+      typescript:
+        specifier: ^5
+        version: 5.9.3
     devDependencies:
-      '@types/node':
-        specifier: ^20
-        version: 20.19.27
-      '@types/react':
-        specifier: ^18
-        version: 18.3.27
-      '@types/react-dom':
-        specifier: ^18
-        version: 18.3.7(@types/react@18.3.27)
       eslint:
         specifier: ^8
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.0
         version: 14.2.0(eslint@8.57.1)(typescript@5.9.3)
-      typescript:
-        specifier: ^5
-        version: 5.9.3
 
   apps/web/boldmind-os:
     dependencies:
