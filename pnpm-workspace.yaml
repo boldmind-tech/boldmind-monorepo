@@ -1,5 +1,5 @@
 packages:
-  - 'apps/web/*'
+  - 'apps/web/**'
   - 'apps/planai/*'
-  - 'packages/*'
-  - 'services/*'
+  - 'packages/**'
+  - 'services/**'

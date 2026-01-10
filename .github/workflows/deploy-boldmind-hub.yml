@@ -15,27 +15,10 @@ jobs:
         with:
           node-version: '20'
       
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      
-      - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
-      
-      - name: Build UI package
-        run: pnpm --filter @boldmind/ui build
-      
-      - name: Build boldmind-hub
-        run: |
-          cd apps/web/boldmind-hub
-          pnpm build
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
       
       - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
-          working-directory: apps/web/boldmind-hub
+        run: |
+          cd apps/web/boldmind-hub
+          vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --yes --scope charlycoms-projects

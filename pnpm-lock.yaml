@@ -954,7 +954,7 @@ importers:
   apps/web/boldmind-hub:
     dependencies:
       '@boldmind/ui':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../../packages/ui
       framer-motion:
         specifier: ^10.16.16
