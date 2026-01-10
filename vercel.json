@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "buildCommand": "cd apps/web/boldmind-hub && pnpm install && pnpm build",
+  "outputDirectory": "apps/web/boldmind-hub/.next",
+  "installCommand": "pnpm install --no-frozen-lockfile",
+  "framework": null
+}

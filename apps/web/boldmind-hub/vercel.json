@@ -1,5 +1,5 @@
 {
-  "installCommand": "cd ../../.. && NODE_ENV=development pnpm install",
-  "buildCommand": "cd ../../.. && pnpm --filter @boldmind/ui build && cd apps/web/boldmind-hub && pnpm build",
-  "outputDirectory": "apps/web/boldmind-hub/.next"
+  "buildCommand": "pnpm build",
+  "framework": "nextjs",
+  "installCommand": "pnpm install"
 }
