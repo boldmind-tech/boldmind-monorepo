@@ -3,9 +3,13 @@ import { defineConfig } from 'tsup';
 export default defineConfig({
   entry: ['src/index.ts'],
   format: ['cjs', 'esm'],
-  dts: true,
+  dts: false,  // Turn off TypeScript declarations
   splitting: false,
-  sourcemap: true,
+  sourcemap: false,
   clean: true,
-  external: ['react', 'react-dom', 'next'], 
+  external: ['react', 'react-dom', 'next'],
+  skipNodeModulesBundle: true,
+  minify: false,
+  target: 'es2020',
+  outDir: 'dist'
 });
