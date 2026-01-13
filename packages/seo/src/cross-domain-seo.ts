@@ -178,26 +178,127 @@ Disallow: /
   }
 }
 
+export interface OrganizationSchema {
+  name: string;
+  url: string;
+  logo: string;
+  description: string;
+  foundingDate: string;
+  founders: { name: string }[];
+  address: {
+    streetAddress: string;
+    addressLocality: string;
+    addressRegion: string;
+    addressCountry: string;
+  };
+  contactPoint: {
+    telephone: string;
+    contactType: string;
+    email: string;
+  };
+  sameAs: string[];
+}
+
 // JSON-LD schema for organization
-export function generateOrganizationSchema() {
+export function generateOrganizationSchema(config: OrganizationSchema) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'BoldMind',
-    url: 'https://boldmind.ng',
-    logo: 'https://boldmind.ng/logo.png',
-    sameAs: [
-      'https://twitter.com/boldmind_ng',
-      'https://facebook.com/boldmind',
-      'https://linkedin.com/company/boldmind',
-      'https://instagram.com/boldmind_ng',
-    ],
+    name: config.name,
+    url: config.url,
+    logo: config.logo,
+    description: config.description,
+    foundingDate: config.foundingDate,
+    founders: config.founders,
+    address: {
+      '@type': 'PostalAddress',
+      ...config.address,
+    },
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+234-xxx-xxx-xxxx',
-      contactType: 'customer service',
-      areaServed: 'NG',
-      availableLanguage: ['English'],
+      ...config.contactPoint,
+    },
+    sameAs: config.sameAs,
+  };
+}
+
+export interface ProductSchema {
+  name: string;
+  description: string;
+  image: string;
+  brand: string;
+  offers: {
+    price: string;
+    priceCurrency: string;
+    availability: string;
+  };
+}
+
+export function generateProductSchema(config: ProductSchema) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: config.name,
+    description: config.description,
+    image: config.image,
+    brand: {
+      '@type': 'Brand',
+      name: config.brand,
+    },
+    offers: {
+      '@type': 'Offer',
+      ...config.offers,
     },
   };
 }
+
+export interface ArticleSchema {
+  headline: string;
+  description: string;
+  image: string;
+  author: string;
+  publisher: string;
+  datePublished: string;
+  dateModified: string;
+}
+
+export function generateArticleSchema(config: ArticleSchema) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: config.headline,
+    description: config.description,
+    image: config.image,
+    author: {
+      '@type': 'Person',
+      name: config.author,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: config.publisher,
+    },
+    datePublished: config.datePublished,
+    dateModified: config.dateModified,
+  };
+}
+
+// ===================================
+// CANONICAL URL GENERATOR
+// ===================================
+export function generateCanonicalUrl(baseUrl: string, path: string): string {
+  const cleanBase = baseUrl.replace(/\/$/, '');
+  const cleanPath = path.replace(/^\//, '');
+  return `${cleanBase}/${cleanPath}`;
+}
+
+// ===================================
+// SLUG GENERATOR
+// ===================================
+export function generateSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+

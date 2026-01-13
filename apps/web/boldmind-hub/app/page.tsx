@@ -54,7 +54,7 @@ export default function HomePage() {
       links: [
         { href: '#ecosystem', label: 'Ecosystem' },
         { href: '#products', label: 'Products' },
-        { href: 'https://x.com/VillageCircle', label: 'Blog' },
+        { href: 'https://amebogist.ng', label: 'Blog' },
         { href: '#contact', label: 'Contact' },
       ],
     },

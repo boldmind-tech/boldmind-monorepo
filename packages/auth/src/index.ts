@@ -1,36 +1,23 @@
-// Export middleware
-export { authMiddleware, requireRole, rateLimitMiddleware } from './middleware';
+// auth actions
+export { loginWithEmail } from "./application/login/loginWithEmail";
+export { loginWithOAuth } from "./application/login/loginWithOAuth";
+export { registerWithEmail } from "./application/register/registerWithEmail";
 
-// Export supabase client
-export { supabase } from './supabase';
+// password
+export { requestPasswordReset } from "./application/password/requestPasswordReset";
+export { updatePassword } from "./application/password/updatePassword";
 
-// Export hooks
-export { useAuth } from './hooks/useAuth';
-export { useUser } from './hooks/useUser';
-export { useSession } from './hooks/useSession';
+// session
+export * from './application/session/getSession';
+export * from './application/session/getUser';
+export * from './application/session/logout';
 
-// Export providers
-export { googleProvider } from './providers/google';
-export { facebookProvider } from './providers/facebook';
-export { emailProvider } from './providers/email';
+// react
+export { AuthProvider, useAuth } from "./delivery/react/AuthProvider";
+export { useUser } from "./delivery/react/hooks/useUser";
 
-// Export types
-export type { AuthUser, AuthSession } from './types/auth';
+// access control
+export * from './domain/policies/canAccessFeature';
 
-// Create a simple client factory
-export function createAuthClient() {
-  // Return a simple object for now
-  return {
-    signIn: async (email: string, _password: string) => {
-      console.log('Sign in:', email);
-      return { user: { id: '1', email }, session: null };
-    },
-    signUp: async (email: string, _password: string) => {
-      console.log('Sign up:', email);
-      return { user: { id: '1', email }, session: null };
-    },
-    signOut: async () => {
-      console.log('Sign out');
-    },
-  };
-}
+// providers
+export * from "./providers";

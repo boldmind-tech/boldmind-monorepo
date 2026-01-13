@@ -1,77 +1,50 @@
-import mongoose from 'mongoose';
+// packages/database/src/mongodb/client.ts
+import { MongoClient, Db } from 'mongodb';
 
-export interface DatabaseConnection {
-  client: typeof mongoose;
-  db: mongoose.Connection;
+let cachedClient: MongoClient | null = null;
+let cachedDb: Db | null = null;
+
+export interface MongoConfig {
+  uri: string;
+  dbName: string;
 }
 
-let cachedConnection: DatabaseConnection | null = null;
-
-export async function connectToDatabase(): Promise<DatabaseConnection> {
-  if (cachedConnection) {
-    return cachedConnection;
+export async function connectMongoDB(config: MongoConfig): Promise<{ client: MongoClient; db: Db }> {
+  // Return cached connection in production
+  if (cachedClient && cachedDb) {
+    return { client: cachedClient, db: cachedDb };
   }
 
-  const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/boldmind';
+  // Create new connection
+  const client = new MongoClient(config.uri, {
+    maxPoolSize: 10,
+    minPoolSize: 5,
+    maxIdleTimeMS: 30000,
+  });
+
+  await client.connect();
+  const db = client.db(config.dbName);
+
+  // Cache the connection
+  cachedClient = client;
+  cachedDb = db;
+
+  console.log(`✅ MongoDB Connected: ${config.dbName}`);
   
-  try {
-    // Set mongoose options
-    mongoose.set('strictQuery', true);
-    
-    const client = await mongoose.connect(MONGODB_URI, {
-      serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
-    });
+  return { client, db };
+}
 
-    const db = client.connection;
-    
-    // Set up event listeners
-    db.on('error', (error) => {
-      console.error('MongoDB connection error:', error);
-      cachedConnection = null;
-    });
-
-    db.on('disconnected', () => {
-      console.log('MongoDB disconnected');
-      cachedConnection = null;
-    });
-
-    db.on('connected', () => {
-      console.log('✅ MongoDB connected successfully');
-    });
-
-    cachedConnection = { client, db };
-    return cachedConnection;
-  } catch (error) {
-    console.error('❌ Failed to connect to MongoDB:', error);
-    cachedConnection = null;
-    throw error;
+export async function disconnectMongoDB(): Promise<void> {
+  if (cachedClient) {
+    await cachedClient.close();
+    cachedClient = null;
+    cachedDb = null;
+    console.log('✅ MongoDB Disconnected');
   }
 }
 
-export async function disconnectFromDatabase(): Promise<void> {
-  if (cachedConnection?.client) {
-    try {
-      await mongoose.disconnect();
-      console.log('✅ MongoDB disconnected successfully');
-    } catch (error) {
-      console.error('Error disconnecting from MongoDB:', error);
-      throw error;
-    } finally {
-      cachedConnection = null;
-    }
-  }
-}
-
-// Helper function to check if connected
-export function isConnected(): boolean {
-  return mongoose.connection.readyState === 1;
-}
-
-// Get the raw MongoDB driver database object for admin commands
-export function getMongoDb() {
-  if (!cachedConnection) {
-    throw new Error('MongoDB not connected');
-  }
-  return cachedConnection.db.db; // This gives you the MongoDB driver Db object
+// Helper function for apps
+export async function getMongoDb(uri: string, dbName: string): Promise<Db> {
+  const { db } = await connectMongoDB({ uri, dbName });
+  return db;
 }

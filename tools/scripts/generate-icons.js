@@ -6,8 +6,8 @@ const { createCanvas, loadImage } = require('canvas');
 console.log('🎨 BoldMind Icon Generator (Node.js)');
 console.log('====================================');
 
-const logoPath = path.join(__dirname, '../../apps/web/boldmind-hub/public/logo.png');
-const outputDir = path.join(__dirname, '../../apps/web/boldmind-hub/public');
+const logoPath = path.join(__dirname, '../../apps/web/amebogist/public/logo.png');
+const outputDir = path.join(__dirname, '../../apps/web/amebogist/public');
 
 // Check if canvas is available
 try {
@@ -103,9 +103,9 @@ async function generateIcons() {
     ogCtx.fillStyle = 'white';
     ogCtx.font = 'bold 48px Arial';
     ogCtx.textAlign = 'center';
-    ogCtx.fillText('BoldMind Technology', 600, 550);
+    ogCtx.fillText('Amebogist', 600, 550);
     ogCtx.font = '32px Arial';
-    ogCtx.fillText('Empowering 1M Nigerian Entrepreneurs', 600, 600);
+    ogCtx.fillText('🇳🇬 Amebo wey make sense. Gist wey fit change your level!', 600, 600);
     
     const ogBuffer = ogCanvas.toBuffer('image/png');
     fs.writeFileSync(path.join(outputDir, 'og-image.png'), ogBuffer);

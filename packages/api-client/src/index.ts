@@ -1,13 +1,29 @@
-import apiClient from './client';
-import * as endpoints from './endpoints/index';
-import * as interceptors from './interceptors';
-import * as types from './typed-client';
+import { APIClient } from './client';
+import { AuthEndpoints } from './endpoints/auth';
+import { UsersEndpoints } from './endpoints/users';
+import { PaymentsEndpoints } from './endpoints/payments';
+import { EducenterEndpoints } from './endpoints/educenter';
 
-export { apiClient, endpoints, interceptors, types };
-export * from './endpoints';
-export * from './typed-client';
+export class BoldMindAPI {
+  public auth: AuthEndpoints;
+  public users: UsersEndpoints;
+  public payments: PaymentsEndpoints;
+  public educenter: EducenterEndpoints;
 
-// Setup default interceptors
-interceptors.setupLoggingInterceptor();
-interceptors.setupCacheInterceptor();
-interceptors.setupRetryInterceptor();
+  constructor(baseURL: string = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api') {
+    const client = new APIClient(baseURL);
+    
+    this.auth = new AuthEndpoints(client);
+    this.users = new UsersEndpoints(client);
+    this.payments = new PaymentsEndpoints(client);
+    this.educenter = new EducenterEndpoints(client);
+  }
+}
+
+export const boldMindAPI = new BoldMindAPI();
+
+// Export classes for custom instances
+export { APIClient, AuthEndpoints, UsersEndpoints, PaymentsEndpoints, EducenterEndpoints };
+
+// Export types
+export type { AxiosRequestConfig } from 'axios';

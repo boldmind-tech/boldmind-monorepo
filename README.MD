@@ -634,23 +634,72 @@ boldmind-monorepo/
 │ │ ├── package.json
 │ │ └── tsconfig.json
 │ │
-│ ├── auth/ # Authentication utilities
-│ │ ├── src/
-│ │ │ ├── supabase.ts # Supabase client
-│ │ │ ├── middleware.ts # Auth middleware
-│ │ │ ├── providers/
-│ │ │ │ ├── google.ts
-│ │ │ │ ├── facebook.ts
-│ │ │ │ └── email.ts
-│ │ │ ├── hooks/
-│ │ │ │ ├── useUser.ts
-│ │ │ │ ├── useSession.ts
-│ │ │ │ └── useAuth.ts
-│ │ │ ├── types/
-│ │ │ │ └── auth.ts
-│ │ │ └── index.ts
-│ │ ├── package.json
-│ │ └── tsconfig.json
+│ ├── auth/
+│ │   ├── domain/
+│ │   │   ├── entities/
+│ │   │   │   ├── User.ts
+│ │   │   │   ├── Session.ts
+│ │   │   │   ├── Role.ts
+│ │   │   │   ├── Permission.ts
+│ │   │   │   └── Subscription.ts
+│ │   │   ├── value-objects/
+│ │   │   │   ├── Email.ts
+│ │   │   │   ├── UserId.ts
+│ │   │   │   └── Provider.ts
+│ │   │   └── policies/
+│ │   │       ├── canAccessFeature.ts
+│ │   │       └── isSubscriptionActive.ts
+│ │   │
+│ │   ├── application/
+│ │   │   ├── login/
+│ │   │   │   ├── loginWithEmail.ts
+│ │   │   │   ├── loginWithOAuth.ts
+│ │   │   │   └── refreshSession.ts
+│ │   │   ├── register/
+│ │   │   │   ├── registerUser.ts
+│ │   │   │   └── verifyEmail.ts
+│ │   │   ├── session/
+│ │   │   │   ├── getSession.ts
+│ │   │   │   └── revokeSession.ts
+│ │   │   ├── subscription/
+│ │   │   │   ├── attachSubscription.ts
+│ │   │   │   ├── hasActiveSubscription.ts
+│ │   │   │   └── getUserPlan.ts
+│ │   │   └── index.ts
+│ │   │
+│ │   ├── infrastructure/
+│ │   │   ├── supabase/
+│ │   │   │   ├── client.ts
+│ │   │   │   ├── auth-repository.ts
+│ │   │   │   └── session-adapter.ts
+│ │   │   ├── providers/
+│ │   │   │   ├── google.provider.ts
+│ │   │   │   ├── facebook.provider.ts
+│ │   │   │   └── email.provider.ts
+│ │   │   ├── repositories/
+│ │   │   │   ├── user.repository.ts
+│ │   │   │   └── subscription.repository.ts
+│ │   │   └── index.ts
+│ │   │
+│ │   ├── delivery/
+│ │   │   ├── nextjs/
+│ │   │   │   ├── middleware.ts
+│ │   │   │   ├── server-auth.ts
+│ │   │   │   └── route-handlers.ts
+│ │   │   ├── react/
+│ │   │   │   ├── hooks/
+│ │   │   │   │   ├── useAuth.ts
+│ │   │   │   │   ├── useUser.ts
+│ │   │   │   │   └── useSession.ts
+│ │   │   │   └── AuthProvider.tsx
+│ │   │   └── api/
+│ │   │       └── auth.controller.ts
+│ │   │
+│ │   ├── types/
+│ │   │   └── auth.ts
+│ │   ├── index.ts
+│ │   ├── package.json
+│ │   └── tsconfig.json
 │ │
 │ ├── payments/ # Payment utilities
 │ │ ├── src/
@@ -1006,3 +1055,4 @@ See `/docs` folder for
 
 **Empower 1 million Nigerian entrepreneurs by 2030.**
 Built with 💛 by BoldMind Technology Solution Enterprise
+## 4B08OZ3YbOUFrgUQ

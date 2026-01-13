@@ -11,9 +11,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "@boldmind/auth": "workspace:*",
     "@boldmind/ui": "workspace:*",
     "@boldmind/utils": "workspace:*",
-    "@boldmind/auth": "workspace:*",
+    "lucide-react": "^0.562.0",
     "next": "^14.2.35",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -24,10 +25,10 @@
     "@types/react": "^18.3.27",
     "@types/react-dom": "^18.3.7",
     "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.38",
-    "typescript": "^5.4.5",
-    "tailwindcss": "^3.4.1",
     "eslint": "^8",
-    "eslint-config-next": "14.2.35"
+    "eslint-config-next": "14.2.35",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.4.5"
   }
 }

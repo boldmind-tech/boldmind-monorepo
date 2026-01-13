@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     siteName: 'BoldMind',
     images: [
       {
-        url: '/og-image.png', // Changed from /logo.png
+        url: '/og-image.png', 
         width: 1200,
         height: 630,
         alt: 'BoldMind - Nigerian Tech Ecosystem',
@@ -46,9 +46,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'BoldMind - Empowering Nigerian Entrepreneurs',
     description: 'The complete Nigerian tech ecosystem: AmeboGist, EduCenter, PlanAI, and 28+ more products',
-    images: ['/og-image.png'], // Changed from /logo.png
-    creator: '@BoldMindNg',
+    images: ['/og-image.png'], 
+    creator: '@bobbycuc2025',
   },
+ 
   icons: {
     icon: [
       { url: '/favicon.ico' },

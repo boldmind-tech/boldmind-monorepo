@@ -1,0 +1,30 @@
+{
+  "extends": "../../packages/config/typescript/tsconfig.json",
+  "compilerOptions": {
+    "module": "preserve",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@boldmind/auth": ["../../packages/auth/src"],
+      "@boldmind/database": ["../../packages/database/src"],
+      "@boldmind/types": ["../../packages/types/src"],
+      "@boldmind/utils": ["../../packages/utils/src"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "test", "**/*.spec.ts"]
+}

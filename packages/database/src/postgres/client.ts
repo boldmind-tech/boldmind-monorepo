@@ -1,112 +1,84 @@
-import { Pool, PoolConfig } from 'pg';
+// packages/database/src/postgres/client.ts
+import { Pool, PoolClient } from 'pg';
 
-// PostgreSQL connection for SAFE AI (security-focused)
-export class PostgresClient {
-  private pool: Pool;
-  private isConnected = false;
+let cachedPool: Pool | null = null;
 
-  constructor(config: PoolConfig) {
-    this.pool = new Pool({
-      ...config,
-      max: 20,
-      idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 2000,
-      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
-    });
+export interface PostgresConfig {
+  host: string;
+  port: number;
+  database: string;
+  user: string;
+  password: string;
+  ssl?: boolean;
+}
 
-    // Log connection events
-    this.pool.on('connect', () => {
-      console.log('PostgreSQL: Connected to database');
-      this.isConnected = true;
-    });
-
-    this.pool.on('error', (err) => {
-      console.error('PostgreSQL: Unexpected error on idle client', err);
-      this.isConnected = false;
-    });
+export function createPostgresPool(config: PostgresConfig): Pool {
+  if (cachedPool) {
+    return cachedPool;
   }
 
-  async connect() {
-    try {
-      await this.pool.connect();
-      this.isConnected = true;
-      return true;
-    } catch (error) {
-      console.error('PostgreSQL: Connection error', error);
-      this.isConnected = false;
-      throw error;
-    }
-  }
+  const pool = new Pool({
+    host: config.host,
+    port: config.port,
+    database: config.database,
+    user: config.user,
+    password: config.password,
+    ssl: config.ssl ? { rejectUnauthorized: false } : false,
+    max: 20, // Maximum number of clients in pool
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 2000,
+  });
 
-  async query<T = any>(text: string, params?: any[]): Promise<{ rows: T[]; rowCount: number }> {
-    try {
-      const result = await this.pool.query(text, params);
-      return {
-        rows: result.rows,
-        rowCount: result.rowCount || 0
-      };
-    } catch (error) {
-      console.error('PostgreSQL: Query error', error);
-      throw error;
-    }
-  }
+  pool.on('connect', () => {
+    console.log(`✅ PostgreSQL Connected: ${config.database}`);
+  });
 
-  async transaction<T>(callback: (client: any) => Promise<T>): Promise<T> {
-    const client = await this.pool.connect();
-    
-    try {
-      await client.query('BEGIN');
-      const result = await callback(client);
-      await client.query('COMMIT');
-      return result;
-    } catch (error) {
-      await client.query('ROLLBACK');
-      throw error;
-    } finally {
-      client.release();
-    }
-  }
+  pool.on('error', (err: any) => {
+    console.error('❌ PostgreSQL Pool Error:', err);
+  });
 
-  async close() {
-    await this.pool.end();
-    this.isConnected = false;
-  }
+  cachedPool = pool;
+  return pool;
+}
 
-  getPool() {
-    return this.pool;
-  }
-
-  isDatabaseConnected() {
-    return this.isConnected;
-  }
-
-  // Health check
-  async healthCheck() {
-    try {
-      const result = await this.query('SELECT NOW() as time');
-      return {
-        status: 'healthy',
-        timestamp: result.rows[0]?.time,
-        connected: this.isConnected
-      };
-    } catch (error) {
-      return {
-        status: 'unhealthy',
-        error: error instanceof Error ? error.message : 'Unknown error',
-        connected: false
-      };
-    }
+export async function queryPostgres<T = any>(
+  pool: Pool,
+  text: string,
+  params?: any[]
+): Promise<T[]> {
+  const client = await pool.connect();
+  try {
+    const result = await client.query(text, params);
+    return result.rows;
+  } finally {
+    client.release();
   }
 }
 
-// Singleton instance
-let postgresClient: PostgresClient;
-
-export const getPostgresClient = (config?: PoolConfig) => {
-  if (!postgresClient && config) {
-    postgresClient = new PostgresClient(config);
+export async function disconnectPostgres(): Promise<void> {
+  if (cachedPool) {
+    await cachedPool.end();
+    cachedPool = null;
+    console.log('✅ PostgreSQL Disconnected');
   }
-  return postgresClient;
-};
+}
 
-export default getPostgresClient;
+// Helper for transactions
+export async function withTransaction<T>(
+  pool: Pool,
+  callback: (client: PoolClient) => Promise<T>
+): Promise<T> {
+  const client = await pool.connect();
+  
+  try {
+    await client.query('BEGIN');
+    const result = await callback(client);
+    await client.query('COMMIT');
+    return result;
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+}
