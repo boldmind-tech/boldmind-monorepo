@@ -1,4 +1,4 @@
-import { APIClient } from './client';
+import  APIClient  from './client';
 import { AuthEndpoints } from './endpoints/auth';
 import { UsersEndpoints } from './endpoints/users';
 import { PaymentsEndpoints } from './endpoints/payments';

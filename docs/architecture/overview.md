@@ -1,48 +1,44 @@
-# Architecture Overview
+# BoldMind Architecture Overview
+
+## Vision
+Empower 1 million Nigerian entrepreneurs by 2030 through innovative technology solutions.
 
 ## System Architecture
 
-The BoldMind ecosystem follows a microservices-oriented architecture with a monorepo structure.
+### 1. Frontend Layer
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript 5.x
+- **Styling**: Tailwind CSS 3.x
+- **State Management**: Zustand + React Query
+- **Animations**: Framer Motion
 
-## Key Components
+### 2. Backend Layer
+- **API Gateway**: NestJS 10.x
+- **Microservices**: Domain-specific NestJS services
+- **Authentication**: JWT + OAuth 2.0
+- **Database**: MongoDB (content), PostgreSQL (transactions)
 
-### 1. Frontend Applications (Next.js)
-- **BoldMind Hub**: Main landing page
-- **AmeboGist**: News platform
-- **EduCenter**: Education platform
-- **PlanAI Suite**: AI-powered tools
+### 3. Shared Layer
+- **UI Components**: `@boldmind/ui` package
+- **Utilities**: `@boldmind/utils` package
+- **Authentication**: `@boldmind/auth` package
+- **Payments**: `@boldmind/payments` package
 
-### 2. Backend Services
-- **API Gateway**: Central API router
-- **Notification Service**: Email/SMS/Push notifications
-- **Media Service**: Image/video processing
-- **Analytics Service**: Data aggregation
-
-### 3. Shared Packages
-- Reusable components and utilities
-- Consistent design system
-- Shared business logic
-
-## Technology Stack
-
-- **Frontend**: Next.js 13+, React, TypeScript, Tailwind CSS
-- **Backend**: Node.js, NestJS
-- **Database**: MongoDB, PostgreSQL
-- **Authentication**: Supabase Auth
-- **Payments**: Paystack
-- **Deployment**: Vercel, Docker, Kubernetes
-- **CI/CD**: GitHub Actions
+### 4. Infrastructure
+- **Hosting**: Vercel (frontend), Railway (backend)
+- **DNS/CDN**: Cloudflare
+- **Monitoring**: Sentry, LogRocket
+- **Analytics**: Google Analytics, PostHog
 
 ## Data Flow
-
-1. Client requests → API Gateway
-2. Gateway routes → Specific service/app
-3. Services process → Database operations
-4. Response returned → Client
+1. User → Cloudflare → Vercel (Next.js)
+2. Next.js → API Gateway → Microservices
+3. Microservices → Database/Cache
+4. Response → User
 
 ## Security
-
 - JWT-based authentication
 - Role-based access control
-- Encrypted database connections
-- Secure environment variables
+- HTTPS everywhere
+- Regular security audits
+- Secrets management via environment variables

@@ -1,58 +1,104 @@
 # Dependencies
 node_modules/
-.pnpm-store/
-.yarn/
+**/node_modules/
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
 
 # Build outputs
 .next/
 dist/
-build/
 out/
+build/
 *.tsbuildinfo
 
 # Environment variables
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 .env*.local
-.env.production
 
-# Testing
-coverage/
-.nyc_output/
-
-# OS files
-.DS_Store
-Thumbs.db
-*.swp
-*.swo
-*~
-
-# Editor
-.vscode/
-.idea/
-*.sublime-*
-
-# Logs
-*.log
+# Debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-lerna-debug.log*
+.pnpm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory
+coverage/
+.nyc_output/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
 
 # Turbo
 .turbo/
 
-# Vercel
-.vercel/
+# Next.js
+.next/cache/
 
-# Mobile
-*.apk
-*.ipa
-android/app/build/
-ios/Pods/
+# Testing
+jest-cache/
+cypress/videos/
+cypress/screenshots/
 
-# Misc
-.cache/
+# Logs
+logs
+*.log
+
+# Temporary folders
 tmp/
 temp/
-.vercel
-.env*.local
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploads
+uploads/
+media/
+
+# Backup files
+*.bak
+*.backup
+
+# Secrets
+*.pem
+*.key
+*.crt
+
+# Custom
+*-debug.log
+*-error.log
+
+# Monorepo specific
+**/.next/
+**/dist/
+**/build/
+
+# AmeboGist specific
+apps/web/amebogist/.next/
+apps/web/amebogist/public/uploads/
+
+# EduCenter specific  
+apps/web/educenter/.next/
+apps/web/educenter/public/courses/
+
+# Services
+services/**/dist/

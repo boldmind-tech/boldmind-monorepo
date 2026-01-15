@@ -1,33 +1,36 @@
-// packages/ui/src/components/StatusBadge.tsx
 "use client";
 
+
 import React from 'react';
+import { cn } from '../lib/utils';
+
+export type BadgeVariant = 'live' | 'building' | 'planned' | 'concept' | 'hiring' | 'new';
 
 interface StatusBadgeProps {
-  status: string;
-  color?: string;
+  variant: BadgeVariant;
+  children: React.ReactNode;
+  className?: string;
 }
 
-const StatusBadge: React.FC<StatusBadgeProps> = ({ status, color = '#10B981' }) => {
-  const badgeStyle: React.CSSProperties = {
-    fontSize: '0.75rem',
-    fontWeight: 600,
-    padding: '0.25rem 0.75rem',
-    borderRadius: '9999px',
-    backgroundColor: `rgba(${hexToRgb(color)}, 0.1)`,
-    color: color,
-    display: 'inline-block',
+export function StatusBadge({ variant, children, className }: StatusBadgeProps) {
+  const variantStyles = {
+    live: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+    building: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
+    planned: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
+    concept: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
+    hiring: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
+    new: 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300',
   };
 
-  return <span style={badgeStyle}>{status}</span>;
-};
-
-// Helper function to convert hex to rgb
-function hexToRgb(hex: string): string {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result 
-    ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`
-    : '16, 185, 129'; // default green
+  return (
+    <span className={cn(
+      'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
+      variantStyles[variant],
+      className
+    )}>
+      {children}
+    </span>
+  );
 }
 
 export default StatusBadge;

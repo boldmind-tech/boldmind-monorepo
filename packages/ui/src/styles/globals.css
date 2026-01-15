@@ -1,20 +1,527 @@
-/* packages/ui/src/styles/globals.css - Simplified Version */
-/* Remove @tailwind and @layer directives, keep only custom styles */
+@import "tw-animate-css";
+@import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap");
 
-body {
-  background-color: #0A1D37;
-  color: white;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* ===============================
+   CSS CUSTOM PROPERTIES (THEMING)
+   =============================== */
+:root {
+  /* === BOLDMIND.ng Colors === */
+  --boldmind-navy: #00143C;
+  --boldmind-gold: #FFC800;
+  --boldmind-light-navy: #2A4A6E;
+  
+  /* === AMEBOGIST.ng Colors === */
+  --amebogist-green: #00A859;
+  --amebogist-dark-green: #007A3D;
+  --amebogist-light-green: #E8F5E9;
+  
+  /* === EDUCENTER.com.ng Colors === */
+  --educenter-blue: #2A4A6E;
+  --educenter-dark-blue: #1A3452;
+  --educenter-light-blue: #E3F2FD;
+  
+  /* === CONCEPT APPS Colors === */
+  --concept-purple: #9C27B0;
+  --concept-pink: #FF4081;
+  --concept-red: #E63946;
+  --concept-orange: #FF5722;
+  --concept-teal: #009688;
+  
+  /* === SHARED NEUTRAL Colors === */
+  --neutral-white: #FFFFFF;
+  --neutral-light: #F0F4F8;
+  --neutral-gray: #6B7280;
+  --neutral-dark: #1F2937;
+  --neutral-black: #111827;
+  
+  /* === PRODUCT-DETECTED VARIABLES === */
+  /* These will be set by JS based on current product */
+  --product-primary: var(--boldmind-navy);
+  --product-secondary: var(--boldmind-gold);
+  --product-accent: var(--boldmind-light-navy);
+  --product-background: var(--neutral-white);
+  --product-foreground: var(--neutral-black);
+  --product-muted: var(--neutral-light);
+  
+  /* === FONTS === */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: 'Lora', Georgia, 'Times New Roman', serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --font-dyslexic: 'OpenDyslexic', 'Comic Sans MS', sans-serif;
+  
+  /* === BORDERS & RADIUS === */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+  
+  /* === SHADOWS === */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  
+  /* === ANIMATIONS === */
+  --transition-fast: 150ms ease-in-out;
+  --transition-normal: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
 }
 
-html {
-  scroll-behavior: smooth;
+/* ===============================
+   PRODUCT-SPECIFIC THEME OVERRIDES
+   =============================== */
+[data-product="boldmind-hub"] {
+  --product-primary: var(--boldmind-navy);
+  --product-secondary: var(--boldmind-gold);
+  --product-accent: var(--boldmind-light-navy);
+}
+
+[data-product="amebogist"] {
+  --product-primary: var(--amebogist-green);
+  --product-secondary: var(--boldmind-gold);
+  --product-accent: var(--amebogist-dark-green);
+}
+
+[data-product="educenter"] {
+  --product-primary: var(--educenter-blue);
+  --product-secondary: #FFFFFF;
+  --product-accent: var(--educenter-dark-blue);
+}
+
+[data-product="boldmind-os"] {
+  --product-primary: var(--concept-red);
+  --product-secondary: var(--boldmind-gold);
+  --product-accent: #B91C1C;
+}
+
+[data-product="naija-fither"] {
+  --product-primary: var(--concept-pink);
+  --product-secondary: var(--concept-purple);
+  --product-accent: #E91E63;
+}
+
+[data-product="emailscraper-pro"] {
+  --product-primary: #2196F3;
+  --product-secondary: #FFFFFF;
+  --product-accent: #0D47A1;
+}
+
+[data-product="safe-ai"] {
+  --product-primary: var(--concept-orange);
+  --product-secondary: #FFFFFF;
+  --product-accent: #D84315;
+}
+
+/* ===============================
+   DARK MODE
+   =============================== */
+[data-theme="dark"] {
+  --product-background: var(--neutral-black);
+  --product-foreground: var(--neutral-white);
+  --product-muted: var(--neutral-dark);
+}
+
+/* ===============================
+   DYSLEXIA MODE
+   =============================== */
+[data-dyslexia="true"] {
+  font-family: var(--font-dyslexic) !important;
+  letter-spacing: 0.05em;
+  line-height: 1.8;
+}
+
+/* ===============================
+   BASE STYLES
+   =============================== */
+@layer base {
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    border-color: hsl(var(--border));
+  }
+  
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--product-background);
+    color: var(--product-foreground);
+    line-height: 1.6;
+    overflow-x: hidden;
+    font-feature-settings: 'ss01' on, 'ss02' on, 'cv01' on, 'cv03' on;
+  }
+  
+  /* Improved focus for accessibility */
+  :focus-visible {
+    outline: 2px solid var(--product-secondary);
+    outline-offset: 2px;
+  }
+  
+  /* Selection colors */
+  ::selection {
+    background-color: color-mix(in srgb, var(--product-primary) 20%, transparent);
+    color: var(--product-foreground);
+  }
+}
+
+/* ===============================
+   TYPOGRAPHY
+   =============================== */
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--product-primary);
+    margin-bottom: 1rem;
+  }
+  
+  h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+  }
+  
+  h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+  
+  h3 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+  
+  p {
+    font-size: clamp(1rem, 2.5vw, 1.125rem);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    text-wrap: pretty;
+  }
+  
+  /* NIGERIAN-STYLE TYPOGRAPHY FOR AMEBOGIST */
+  [data-product="amebogist"] h1,
+  [data-product="amebogist"] h2,
+  [data-product="amebogist"] h3 {
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+  }
+  
+  /* EDUCATIONAL TYPOGRAPHY FOR EDUCENTER */
+  [data-product="educenter"] h1,
+  [data-product="educenter"] h2,
+  [data-product="educenter"] h3 {
+    font-weight: 600;
+    letter-spacing: -0.25px;
+  }
+}
+
+/* ===============================
+   COMPONENTS
+   =============================== */
+@layer components {
+  /* === BUTTONS === */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.5;
+    transition: all var(--transition-normal);
+    cursor: pointer;
+    border: 2px solid transparent;
+    white-space: nowrap;
+  }
+  
+  .btn-primary {
+    background-color: var(--product-primary);
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: color-mix(in srgb, var(--product-primary) 90%, black);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--product-primary);
+    border-color: var(--product-primary);
+  }
+  
+  .btn-secondary:hover {
+    background-color: var(--product-primary);
+    color: white;
+  }
+  
+  /* === CARDS === */
+  .card {
+    background-color: var(--product-background);
+    border: 1px solid var(--product-muted);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    transition: all var(--transition-normal);
+  }
+  
+  .card:hover {
+    border-color: var(--product-primary);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+  }
+  
+  /* === NAVIGATION === */
+  .nav-link {
+    color: var(--product-foreground);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+  }
+  
+  .nav-link:hover {
+    background-color: color-mix(in srgb, var(--product-primary) 10%, transparent);
+    color: var(--product-primary);
+  }
+  
+  .nav-link.active {
+    background-color: var(--product-primary);
+    color: white;
+  }
+  
+  /* === AD CONTAINERS (FOR ALL PRODUCTS) === */
+  .ad-container {
+    background: linear-gradient(135deg, 
+      color-mix(in srgb, var(--product-muted) 30%, transparent) 0%,
+      color-mix(in srgb, var(--product-muted) 50%, transparent) 100%
+    );
+    border: 2px dashed color-mix(in srgb, var(--product-foreground) 20%, transparent);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    text-align: center;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-normal);
+  }
+  
+  .ad-container:hover {
+    border-color: var(--product-primary);
+    background: linear-gradient(135deg, 
+      color-mix(in srgb, var(--product-primary) 5%, transparent) 0%,
+      color-mix(in srgb, var(--product-primary) 10%, transparent) 100%
+    );
+  }
+  
+  /* === PRODUCT-SPECIFIC CARD STYLES === */
+  .card-amebogist {
+    @apply card;
+    border-left: 4px solid var(--amebogist-green);
+  }
+  
+  .card-educenter {
+    @apply card;
+    border-left: 4px solid var(--educenter-blue);
+  }
+  
+  .card-boldmind {
+    @apply card;
+    border-left: 4px solid var(--boldmind-navy);
+  }
+}
+
+/* ===============================
+   UTILITIES
+   =============================== */
+@layer utilities {
+  /* Scrollbar */
+  .scrollbar-custom {
+    scrollbar-width: thin;
+    scrollbar-color: var(--product-primary) var(--product-muted);
+  }
+  
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background: var(--product-muted);
+    border-radius: var(--radius-full);
+  }
+  
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background: var(--product-primary);
+    border-radius: var(--radius-full);
+  }
+  
+  /* Animations */
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      var(--product-muted) 0%,
+      color-mix(in srgb, var(--product-primary) 20%, var(--product-muted)) 50%,
+      var(--product-muted) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+  
+  /* Product badges */
+  .product-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .badge-live {
+    background-color: #10B981;
+    color: white;
+  }
+  
+  .badge-building {
+    background-color: #F59E0B;
+    color: white;
+  }
+  
+  .badge-planned {
+    background-color: #3B82F6;
+    color: white;
+  }
+  
+  .badge-concept {
+    background-color: #8B5CF6;
+    color: white;
+  }
+}
+
+/* ===============================
+   ANIMATIONS
+   =============================== */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 @keyframes pulse-slow {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(1.05); }
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
-.animate-pulse-slow {
-  animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+/* ===============================
+   RESPONSIVE DESIGN
+   =============================== */
+@media (max-width: 640px) {
+  :root {
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+  }
+  
+  h1 {
+    font-size: 2rem !important;
+  }
+  
+  h2 {
+    font-size: 1.5rem !important;
+  }
+  
+  .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .card {
+    padding: 1rem;
+  }
+}
+
+/* ===============================
+   PRINT STYLES
+   =============================== */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .ad-container,
+  .btn {
+    display: none !important;
+  }
+  
+  body {
+    color: black !important;
+    background: white !important;
+  }
+}
+
+/* ===============================
+   DARK MODE ENHANCEMENTS
+   =============================== */
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] {
+    --product-background: var(--neutral-black);
+    --product-foreground: var(--neutral-white);
+    --product-muted: var(--neutral-dark);
+  }
+}
+
+/* ===============================
+   REDUCED MOTION
+   =============================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .btn:hover,
+  .card:hover {
+    transform: none !important;
+  }
 }

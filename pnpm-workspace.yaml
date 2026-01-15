@@ -1,5 +1,24 @@
 packages:
-  - 'apps/web/**'
-  - 'apps/planai/*'
-  - 'packages/**'
-  - 'services/**'
+  # All web applications
+  - 'APPS/WEB_APPS/*'
+  - 'APPS/WEB_APPS/PLANAI_SUITE/*'
+  - 'APPS/CONCEPT_APPS/*'
+  
+  # Mobile applications
+  - 'APPS/MOBILE/native/*'
+  - 'APPS/MOBILE/twa/*'
+  
+  # Shared packages
+  - 'PACKAGES/*'
+  
+  # Backend services
+  - 'SERVICES/*'
+
+# Force exact versions
+shared-workspace-dependencies: true
+shared-workspace-lockfile: true
+
+# Hoist common dependencies (reduce duplication)
+hoist-pattern:
+  - '*'
+  - '@boldmind/*'

@@ -1,9 +1,10 @@
+// packages/ui/tsup.config.ts - MINIMAL
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: ['src/index.ts'],
   format: ['cjs', 'esm'],
-  dts: false,  // Turn off TypeScript declarations
+  dts: true,
   splitting: false,
   sourcemap: false,
   clean: true,
@@ -11,5 +12,4 @@ export default defineConfig({
   skipNodeModulesBundle: true,
   minify: false,
   target: 'es2020',
-  outDir: 'dist'
 });

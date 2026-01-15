@@ -1,5 +1,0 @@
-{
-  "buildCommand": "cd ../../.. && pnpm install && pnpm build:ui && cd apps/web/boldmind-hub && pnpm build",
-  "installCommand": "cd ../../.. && pnpm install",
-  "outputDirectory": ".next"
-}

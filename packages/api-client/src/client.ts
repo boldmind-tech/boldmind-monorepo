@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
-export class APIClient {
+export default class APIClient {
   private client: AxiosInstance;
 
   constructor(baseURL: string) {

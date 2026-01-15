@@ -1,96 +1,120 @@
-# Getting Started
+# Getting Started with BoldMind Monorepo
 
-Welcome to the BoldMind Monorepo! This guide will help you get started with development.
+## Prerequisites
 
-## Quick Start
+- Node.js 18 or higher
+- PNPM 8.15.0 or higher
+- Git
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/boldmind/boldmind-monorepo.git
-   cd boldmind-monorepo
-Install dependencies
+## Setup
 
-bash
-pnpm install
-Set up environment variables
+### 1. Clone Repository
 
-bash
+`bash` git clone [https://github.com/boldmind-tech/boldmind-monorepo]
+
+## Install Dependencies
+
+`bash` pnpm install
+
+3. # Environment Setup
+
+``bash`
+# Copy environment example
 cp .env.example .env.local
+
 # Edit .env.local with your values
-Start development servers
+4. ## Start Development
+`bash`
 
-bash
-# Build shared packages first
-pnpm build:packages
+# Start live products
+pnpm dev:live
 
-# Start specific apps
-pnpm dev:hub       # http://localhost:3000
-pnpm dev:amebogist # http://localhost:3001
-pnpm dev:educenter # http://localhost:3002
-Project Structure
-text
-boldmind-monorepo/
-├── apps/              # All applications
-│   ├── web/          # Web applications
-│   ├── planai/       # PlanAI suite
-│   └── mobile/       # Mobile apps
-├── packages/         # Shared packages
-├── services/         # Backend services
-├── infrastructure/   # DevOps configs
-├── tools/           # Development tools
-└── docs/            # Documentation
-Development Commands
-Build
+# Start specific category
+pnpm dev:building
+pnpm dev:planai
+pnpm dev:concepts
+
+# Start all apps (be careful - many ports!)
+
+pnpm dev:all
+Port Allocation
+3000: BoldMind Hub
+
+3001: AmeboGist
+
+3002: EduCenter
+
+3007: PlanAI Receptionist
+
+See complete port list
+
+Common Tasks
+Adding a New App
+
+`bash`
+
+# Use the generator
+pnpm new:web
+
+# Or manually create:
+# 1. Create folder in APPS/WEB_APPS/
+# 2. Copy package.json template
+# 3. Update ports
+# 4. Add to pnpm-workspace.yaml
+
+Updating Dependencies
 bash
-# Build all packages and apps
+# Check for outdated dependencies
+pnpm check:deps
+
+# Update all dependencies
+pnpm update:deps
+
+# Fix dependency issues
+pnpm fix:deps
+Building and Deploying
+bash
+# Build everything
 pnpm build
 
-# Build only shared packages
-pnpm build:packages
-Testing
+# Build specific apps
+pnpm build:live
+pnpm build:selected
+
+# Deploy
+pnpm deploy:live
+pnpm deploy:planai
+Troubleshooting
+Port Conflicts
+Check which process is using a port:
+
 bash
-# Run all tests
-pnpm test
+# Windows
+netstat -ano | findstr :3001
 
-# Run tests for specific app
-pnpm test --filter=@boldmind/amebogist
-Code Quality
+# Linux/Mac
+lsof -i :3001
+Dependency Issues
+
 bash
-# Lint all code
-pnpm lint
 
-# Type check
-pnpm type-check
-
-# Format code
-pnpm format
-
-# Check formatting
-pnpm format:check
-Development
-bash
-# Start all apps in development mode
-pnpm dev
-
-# Start specific app
-pnpm dev --filter=@boldmind/amebogist
-
-# Clean node_modules
+# Clean everything
 pnpm clean
-Adding a New Application
-Create app directory in apps/web/ or apps/planai/
 
-Copy configuration from existing app
+# Reinstall
+pnpm install
+TypeScript Errors
 
-Add to turbo.json pipeline
+`bash`
 
-Create deployment workflow
+# Check all TypeScript configs
 
-Update documentation
+pnpm type-check
+Next Steps
+Read Architecture Overview
 
-Need Help?
-Check existing issues on GitHub
+Check Product Specifications
 
-Contact the development team
+Review API Documentation
 
-Review application logs
+Join the development team

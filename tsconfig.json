@@ -1,44 +1,28 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "allowJs": true,
-    "checkJs": false,
+    "isolatedModules": true,
     "jsx": "preserve",
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "outDir": "./dist",
-    "removeComments": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "skipLibCheck": true,
-    "baseUrl": ".",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "paths": {
-      "@boldmind/ui": ["./packages/ui/src"],
-      "@boldmind/ui/*": ["./packages/ui/src/*"],
-      "@boldmind/ai": ["./packages/ai/src"],
-      "@boldmind/ai/*": ["./packages/ai/src/*"],
-      "@boldmind/auth": ["./packages/auth/src"],
-      "@boldmind/auth/*": ["./packages/auth/src/*"],
-      "@boldmind/api-client": ["./packages/api-client/src"],
-      "@boldmind/api-client/*": ["./packages/api-client/src/*"],
-      "@boldmind/database": ["./packages/database/src"],
-      "@boldmind/database/*": ["./packages/database/src/*"],
-      "@boldmind/utils": ["./packages/utils/src"],
-      "@boldmind/utils/*": ["./packages/utils/src/*"],
-      "@boldmind/payments": ["./packages/payments/src"],
-      "@boldmind/payments/*": ["./packages/payments/src/*"]
-    },
-    "downlevelIteration": true
+      "@boldmind/*": ["./packages/*/src"],
+      "@/*": ["./*"]
+    }
   },
-  "include": ["**/*.ts", "**/*.tsx", "packages/config/eslint/index.js"],
-  "exclude": ["node_modules", "dist", ".next", "build"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

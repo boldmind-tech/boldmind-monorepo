@@ -1,22 +1,29 @@
-// packages/ui/src/components/LoadingSpinner.tsx
-"use client";
+import { cn } from '../lib/utils';
 
-import React from 'react';
+interface LoadingSpinnerProps {
+  size?: 'sm' | 'md' | 'lg';
+  color?: string;
+  className?: string;
+}
 
-const LoadingSpinner: React.FC = () => {
-  const spinnerStyle: React.CSSProperties = {
-    display: 'inline-block',
-    width: '2rem',
-    height: '2rem',
-    border: '2px solid #FFC800',
-    borderTopColor: 'transparent',
-    borderRadius: '50%',
-    animation: 'spin 1s linear infinite',
+export function LoadingSpinner({ size = 'md', color = 'currentColor', className }: LoadingSpinnerProps) {
+  const sizes = {
+    sm: 'w-4 h-4',
+    md: 'w-8 h-8',
+    lg: 'w-12 h-12',
   };
 
   return (
-    <div style={spinnerStyle} />
+    <div className={cn('inline-block', className)}>
+      <div 
+        className={cn('animate-spin rounded-full border-2 border-t-transparent', sizes[size])}
+        style={{ 
+          borderColor: `${color}20`,
+          borderTopColor: color 
+        }}
+      />
+    </div>
   );
-};
+}
 
 export default LoadingSpinner;
