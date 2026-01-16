@@ -55,9 +55,8 @@ export function getProductFromPath(path: string): string {
   return 'boldmind-hub';
 }
 
-// IMPROVED DETECTION: Check both DOMAIN and PATH
-// In utils.ts, update the detectCurrentProduct function:
 
+// In packages/ui/src/lib/utils.ts
 export function detectCurrentProduct(): string {
   if (typeof window === 'undefined') return 'boldmind-hub';
   
@@ -66,24 +65,36 @@ export function detectCurrentProduct(): string {
   
   console.log('Detection debug:', { hostname, pathname });
   
-  // First check by domain (more reliable for subdomains)
+  // Add pathname checks for local development
+  if (pathname.includes('/educenter') || pathname.startsWith('/educenter')) {
+    return 'educenter';
+  }
+  
+  if (pathname.includes('/amebogist') || pathname.startsWith('/amebogist')) {
+    return 'amebogist';
+  }
+  
+  if (pathname.includes('/planai') || pathname.startsWith('/planai')) {
+    return 'planai';
+  }
+  
+  if (pathname.includes('/boldmind-os') || pathname.startsWith('/boldmind-os')) {
+    return 'boldmind-os';
+  }
+  
+  // Rest of your existing detection logic...
   const domainProductMap: Record<string, string> = {
     'boldmind.ng': 'boldmind-hub',
     'www.boldmind.ng': 'boldmind-hub',
-    
     'amebogist.ng': 'amebogist',
     'www.amebogist.ng': 'amebogist',
-    
     'educenter.com.ng': 'educenter',
     'www.educenter.com.ng': 'educenter',
-    
     'os.boldmind.ng': 'boldmind-os',
     'planai.boldmind.ng': 'planai',
     'fit.boldmind.ng': 'naija-fither',
     'email.boldmind.ng': 'emailscraper-pro',
     'safe.boldmind.ng': 'safe-ai',
-    
-    // Local development
     'localhost': 'boldmind-hub',
   };
   

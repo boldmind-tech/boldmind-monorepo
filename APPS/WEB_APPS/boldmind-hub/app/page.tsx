@@ -187,7 +187,7 @@ export default function HomePage() {
           icon: "🚀",
         }}
         logoSrc="/logo.png"
-        theme="transparent"
+        // theme="transparent"
         sticky={true}
         animated={true}
         showThemeControls={true}

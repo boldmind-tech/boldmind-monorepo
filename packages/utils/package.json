@@ -4,15 +4,15 @@
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
-    "clean": "rm -rf dist",
-    "lint": "eslint src/",
-    "type-check": "tsc --noEmit"
+ "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint . --ext ts,tsx",
+    "clean": "rm -rf .turbo dist node_modules"
   },
   "dependencies": {
-    "date-fns": "^3.0.0"
+    "date-fns": "^3.0.0",
+    "tsup": "^7.2.0"
   },
   "devDependencies": {
     "@types/node": "^20.19.28",

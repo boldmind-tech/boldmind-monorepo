@@ -51,52 +51,52 @@ export const PRODUCT_CATEGORIES = [
 ];
 
 export const BOLDMIND_PRODUCTS: Product[] = [
-{
-  id: 'prod_000',
-  name: 'BoldMind Hub',
-  description: 'Central hub for the BoldMind technology ecosystem - showcasing 31+ innovative products empowering Nigerian entrepreneurs.',
-  category: 'ai',
-  status: 'LIVE',
-  version: '1.0.0',
-  slug: 'boldmind-hub',
-  icon: '🚀',
-  revenueModel: 'Portfolio management',
-  monthlyRevenue: 0,
-  users: '10,000+',
-  techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
-  teamSize: 3,
-  timeline: 'Launched Q4 2025',
-  priority: 0,
-  dependencies: [],
-  integrations: [],
-  tags: ['ecosystem', 'hub', 'portfolio', 'showcase'],
-  links: {
-    website: 'https://boldmind.ng',
+  {
+    id: 'prod_000',
+    name: 'BoldMind Hub',
+    description: 'Central hub for the BoldMind technology ecosystem - showcasing 31+ innovative products empowering Nigerian entrepreneurs.',
+    category: 'ai',
+    status: 'LIVE',
+    version: '1.0.0',
+    slug: 'boldmind-hub',
+    icon: '🚀',
+    revenueModel: 'Portfolio management',
+    monthlyRevenue: 0,
+    users: '10,000+',
+    techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
+    teamSize: 3,
+    timeline: 'Launched Q4 2025',
+    priority: 0,
+    dependencies: [],
+    integrations: [],
+    tags: ['ecosystem', 'hub', 'portfolio', 'showcase'],
+    links: {
+      website: 'https://boldmind.ng',
+    },
+    features: [
+      'Product ecosystem dashboard',
+      'Real-time revenue tracking',
+      'Team management tools',
+      'Product launch roadmap',
+      'Entrepreneur resources'
+    ],
+    challenges: ['Managing 31+ product portfolio', 'Resource allocation'],
+    opportunities: ['Ecosystem partnerships', 'Investment opportunities'],
+    createdAt: '2025-01-01',
+    updatedAt: '2025-12-28'
   },
-  features: [
-    'Product ecosystem dashboard',
-    'Real-time revenue tracking',
-    'Team management tools',
-    'Product launch roadmap',
-    'Entrepreneur resources'
-  ],
-  challenges: ['Managing 31+ product portfolio', 'Resource allocation'],
-  opportunities: ['Ecosystem partnerships', 'Investment opportunities'],
-  createdAt: '2025-01-01',
-  updatedAt: '2025-12-28'
-},
- {
+  {
     id: 'prod_001',
     name: 'AmeboGist',
     description: 'Nigeria\'s #1 Pidgin English platform led by AI/Tech education 🤖 and Creator entrepreneurship ✍️, plus Sports ⚽, Politics 🏛️, Entertainment 🎭, and Trending Gist 🔥. "Amebo wey make sense, gist wey fit change your level!"',
     status: 'LIVE',
-    version: '1.0.0', 
+    version: '1.0.0',
     slug: 'amebogist',
     category: 'media',
     icon: '📰',
     revenueModel: 'Google AdSense + Affiliate Marketing (Tech/AI tools)',
     monthlyRevenue: 85000,
-    users: '25,000+', 
+    users: '25,000+',
     techStack: ['Next.js', 'MongoDB', 'PWA', 'Tailwind CSS', 'AI Content Tools'],
     teamSize: 2,
     timeline: 'Launched Q2 2025, Pidgin AI/Tech Focus Q4 2025',
@@ -139,8 +139,8 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     ],
 
     createdAt: '2025-01-15',
-    updatedAt: '2025-12-28' 
-},
+    updatedAt: '2025-12-28'
+  },
   {
     id: 'prod_002',
     name: 'EduCenter',

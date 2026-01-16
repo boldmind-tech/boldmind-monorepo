@@ -136,6 +136,12 @@ const planaiProducts = [
 
 export default function PlanAIPage() {
   const [activeProduct, setActiveProduct] = useState('receptionist');
+const handleNavClick = (href: string) => {
+    // Log navigation for analytics
+    if (process.env.NODE_ENV === 'development') {
+      console.log("Navigating to:", href);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black">
@@ -143,13 +149,14 @@ export default function PlanAIPage() {
       <SuperNavbar
         logoSrc="/logo.png"
         links={[
-          { href: '#hero', label: 'Home', icon: '🏠' },
+          { href: '/', label: 'Home', icon: '🏠' },
           { href: '#products', label: 'Products', icon: '🧩' },
           { href: '#features', label: 'Features', icon: '✨' },
           { href: '#pricing', label: 'Pricing', icon: '💰' },
+          { href: "/contact", label: "Contact" },
         ]}
         cta={{ href: '/signup', label: 'Get Started', icon: '🚀' }}
-        onLinkClick={{href: '/register', label: 'Register', icon: '📝'}}
+        onLinkClick={handleNavClick}
       />
       <section className="pt-32 pb-24 px-4 text-center">
         <motion.div

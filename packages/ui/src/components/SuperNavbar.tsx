@@ -1,12 +1,31 @@
-'use client';
-import React, { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronDown, Sparkles, Zap, Rocket, Moon, Sun, Eye, ExternalLink } from 'lucide-react';
-import { useTheme, ThemeToggle, DyslexiaModeToggle } from '../providers/theme-provider';
-import { cn } from '../lib/utils';
-import { BOLDMIND_PRODUCTS, getProductBySlug, ProductStatus } from '@boldmind/utils';
+"use client";
+import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Menu,
+  X,
+  ChevronDown,
+  Sparkles,
+  Zap,
+  Rocket,
+  Moon,
+  Sun,
+  Eye,
+  ExternalLink,
+} from "lucide-react";
+import {
+  useTheme,
+  ThemeToggle,
+  DyslexiaModeToggle,
+} from "../providers/theme-provider";
+import { cn } from "../lib/utils";
+import {
+  BOLDMIND_PRODUCTS,
+  getProductBySlug,
+  ProductStatus,
+} from "@boldmind/utils";
 
 export interface NavLink {
   href: string;
@@ -19,13 +38,13 @@ export interface NavLink {
 export interface SuperNavbarProps {
   logoSrc?: string;
   links: NavLink[];
-  cta?: { 
-    href: string; 
+  cta?: {
+    href: string;
     label: string;
-    variant?: 'primary' | 'secondary' | 'glow' | 'gradient';
+    variant?: "primary" | "secondary" | "glow" | "gradient";
     icon?: React.ReactNode;
   };
-  theme?: 'dark' | 'light' | 'transparent';
+  theme?: "dark" | "light" | "transparent";
   sticky?: boolean;
   animated?: boolean;
   showParticles?: boolean;
@@ -35,15 +54,15 @@ export interface SuperNavbarProps {
 }
 
 export function SuperNavbar({
-  logoSrc = '/logo.png',
+  logoSrc = "/logo.png",
   links,
   cta,
-  theme = 'dark',
+  theme = "dark",
   sticky = true,
   animated = true,
   showParticles = false,
   showThemeControls = true,
-  className = '',
+  className = "",
   onLinkClick,
 }: SuperNavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,44 +70,47 @@ export function SuperNavbar({
   const [imageError, setImageError] = useState(false);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const [hoveredCta, setHoveredCta] = useState(false);
-  const [activeLink, setActiveLink] = useState('');
+  const [activeLink, setActiveLink] = useState("");
   const [showSparkles, setShowSparkles] = useState(false);
-  
+
   const { productTheme } = useTheme();
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
-  const currentProduct = getProductBySlug(productTheme.slug) || BOLDMIND_PRODUCTS[0];
+  const currentProduct =
+    getProductBySlug(productTheme.slug) || BOLDMIND_PRODUCTS[0];
   const productInitial = currentProduct.name.charAt(0);
   const productColor = productTheme.colors.primary;
 
-
   // Default links if none provided
   const defaultLinks = [
-    { href: '/', label: 'Home', icon: '🏠' },
-    { href: '/features', label: 'Features', icon: '✨' },
-    { href: '/pricing', label: 'Pricing', icon: '💰' },
-    { href: '/docs', label: 'Docs', icon: '📚' },
-    { href: '/contact', label: 'Contact', icon: '✉️' },
+    { href: "/", label: "Home", icon: "🏠" },
+    { href: "/features", label: "Features", icon: "✨" },
+    { href: "/pricing", label: "Pricing", icon: "💰" },
+    { href: "/docs", label: "Docs", icon: "📚" },
+    { href: "/contact", label: "Contact", icon: "✉️" },
   ];
 
   const navLinks = links || defaultLinks;
   // Get product-specific CTA
   const getDefaultCTA = () => {
-    if (currentProduct.status === ('LIVE' as ProductStatus) && currentProduct.links?.website) {
+    if (
+      currentProduct.status === ("LIVE" as ProductStatus) &&
+      currentProduct.links?.website
+    ) {
       return {
         href: currentProduct.links.website,
-        label: 'Visit Website',
-        variant: 'primary' as const,
-        icon: <ExternalLink className="w-4 h-4" />
+        label: "Visit Website",
+        variant: "primary" as const,
+        icon: <ExternalLink className="w-4 h-4" />,
       };
     }
-    
+
     return {
-      href: 'https://wa.me/2349138349271',
-      label: 'Get Started',
-      variant: 'primary' as const,
-      icon: <Zap className="w-4 h-4" />
+      href: "https://wa.me/2349138349271",
+      label: "Get Started",
+      variant: "primary" as const,
+      icon: <Zap className="w-4 h-4" />,
     };
   };
 
@@ -97,40 +119,42 @@ export function SuperNavbar({
   // Theme colors - FIXED VERSION
   const getThemeColors = () => {
     const baseColor = productColor;
-    const rgbMatch = baseColor.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
-    
+    const rgbMatch = baseColor.match(
+      /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i,
+    );
+
     if (rgbMatch) {
       const r = parseInt(rgbMatch[1], 16);
       const g = parseInt(rgbMatch[2], 16);
       const b = parseInt(rgbMatch[3], 16);
-      
+
       switch (theme) {
-        case 'light':
+        case "light":
           return {
             bg: scrolled ? baseColor : `rgba(${r}, ${g}, ${b}, 0.95)`,
-            text: '#FFFFFF',
-            border: '#E5E7EB',
+            text: "#FFFFFF",
+            border: "#E5E7EB",
           };
-        case 'transparent':
+        case "transparent":
           return {
-            bg: scrolled ? `rgba(${r}, ${g}, ${b}, 0.95)` : 'transparent',
-            text: '#FFFFFF',
-            border: 'transparent',
+            bg: scrolled ? `rgba(${r}, ${g}, ${b}, 0.95)` : "transparent",
+            text: "#FFFFFF",
+            border: "transparent",
           };
         default: // dark
           return {
             bg: scrolled ? baseColor : `rgba(${r}, ${g}, ${b}, 0.95)`,
-            text: '#FFFFFF',
-            border: '#374151',
+            text: "#FFFFFF",
+            border: "#374151",
           };
       }
     }
-    
+
     // Fallback colors
     return {
-      bg: scrolled ? '#00143C' : 'rgba(0, 20, 60, 0.95)',
-      text: '#FFFFFF',
-      border: '#374151',
+      bg: scrolled ? "#00143C" : "rgba(0, 20, 60, 0.95)",
+      text: "#FFFFFF",
+      border: "#374151",
     };
   };
 
@@ -145,8 +169,8 @@ export function SuperNavbar({
         setTimeout(() => setShowSparkles(false), 1000);
       }
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Close mobile menu when clicking outside
@@ -163,8 +187,8 @@ export function SuperNavbar({
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
   // FIXED: Proper navigation handling
@@ -172,35 +196,34 @@ export function SuperNavbar({
     setActiveLink(href);
     setIsOpen(false);
     onLinkClick?.(href);
-    
+
     // If it's an external link, let the anchor tag handle it
-    if (isExternal || href.startsWith('http')) {
+    if (isExternal || href.startsWith("http")) {
       return; // Let browser handle external links
     }
-    
+
     // If it's a hash link (same page anchor)
-    if (href.startsWith('#')) {
+    if (href.startsWith("#")) {
       const element = document.getElementById(href.substring(1));
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+        element.scrollIntoView({ behavior: "smooth" });
         // Update URL without page reload
-        window.history.pushState(null, '', href);
+        window.history.pushState(null, "", href);
       }
       return;
     }
-    
-   
   };
 
   const getCtaStyles = () => {
-    const baseStyles = 'px-6 py-3 rounded-xl font-bold transition-all duration-300 flex items-center gap-2';
-    
+    const baseStyles =
+      "px-6 py-3 rounded-xl font-bold transition-all duration-300 flex items-center gap-2";
+
     switch (navCTA.variant) {
-      case 'secondary':
+      case "secondary":
         return `${baseStyles} bg-white text-blue-600 hover:bg-gray-100 hover:scale-105`;
-      case 'glow':
+      case "glow":
         return `${baseStyles} bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] hover:scale-105`;
-      case 'gradient':
+      case "gradient":
         return `${baseStyles} bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white hover:shadow-xl hover:scale-105`;
       default:
         return `${baseStyles} bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 hover:shadow-lg hover:scale-105`;
@@ -210,15 +233,15 @@ export function SuperNavbar({
   // Helper to get icon component
   const getIconComponent = (iconString: string) => {
     const iconMap: Record<string, React.ReactNode> = {
-      '🏠': <div>🏠</div>,
-      '✨': <div>✨</div>,
-      '💰': <div>💰</div>,
-      '📚': <div>📚</div>,
-      '✉️': <div>✉️</div>,
-      '🚀': <Rocket className="w-4 h-4" />,
-      '🤖': <div>🤖</div>,
-      '🎓': <div>🎓</div>,
-      '📰': <div>📰</div>,
+      "🏠": <div>🏠</div>,
+      "✨": <div>✨</div>,
+      "💰": <div>💰</div>,
+      "📚": <div>📚</div>,
+      "✉️": <div>✉️</div>,
+      "🚀": <Rocket className="w-4 h-4" />,
+      "🤖": <div>🤖</div>,
+      "🎓": <div>🎓</div>,
+      "📰": <div>📰</div>,
     };
     return iconMap[iconString] || <Sparkles className="w-4 h-4" />;
   };
@@ -270,10 +293,10 @@ export function SuperNavbar({
       </AnimatePresence>
 
       {/* Main Navbar */}
-     <motion.nav
+      <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+        transition={{ type: "spring", stiffness: 100, damping: 20 }}
         style={{
           backgroundColor: currentNavTheme.bg,
           color: currentNavTheme.text,
@@ -282,7 +305,7 @@ export function SuperNavbar({
         className={cn(
           "w-full z-50 transition-all duration-300 backdrop-blur-lg",
           sticky && "fixed top-0",
-          className
+          className,
         )}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -292,10 +315,10 @@ export function SuperNavbar({
               whileHover={{ scale: 1.05 }}
               className="flex items-center space-x-3"
             >
-              <Link 
-                href="/" 
+              <Link
+                href="/"
                 className="flex items-center space-x-3 no-underline"
-                onClick={() => handleNavClick('/')}
+                onClick={() => handleNavClick("/")}
               >
                 {!imageError ? (
                   <div className="relative w-12 h-12">
@@ -310,44 +333,52 @@ export function SuperNavbar({
                     {animated && (
                       <motion.div
                         animate={{ rotate: 360 }}
-                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                        transition={{
+                          duration: 20,
+                          repeat: Infinity,
+                          ease: "linear",
+                        }}
                         className="absolute inset-0 border-2 border-transparent border-t-blue-500 border-r-purple-500 rounded-full"
                       />
                     )}
                   </div>
                 ) : (
-                  <div 
+                  <div
                     className="w-12 h-12 rounded-xl flex items-center justify-center"
                     style={{ backgroundColor: productColor }}
                   >
-                    <span className="text-white font-black text-xl">{productInitial}</span>
+                    <span className="text-white font-black text-xl">
+                      {productInitial}
+                    </span>
                   </div>
                 )}
-                
+
                 <div>
                   <span className="text-2xl font-black">
                     {currentProduct.name}
                   </span>
-                  <motion.p 
+                  <motion.p
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="text-xs text-gray-400 -mt-1"
                   >
-                    {currentProduct.status === ('LIVE' as ProductStatus) ? '🚀 LIVE' : 
+                      
+                    {/* {currentProduct.status === ('LIVE' as ProductStatus) ? '🚀 LIVE' : 
                      currentProduct.status === ('BUILDING' as ProductStatus) ? '🔨 BUILDING' :
-                     currentProduct.status === ('PLANNED' as ProductStatus) ? '📅 PLANNED' : '💡 CONCEPT'}
+                     currentProduct.status === ('PLANNED' as ProductStatus) ? '📅 PLANNED' : '💡 CONCEPT'} */}
                   </motion.p>
                 </div>
               </Link>
             </motion.div>
 
             {/* Desktop Navigation */}
-               <div className="hidden md:flex items-center space-x-2">
+            <div className="hidden md:flex items-center space-x-2">
               {navLinks.map((link) => {
-                const isExternal = link.isExternal || link.href.startsWith('http');
-                const isHashLink = link.href.startsWith('#');
+                const isExternal =
+                  link.isExternal || link.href.startsWith("http");
+                const isHashLink = link.href.startsWith("#");
                 const isActive = activeLink === link.href;
-                
+
                 return (
                   <div key={link.href} className="relative">
                     {isExternal || isHashLink ? (
@@ -356,8 +387,8 @@ export function SuperNavbar({
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         href={link.href}
-                        target={isExternal ? '_blank' : undefined}
-                        rel={isExternal ? 'noopener noreferrer' : undefined}
+                        target={isExternal ? "_blank" : undefined}
+                        rel={isExternal ? "noopener noreferrer" : undefined}
                         onClick={(e) => {
                           if (isHashLink) {
                             e.preventDefault();
@@ -369,8 +400,8 @@ export function SuperNavbar({
                         className={cn(
                           "flex items-center gap-2 px-4 py-3 rounded-lg transition-all",
                           isActive
-                            ? 'bg-blue-500/20 text-blue-400'
-                            : 'hover:bg-white/10'
+                            ? "bg-blue-500/20 text-blue-400"
+                            : "hover:bg-white/10",
                         )}
                       >
                         {getIconComponent(link.icon as string)}
@@ -380,9 +411,7 @@ export function SuperNavbar({
                             {link.badge}
                           </span>
                         )}
-                        {isExternal && (
-                          <ExternalLink className="w-4 h-4" />
-                        )}
+                        {isExternal && <ExternalLink className="w-4 h-4" />}
                       </motion.a>
                     ) : (
                       // Internal Next.js routes use Link component
@@ -396,8 +425,8 @@ export function SuperNavbar({
                           className={cn(
                             "flex items-center gap-2 px-4 py-3 rounded-lg transition-all cursor-pointer",
                             isActive
-                              ? 'bg-blue-500/20 text-blue-400'
-                              : 'hover:bg-white/10'
+                              ? "bg-blue-500/20 text-blue-400"
+                              : "hover:bg-white/10",
                           )}
                         >
                           {getIconComponent(link.icon as string)}
@@ -421,7 +450,7 @@ export function SuperNavbar({
                   </div>
                 );
               })}
-              
+
               {/* Theme Controls */}
               {showThemeControls && (
                 <div className="flex items-center space-x-1 ml-2">
@@ -429,16 +458,16 @@ export function SuperNavbar({
                   <DyslexiaModeToggle />
                 </div>
               )}
-              
+
               {/* CTA Button */}
-               {navCTA && (
+              {navCTA && (
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   <a
                     href={navCTA.href}
-                    target={navCTA.href.startsWith('http') ? '_blank' : '_self'}
+                    target={navCTA.href.startsWith("http") ? "_blank" : "_self"}
                     className={getCtaStyles()}
                     onMouseEnter={() => setHoveredCta(true)}
                     onMouseLeave={() => setHoveredCta(false)}
@@ -467,7 +496,7 @@ export function SuperNavbar({
                   <DyslexiaModeToggle />
                 </div>
               )}
-              
+
               <button
                 ref={menuButtonRef}
                 onClick={() => setIsOpen(!isOpen)}
@@ -501,22 +530,23 @@ export function SuperNavbar({
         </div>
 
         {/* Mobile Navigation */}
-          <AnimatePresence>
+        <AnimatePresence>
           {isOpen && (
             <motion.div
               ref={mobileMenuRef}
               initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
+              animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               style={{ backgroundColor: currentNavTheme.bg }}
               className="md:hidden overflow-hidden border-t"
             >
               <div className="px-4 py-6 space-y-2">
                 {navLinks.map((link, index) => {
-                  const isExternal = link.isExternal || link.href.startsWith('http');
-                  const isHashLink = link.href.startsWith('#');
+                  const isExternal =
+                    link.isExternal || link.href.startsWith("http");
+                  const isHashLink = link.href.startsWith("#");
                   const isActive = activeLink === link.href;
-                  
+
                   return (
                     <motion.div
                       key={link.href}
@@ -527,8 +557,8 @@ export function SuperNavbar({
                       {isExternal || isHashLink ? (
                         <a
                           href={link.href}
-                          target={isExternal ? '_blank' : undefined}
-                          rel={isExternal ? 'noopener noreferrer' : undefined}
+                          target={isExternal ? "_blank" : undefined}
+                          rel={isExternal ? "noopener noreferrer" : undefined}
                           onClick={(e) => {
                             if (isHashLink) {
                               e.preventDefault();
@@ -540,8 +570,8 @@ export function SuperNavbar({
                           className={cn(
                             "w-full flex items-center justify-between p-4 rounded-xl transition-all",
                             isActive
-                              ? 'bg-blue-500/20 text-blue-400'
-                              : 'hover:bg-white/10'
+                              ? "bg-blue-500/20 text-blue-400"
+                              : "hover:bg-white/10",
                           )}
                         >
                           <div className="flex items-center gap-3">
@@ -554,9 +584,7 @@ export function SuperNavbar({
                                 {link.badge}
                               </span>
                             )}
-                            {isExternal && (
-                              <ExternalLink className="w-4 h-4" />
-                            )}
+                            {isExternal && <ExternalLink className="w-4 h-4" />}
                           </div>
                         </a>
                       ) : (
@@ -566,8 +594,8 @@ export function SuperNavbar({
                             className={cn(
                               "w-full flex items-center justify-between p-4 rounded-xl transition-all cursor-pointer",
                               isActive
-                                ? 'bg-blue-500/20 text-blue-400'
-                                : 'hover:bg-white/10'
+                                ? "bg-blue-500/20 text-blue-400"
+                                : "hover:bg-white/10",
                             )}
                           >
                             <div className="flex items-center gap-3">
@@ -587,7 +615,7 @@ export function SuperNavbar({
                     </motion.div>
                   );
                 })}
-                
+
                 {navCTA && (
                   <motion.div
                     initial={{ scale: 0.9, opacity: 0 }}
@@ -597,7 +625,9 @@ export function SuperNavbar({
                   >
                     <a
                       href={navCTA.href}
-                      target={navCTA.href.startsWith('http') ? '_blank' : '_self'}
+                      target={
+                        navCTA.href.startsWith("http") ? "_blank" : "_self"
+                      }
                       className={`block w-full text-center ${getCtaStyles()}`}
                       onClick={() => {
                         setIsOpen(false);
@@ -614,7 +644,7 @@ export function SuperNavbar({
           )}
         </AnimatePresence>
       </motion.nav>
-      
+
       {/* Spacer for fixed navbar */}
       {sticky && <div className="h-20" />}
     </>

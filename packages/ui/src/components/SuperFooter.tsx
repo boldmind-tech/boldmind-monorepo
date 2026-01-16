@@ -107,11 +107,17 @@ export function SuperFooter({
 
   const currentYear = new Date().getFullYear();
 
-  // Get the current product data
   const currentProduct = useMemo(() => {
-    return getProductBySlug(productTheme.slug) || BOLDMIND_PRODUCTS[0]; // Fallback to first product
-  }, [productTheme.slug]);
-
+  const product = getProductBySlug(productTheme.slug);
+  
+  if (product) {
+    console.log('✅ Found product:', product.name, 'for slug:', productTheme.slug);
+    return product;
+  }
+  
+  console.warn('⚠️ Product not found for slug:', productTheme.slug, '- Falling back to BoldMind Hub');
+  return BOLDMIND_PRODUCTS[0]; // ✅ CORRECT
+}, [productTheme.slug]);
   // Get all live products (except current one) for related products section
   const liveProducts = useMemo(() => {
     return getLiveProducts()
@@ -177,7 +183,7 @@ export function SuperFooter({
       {
         title: "🚀 BoldMind Products",
         links: liveProducts.map((product) => ({
-          href: `https://${product.slug}.boldmind.tech`,
+          href: `https://${product.slug}.boldmind.ng`,
           label: product.name,
           icon: product.icon,
           isExternal: true,

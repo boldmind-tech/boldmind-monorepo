@@ -1,7 +1,7 @@
 // apps/web/boldmind-hub/components/Hero/AnimatedBackground.tsx
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 
 export default function AnimatedBackground() {
   return (
@@ -17,7 +17,7 @@ export default function AnimatedBackground() {
           transition={{
             duration: 8,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: "easeInOut",
           }}
         />
         <motion.div
@@ -29,21 +29,21 @@ export default function AnimatedBackground() {
           transition={{
             duration: 10,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: "easeInOut",
           }}
         />
       </div>
-      
+
       {/* Grid pattern */}
-      <div 
+      <div
         className="absolute inset-0 opacity-5"
         style={{
           backgroundImage: `linear-gradient(to right, #FFC800 1px, transparent 1px),
                           linear-gradient(to bottom, #FFC800 1px, transparent 1px)`,
-          backgroundSize: '50px 50px'
+          backgroundSize: "50px 50px",
         }}
       />
-      
+
       {/* Floating particles */}
       {Array.from({ length: 20 }).map((_, i) => (
         <motion.div

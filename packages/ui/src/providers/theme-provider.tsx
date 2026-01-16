@@ -1,20 +1,28 @@
-'use client';
+// lib/theme.ts
+"use client";
 
-import { createContext, useContext, useEffect, useState } from 'react';
-import { 
-  detectCurrentProduct, 
-  getProductThemeClass  // This is from lib/utils.ts
-} from '../lib/utils';
-import { 
-  getProductTheme,  // This is from styles/theme.ts - returns ProductThemeValue
-  productThemes, 
+import { createContext, useContext, useEffect, useState, useMemo } from "react";
+import {
+  detectCurrentProduct,
+  getProductThemeClass,
+} from "../lib/utils";
+import {
+  getProductTheme,
+  productThemes,
   type ProductThemeValue,
-  boldmindColors,  // ADD THIS IMPORT
-  getProductColors  // ADD THIS IMPORT - it's in styles/theme.ts
-} from '../styles/theme';
+  boldmindColors,
+  getProductColors,
+} from "../styles/theme";
+import { 
+  BOLDMIND_PRODUCTS, 
+  getProductBySlug, 
+  type Product,
+  getLiveProducts,
+  getBuildingProducts
+} from '@boldmind/utils';
 
-
-type Theme = 'light' | 'dark' | 'system';
+// Types
+export type Theme = "light" | "dark" | "system";
 
 export interface ProductThemeType {
   slug: string;
@@ -28,33 +36,41 @@ export interface ProductThemeType {
     accent: string;
     background: string;
   };
-  product?: any;
 }
 
 export interface ThemeContextType {
   theme: Theme;
   setTheme: (theme: Theme) => void;
   productTheme: ProductThemeType;
+  currentProduct: Product | null;
   toggleTheme: () => void;
   toggleDyslexiaMode: () => void;
   dyslexiaMode: boolean;
   allProducts: typeof productThemes;
   allColors: typeof boldmindColors;
-  switchProduct: (productSlug: string) => void; // ADD THIS
+  availableProducts: Product[];
+  liveProducts: Product[];
+  buildingProducts: Product[];
+  switchProduct: (productSlug: string) => void;
 }
 
+// Component: ThemeToggle
 export function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
-  
+
   const getThemeIcon = () => {
     switch (theme) {
-      case 'light': return '☀️';
-      case 'dark': return '🌙';
-      case 'system': return '🖥️';
-      default: return '🎨';
+      case "light":
+        return "☀️";
+      case "dark":
+        return "🌙";
+      case "system":
+        return "🖥️";
+      default:
+        return "🎨";
     }
   };
-  
+
   return (
     <button
       onClick={toggleTheme}
@@ -67,291 +83,364 @@ export function ThemeToggle() {
   );
 }
 
-// Dyslexia Mode Toggle Component
+// Component: DyslexiaModeToggle
 export function DyslexiaModeToggle() {
   const { dyslexiaMode, toggleDyslexiaMode } = useTheme();
-  
+
   return (
     <button
       onClick={toggleDyslexiaMode}
-      className={`dyslexia-toggle ${dyslexiaMode ? 'active' : ''}`}
-      aria-label={`${dyslexiaMode ? 'Disable' : 'Enable'} dyslexia-friendly mode`}
+      className={`dyslexia-toggle ${dyslexiaMode ? "active" : ""}`}
+      aria-label={`${dyslexiaMode ? "Disable" : "Enable"} dyslexia-friendly mode`}
     >
       <span className="dyslexia-icon">🧠</span>
       <span className="dyslexia-label">
-        {dyslexiaMode ? 'Dyslexia Mode: ON' : 'Dyslexia Mode: OFF'}
+        {dyslexiaMode ? "Dyslexia Mode: ON" : "Dyslexia Mode: OFF"}
       </span>
     </button>
   );
 }
 
-// Product Theme Hook
+// Hook: useProductTheme
 export function useProductTheme() {
-  const { productTheme, allProducts, allColors } = useTheme();
-  
+  const { 
+    productTheme, 
+    allProducts, 
+    allColors, 
+    availableProducts,
+    liveProducts,
+    buildingProducts,
+    switchProduct 
+  } = useTheme();
+
   return {
     currentProduct: productTheme,
     allProducts,
     allColors,
-    // Helper to switch product theme
-    switchProduct: (productSlug: string) => {
-      // This would need to be implemented in your ThemeContext
-      // You'll need to add a switchProduct function to your context
-      console.log('Switching to product:', productSlug);
-      // Implementation would depend on your context structure
-    }
+    availableProducts,
+    liveProducts,
+    buildingProducts,
+    switchProduct,
   };
+}
+
+// Helper: getCurrentProductFromSlug - FIXED TYPE
+function getCurrentProductFromSlug(slug: string): Product | null {
+  const found = getProductBySlug(slug);
+  
+  if (found) {
+    console.log('Theme: Found product in database:', found.name, found.slug);
+    return found; // found is Product | undefined, but we return null if undefined
+  }
+  
+  console.warn('Theme: Product not found in database:', slug);
+  return null;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export function getThemeCSSVariables(productSlug: string) {
-  const theme = getProductTheme(productSlug);
-  const colors = getProductColors(productSlug);
+// Helper: createProductThemeFromProduct - FIXED TYPE
+function createProductThemeFromProduct(product: Product | null, productSlug: string): ProductThemeType {
+  // Convert undefined to null
+  const productOrNull = product || null;
+  
+  if (!productOrNull) {
+    // Fallback if product not found in database
+    const themeData = getProductTheme(productSlug);
+    const colors = getProductColors(productSlug);
+    
+    return {
+      slug: productSlug,
+      name: productSlug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+      description: `Product: ${productSlug}`,
+      icon: '🚀',
+      status: 'LIVE',
+      colors: {
+        primary: colors.primary,
+        secondary: colors.secondary,
+        accent: colors.accent,
+        background: themeData.background,
+      },
+    };
+  }
+  
+  const themeData = getProductTheme(productOrNull.slug);
+  const colors = getProductColors(productOrNull.slug);
   
   return {
-    '--product-primary': colors.primary,
-    '--product-secondary': colors.secondary,
-    '--product-accent': colors.accent,
-    '--product-background': theme.background,
+    slug: productOrNull.slug,
+    name: productOrNull.name,
+    description: productOrNull.description,
+    icon: productOrNull.icon,
+    status: productOrNull.status,
+    colors: {
+      primary: colors.primary,
+      secondary: colors.secondary,
+      accent: colors.accent,
+      background: themeData.background,
+    },
   };
 }
 
-// Helper to apply theme to element
-export function applyThemeToElement(element: HTMLElement, productSlug: string) {
-  const variables = getThemeCSSVariables(productSlug);
-  Object.entries(variables).forEach(([key, value]) => {
-    element.style.setProperty(key, value);
-  });
-  element.setAttribute('data-product', productSlug);
-}
-
-// ADD THIS TYPE
+// Props for ThemeProvider
 export interface ThemeProviderProps {
   children: React.ReactNode;
   defaultTheme?: Theme;
   defaultDyslexia?: boolean;
-  defaultProduct?: ProductThemeType; // ADD THIS LINE
+  defaultProduct?: ProductThemeType;
+  forceProductSlug?: string;
 }
 
-export function ThemeProvider({ 
+// Component: ThemeProvider
+export function ThemeProvider({
   children,
-  defaultTheme = 'light',
+  defaultTheme = "light",
   defaultDyslexia = false,
-  defaultProduct
+  defaultProduct,
+  forceProductSlug,
 }: ThemeProviderProps) {
-  const [theme, setThemeState] = useState<Theme>(defaultTheme);
-  const [dyslexiaMode, setDyslexiaMode] = useState<boolean>(defaultDyslexia);
-  const [productTheme, setProductTheme] = useState<ProductThemeType>(
-    defaultProduct || {
-      slug: 'boldmind-hub',
-      name: 'BoldMind',
-      description: 'Technology Solution Enterprise',
-      icon: '🚀',
-      status: 'LIVE',
-      colors: {
-        primary: boldmindColors.primary[500],
-        secondary: boldmindColors.accent.yellow,
-        accent: boldmindColors.primary[500],
-        background: 'linear-gradient(135deg, #00143C 0%, #2A4A6E 100%)',
+  // Initialize with undefined to avoid hydration mismatch
+  const [theme, setThemeState] = useState<Theme | undefined>(undefined);
+  const [dyslexiaMode, setDyslexiaMode] = useState<boolean | undefined>(undefined);
+  const [productTheme, setProductTheme] = useState<ProductThemeType | undefined>(undefined);
+
+  // Use useEffect to initialize from localStorage/client-side only
+  useEffect(() => {
+    // Initialize theme from localStorage or default
+    const savedTheme = localStorage.getItem('theme') as Theme;
+    const initialTheme = savedTheme || defaultTheme;
+    setThemeState(initialTheme);
+    console.log('Theme: Initializing theme to:', initialTheme);
+
+    // Initialize dyslexia mode
+    const savedDyslexia = localStorage.getItem('dyslexia-mode');
+    const initialDyslexia = savedDyslexia === 'true' || defaultDyslexia;
+    setDyslexiaMode(initialDyslexia);
+    console.log('Theme: Initializing dyslexia mode to:', initialDyslexia);
+
+    // Initialize product theme
+    let initialProductTheme: ProductThemeType;
+    
+    // 1. If defaultProduct is provided, use it
+    if (defaultProduct) {
+      console.log('Theme: Using defaultProduct prop:', defaultProduct.slug);
+      initialProductTheme = defaultProduct;
+    }
+    // 2. If forceProductSlug is provided, use it
+    else if (forceProductSlug) {
+      console.log('Theme: Using forceProductSlug:', forceProductSlug);
+      const product = getProductBySlug(forceProductSlug);
+      // Convert undefined to null
+      initialProductTheme = createProductThemeFromProduct(product || null, forceProductSlug);
+    }
+    // 3. Try to get from localStorage first
+    else {
+      const savedProductSlug = localStorage.getItem('product-theme');
+      if (savedProductSlug) {
+        const product = getProductBySlug(savedProductSlug);
+        if (product) {
+          console.log('Theme: Using saved product from localStorage:', savedProductSlug);
+          initialProductTheme = createProductThemeFromProduct(product, savedProductSlug);
+        } else {
+          // Saved slug not found in database, detect from URL
+          const detectedSlug = detectCurrentProduct();
+          console.log('Theme: Saved product not found, detecting from URL:', detectedSlug);
+          const detectedProduct = getProductBySlug(detectedSlug);
+          initialProductTheme = createProductThemeFromProduct(detectedProduct || null, detectedSlug);
+        }
+      }
+      // 4. Use detectCurrentProduct() from utils.ts
+      else {
+        const detectedSlug = detectCurrentProduct();
+        console.log('Theme: Detected product slug:', detectedSlug, 'from URL:', window.location.href);
+        
+        const product = getProductBySlug(detectedSlug);
+        initialProductTheme = createProductThemeFromProduct(product || null, detectedSlug);
+        console.log('Theme: Initial product theme:', initialProductTheme.slug, initialProductTheme.name);
       }
     }
-  );
-const getProductThemeClassName = (productSlug: string): string => {
-    return `theme-${productSlug.replace(/-/g, '')}`;
+    
+    setProductTheme(initialProductTheme);
+  }, [defaultProduct, defaultTheme, defaultDyslexia, forceProductSlug]);
+
+  // Memoized current product from @boldmind/utils
+  const currentProduct = useMemo(() => {
+    if (!productTheme) return null;
+    return getCurrentProductFromSlug(productTheme.slug);
+  }, [productTheme]);
+
+  // Get all available products from @boldmind/utils
+  const availableProducts = useMemo(() => BOLDMIND_PRODUCTS, []);
+  const liveProducts = useMemo(() => getLiveProducts(), []);
+  const buildingProducts = useMemo(() => getBuildingProducts(), []);
+
+  const getProductThemeClassName = (productSlug: string): string => {
+    return `theme-${productSlug.replace(/-/g, "")}`;
   };
 
- useEffect(() => {
-    // Only auto-detect if no defaultProduct provided
-    if (!defaultProduct) {
-      const product = detectCurrentProduct();
-      const themeData = getProductTheme(product);
-      const colors = getProductColors(product);
+  // Auto-detect product on mount ONLY if no defaultProduct or forceProductSlug
+  useEffect(() => {
+    if (productTheme && !defaultProduct && !forceProductSlug) {
+      const detectedSlug = detectCurrentProduct();
+      console.log('Theme: Checking for product change. Current:', productTheme.slug, 'Detected:', detectedSlug);
       
-      setProductTheme({
-        slug: product,
-        name: product.charAt(0).toUpperCase() + product.slice(1),
-        description: getProductDescription(product),
-        icon: getProductIcon(product),
-        status: getProductStatus(product),
-        colors: {
-          primary: colors.primary,
-          secondary: colors.secondary,
-          accent: colors.accent,
-          background: themeData.background,
-        }
-      });
+      if (detectedSlug !== productTheme.slug) {
+        const product = getProductBySlug(detectedSlug);
+        const newProductTheme = createProductThemeFromProduct(product || null, detectedSlug);
+        
+        console.log('Theme: Switching to detected product:', {
+          old: productTheme.slug,
+          new: detectedSlug,
+          productName: product?.name || 'Unknown'
+        });
+        
+        setProductTheme(newProductTheme);
+      }
     }
-  }, [defaultProduct]);
+  }, [defaultProduct, forceProductSlug, productTheme]);
 
-  // Helper functions
-  const getProductDescription = (slug: string): string => {
-    const descriptions: Record<string, string> = {
-      'boldmind-hub': 'BoldMind Technology Ecosystem',
-      'amebogist': 'Nigeria\'s #1 Pidgin English platform',
-      'educenter': 'Comprehensive Nigerian ed-tech platform',
-      'planai': 'AI-powered business planning suite',
-      'boldmind-os': 'Productivity system for neurodivergent entrepreneurs',
-    };
-    return descriptions[slug] || 'Technology Solution Enterprise';
-  };
+  // Apply theme effects
+  useEffect(() => {
+    if (!theme || !productTheme || dyslexiaMode === undefined) return;
 
-  const getProductIcon = (slug: string): string => {
-    const icons: Record<string, string> = {
-      'boldmind-hub': '🚀',
-      'amebogist': '📰',
-      'educenter': '🎓',
-      'planai': '🤖',
-      'boldmind-os': '🧠',
-    };
-    return icons[slug] || '🚀';
-  };
-
-  const getProductStatus = (slug: string): string => {
-    const statuses: Record<string, string> = {
-      'boldmind-hub': 'LIVE',
-      'amebogist': 'LIVE',
-      'educenter': 'LIVE',
-      'planai': 'BUILDING',
-      'boldmind-os': 'BUILDING',
-    };
-    return statuses[slug] || 'LIVE';
-  };
-
-  // ... rest of your existing useEffect for theme setup
- useEffect(() => {
     const root = document.documentElement;
-    
+
+    console.log('Theme: Applying theme to DOM:', {
+      product: productTheme.slug,
+      theme,
+      dyslexiaMode,
+      currentProduct: currentProduct?.name
+    });
+
     // Set CSS custom properties
-    root.style.setProperty('--product-primary', productTheme.colors.primary);
-    root.style.setProperty('--product-secondary', productTheme.colors.secondary);
-    root.style.setProperty('--product-accent', productTheme.colors.accent);
-    
-    // Set data attributes for CSS theming
-    root.setAttribute('data-product', productTheme.slug);
-    root.setAttribute('data-theme', theme);
-    root.setAttribute('data-dyslexia', dyslexiaMode.toString());
-    
+    root.style.setProperty("--product-primary", productTheme.colors.primary);
+    root.style.setProperty("--product-secondary", productTheme.colors.secondary);
+    root.style.setProperty("--product-accent", productTheme.colors.accent);
+
+    // Set data attributes
+    root.setAttribute("data-product", productTheme.slug);
+    root.setAttribute("data-theme", theme);
+    root.setAttribute("data-dyslexia", dyslexiaMode.toString());
+
     // Remove previous theme classes
-    Object.keys(productThemes).forEach(slug => {
+    Object.keys(productThemes).forEach((slug) => {
       root.classList.remove(getProductThemeClassName(slug));
     });
-    
+
     // Add current theme class
     root.classList.add(getProductThemeClassName(productTheme.slug));
-    
-    // ... rest of your existing theme setup code ...
 
-    // Handle system theme preference
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    
+    // System theme listener
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
     const handleSystemThemeChange = (e: MediaQueryListEvent) => {
-      if (theme === 'system') {
-        const newTheme = e.matches ? 'dark' : 'light';
-        root.setAttribute('data-theme', newTheme);
-        root.classList.toggle('dark', e.matches);
-        root.classList.toggle('light', !e.matches);
+      if (theme === "system") {
+        const newTheme = e.matches ? "dark" : "light";
+        root.setAttribute("data-theme", newTheme);
+        root.classList.toggle("dark", e.matches);
+        root.classList.toggle("light", !e.matches);
       }
     };
-    
-    if (theme === 'system') {
-      const systemTheme = mediaQuery.matches ? 'dark' : 'light';
-      root.setAttribute('data-theme', systemTheme);
+
+    if (theme === "system") {
+      const systemTheme = mediaQuery.matches ? "dark" : "light";
+      root.setAttribute("data-theme", systemTheme);
       root.classList.add(systemTheme);
     } else {
-      root.setAttribute('data-theme', theme);
+      root.setAttribute("data-theme", theme);
       root.classList.add(theme);
     }
-    
+
     // Handle dyslexia mode
     if (dyslexiaMode) {
-      root.classList.add('dyslexia-mode');
-      document.body.classList.add('dyslexia-friendly');
+      root.classList.add("dyslexia-mode");
+      document.body.classList.add("dyslexia-friendly");
     } else {
-      root.classList.remove('dyslexia-mode');
-      document.body.classList.remove('dyslexia-friendly');
+      root.classList.remove("dyslexia-mode");
+      document.body.classList.remove("dyslexia-friendly");
     }
-    
-    mediaQuery.addEventListener('change', handleSystemThemeChange);
-    
+
+    mediaQuery.addEventListener("change", handleSystemThemeChange);
+
     return () => {
-      mediaQuery.removeEventListener('change', handleSystemThemeChange);
+      mediaQuery.removeEventListener("change", handleSystemThemeChange);
     };
   }, [theme, productTheme, dyslexiaMode]);
 
+  // Theme functions
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);
-    // You could also save to localStorage here
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('theme', newTheme);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("theme", newTheme);
     }
   };
 
   const toggleTheme = () => {
-    const themes: Theme[] = ['light', 'dark', 'system'];
+    if (!theme) return;
+    const themes: Theme[] = ["light", "dark", "system"];
     const currentIndex = themes.indexOf(theme);
     const nextIndex = (currentIndex + 1) % themes.length;
     setTheme(themes[nextIndex]);
   };
 
   const toggleDyslexiaMode = () => {
+    if (dyslexiaMode === undefined) return;
     const newMode = !dyslexiaMode;
     setDyslexiaMode(newMode);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('dyslexia-mode', newMode.toString());
+    if (typeof window !== "undefined") {
+      localStorage.setItem("dyslexia-mode", newMode.toString());
     }
   };
 
   const switchProduct = (productSlug: string) => {
-    const product = productSlug;
-    const themeData = getProductTheme(product);
-    const colors = getProductColors(product);
+    console.log('Theme: Manually switching product to:', productSlug);
     
-    setProductTheme({
-      slug: product,
-      name: product.charAt(0).toUpperCase() + product.slice(1),
-      description: getProductDescription(product),
-      icon: getProductIcon(product),
-      status: getProductStatus(product),
-      colors: {
-        primary: colors.primary,
-        secondary: colors.secondary,
-        accent: colors.accent,
-        background: themeData.background,
+    const product = getProductBySlug(productSlug);
+    if (product) {
+      const newProductTheme = createProductThemeFromProduct(product, productSlug);
+      setProductTheme(newProductTheme);
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("product-theme", productSlug);
       }
-    });
-    
-    // Save to localStorage
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('product-theme', productSlug);
+    } else {
+      console.warn(`Theme: Product with slug "${productSlug}" not found`);
     }
   };
 
+  // Don't render children until initialized to avoid hydration mismatch
+  if (theme === undefined || dyslexiaMode === undefined || !productTheme) {
+    console.log('Theme: Not rendering children, waiting for initialization');
+    return null;
+  }
 
-  // Update your context value to include switchProduct
+  // Context value
   const value: ThemeContextType = {
     theme,
     setTheme,
     productTheme,
+    currentProduct,
     toggleTheme,
     toggleDyslexiaMode,
     dyslexiaMode,
     allProducts: productThemes,
     allColors: boldmindColors,
+    availableProducts,
+    liveProducts,
+    buildingProducts,
     switchProduct,
   };
 
   return (
-    <ThemeContext.Provider value={value}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 }
 
+// Hook: useTheme
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (context === undefined) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+    throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
 }
