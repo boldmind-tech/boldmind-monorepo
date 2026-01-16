@@ -50,30 +50,19 @@ cd boldmind-monorepo
 pnpm install
 
 # Start development
-pnpm dev:live     # Start live products
-pnpm dev:building # Start building products
-pnpm dev:planai   # Start PlanAI suite
-pnpm dev:concepts # Start concept apps
-Development URLs
+
 BoldMind Hub: http://localhost:3000
 
 AmeboGist: http://localhost:3001
 
 EduCenter: http://localhost:3002
 
-AI Receptionist: http://localhost:3007
 
 # Project Structure
-
-
 boldmind-monorepo/
 ├── APPS/                                   # All applications
 │   ├── WEB_APPS/                           # Next.js applications
-│   │   ├── boldmind-hub/                      # boldmind.ng
-│   │   │   ├── app/                           # App Router
-│   │   │   ├── public/                        # Static assets
-│   │   │   ├── package.json                   # App dependencies
-│   │   │   └── next.config.js                 # Next.js config
+│   │   ├── boldmind-hub/                      # boldmind.ng               
 │   │   ├── amebogist/                         # amebogist.ng
 │   │   ├── educenter/                         # educenter.com.ng
 │   │   ├── boldmind-os/                       # os.boldmind.ng
@@ -102,7 +91,7 @@ boldmind-monorepo/
 │   │       ├── naija-fither/                  # Naija FitHer mobile
 │   │       └── emailscraper-pro/              # EmailScraper mobile
 │   │
-│   └── CONCEPT_APPS/                          # building the products aLONG SIDE
+│   └── CONCEPT_APPS/                          # building the products aLONGSIDE
 │       ├── afrohustle-os/                     # hustle.boldmind.ng
 │       ├── naijagig-matcher/                  # gig.educenter.com.ng
 │       ├── kolo-ai/                           # kolo.boldmind.ng
@@ -227,6 +216,8 @@ Cleanup
 
 # 🔧  Technology Stack
 ## Frontend
+
+
 ## Framework: Next.js 14 (App Router)
 
 Language: TypeScript 5.x
@@ -244,7 +235,7 @@ Framework: NestJS 10.x
 
 Database: MongoDB, PostgreSQL
 
-Authentication: JWT + OAuth 2.0
+Authentication: JWT + OAuth 2.0, supabase
 
 Payments: Paystack, Flutterwave
 
@@ -262,15 +253,16 @@ CI/CD: GitHub Actions
 
 Monitoring: Sentry, LogRocket
 
-🌐 Domains
-Primary Domains
+## 🌐 Domains
+
+# Primary Domains
 boldmind.ng - Main ecosystem hub
 
 amebogist.ng - News & content platform
 
 educenter.com.ng - Education platform
 
-Subdomains
+# Subdomains
 os.boldmind.ng - BoldMind OS
 
 planai.boldmind.ng - PlanAI Suite
@@ -282,6 +274,7 @@ email.boldmind.ng - EmailScraper Pro
 safe.boldmind.ng - SAFE AI
 
 📚 Documentation
+
 Architecture Overview
 
 Getting Started Guide
@@ -320,9 +313,13 @@ Website: https://boldmind.ng
 
 Email: info@boldmind.ng
 
-WhatsApp: +234 813 670 5908
+Github: https://github.com/boldmindtech
 
-Twitter: @boldmindtech
+WhatsApp: +234 813 834 9271
+
+Facebook: +234 813 670 5908
+
+Twitter: @bobbycuc2025
 
 🎯 Core Values (B.E.R.A.G)
 Boldness - Courage to tackle Nigeria's biggest problems

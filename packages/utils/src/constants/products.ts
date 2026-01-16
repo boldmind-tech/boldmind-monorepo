@@ -54,7 +54,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
   {
     id: 'prod_000',
     name: 'BoldMind Hub',
-    description: 'Central hub for the BoldMind technology ecosystem - showcasing 31+ innovative products empowering Nigerian entrepreneurs.',
+    description: 'Central hub for the BoldMind Technology Solution Enterprise ecosystem - showcasing 31+ innovative products empowering Nigerian entrepreneurs.',
     category: 'ai',
     status: 'LIVE',
     version: '1.0.0',
@@ -62,9 +62,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     icon: '🚀',
     revenueModel: 'Portfolio management',
     monthlyRevenue: 0,
-    users: '10,000+',
+    users: '100+',
     techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
-    teamSize: 3,
+    teamSize: 1,
     timeline: 'Launched Q4 2025',
     priority: 0,
     dependencies: [],
@@ -94,9 +94,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     slug: 'amebogist',
     category: 'media',
     icon: '📰',
-    revenueModel: 'Google AdSense + Affiliate Marketing (Tech/AI tools)',
-    monthlyRevenue: 85000,
-    users: '25,000+',
+    revenueModel: 'Google AdSense + Affiliate Marketing (Tech/AI tools), Local Advert for SME\'s',
+    monthlyRevenue: 15000,
+    users: '12,000+',
     techStack: ['Next.js', 'MongoDB', 'PWA', 'Tailwind CSS', 'AI Content Tools'],
     teamSize: 2,
     timeline: 'Launched Q2 2025, Pidgin AI/Tech Focus Q4 2025',
@@ -206,7 +206,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: ['PlanAI Suite'],
     integrations: ['Meta API', 'WhatsApp', 'Instagram', 'Facebook'],
     tags: ['ai', 'automation', 'customer-service', 'whatsapp'],
-    links: {},
+    links: {
+      website: "planai.boldmind.ng/receptionist"
+    },
     features: [
       'Auto-reply to comments and DMs',
       'Lead qualification',
@@ -230,14 +232,16 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     icon: '🎬',
     revenueModel: 'Monthly subscription + usage-based',
     monthlyRevenue: 0,
-    techStack: ['Next.js', 'n8n', 'Pictory API', 'Meta API', 'Twitter API'],
+    techStack: ['Next.js', 'n8n', 'Open Source AI Model or API', 'Meta API', 'Twitter API'],
     teamSize: 2,
     timeline: '12 weeks (Jan-Mar 2026)',
     priority: 4,
-    dependencies: ['PlanAI Suite'],
+    dependencies: [],
     integrations: ['Open source ai video generator', 'YouTube', 'Instagram', 'Facebook', 'Twitter', 'TikTok'],
     tags: ['content-creation', 'video', 'social-media', 'automation'],
-    links: {},
+    links: {
+      website: 'social.boldmind.ng'
+    },
     features: [
       'AI video generation',
       'Multi-platform publishing',
@@ -268,7 +272,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: [],
     integrations: ['n8n', 'OpenAI', 'Whisper API', 'Supabase Auth'],
     tags: ['productivity', 'adhd', 'dyslexia', 'ai', 'pomodoro'],
-    links: {},
+    links: {
+      website: "os.boldmind.ng"
+    },
     features: [
       'Capture Brain (multi-modal input)',
       'Focus Brain (ADHD-friendly Pomodoro)',
@@ -287,7 +293,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     name: 'Professional Credibility Hubs',
     description: 'AI-assisted personal branding and one-pager sites',
     category: 'ai',
-    status: 'PLANNED',
+    status: 'BUILDING',
     version: '0.0.1',
     slug: 'credibility-hubs',
     icon: '💼',
@@ -331,7 +337,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: ['PlanAI Suite'],
     integrations: ['Financial APIs', 'Market data'],
     tags: ['business', 'planning', 'market-analysis', 'pitch-deck'],
-    links: {},
+    links: {
+      website: "businessplan.boldmind.ng"
+    },
     features: [
       'AI-generated business plans',
       'Pitch deck creator',
@@ -362,7 +370,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: ['PlanAI Suite'],
     integrations: ['Accounting software', 'Bank APIs'],
     tags: ['finance', 'forecasting', 'cashflow', 'analytics'],
-    links: {},
+    links: {
+      website: "financialforecasting.boldmind.ng"
+    },
     features: [
       'Cashflow projections',
       'Revenue forecasting',
@@ -393,7 +403,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: ['PlanAI Suite'],
     integrations: ['Legal document templates', 'E-signature APIs'],
     tags: ['investment', 'funding', 'legal', 'startups'],
-    links: {},
+    links: {
+      website: "investorreadiness.boldmind.ng"
+    },
     features: [
       'SAFE/term sheet generator',
       'Data room scaffolding',
@@ -411,7 +423,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     name: 'Branding & Design Tools',
     description: 'AI-powered logo creation and marketing visuals',
     category: 'ai',
-    status: 'PLANNED',
+    status: 'BUILDING',
     version: '0.0.1',
     slug: 'branding-design',
     icon: '🎨',
@@ -442,7 +454,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     name: 'Digital Storefronts',
     description: 'Instant e-commerce stores for SMEs and creators',
     category: 'marketplace',
-    status: 'PLANNED',
+    status: 'BUILDING',
     version: '0.0.1',
     slug: 'digital-storefronts',
     icon: '🛍️',
@@ -455,7 +467,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: ['PlanAI Suite'],
     integrations: ['Paystack', 'Delivery APIs', 'WhatsApp'],
     tags: ['ecommerce', 'store', 'payments', 'inventory'],
-    links: {},
+    links: {
+      website: "brandingdesign.boldmind.ng"
+    },
     features: [
       'Instant store creation',
       'Paystack integration',
@@ -473,7 +487,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     name: 'Marketing Automation',
     description: 'AI-driven marketing campaigns and lead nurturing',
     category: 'ai',
-    status: 'PLANNED',
+    status: 'BUILDING',
     version: '0.0.1',
     slug: 'marketing-automation',
     icon: '📧',
@@ -486,7 +500,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: ['PlanAI Suite'],
     integrations: ['Email services', 'CRM systems', 'Analytics'],
     tags: ['marketing', 'automation', 'email', 'crm'],
-    links: {},
+    links: {
+      website: "marketingautomation.boldmind.ng"
+    },
     features: [
       'Email campaign automation',
       'Customer segmentation',
@@ -504,7 +520,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     name: 'Analytics Dashboard',
     description: 'Cross-platform business intelligence',
     category: 'ai',
-    status: 'PLANNED',
+    status: 'BUILDING',
     version: '0.0.1',
     slug: 'analytics-dashboard',
     icon: '📊',
@@ -517,7 +533,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: ['PlanAI Suite'],
     integrations: ['Google Analytics', 'Social APIs', 'Payment processors'],
     tags: ['analytics', 'business-intelligence', 'dashboards', 'reports'],
-    links: {},
+    links: {
+      website: "analytics.boldmind.ng"
+    },
     features: [
       'Unified analytics (all platforms)',
       'Customer behavior insights',
@@ -535,7 +553,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     name: 'EmailScraper Pro',
     description: 'Advanced email discovery and verification tool for Nigerian B2B market',
     category: 'productivity',
-    status: 'CONCEPT',
+    status: 'BUILDING',
     version: '0.0.1',
     slug: 'emailscraper-pro',
     icon: '🔍',
@@ -548,7 +566,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: [],
     integrations: ['LinkedIn', 'Hunter.io', 'CRM systems'],
     tags: ['lead-generation', 'sales', 'email', 'b2b'],
-    links: {},
+    links: {
+      website: 'email.boldmind.ng'
+    },
     features: [
       'Email finding from LinkedIn/company domains',
       'Real-time email verification',
@@ -580,7 +600,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: [],
     integrations: ['Facial recognition', 'Vehicle plate recognition', 'GIS'],
     tags: ['security', 'law-enforcement', 'ai', 'crime-prevention'],
-    links: {},
+    links: {
+      website: "safe.boldmind.ng"
+    },
     features: [
       'Incident reporting & management',
       'Criminal database & pattern recognition',
@@ -599,7 +621,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     name: 'Naija FitHer',
     description: 'Weight loss and wellness platform specifically for Nigerian women',
     category: 'health',
-    status: 'CONCEPT',
+    status: 'BUILDING',
     version: '0.0.1',
     slug: 'naija-fither',
     icon: '💪',
@@ -612,7 +634,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: [],
     integrations: ['WhatsApp', 'Fitness trackers', 'Nutrition databases'],
     tags: ['health', 'fitness', 'women', 'weight-loss', 'nigeria'],
-    links: {},
+    links: {
+      website: 'fit.boldmind.ng'
+    },
     features: [
       'Personalized Nigerian meal plans',
       'Home workouts (no gym equipment)',
@@ -675,7 +699,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: [],
     integrations: ['Payment gateways', 'Maps API'],
     tags: ['marketplace', 'gigs', 'artisans', 'local-services'],
-    links: {},
+    links: {
+      website:  "naijagigmatcher.boldmind.ng"
+    },
     features: [
       'Gig worker profiles',
       'Location-based matching',
@@ -706,7 +732,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: [],
     integrations: ['Bank APIs', 'Credit scoring'],
     tags: ['fintech', 'thrift', 'savings', 'groups', 'ai'],
-    links: {},
+    links: {
+      website: "kolo.boldmind.ng"
+    },
     features: [
       'Group thrift management',
       'AI predicts who will default',
@@ -724,7 +752,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     name: 'BorderlessRemit Tracker',
     description: 'Real-time remittance rate comparison',
     category: 'fintech',
-    status: 'CONCEPT',
+    status: 'BUILDING',
     version: '0.0.1',
     slug: 'borderless-remit-tracker',
     icon: '💱',
@@ -737,7 +765,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: [],
     integrations: ['Remittance APIs', 'Bank APIs'],
     tags: ['fintech', 'remittance', 'comparison', 'money-transfer'],
-    links: {},
+    links: {
+      website: "borderlessremit.boldmind.ng"
+    },
     features: [
       'Compare bank rates vs. black market',
       'Receipt generator',
@@ -755,7 +785,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     name: 'ReceiptGenius NG',
     description: 'Instant VAT-compliant invoice/receipt generator',
     category: 'fintech',
-    status: 'CONCEPT',
+    status: 'BUILDING',
     version: '0.0.1',
     slug: 'receipt-genius-ng',
     icon: '🧾',
@@ -768,7 +798,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: [],
     integrations: ['SMS APIs', 'Email services', 'FIRS compliance'],
     tags: ['fintech', 'invoicing', 'receipts', 'tax', 'business-tools'],
-    links: {},
+    links: {
+      website: "receiptgenius.boldmind.ng"
+    },
     features: [
       'VAT-compliant receipts',
       'Invoice generation',
@@ -830,7 +862,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: [],
     integrations: ['Logistics APIs', 'Payment gateways', 'Weather APIs'],
     tags: ['agriculture', 'marketplace', 'farmers', 'produce', 'logistics'],
-    links: {},
+    links: {
+      website: "poweralerts.boldmind.ng"
+    },
     features: [
       'Farmers post produce + price + location',
       'Buyers contact directly',
@@ -861,7 +895,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: [],
     integrations: [],
     tags: ['ai', 'copywriting', 'content', 'marketing', 'african'],
-    links: {},
+    links: {
+      website: "afrocopy.boldmind.ng"
+    },
     features: [
       'Pidgin, Yoruba slang, Igbo proverbs, Hausa vibes',
       'Social media captions',
@@ -892,7 +928,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: [],
     integrations: ['Video hosting', 'Payment processing'],
     tags: ['marketplace', 'gigs', 'gen-z', 'creative', 'video'],
-    links: {},
+    links: {
+      website: "skill2cash.boldmind.ng"
+    },
     features: [
       'No CV required (30-sec video + price)',
       'Skills: DJ, makeup, tailoring, phone repair',
@@ -923,7 +961,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: [],
     integrations: [],
     tags: ['social', 'anonymous', 'audio', 'whistleblower', 'high-risk'],
-    links: {},
+    links: {
+      website: "anonmic.boldmind.ng"
+    },
     features: [
       '100% anonymous + encrypted',
       'Temporary (auto-delete after time)',
@@ -972,7 +1012,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     name: 'EduCenter TWA',
     description: 'Mobile app for EduCenter educational platform',
     category: 'education',
-    status: 'PLANNED',
+    status: 'BUILDING',
     version: '0.0.1',
     slug: 'educenter-twa',
     icon: '📚',

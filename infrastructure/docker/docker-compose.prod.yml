@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  api-gateway:
+    build:
+      context: ../../SERVICES/api-gateway
+      dockerfile: Dockerfile.prod
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+    networks:
+      - boldmind-network
+
+  user-service:
+    build:
+      context: ../../SERVICES/user-service
+      dockerfile: Dockerfile.prod
+    ports:
+      - "4001:4001"
+    environment:
+      - NODE_ENV=production
+      - PORT=4001
+    networks:
+      - boldmind-network
+
+networks:
+  boldmind-network:
+    driver: bridge

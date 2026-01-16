@@ -1,0 +1,14 @@
+name: user-service
+type: web
+runtime: node
+plan: free
+autoDeploy: true
+buildCommand: pnpm install && pnpm build
+startCommand: pnpm start
+envVars:
+  - key: PORT
+    value: 4001
+  - key: SERVICE_NAME
+    value: user-service
+domains:
+  - users.api.boldmind.ng

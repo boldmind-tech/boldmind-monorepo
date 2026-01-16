@@ -15,10 +15,11 @@ export function detectCurrentProduct(): string {
     'www.educenter.com.ng': 'educenter',
     
     'os.boldmind.ng': 'boldmind-os',
-    'planai.boldmind.ng': 'planai',
+    'planai.boldmind.ng': 'planai_suite',
     'fit.boldmind.ng': 'naija-fither',
     'email.boldmind.ng': 'emailscraper-pro',
     'safe.boldmind.ng': 'safe-ai',
+    'social.boldmind.ng': 'social-factory'
   };
   
   return productMap[hostname] || 'boldmind-hub';

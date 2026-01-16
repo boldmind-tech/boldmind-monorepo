@@ -4,20 +4,14 @@
 - 3000: boldmind-hub (boldmind.ng)
 - 3001: amebogist (amebogist.ng)
 - 3002: educenter (educenter.com.ng)
-- 3007: planai-receptionist (planai.boldmind.ng/receptionist)
-
-## Building Products
+- : planai_suite(planai.boldmind.ng)
 - 3003: boldmind-os (os.boldmind.ng)
 - 3008: social-factory (social.boldmind.ng)
-
-## New Products
 - 3004: naija-fither (fit.boldmind.ng)
 - 3005: emailscraper-pro (email.boldmind.ng)
 - 3006: safe-ai (safe.boldmind.ng)
-
-## PlanAI Suite
 - 3007: receptionist (already assigned)
-- 3009: credibility-hubs
+- 3009: credibility-hubs  ()
 - 3010: business-planning
 - 3011: financial-forecasting
 - 3012: investor-readiness
@@ -25,8 +19,6 @@
 - 3014: digital-storefronts
 - 3015: marketing-automation
 - 3016: analytics-dashboard
-
-## Concept Apps
 - 3017: afrohustle-os
 - 3018: naijagig-matcher
 - 3019: kolo-ai

@@ -7,7 +7,7 @@ on:
       - 'APPS/WEB_APPS/boldmind-hub/**'
       - 'APPS/WEB_APPS/amebogist/**'
       - 'APPS/WEB_APPS/educenter/**'
-      - 'APPS/WEB_APPS/PLANAI_SUITE/receptionist/**'
+      - 'APPS/WEB_APPS/PLANAI_SUITE/**'
       - 'packages/**'
 
 jobs:

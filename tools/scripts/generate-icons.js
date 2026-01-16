@@ -1,4 +1,4 @@
-// generate-icons.js - Node.js based icon generator (no ImageMagick needed)
+// tools/script/generate-icons.js - Node.js based icon generator (no ImageMagick needed)
 const fs = require('fs');
 const path = require('path');
 const { createCanvas, loadImage } = require('canvas');

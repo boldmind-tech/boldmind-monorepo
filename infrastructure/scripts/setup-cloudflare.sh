@@ -28,11 +28,11 @@ DOMAINS=(
 # Subdomains for apps
 SUBDOMAINS=(
     "os.boldmind.ng"
-    "naijafither.boldmind.ng"
-    "emailscraper.boldmind.ng"
-    "safeai.boldmind.ng"
+    'fit.boldmind.ng'
+    "email.boldmind.ng"
+    "safe.boldmind.ng"
     "receptionist.boldmind.ng"
-    "socialfactory.boldmind.ng"
+    "social.boldmind.ng"
     "credibility.boldmind.ng"
     "businessplan.boldmind.ng"
     "financialforecasting.boldmind.ng"
@@ -43,7 +43,7 @@ SUBDOMAINS=(
     "analytics.boldmind.ng"
     "kolo.boldmind.ng"
     "afrohustle.boldmind.ng"
-    "anontruth.boldmind.ng"
+    "anonmic.boldmind.ng"
     "borderlessremit.boldmind.ng"
     "farmgatedirect.boldmind.ng"
     "naijagigmatcher.boldmind.ng"
@@ -51,6 +51,7 @@ SUBDOMAINS=(
     "receiptgenius.boldmind.ng"
     "skill2cash.boldmind.ng"
     "afrocopy.boldmind.ng"
+     'planai.boldmind.ng'
 )
 
 echo "Setting up DNS records..."

@@ -6,10 +6,6 @@ boldmind-monorepo/
 ├── APPS/ # All applications
 │ ├── WEB_APPS/ # Next.js applications
 │ │ ├── boldmind-hub/ # boldmind.ng
-│ │ │ ├── app/ # App Router
-│ │ │ ├── public/ # Static assets
-│ │ │ ├── package.json # App dependencies
-│ │ │ └── next.config.js # Next.js config
 │ │ ├── amebogist/ # amebogist.ng
 │ │ ├── educenter/ # educenter.com.ng
 │ │ ├── boldmind-os/ # os.boldmind.ng

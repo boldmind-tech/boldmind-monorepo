@@ -1,0 +1,19 @@
+# SERVICES/api-gateway/render.yaml
+name: api-gateway
+type: web
+runtime: node
+buildCommand: pnpm install && pnpm build
+startCommand: pnpm start:prod
+envVars:
+  - key: NODE_ENV
+    value: production
+  - key: PORT
+    value: 4000
+  - key: DATABASE_URL
+    sync: false
+  - key: JWT_SECRET
+    sync: false
+domains:
+  - api.boldmind.ng
+  - api.amebogist.ng
+  - api.educenter.com.ng
