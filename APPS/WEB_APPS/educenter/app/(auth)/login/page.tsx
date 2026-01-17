@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { loginWithEmail, loginWithOAuth, GoogleProvider } from "@boldmind/auth";
-
 import toast from 'react-hot-toast';
 import { Mail, Lock, Eye, EyeOff, School } from 'lucide-react';
 

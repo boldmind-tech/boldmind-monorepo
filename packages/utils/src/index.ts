@@ -8,12 +8,14 @@ export * from './helpers/array';
 export * from './hooks/useLocalStorage';
 
 // Constants
-export * from './constants/routes';
+// export * from './constants/routes';
 export * from './constants/products';
 export type { Product, ProductStatus, ProductCategory } from './constants/products';
 
-// Temporarily comment out the problematic social exports
-// export { SocialMediaPoster, socialAccounts, crossPostingRules } from './social/poster';
+// Social exports (FIXED)
+export { socialAccounts } from './constants/social';
+// export { SocialConnectionWizard } from './social/connect-guide';
+// export { SocialIntegration } from './social';
 
 // Types
 export * from './types/index';

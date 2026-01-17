@@ -4,7 +4,7 @@
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
- "scripts": {
+  "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "eslint . --ext ts,tsx",
@@ -12,10 +12,29 @@
   },
   "dependencies": {
     "date-fns": "^3.0.0",
+    "axios": "^1.6.0",
     "tsup": "^7.2.0"
   },
   "devDependencies": {
     "@types/node": "^20.19.28",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "@types/axios": "^0.14.0"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./social": {
+      "import": "./dist/social/index.js",
+      "require": "./dist/social/index.cjs",
+      "types": "./dist/social/index.d.ts"
+    },
+    "./constants": {
+      "import": "./dist/constants/index.js",
+      "require": "./dist/constants/index.cjs",
+      "types": "./dist/constants/index.d.ts"
+    }
   }
 }

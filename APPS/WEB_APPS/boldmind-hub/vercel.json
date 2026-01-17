@@ -1,14 +1,14 @@
 {
   "name": "boldmind-hub",
   "framework": "nextjs",
-  "buildCommand": "pnpm turbo run build --filter=boldmind-hub",
+  "buildCommand": "cd ../.. && pnpm install && pnpm turbo run build --filter=boldmind-hub",
   "outputDirectory": ".next",
-  "devCommand": "pnpm turbo run dev --filter=boldmind-hub",
-  "installCommand": "pnpm install",
+  "installCommand": "cd ../.. && pnpm install",
+  "devCommand": "cd ../.. && pnpm turbo run dev --filter=boldmind-hub",
+  "regions": ["fra1"],
   "env": {
     "NEXT_PUBLIC_API_URL": "https://api.boldmind.ng",
     "NEXT_PUBLIC_SITE_URL": "https://boldmind.ng"
   },
-  "regions": ["fra1"],
   "alias": ["boldmind.ng", "www.boldmind.ng"]
 }

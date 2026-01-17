@@ -1,4 +1,5 @@
 // packages/utils/src/hooks/useLocalStorage.ts
+"use client"
 import { useState } from 'react';
 
 export function useLocalStorage<T>(

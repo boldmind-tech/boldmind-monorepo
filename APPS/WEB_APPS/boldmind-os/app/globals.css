@@ -5,8 +5,7 @@
 
 /* === ROOT CSS VARIABLES === */
 :root {
-  /* BoldMind OS Brand Colors */
-  --brand-primary: 230, 57, 70;    /* #E63946 */
+  /* BoldMind OS Brand Colors */  --brand-primary: 230, 57, 70;    /* #E63946 */ 
   --brand-secondary: 255, 200, 0;  /* #FFC800 */
   --brand-accent: 185, 28, 28;     /* #B91C1C */
   --brand-gradient: linear-gradient(135deg, #E63946 0%, #B91C1C 100%);

@@ -1,0 +1,21 @@
+{
+  "name": "AfroCopy AI",
+  "short_name": "AfroCopy AI",
+  "description": "African-trained copywriting tool with local languages and slang",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#9C27B0",
+  "theme_color": "#009688",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

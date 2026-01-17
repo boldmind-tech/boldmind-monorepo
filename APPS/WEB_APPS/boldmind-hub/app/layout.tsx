@@ -377,7 +377,7 @@ export default function RootLayout({
         {/* Preload LCP image */}
         <link
           rel="preload"
-          href="/logo-large.png"
+          href="/icon-512x512.png"
           as="image"
           type="image/png"
         />
@@ -430,7 +430,7 @@ export default function RootLayout({
         <ThemeProvider
           defaultProduct={{
             slug: "boldmind-hub",
-            name: "BoldMind",
+            name: "BoldMind Hub",
             description: "Technology Solution Enterprise",
             icon: "🚀",
             status: "LIVE",
@@ -441,7 +441,7 @@ export default function RootLayout({
               background: "linear-gradient(135deg, #00143C 0%, #2A4A6E 100%)",
             },
           }}
-          defaultTheme="light"
+          // defaultTheme="light"
           defaultDyslexia={false}
         >
           {children}

@@ -252,7 +252,6 @@ export default function RootLayout({
       >
         <ThemeProvider
           forceProductSlug="boldmind-os"
-         
         >
           {children}
         </ThemeProvider>

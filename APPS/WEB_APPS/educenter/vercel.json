@@ -1,12 +1,14 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
+  "name": "educenter",
   "framework": "nextjs",
+  "buildCommand": "cd ../.. && pnpm install && pnpm turbo run build --filter=educenter",
+  "outputDirectory": ".next",
+  "installCommand": "cd ../.. && pnpm install",
+  "devCommand": "cd ../.. && pnpm turbo run dev --filter=educenter",
+  "regions": ["fra1"],
   "env": {
-    "NEXT_PUBLIC_API_URL": "https://api.boldmind.ng",
-    "NEXT_PUBLIC_SUPABASE_URL": "@supabase-url",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase-anon-key",
-    "PAYSTACK_SECRET_KEY": "@paystack-secret-key",
-    "MONGODB_URI": "@mongodb-uri-educenter"
-  }
+    "NEXT_PUBLIC_API_URL": "https://api.educenter.com.ng",
+    "NEXT_PUBLIC_SITE_URL": "https://educenter.com.ng"
+  },
+  "alias": ["educenter.com.ng", "www.educenter.com.ng"]
 }

@@ -1,0 +1,21 @@
+{
+  "name": "Digital Storefronts",
+  "short_name": "Digital Storefronts",
+  "description": "Instant e-commerce stores for SMEs and creators",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#059669",
+  "theme_color": "#10B981",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

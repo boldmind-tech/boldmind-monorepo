@@ -71,6 +71,7 @@ boldmind-monorepo/
 │   │   ├── safe-ai/                           # safe.boldmind.ng
 │   │   ├── social-factory/                    # social.boldmind.ng
 │   │   └── PLANAI_SUITE/                      # planai.boldmind.ng/*
+│   │       ├── planai-landing/                 # planai.boldmind.ng/
 │   │       ├── receptionist/                   # AI Receptionist
 │   │       ├── credibility-hubs/               # Professional portfolios
 │   │       ├── business-planning/              # Business plan generator

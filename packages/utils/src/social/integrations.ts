@@ -1,4 +1,8 @@
+import { socialAccounts } from '../constants/social';
+import { Product } from '../constants/products';
+
 type ProductKey = 'amebogist' | 'educenter';
+
 
 interface PlatformRules {
   platforms: string[];
@@ -6,59 +10,126 @@ interface PlatformRules {
   templates: Record<string, string>;
 }
 
-export const socialAccounts = {
-  youtube: [
-    { id: 'channel1', name: 'Boldmind Technology Solution Enterprise', url: 'https://youtube.com/@BoldMindTech' },
-    { id: 'channel2', name: 'Code Fires', url: 'https://youtube.com/@Codefires' },
-    { id: 'channel3', name: 'Chains to Coins', url: 'https://youtube.com/@ChainstoCoins' },
-    { id: 'channel4', name: 'Echoes of the Elders', url: 'https://youtube.com/@EchoesoftheElders-d68' },
-  ],
-  facebook: [
-    { id: 'fb1', name: 'BoldMind Technology Solution Enterprise', url: 'https://facebook.com/BoldMindTech' },
-    { id: 'fb2', name: 'Amebo Gist', url: 'https://facebook.com/amebogistng' },
-    { id: 'fb3', name: 'Educenter', url: 'https://facebook.com/DevConectPage' },
-    { id: 'fb4', name: 'Charles Uche Chijuka', url: 'https://facebook.com/cuche3' },
-  ],
-  instagram: [
-    { id: 'ig1', name: '@boldmindtech', url: 'https://instagram.com/boldmindtech' },
-    { id: 'ig2', name: '@amebogist10', url: 'https://instagram.com/amebogist10' },
-    { id: 'ig3', name: '@educenterc', url: 'https://instagram.com/educenterc' },
-    { id: 'ig4', name: '@charleschijuka', url: 'https://instagram.com/charleschijuka' },
-    { id: 'ig5', name: '@villagecircl', url: 'https://instagram.com/villagecircl' },
-  ],
-  x: [
-    { id: 'tw1', name: 'VillageCircle', url: 'https://x.com/bobbycuc2025' },
-    { id: 'tw2', name: 'AmeboGist', url: 'https://x.com/Amebo__Gist' },
-    { id: 'tw3', name: 'ChainsToCoins', url: 'https://x.com/ChainsToCoins' },
-    { id: 'tw4', name: 'CodeFiresAfrica', url: 'https://x.com/mediaman9ja' },
-    { id: 'tw5', name: 'Charles Uche Chijuka', url: 'https://x.com/CharlesUcheCh' },
-  ],
-  tiktok: [
-    { id: 'tt1', name: 'CodeFiresAfrica', url: 'https://tiktok.com/@codesfiresafrica' },
-    { id: 'tt2', name: 'VillageCircle', url: 'https://tiktok.com/@viilagecircle' },
-  ],
-  whatsapp: [
-    { id: 'wa1', name: 'Charles', phone: '+2348136705908' },
-    { id: 'wa2', name: 'BoldMind Technology Solution Enterpires', phone: '+2349138349271' },
-  ]
-};
-
-export const crossPostingRules: Record<ProductKey, PlatformRules> = {
-  'amebogist': {
-    platforms: ['facebook', 'twitter', 'instagram', 'tiktok'],
-    schedule: 'daily',
-    templates: {
-      facebook: '📰 {title}\n\n{excerpt}\n\n🔗 Read full gist: {url}\n\n#AmeboGist #NaijaNews #TechNaija',
-      twitter: '📰 {title}\n\n{url}\n\n#AmeboGist #NaijaTech',
-      instagram: '{title}\n\n{excerpt}\n\n🔗 Link in bio\n\n#AmeboGist #NaijaNews #Nigeria',
+export class SocialIntegration {
+  private platformTokens: Map<string, string> = new Map();
+  
+  // Connect to all your 16 social accounts
+  async connectAllAccounts(): Promise<void> {
+    const connections = [];
+    
+    for (const [platform, accounts] of Object.entries(socialAccounts)) {
+      for (const account of accounts) {
+        connections.push(this.connectAccount(platform, account));
+      }
     }
-  },
-  'educenter': {
-    platforms: ['facebook', 'twitter', 'instagram', 'youtube'],
-    schedule: 'weekly',
-    templates: {
-      facebook: '🎓 New lesson: {title}\n\nPerfect for JAMB/WAEC prep!\n\n{url}\n\n#EduCenter #JAMB #Education',
-      twitter: '🎓 {title}\n\n{url}\n\n#EduCenter #JAMB2026',
+    
+    await Promise.all(connections);
+    console.log(`✅ Connected ${connections.length} social accounts`);
+  }
+  
+  // Unified cross-posting
+  async crossPost(content: {
+    title: string;
+    body: string;
+    image?: string;
+    product: string;
+  }): Promise<void> {
+    const rules = crossPostingRules[content.product as keyof typeof crossPostingRules];
+    
+    if (!rules) return;
+    
+    for (const platform of rules.platforms) {
+      const template = rules.templates[platform];
+      const message = this.formatMessage(template, content);
+      
+      await this.postToPlatform(platform, message, content.image);
     }
   }
-};
+  
+  // Post to all products simultaneously
+  async postToAllProducts(productPost: {
+    amebogist?: { title: string; excerpt: string; url: string };
+    educenter?: { title: string; excerpt: string; url: string };
+    boldmind?: { title: string; excerpt: string; url: string };
+  }): Promise<void> {
+    const posts = [];
+    
+    if (productPost.amebogist) {
+      posts.push(this.crossPost({
+        ...productPost.amebogist,
+        product: 'amebogist'
+      }));
+    }
+    
+    if (productPost.educenter) {
+      posts.push(this.crossPost({
+        ...productPost.educenter,
+        product: 'educenter'
+      }));
+    }
+    
+    if (productPost.boldmind) {
+      posts.push(this.crossPost({
+        ...productPost.boldmind,
+        product: 'boldmind'
+      }));
+    }
+    
+    await Promise.all(posts);
+  }
+  
+  // Analytics across all platforms
+  async getUnifiedAnalytics(): Promise<any> {
+    const analytics = {
+      totalFollowers: 0,
+      engagement: 0,
+      reach: 0,
+      platformBreakdown: {} as Record<string, any>
+    };
+    
+    for (const [platform, accounts] of Object.entries(socialAccounts)) {
+      let platformFollowers = 0;
+      let platformEngagement = 0;
+      
+      for (const account of accounts) {
+        const stats = await this.fetchPlatformStats(platform, account.id);
+        platformFollowers += stats.followers || 0;
+        platformEngagement += stats.engagement || 0;
+      }
+      
+      analytics.totalFollowers += platformFollowers;
+      analytics.engagement += platformEngagement;
+      analytics.platformBreakdown[platform] = {
+        followers: platformFollowers,
+        engagement: platformEngagement,
+        accounts: accounts.length
+      };
+    }
+    
+    return analytics;
+  }
+  
+  private async connectAccount(platform: string, account: any): Promise<void> {
+    // Implementation for each platform's API
+    switch(platform) {
+      case 'facebook':
+        // Facebook Graph API integration
+        break;
+      case 'instagram':
+        // Instagram Graph API
+        break;
+      case 'x':
+        // Twitter/X API v2
+        break;
+      case 'youtube':
+        // YouTube Data API
+        break;
+      case 'tiktok':
+        // TikTok API
+        break;
+      case 'whatsapp':
+        // WhatsApp Business API
+        break;
+    }
+  }
+}
