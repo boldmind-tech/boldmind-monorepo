@@ -16,7 +16,7 @@
     "tsup": "^7.2.0"
   },
   "devDependencies": {
-    "@types/node": "^20.19.28",
+   "@types/node": "20.19.29",  
     "typescript": "^5.4.5",
     "@types/axios": "^0.14.0"
   },

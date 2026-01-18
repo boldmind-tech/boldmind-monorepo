@@ -40,15 +40,15 @@
     "stats": "turbo run stats",
     "graph": "turbo run build --graph",
     "type-check": "turbo run type-check",
-    "vercel:boldmind-hub": "turbo run build --continue --filter=@boldmind/ui --filter=@boldmind/utils --filter=@boldmind/boldmind-hub",
-    "vercel:educenter": "turbo run build --continue --filter=@boldmind/auth --filter=@boldmind/ui --filter=@boldmind/utils  --filter=@boldmind/educenter",
     "vercel:amebogist": "turbo run build --filter=@boldmind/ui --filter=@boldmind/utils --filter=@boldmind/api-client --filter=@boldmind/amebogist",
     "vercel:planai-planai-landing": "turbo run build --filter=@boldmind/ui --filter=@boldmind/utils --filter=@boldmind/ai --filter=@boldmind/planai-receptionist",
     "vercel-build:boldmind-hub": "pnpm install && pnpm run vercel:boldmind-hub",
     "vercel-build:educenter": "pnpm install && pnpm run vercel:educenter",
     "vercel-build:amebogist": "pnpm install && pnpm run vercel:amebogist",
+    "vercel:boldmind-hub": "turbo run build --filter=...@boldmind/boldmind-hub",
+  "vercel:educenter": "turbo run build --filter=...@boldmind/educenter",
+  "vercel:planai-landing": "turbo run build --filter=...@boldmind/planai-landing",
     "vercel-build:planai-receptionist": "pnpm install && pnpm run vercel:planai-receptionist",
-      "vercel:planai-landing": "turbo run build --filter=@boldmind/ui --filter=@boldmind/utils --filter=@boldmind/planai-landing",
   "vercel-build:planai-landing": "pnpm install && pnpm run vercel:planai-landing"
   },
   "devDependencies": {
