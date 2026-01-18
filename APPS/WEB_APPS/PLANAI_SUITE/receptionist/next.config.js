@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+// Updated for Vercel deployment
 const nextConfig = {
   images: {
     domains: ["localhost"],

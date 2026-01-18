@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+// Updated for Vercel deployment
 const nextConfig = {
   output: 'standalone',
   transpilePackages: ['@boldmind/ui', '@boldmind/utils'],

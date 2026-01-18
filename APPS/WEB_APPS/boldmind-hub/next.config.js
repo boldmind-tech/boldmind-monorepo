@@ -1,4 +1,5 @@
 // apps/web/boldmind-hub/next.config.js
+// Updated for Vercel deployment
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
