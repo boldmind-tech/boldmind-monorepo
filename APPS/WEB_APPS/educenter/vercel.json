@@ -1,10 +1,10 @@
 {
   "name": "educenter",
   "framework": "nextjs",
-  "buildCommand": "cd ../.. && pnpm install && pnpm turbo run build --filter=educenter",
+  "buildCommand": "cd ../.. && pnpm install && pnpm run build:shared && pnpm turbo run build --filter=@boldmind/educenter",
   "outputDirectory": ".next",
   "installCommand": "cd ../.. && pnpm install",
-  "devCommand": "cd ../.. && pnpm turbo run dev --filter=educenter",
+  "devCommand": "cd ../.. && pnpm turbo run dev --filter=@boldmind/educenter",
   "regions": ["fra1"],
   "env": {
     "NEXT_PUBLIC_API_URL": "https://api.educenter.com.ng",
