@@ -6,7 +6,6 @@ import { BOLDMIND_PRODUCTS } from '@boldmind/utils';
 import { productThemes } from '@boldmind/ui';
 
 export function BoldMindLayout({ children }: { children: React.ReactNode }) {
-  // Force BoldMind Hub theme regardless of detection
   const forceProduct = 'boldmind-hub';
   
   // Get BoldMind Hub product from your data or create it

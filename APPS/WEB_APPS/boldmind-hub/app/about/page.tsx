@@ -9,8 +9,8 @@ export default function AboutPage() {
   const navLinks = [
     { href: '/', label: 'Home' },
     { href: '#ecosystem', label: 'Ecosystem' },
-    { href: '#products', label: 'Products' },
-    { href: '/planai', label: 'PlanAI' },
+    { href: '/products', label: 'Products' },
+    // { href: '/planai', label: 'PlanAI' },
     { href: '/contact', label: 'Contact' },
   ];
 
@@ -21,7 +21,7 @@ export default function AboutPage() {
         { href: 'https://amebogist.ng', label: 'AmeboGist', isExternal: true },
         { href: 'https://educenter.com.ng', label: 'EduCenter', isExternal: true },
         { href: '/planai', label: 'PlanAI Suite' },
-        { href: '/#products', label: 'All Products', badge: '31+' },
+        { href: '/products', label: 'All Products', badge: '31+' },
       ],
     },
     {

@@ -5,11 +5,14 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc -b",
-    "dev": "tsc -w"
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint . --ext ts,tsx",
+    "clean": "rm -rf .turbo dist node_modules"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "tsup": "^7.2.0"
   }
 }

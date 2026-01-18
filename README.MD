@@ -72,7 +72,7 @@ boldmind-monorepo/
 │   │   ├── social-factory/                    # social.boldmind.ng
 │   │   └── PLANAI_SUITE/                      # planai.boldmind.ng/*
 │   │       ├── planai-landing/                 # planai.boldmind.ng/
-│   │       ├── receptionist/                   # AI Receptionist
+│   │       ├── receptionist/                   # AI Receptionist planai.boldmind.ng/receptionist
 │   │       ├── credibility-hubs/               # Professional portfolios
 │   │       ├── business-planning/              # Business plan generator
 │   │       ├── financial-forecasting/          # Cashflow modeling

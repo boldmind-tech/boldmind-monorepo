@@ -17,10 +17,17 @@
     "dev:live": "turbo run dev --filter=@boldmind/boldmind-hub --filter=@boldmind/amebogist --filter=@boldmind/educenter --filter=@boldmind/planai-receptionist",
     "dev:building": "turbo run dev --filter=@boldmind/boldmind-os --filter=@boldmind/social-factory",
     "dev:new": "turbo run dev --filter=@boldmind/naija-fither --filter=@boldmind/emailscraper-pro --filter=@boldmind/safe-ai",
-    "dev:planai": "turbo run dev --filter=@boldmind/planai-*",
-    "dev:concepts": "turbo run dev --filter=@boldmind/concept-*",
+    "dev:planai-landing": "turbo run dev --filter=./APPS/WEB_APPS/PLANAI_SUITE/planai-landing",
+    "dev:planai-receptionist": "turbo run dev --filter=./APPS/WEB_APPS/PLANAI_SUITE/receptionist",
+    "dev:planai-credibility-hubs": "turbo run dev --filter=./APPS/WEB_APPS/PLANAI_SUITE/credibility-hubs",
+    "dev:planai-business-planning": "turbo run dev --filter=./APPS/WEB_APPS/PLANAI_SUITE/business-planning",
+    "dev:afrohustle-os": "turbo run dev --filter=./APPS/CONCEPT_APPS/afrohustle-os",
+    "dev:naijagig-matcher": "turbo run dev --filter=./APPS/CONCEPT_APPS/naijagig-matcher",
+    "dev:kolo-ai": "turbo run dev --filter=./APPS/CONCEPT_APPS/kolo-ai",
+    "dev:planai": "turbo run dev --filter=./APPS/WEB_APPS/PLANAI_SUITE/*",
+    "dev:concepts": "turbo run dev --filter=./APPS/CONCEPT_APPS/*",
     "dev:all": "turbo run dev --parallel",
-    "build:shared": "turbo run build --filter=./packages/*",
+    "build:shared": "turbo run build --filter=./PACKAGES/*",
     "build:live": "turbo run build --filter=@boldmind/boldmind-hub --filter=@boldmind/amebogist --filter=@boldmind/educenter --filter=@boldmind/planai-receptionist",
     "build:selected": "turbo run build --filter=@boldmind/boldmind-hub --filter=@boldmind/amebogist --filter=@boldmind/educenter --filter=@boldmind/boldmind-os --filter=@boldmind/naija-fither --filter=@boldmind/emailscraper-pro --filter=@boldmind/safe-ai --filter=@boldmind/social-factory",
     "install:all": "pnpm install && pnpm -r install",
@@ -32,9 +39,18 @@
     "deploy:planai": "turbo run deploy --filter=@boldmind/planai-*",
     "stats": "turbo run stats",
     "graph": "turbo run build --graph",
-    "type-check": "turbo run type-check"
+    "type-check": "turbo run type-check",
+    "vercel:boldmind-hub": "turbo run build --continue --filter=@boldmind/ui --filter=@boldmind/utils --filter=@boldmind/boldmind-hub",
+    "vercel:educenter": "turbo run build --continue --filter=@boldmind/auth --filter=@boldmind/ui --filter=@boldmind/utils  --filter=@boldmind/educenter",
+    "vercel:amebogist": "turbo run build --filter=@boldmind/ui --filter=@boldmind/utils --filter=@boldmind/api-client --filter=@boldmind/amebogist",
+    "vercel:planai-planai-landing": "turbo run build --filter=@boldmind/ui --filter=@boldmind/utils --filter=@boldmind/ai --filter=@boldmind/planai-receptionist",
+    "vercel-build:boldmind-hub": "pnpm install && pnpm run vercel:boldmind-hub",
+    "vercel-build:educenter": "pnpm install && pnpm run vercel:educenter",
+    "vercel-build:amebogist": "pnpm install && pnpm run vercel:amebogist",
+    "vercel-build:planai-receptionist": "pnpm install && pnpm run vercel:planai-receptionist",
+      "vercel:planai-landing": "turbo run build --filter=@boldmind/ui --filter=@boldmind/utils --filter=@boldmind/planai-landing",
+  "vercel-build:planai-landing": "pnpm install && pnpm run vercel:planai-landing"
   },
-  
   "devDependencies": {
     "@types/node": "^20.11.5",
     "@types/react": "^18.2.61",
@@ -57,11 +73,10 @@
     "@nestjs/platform-express": "^10.3.3",
     "@nestjs/swagger": "^7.3.0"
   },
-  
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "next": "^14.2.0",  
+    "next": "^14.2.0",
     "framer-motion": "^11.0.5",
     "lucide-react": "^0.309.0",
     "clsx": "^2.0.0",
@@ -73,7 +88,6 @@
     "zod": "^3.22.4",
     "@hookform/resolvers": "^3.3.2"
   },
-  
   "pnpm": {
     "overrides": {
       "react": "^18.2.0",

@@ -1,42 +1,575 @@
+// First, let's define the missing types and interfaces
 
+// constants/social.ts
+export interface SocialAccount {
+  id: string;
+  name: string;
+  url?: string;
+  phone?: string;
+  platform: string;
+  accessToken?: string;
+  refreshToken?: string;
+  connectedAt?: Date;
+}
 
+export interface PlatformRules {
+  platforms: string[];
+  schedule: string;
+  templates: Record<string, string>;
+}
 
-export const socialAccounts = {
+export interface ProductRules {
+  [product: string]: PlatformRules;
+}
+
+export const crossPostingRules: ProductRules = {
+  amebogist: {
+    platforms: ['facebook', 'twitter', 'instagram', 'whatsapp'],
+    schedule: 'immediate',
+    templates: {
+      facebook: '{title}\n\n{body}\n\nRead more: {url}',
+      twitter: '{title}\n\n{excerpt}... {url}',
+      instagram: '{title}\n\n{excerpt}\n\n{url}\n\n#AmeboGist #News',
+      whatsapp: '📰 *{title}*\n\n{excerpt}\n\nRead full article: {url}'
+    }
+  },
+  educenter: {
+    platforms: ['facebook', 'twitter', 'linkedin', 'whatsapp'],
+    schedule: 'immediate',
+    templates: {
+      facebook: '🎓 {title}\n\n{body}\n\nLearn more: {url}',
+      twitter: '🎓 {title}\n\n{excerpt}... {url} #Education #EduCenter',
+      linkedin: '{title}\n\n{body}\n\n🔗 {url}',
+      whatsapp: '📚 *{title}*\n\n{excerpt}\n\nEnroll now: {url}'
+    }
+  },
+  boldmind: {
+    platforms: ['twitter', 'linkedin', 'youtube'],
+    schedule: 'scheduled',
+    templates: {
+      twitter: '💻 {title}\n\n{excerpt}... {url} #Tech #Boldmind',
+      linkedin: '{title}\n\n{body}\n\n🔗 {url}\n\n#Technology #Innovation',
+      youtube: 'Check out our latest tech tutorial!\n\n{url}'
+    }
+  }
+};
+
+export const socialAccounts: Record<string, SocialAccount[]> = {
   youtube: [
-    { id: 'channel1', name: 'Boldmind Technology Solution Enterprise', url: 'https://youtube.com/@BoldMindTech' },
-    { id: 'channel2', name: 'Code Fires', url: 'https://youtube.com/@Codefires' },
-    { id: 'channel3', name: 'Chains to Coins', url: 'https://youtube.com/@ChainstoCoins' },
-    { id: 'channel4', name: 'Echoes of the Elders', url: 'https://youtube.com/@EchoesoftheElders-d68' },
+    { id: 'channel1', name: 'Boldmind Technology Solution Enterprise', url: 'https://youtube.com/@BoldMindTech', platform: 'youtube' },
+    { id: 'channel2', name: 'Code Fires', url: 'https://youtube.com/@Codefires', platform: 'youtube' },
+    { id: 'channel3', name: 'Chains to Coins', url: 'https://youtube.com/@ChainstoCoins', platform: 'youtube' },
+    { id: 'channel4', name: 'Echoes of the Elders', url: 'https://youtube.com/@EchoesoftheElders-d68', platform: 'youtube' },
   ],
   facebook: [
-    { id: 'fb1', name: 'BoldMind Technology Solution Enterprise', url: 'https://facebook.com/BoldMindTech' },
-    { id: 'fb2', name: 'Amebo Gist', url: 'https://facebook.com/amebogistng' },
-    { id: 'fb3', name: 'Educenter', url: 'https://facebook.com/DevConectPage' },
-    { id: 'fb4', name: 'Charles Uche Chijuka', url: 'https://facebook.com/cuche3' },
+    { id: 'fb1', name: 'BoldMind Technology Solution Enterprise', url: 'https://facebook.com/BoldMindTech', platform: 'facebook' },
+    { id: 'fb2', name: 'Amebo Gist', url: 'https://facebook.com/amebogistng', platform: 'facebook' },
+    { id: 'fb3', name: 'Educenter', url: 'https://facebook.com/DevConectPage', platform: 'facebook' },
+    { id: 'fb4', name: 'Charles Uche Chijuka', url: 'https://facebook.com/cuche3', platform: 'facebook' },
   ],
   instagram: [
-    { id: 'ig1', name: '@boldmindtech', url: 'https://instagram.com/boldmindtech' },
-    { id: 'ig2', name: '@amebogist10', url: 'https://instagram.com/amebogist10' },
-    { id: 'ig3', name: '@educenterc', url: 'https://instagram.com/educenterc' },
-    { id: 'ig4', name: '@charleschijuka', url: 'https://instagram.com/charleschijuka' },
-    { id: 'ig5', name: '@villagecircl', url: 'https://instagram.com/villagecircl' },
+    { id: 'ig1', name: '@boldmindtech', url: 'https://instagram.com/boldmindtech', platform: 'instagram' },
+    { id: 'ig2', name: '@amebogist10', url: 'https://instagram.com/amebogist10', platform: 'instagram' },
+    { id: 'ig3', name: '@educenterc', url: 'https://instagram.com/educenterc', platform: 'instagram' },
+    { id: 'ig4', name: '@charleschijuka', url: 'https://instagram.com/charleschijuka', platform: 'instagram' },
+    { id: 'ig5', name: '@villagecircl', url: 'https://instagram.com/villagecircl', platform: 'instagram' },
   ],
-  x: [
-    { id: 'tw1', name: 'VillageCircle', url: 'https://x.com/bobbycuc2025' },
-    { id: 'tw2', name: 'AmeboGist', url: 'https://x.com/Amebo__Gist' },
-    { id: 'tw3', name: 'ChainsToCoins', url: 'https://x.com/ChainsToCoins' },
-    { id: 'tw4', name: 'CodeFiresAfrica', url: 'https://x.com/mediaman9ja' },
-    { id: 'tw5', name: 'Charles Uche Chijuka', url: 'https://x.com/CharlesUcheCh' },
+  twitter: [
+    { id: 'tw1', name: 'VillageCircle', url: 'https://x.com/bobbycuc2025', platform: 'twitter' },
+    { id: 'tw2', name: 'AmeboGist', url: 'https://x.com/Amebo__Gist', platform: 'twitter' },
+    { id: 'tw3', name: 'ChainsToCoins', url: 'https://x.com/ChainsToCoins', platform: 'twitter' },
+    { id: 'tw4', name: 'CodeFiresAfrica', url: 'https://x.com/mediaman9ja', platform: 'twitter' },
+    { id: 'tw5', name: 'Charles Uche Chijuka', url: 'https://x.com/CharlesUcheCh', platform: 'twitter' },
   ],
   tiktok: [
-    { id: 'tt1', name: 'CodeFiresAfrica', url: 'https://tiktok.com/@codesfiresafrica' },
-    { id: 'tt2', name: 'VillageCircle', url: 'https://tiktok.com/@viilagecircle' },
+    { id: 'tt1', name: 'CodeFiresAfrica', url: 'https://tiktok.com/@codesfiresafrica', platform: 'tiktok' },
+    { id: 'tt2', name: 'VillageCircle', url: 'https://tiktok.com/@viilagecircle', platform: 'tiktok' },
   ],
   whatsapp: [
-    { id: 'wa1', name: 'Charles', phone: '+2348136705908' },
-    { id: 'wa2', name: 'BoldMind Technology Solution Enterpires', phone: '+2349138349271' },
+    { id: 'wa1', name: 'Charles', phone: '+2348136705908', platform: 'whatsapp' },
+    { id: 'wa2', name: 'BoldMind Technology Solution Enterprises', phone: '+2349138349271', platform: 'whatsapp' },
+  ],
+  linkedin: [
+    { id: 'li1', name: 'BoldMind Technology Solutions', url: 'https://linkedin.com/company/boldmindtech', platform: 'linkedin' },
+    { id: 'li2', name: 'Charles Uche Chijuka', url: 'https://linkedin.com/in/charleschijuka', platform: 'linkedin' },
   ]
 };
 
+// Enhanced SocialIntegration class with fixed types
+export class SocialIntegration {
+  private platformTokens: Map<string, string> = new Map();
+  private apiClients: Map<string, any> = new Map();
+  private postingQueue: Array<() => Promise<void>> = [];
+  private isProcessingQueue = false;
 
+  constructor(private config = {
+    maxRetries: 3,
+    delayBetweenPosts: 1000, // 1 second
+    batchSize: 5,
+    enableAnalytics: true
+  }) {}
 
+  // Connect to all social accounts with better error handling
+  async connectAllAccounts(): Promise<{ success: number; failed: number; errors: string[] }> {
+    const results = {
+      success: 0,
+      failed: 0,
+      errors: [] as string[]
+    };
+
+    const connectionPromises = [];
+
+    for (const [platform, accounts] of Object.entries(socialAccounts)) {
+      for (const account of accounts) {
+        connectionPromises.push(
+          this.connectAccount(platform, account).then(
+            () => results.success++,
+            (error) => {
+              results.failed++;
+              results.errors.push(`Failed to connect ${account.name} on ${platform}: ${error.message}`);
+            }
+          )
+        );
+      }
+    }
+
+    await Promise.allSettled(connectionPromises);
+    console.log(`✅ Connected ${results.success} social accounts, ${results.failed} failed`);
+    return results;
+  }
+
+  // Enhanced cross-posting with better typing
+  async crossPost(content: {
+    title: string;
+    body: string;
+    excerpt: string;
+    url: string;
+    image?: string;
+    product: string;
+  }): Promise<PostResult[]> {
+    const rules = crossPostingRules[content.product as keyof typeof crossPostingRules];
+    
+    if (!rules) {
+      console.warn(`No cross-posting rules found for product: ${content.product}`);
+      return [];
+    }
+
+    const results: PostResult[] = [];
+    
+    // Group by platform to handle multiple accounts per platform
+    for (const platform of rules.platforms) {
+      const platformAccounts = socialAccounts[platform] || [];
+      const template = rules.templates[platform] || '{title}\n\n{body}\n\n{url}';
+      
+      for (const account of platformAccounts) {
+        try {
+          const message = this.formatMessage(template, content);
+          const result = await this.postToPlatform(platform, account.id, message, content.image, content.url);
+          
+          results.push({
+            platform,
+            accountId: account.id,
+            accountName: account.name,
+            success: true,
+            messageId: result.messageId,
+            timestamp: new Date(),
+            content: {
+              title: content.title,
+              excerpt: content.excerpt,
+              url: content.url
+            }
+          });
+          
+          // Respect rate limits
+          await this.delay(this.config.delayBetweenPosts);
+          
+        } catch (error) {
+          results.push({
+            platform,
+            accountId: account.id,
+            accountName: account.name,
+            success: false,
+            error: error instanceof Error ? error.message : 'Unknown error',
+            timestamp: new Date()
+          });
+          console.error(`Failed to post to ${platform} (${account.name}):`, error);
+        }
+      }
+    }
+
+    return results;
+  }
+
+  // Fixed method signature for postToPlatform
+  private async postToPlatform(
+    platform: string,
+    accountId: string,
+    message: string,
+    image?: string,
+    url?: string
+  ): Promise<{ messageId: string; platform: string }> {
+    // Implementation for each platform's API
+    switch(platform) {
+      case 'facebook':
+        return this.postToFacebook(accountId, message, image, url);
+      case 'instagram':
+        return this.postToInstagram(accountId, message, image);
+      case 'twitter':
+      case 'x':
+        return this.postToTwitter(accountId, message, image, url);
+      case 'youtube':
+        return this.postToYouTube(accountId, message, image || '', url);
+      case 'tiktok':
+        return this.postToTikTok(accountId, message, image);
+      case 'whatsapp':
+        return this.postToWhatsApp(accountId, message, url);
+      case 'linkedin':
+        return this.postToLinkedIn(accountId, message, image, url);
+      default:
+        throw new Error(`Unsupported platform: ${platform}`);
+    }
+  }
+
+  // Fixed formatMessage method
+  private formatMessage(template: string, content: {
+    title: string;
+    body: string;
+    excerpt: string;
+    url: string;
+    product: string;
+  }): string {
+    return template
+      .replace(/{title}/g, content.title)
+      .replace(/{body}/g, content.body)
+      .replace(/{excerpt}/g, content.excerpt)
+      .replace(/{url}/g, content.url)
+      .replace(/{product}/g, content.product);
+  }
+
+  // Enhanced postToAllProducts with proper typing
+  async postToAllProducts(productPost: {
+    amebogist?: { title: string; excerpt: string; url: string; body?: string; image?: string };
+    educenter?: { title: string; excerpt: string; url: string; body?: string; image?: string };
+    boldmind?: { title: string; excerpt: string; url: string; body?: string; image?: string };
+  }): Promise<Record<string, PostResult[]>> {
+    const results: Record<string, PostResult[]> = {};
+    const posts = [];
+
+    if (productPost.amebogist) {
+      posts.push(
+        this.crossPost({
+          ...productPost.amebogist,
+          body: productPost.amebogist.body || productPost.amebogist.excerpt,
+          product: 'amebogist'
+        }).then(result => { results.amebogist = result; })
+      );
+    }
+
+    if (productPost.educenter) {
+      posts.push(
+        this.crossPost({
+          ...productPost.educenter,
+          body: productPost.educenter.body || productPost.educenter.excerpt,
+          product: 'educenter'
+        }).then(result => { results.educenter = result; })
+      );
+    }
+
+    if (productPost.boldmind) {
+      posts.push(
+        this.crossPost({
+          ...productPost.boldmind,
+          body: productPost.boldmind.body || productPost.boldmind.excerpt,
+          product: 'boldmind'
+        }).then(result => { results.boldmind = result; })
+      );
+    }
+
+    await Promise.all(posts);
+    return results;
+  }
+
+  // Queue posting for rate limiting
+  async queuePost(postFn: () => Promise<void>): Promise<void> {
+    this.postingQueue.push(postFn);
+    
+    if (!this.isProcessingQueue) {
+      this.processQueue();
+    }
+  }
+
+  private async processQueue(): Promise<void> {
+    if (this.isProcessingQueue || this.postingQueue.length === 0) return;
+    
+    this.isProcessingQueue = true;
+    
+    while (this.postingQueue.length > 0) {
+      const batch = this.postingQueue.splice(0, this.config.batchSize);
+      
+      await Promise.all(
+        batch.map(async (postFn, index) => {
+          // Stagger posts within batch
+          await this.delay(index * 500);
+          await this.retryOperation(postFn, this.config.maxRetries);
+        })
+      );
+      
+      // Delay between batches
+      if (this.postingQueue.length > 0) {
+        await this.delay(this.config.delayBetweenPosts * 2);
+      }
+    }
+    
+    this.isProcessingQueue = false;
+  }
+
+  // Platform-specific implementations (simplified)
+  private async postToFacebook(
+    accountId: string,
+    message: string,
+    image?: string,
+    url?: string
+  ): Promise<{ messageId: string; platform: string }> {
+    // Implementation using Facebook Graph API
+    console.log(`Posting to Facebook account ${accountId}`);
+    // Actual API call would go here
+    return { messageId: `fb_${Date.now()}`, platform: 'facebook' };
+  }
+
+  private async postToTwitter(
+    accountId: string,
+    message: string,
+    image?: string,
+    url?: string
+  ): Promise<{ messageId: string; platform: string }> {
+    // Implementation using Twitter API v2
+    console.log(`Posting to Twitter account ${accountId}`);
+    return { messageId: `tw_${Date.now()}`, platform: 'twitter' };
+  }
+
+  private async postToInstagram(
+    accountId: string,
+    message: string,
+    image?: string
+  ): Promise<{ messageId: string; platform: string }> {
+    // Implementation using Instagram Graph API
+    console.log(`Posting to Instagram account ${accountId}`);
+    return { messageId: `ig_${Date.now()}`, platform: 'instagram' };
+  }
+
+  private async postToYouTube(
+    accountId: string,
+    message: string,
+    image: string,
+    url?: string
+  ): Promise<{ messageId: string; platform: string }> {
+    // Implementation using YouTube Data API
+    console.log(`Posting to YouTube account ${accountId}`);
+    return { messageId: `yt_${Date.now()}`, platform: 'youtube' };
+  }
+
+  private async postToWhatsApp(
+    accountId: string,
+    message: string,
+    url?: string
+  ): Promise<{ messageId: string; platform: string }> {
+    // Implementation using WhatsApp Business API
+    console.log(`Posting to WhatsApp account ${accountId}`);
+    return { messageId: `wa_${Date.now()}`, platform: 'whatsapp' };
+  }
+
+  private async postToTikTok(
+    accountId: string,
+    message: string,
+    image?: string
+  ): Promise<{ messageId: string; platform: string }> {
+    // Implementation using TikTok API
+    console.log(`Posting to TikTok account ${accountId}`);
+    return { messageId: `tt_${Date.now()}`, platform: 'tiktok' };
+  }
+
+  private async postToLinkedIn(
+    accountId: string,
+    message: string,
+    image?: string,
+    url?: string
+  ): Promise<{ messageId: string; platform: string }> {
+    // Implementation using LinkedIn API
+    console.log(`Posting to LinkedIn account ${accountId}`);
+    return { messageId: `li_${Date.now()}`, platform: 'linkedin' };
+  }
+
+  private async connectAccount(platform: string, account: SocialAccount): Promise<void> {
+    // Implementation for each platform's authentication
+    console.log(`Connecting ${account.name} on ${platform}`);
+    // Store tokens in this.platformTokens
+    this.platformTokens.set(`${platform}:${account.id}`, 'mock_token');
+  }
+
+  // Helper methods
+  private async delay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  private async retryOperation<T>(
+    operation: () => Promise<T>,
+    maxRetries: number,
+    delayMs = 1000
+  ): Promise<T> {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        return await operation();
+      } catch (error) {
+        if (attempt === maxRetries) throw error;
+        console.log(`Retry ${attempt}/${maxRetries} after error:`, error);
+        await this.delay(delayMs * attempt); // Exponential backoff
+      }
+    }
+    throw new Error('Max retries exceeded');
+  }
+
+  // Enhanced analytics with error handling
+  async getUnifiedAnalytics(startDate?: Date, endDate?: Date): Promise<AnalyticsData> {
+    const analytics: AnalyticsData = {
+      totalFollowers: 0,
+      engagement: 0,
+      reach: 0,
+      postsCount: 0,
+      platformBreakdown: {},
+      period: {
+        start: startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days
+        end: endDate || new Date()
+      }
+    };
+
+    for (const [platform, accounts] of Object.entries(socialAccounts)) {
+      let platformFollowers = 0;
+      let platformEngagement = 0;
+      let platformReach = 0;
+      let platformPosts = 0;
+
+      for (const account of accounts) {
+        try {
+          const stats = await this.fetchPlatformStats(platform, account.id, startDate, endDate);
+          platformFollowers += stats.followers || 0;
+          platformEngagement += stats.engagement || 0;
+          platformReach += stats.reach || 0;
+          platformPosts += stats.postsCount || 0;
+        } catch (error) {
+          console.warn(`Failed to fetch stats for ${account.name} on ${platform}:`, error);
+        }
+      }
+
+      analytics.totalFollowers += platformFollowers;
+      analytics.engagement += platformEngagement;
+      analytics.reach += platformReach;
+      analytics.postsCount += platformPosts;
+
+      analytics.platformBreakdown[platform] = {
+        followers: platformFollowers,
+        engagement: platformEngagement,
+        reach: platformReach,
+        postsCount: platformPosts,
+        accounts: accounts.length,
+        avgEngagementRate: platformFollowers > 0 ? (platformEngagement / platformFollowers) * 100 : 0
+      };
+    }
+
+    return analytics;
+  }
+
+  private async fetchPlatformStats(
+    platform: string,
+    accountId: string,
+    startDate?: Date,
+    endDate?: Date
+  ): Promise<PlatformStats> {
+    // Implementation to fetch platform-specific statistics
+    return {
+      followers: Math.floor(Math.random() * 10000),
+      engagement: Math.floor(Math.random() * 1000),
+      reach: Math.floor(Math.random() * 50000),
+      postsCount: Math.floor(Math.random() * 50),
+      platform
+    };
+  }
+}
+
+// Additional types
+export interface PostResult {
+  platform: string;
+  accountId: string;
+  accountName: string;
+  success: boolean;
+  messageId?: string;
+  error?: string;
+  timestamp: Date;
+  content?: {
+    title: string;
+    excerpt: string;
+    url: string;
+  };
+}
+
+export interface PlatformStats {
+  followers: number;
+  engagement: number;
+  reach: number;
+  postsCount: number;
+  platform: string;
+}
+
+export interface AnalyticsData {
+  totalFollowers: number;
+  engagement: number;
+  reach: number;
+  postsCount: number;
+  platformBreakdown: Record<string, {
+    followers: number;
+    engagement: number;
+    reach: number;
+    postsCount: number;
+    accounts: number;
+    avgEngagementRate: number;
+  }>;
+  period: {
+    start: Date;
+    end: Date;
+  };
+}
+
+// Example usage
+export async function exampleUsage() {
+  const social = new SocialIntegration({
+    maxRetries: 3,
+    delayBetweenPosts: 2000,
+    batchSize: 3,
+    enableAnalytics: true
+  });
+
+  // Connect accounts
+  const connectionResult = await social.connectAllAccounts();
+  console.log('Connection results:', connectionResult);
+
+  // Post to all products
+  const results = await social.postToAllProducts({
+    amebogist: {
+      title: 'Breaking News: Tech Revolution',
+      excerpt: 'A major breakthrough in AI technology has been announced...',
+      body: 'Full article content here...',
+      url: 'https://amebogist.com/news/tech-revolution',
+      image: 'https://amebogist.com/images/tech-revolution.jpg'
+    },
+    educenter: {
+      title: 'New Course: Advanced React Patterns',
+      excerpt: 'Learn advanced React patterns and best practices...',
+      url: 'https://educenter.com/courses/react-patterns'
+    }
+  });
+
+  console.log('Posting results:', results);
+
+  // Get analytics
+  const analytics = await social.getUnifiedAnalytics();
+  console.log('Analytics:', analytics);
+}

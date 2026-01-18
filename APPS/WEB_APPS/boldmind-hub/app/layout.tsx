@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
-import { ThemeProvider } from "@boldmind/ui";
-import { BOLDMIND_PRODUCTS, ProductStatus } from "@boldmind/utils";
+import { BoldMindLayout } from "./boldmindLayout";
 import "@boldmind/ui/dist/index.css";
 import "./globals.css";
 
@@ -199,10 +198,10 @@ export const metadata: Metadata = {
     ],
   },
 };
-console.log("Theme initialized with:", {
-  slug: "boldmind-hub",
-  shouldMatch: BOLDMIND_PRODUCTS[0].slug,
-});
+// console.log("Theme initialized with:", {
+//   slug: "boldmind-hub",
+//   shouldMatch: BOLDMIND_PRODUCTS[0].slug,
+// });
 
 export const viewport: Viewport = {
   themeColor: "#00143C",
@@ -427,25 +426,11 @@ export default function RootLayout({
       <body
         className={`${inter.className} antialiased bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100`}
       >
-        <ThemeProvider
-          defaultProduct={{
-            slug: "boldmind-hub",
-            name: "BoldMind Hub",
-            description: "Technology Solution Enterprise",
-            icon: "🚀",
-            status: "LIVE",
-            colors: {
-              primary: "#00143C",
-              secondary: "#FFC800",
-              accent: "#2A4A6E",
-              background: "linear-gradient(135deg, #00143C 0%, #2A4A6E 100%)",
-            },
-          }}
-          // defaultTheme="light"
-          defaultDyslexia={false}
+        <BoldMindLayout
+          
         >
           {children}
-        </ThemeProvider>
+        </BoldMindLayout>
 
         {/* Performance monitoring */}
         {process.env.NODE_ENV === "production" && (

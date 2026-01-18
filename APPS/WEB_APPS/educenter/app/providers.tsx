@@ -1,13 +1,12 @@
 // apps/web/educenter/app/providers.tsx
 "use client";
-
-import { ThemeProvider } from "@boldmind/ui";
+import { EducenterLayout  } from '../components/EducenterLayout'
 import { AuthProvider } from "@boldmind/auth";
 import { Toaster } from "react-hot-toast";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider forceProductSlug="educenter" defaultDyslexia={false}>
+    <EducenterLayout>
       <AuthProvider>
         {children}
         <Toaster
@@ -35,6 +34,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
           }}
         />
       </AuthProvider>
-    </ThemeProvider>
+    </EducenterLayout>
   );
 }

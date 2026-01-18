@@ -4,15 +4,17 @@
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
-    "clean": "rm -rf dist"
+   "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint . --ext ts,tsx",
+    "clean": "rm -rf .turbo dist node_modules"
   },
   "dependencies": {
     "posthog-js": "^1.0.0",
     "mixpanel-browser": "^2.0.0",
-    "@boldmind/utils": "workspace:*"
+    "@boldmind/utils": "workspace:*",
+    "tsup": "^7.2.0"
   },
   "devDependencies": {
     "typescript": "^5.3.3",
@@ -20,5 +22,12 @@
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
   }
 }
