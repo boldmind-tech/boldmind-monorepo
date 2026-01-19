@@ -1,7 +1,5 @@
 import APIClient from '../client';
 
-const defaultClient = new APIClient(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api');
-
 export interface Product {
   id: string;
   name: string;
@@ -38,39 +36,51 @@ export interface CreateProductData {
   status?: string;
 }
 
-export const productsApi = {
-  getProducts: (params?: { 
+export class ProductsEndpoints {
+  constructor(private client: APIClient) {}
+
+  async getProducts(params?: { 
     category?: string; 
     status?: string; 
     limit?: number; 
     offset?: number 
-  }) => 
-    defaultClient.get<{ products: Product[]; total: number }>('/products', { params }),
+  }) {
+    return this.client.get<{ products: Product[]; total: number }>('/products', { params });
+  }
   
-  getProduct: (productId: string) => 
-    defaultClient.get<Product>(`/products/${productId}`),
+  async getProduct(productId: string) {
+    return this.client.get<Product>(`/products/${productId}`);
+  }
   
-  getProductBySlug: (slug: string) => 
-    defaultClient.get<Product>(`/products/slug/${slug}`),
+  async getProductBySlug(slug: string) {
+    return this.client.get<Product>(`/products/slug/${slug}`);
+  }
   
-  createProduct: (data: CreateProductData) => 
-    defaultClient.post<Product>('/products', data),
+  async createProduct(data: CreateProductData) {
+    return this.client.post<Product>('/products', data);
+  }
   
-  updateProduct: (productId: string, data: Partial<CreateProductData>) => 
-    defaultClient.put<Product>(`/products/${productId}`, data),
+  async updateProduct(productId: string, data: Partial<CreateProductData>) {
+    return this.client.put<Product>(`/products/${productId}`, data);
+  }
   
-  deleteProduct: (productId: string) => 
-    defaultClient.delete(`/products/${productId}`),
+  async deleteProduct(productId: string) {
+    return this.client.delete(`/products/${productId}`);
+  }
   
-  getProductStats: (productId: string) => 
-    defaultClient.get<any>(`/products/${productId}/stats`),
+  async getProductStats(productId: string) {
+    return this.client.get<any>(`/products/${productId}/stats`);
+  }
   
-  updateProductStatus: (productId: string, status: string) => 
-    defaultClient.put(`/products/${productId}/status`, { status }),
+  async updateProductStatus(productId: string, status: string) {
+    return this.client.put(`/products/${productId}/status`, { status });
+  }
   
-  getProductCategories: () => 
-    defaultClient.get<string[]>('/products/categories'),
+  async getProductCategories() {
+    return this.client.get<string[]>('/products/categories');
+  }
   
-  searchProducts: (query: string, params?: { limit?: number }) => 
-    defaultClient.get<Product[]>(`/products/search?q=${query}`, { params })
-};
+  async searchProducts(query: string, params?: { limit?: number }) {
+    return this.client.get<Product[]>(`/products/search?q=${query}`, { params });
+  }
+}

@@ -10,7 +10,6 @@ export { EducenterEndpoints } from './endpoints/educenter';
 
 // Export API utilities
 export { analyticsApi } from './endpoints/analytics';
-export { productsApi } from './endpoints/products';
 export { typedApi } from './utils/typed-api';
 
 // Export interceptor setup functions

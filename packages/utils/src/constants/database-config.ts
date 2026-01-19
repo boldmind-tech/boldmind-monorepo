@@ -1,4 +1,5 @@
 // packages/utils/src/constants/database-config.ts
+import { DatabaseType } from './products';
 
 export const DATABASE_CONFIG = {
   // PostgreSQL/Prisma Products (Transactional, structured data)
@@ -43,7 +44,6 @@ export const DATABASE_CONFIG = {
   ]
 } as const;
 
-export type DatabaseType = 'postgres' | 'mongodb';
 
 /**
  * Get which database a product uses
@@ -92,5 +92,3 @@ export const DB_CONNECTIONS = {
     development: process.env.MONGODB_URI,
   }
 } as const;
-
-export default DATABASE_CONFIG;

@@ -1,5 +1,3 @@
-// First, let's define the missing types and interfaces
-
 // constants/social.ts
 export interface SocialAccount {
   id: string;

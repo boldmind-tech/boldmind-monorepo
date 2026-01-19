@@ -3,12 +3,14 @@ import { AuthEndpoints } from './endpoints/auth';
 import { UsersEndpoints } from './endpoints/users';
 import { PaymentsEndpoints } from './endpoints/payments';
 import { EducenterEndpoints } from './endpoints/educenter';
+import { ProductsEndpoints } from './endpoints/products';
 
 export class BoldMindAPI {
   public auth: AuthEndpoints;
   public users: UsersEndpoints;
   public payments: PaymentsEndpoints;
   public educenter: EducenterEndpoints;
+  public products: ProductsEndpoints;
 
   constructor(baseURL: string = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api') {
     const client = new APIClient(baseURL);
@@ -17,6 +19,7 @@ export class BoldMindAPI {
     this.users = new UsersEndpoints(client);
     this.payments = new PaymentsEndpoints(client);
     this.educenter = new EducenterEndpoints(client);
+    this.products = new ProductsEndpoints(client);
   }
 }
 
@@ -29,3 +32,4 @@ export { AuthEndpoints } from './endpoints/auth';
 export { UsersEndpoints } from './endpoints/users';
 export { PaymentsEndpoints } from './endpoints/payments';
 export { EducenterEndpoints } from './endpoints/educenter';
+export { ProductsEndpoints } from './endpoints/products';

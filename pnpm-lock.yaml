@@ -1142,6 +1142,18 @@ importers:
       '@auth/mongodb-adapter':
         specifier: ^3.9.0
         version: 3.11.1(mongodb@6.21.0)
+      '@boldmind/auth':
+        specifier: workspace:*
+        version: link:../../../PACKAGES/auth
+      '@boldmind/database':
+        specifier: workspace:*
+        version: link:../../../PACKAGES/database
+      '@boldmind/ui':
+        specifier: workspace:*
+        version: link:../../../PACKAGES/ui
+      '@boldmind/utils':
+        specifier: workspace:*
+        version: link:../../../PACKAGES/utils
       '@emotion/is-prop-valid':
         specifier: ^1.3.1
         version: 1.4.0

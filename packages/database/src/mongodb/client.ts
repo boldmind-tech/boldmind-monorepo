@@ -4,14 +4,18 @@ import { MongoClient, Db } from 'mongodb';
 let cachedClient: MongoClient | null = null;
 let cachedDb: Db | null = null;
 
+// Export the client instance directly (will be null until connected)
+export let mongoClient: MongoClient;
+
 export interface MongoConfig {
   uri: string;
   dbName: string;
 }
 
-export async function connectMongoDB(config: MongoConfig): Promise<{ client: MongoClient; db: Db }> {
+export async function connectMongo(config: MongoConfig): Promise<{ client: MongoClient; db: Db }> {
   // Return cached connection in production
   if (cachedClient && cachedDb) {
+    mongoClient = cachedClient;
     return { client: cachedClient, db: cachedDb };
   }
 
@@ -28,13 +32,14 @@ export async function connectMongoDB(config: MongoConfig): Promise<{ client: Mon
   // Cache the connection
   cachedClient = client;
   cachedDb = db;
+  mongoClient = client;
 
   console.log(`✅ MongoDB Connected: ${config.dbName}`);
   
   return { client, db };
 }
 
-export async function disconnectMongoDB(): Promise<void> {
+export async function disconnectMongo(): Promise<void> {
   if (cachedClient) {
     await cachedClient.close();
     cachedClient = null;
@@ -45,6 +50,6 @@ export async function disconnectMongoDB(): Promise<void> {
 
 // Helper function for apps
 export async function getMongoDb(uri: string, dbName: string): Promise<Db> {
-  const { db } = await connectMongoDB({ uri, dbName });
+  const { db } = await connectMongo({ uri, dbName });
   return db;
 }

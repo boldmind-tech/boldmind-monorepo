@@ -4,13 +4,8 @@
 // ===================================
 // PRODUCTS & CATALOG
 // ===================================
-export {
+import {
   BOLDMIND_PRODUCTS,
-  type Product,
-  type ProductStatus,
-  type ProductCategory,
-  type DatabaseType,
-  type ProductStatusSummary,
   getProductById,
   getProductBySlug,
   getProductByDomain,
@@ -26,24 +21,47 @@ export {
   getProductStatusSummary,
 } from './constants/products';
 
+export {
+  BOLDMIND_PRODUCTS,
+  getProductById,
+  getProductBySlug,
+  getProductByDomain,
+  getProductsByStatus,
+  getProductsByCategory,
+  getProductsByDatabase,
+  getLiveProducts,
+  getBuildingProducts,
+  getPlannedProducts,
+  getConceptProducts,
+  calculateTotalMonthlyRevenue,
+  calculateProjectedRevenue,
+  getProductStatusSummary,
+};
+
 // ===================================
 // DATABASE CONFIGURATION
 // ===================================
-export {
+import {
   DATABASE_CONFIG,
   DB_CONNECTIONS,
-  type DatabaseType as DBType,
   getProductDatabase,
   usesPostgres,
   usesMongoDB,
 } from './constants/database-config';
 
+export {
+  DATABASE_CONFIG,
+  DB_CONNECTIONS,
+  getProductDatabase,
+  usesPostgres,
+  usesMongoDB,
+};
+
 // ===================================
 // DOMAIN MAPPING & ROUTES
 // ===================================
-export {
+import {
   DOMAIN_MAPPINGS,
-  type DomainMapping,
   getProductFromDomain,
   getDomainFromProduct,
   getDomainsByStatus,
@@ -51,24 +69,42 @@ export {
   isLiveDomain,
 } from './constants/domains';
 
+export {
+  DOMAIN_MAPPINGS,
+  getProductFromDomain,
+  getDomainFromProduct,
+  getDomainsByStatus,
+  getAPIEndpoint,
+  isLiveDomain,
+};
+
 // ===================================
 // COLORS & THEMES
 // ===================================
-export {
+import {
   BOLDMIND_COLOR_SCHEMES,
-  type ColorScheme,
-  type ProductColorScheme,
   getColorScheme,
   getCategoryColorSchemes,
   generateCSSVariables,
   getContrastColor,
   generateThemeClasses,
+} from './styles/theme';
+
+export {
+  BOLDMIND_COLOR_SCHEMES,
+  getColorScheme,
+  getCategoryColorSchemes,
+  generateCSSVariables,
+  getContrastColor,
+  generateThemeClasses,
+};
+
+// Re-export common theme assets
+export {
   boldmindColors,
   boldmindTypography,
   boldmindAnimations,
   productThemes,
-  type ProductTheme,
-  type ProductThemeValue,
   getProductTheme,
   getProductColors,
   getProductThemeClass,
@@ -379,18 +415,13 @@ export function getRelativeTime(date: string | Date): string {
 // ===================================
 // RE-EXPORT EVERYTHING AS DEFAULT
 // ===================================
-// Import for default export
-import { BOLDMIND_PRODUCTS as PRODUCTS } from './constants/products';
-import { DATABASE_CONFIG as DB_CONFIG } from './constants/database-config';
-import { DOMAIN_MAPPINGS as DOMAINS } from './constants/domains';
-import { BOLDMIND_COLOR_SCHEMES as COLOR_SCHEMES } from './constants/colors';
 
 export default {
   // Core constants
-  products: PRODUCTS,
-  database: DB_CONFIG,
-  domains: DOMAINS,
-  colors: COLOR_SCHEMES,
+  products: BOLDMIND_PRODUCTS,
+  database: DATABASE_CONFIG,
+  domains: DOMAIN_MAPPINGS,
+  colors: BOLDMIND_COLOR_SCHEMES,
   
   // Utils
   utils: {
