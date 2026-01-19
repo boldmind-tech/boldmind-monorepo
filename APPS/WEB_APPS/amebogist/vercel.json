@@ -1,14 +1,19 @@
 {
   "name": "amebogist",
   "framework": "nextjs",
-  "buildCommand": "cd ../.. && pnpm install && pnpm turbo run build --filter=amebogist",
+  "buildCommand": "cd ../../.. && pnpm run vercel:amebogist",
   "outputDirectory": ".next",
-  "installCommand": "cd ../.. && pnpm install",
-  "devCommand": "cd ../.. && pnpm turbo run dev --filter=amebogist",
-  "regions": ["fra1"],
+  "installCommand": "cd ../../.. && pnpm install",
+  "devCommand": "cd ../../.. && pnpm run dev --filter=@boldmind/amebogist",
+  "regions": [
+    "fra1"
+  ],
   "env": {
     "NEXT_PUBLIC_API_URL": "https://api.amebogist.ng",
     "NEXT_PUBLIC_SITE_URL": "https://amebogist.ng"
   },
-  "alias": ["amebogist.ng", "www.amebogist.ng"]
+  "alias": [
+    "amebogist.ng",
+    "www.amebogist.ng"
+  ]
 }
