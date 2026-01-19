@@ -28,7 +28,7 @@
     "db:push": "prisma db push --schema=./prisma/schema.prisma",
     "db:migrate": "prisma migrate dev --schema=./prisma/schema.prisma",
     "db:studio": "prisma studio --schema=./prisma/schema.prisma",
-    "build": "tsup",
+    "build": "pnpm db:generate && tsup",
     "dev": "tsup --watch",
     "lint": "eslint . --ext ts,tsx",
     "clean": "rm -rf .turbo dist node_modules"

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "cd ../../../../ && turbo run build --filter=...@boldmind/planai-landing",
     "start": "next start",
     "lint": "next lint",
     "deploy": "vercel --prod"
