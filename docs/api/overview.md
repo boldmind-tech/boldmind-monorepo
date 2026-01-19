@@ -145,3 +145,103 @@ Email: api-support@boldmind.ng
 Documentation: https://docs.boldmind.ng/api
 
 Status: https://status.boldmind.ng
+
+┌─────────────────────────────────────────────────────┐
+│           AUTHENTICATION (ALL APPS)                 │
+│  Supabase Auth (FREE)                               │
+│  - Google OAuth, Email/Password                     │
+│  - Returns: user.id, user.email                     │
+└─────────────────────────────────────────────────────┘
+                        ↓
+        ┌───────────────┴───────────────┐
+        ↓                               ↓
+┌───────────────────┐         ┌───────────────────┐
+│  PostgreSQL/Neon  │         │  MongoDB Atlas    │
+│  (Transactional)  │         │  (Flexible Data)  │
+├───────────────────┤         ├───────────────────┤
+│                   │         │                   │
+│ • EduCenter       │         │ • AmeboGist       │
+│   - Progress      │         │   - Posts         │
+│   - Subscriptions │         │   - Comments      │
+│   - Payments      │         │   - Reactions     │
+│                   │         │                   │
+│ • BoldMind Hub    │         │ • Social Factory  │
+│   - Products      │         │   - Content       │
+│   - Analytics     │         │   - Media         │
+│   - Transactions  │         │                   │
+│                   │         │ • Email Scraper   │
+│ • Naija FitHer    │         │   - Scraped Data  │
+│   - Workouts      │         │   - Searches      │
+│   - Meal Plans    │         │                   │
+│   - Progress      │         │ • Safe AI         │
+│                   │         │   - Reports       │
+└───────────────────┘         │   - Locations     │
+                              └───────────────────┘
+
+
+import { prisma } from '@boldmind/database';
+import { createClient } from '@supabase/supabase-js';
+
+// Get authenticated user from Supabase
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+
+const { data: { user } } = await supabase.auth.getUser();
+
+// Use user.id in Prisma
+const progress = await prisma.progress.create({
+  data: {
+    userId: user.id,  // ← Same ID from Supabase
+    subject: 'Mathematics',
+    year: '2024',
+    questionId: 'q123',
+    answer: 'A',
+    isCorrect: true,
+    timeSpent: 45
+  }
+});
+
+import { mongoClient } from '@boldmind/database';
+import { createClient } from '@supabase/supabase-js';
+
+// Get authenticated user from Supabase
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+
+const { data: { user } } = await supabase.auth.getUser();
+
+// Use user.id in MongoDB
+const db = mongoClient.db('amebogist');
+const posts = db.collection('posts');
+
+await posts.insertOne({
+  userId: user.id,  // ← Same ID from Supabase
+  content: 'Latest gist...',
+  likes: 0,
+  comments: [],
+  createdAt: new Date()
+});
+```
+
+---
+
+## **Step 6: Add to Vercel**
+
+### **For each app, add the appropriate env vars:**
+
+**PostgreSQL apps (educenter, boldmind-hub, naija-fither):**
+```
+DATABASE_URL=postgresql://your-neon-string
+NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-key
+```
+
+**MongoDB apps (amebogist, social-factory, etc.):**
+```
+MONGODB_URI=mongodb+srv://your-mongo-string
+NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-key

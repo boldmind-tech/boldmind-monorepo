@@ -2,15 +2,21 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { SuperNavbar, SuperFooter } from '@boldmind/ui';
-import { Users, Target, Heart, Zap, Globe, Rocket, Award, TrendingUp } from 'lucide-react';
+import { 
+  SuperNavbar, 
+  SuperFooter, 
+  Card, 
+  Button, 
+  ParticleBackground,
+  StatusBadge
+} from '@boldmind/ui';
+import { Users, Target, Heart, Zap, Globe, Rocket, Award, TrendingUp, Linkedin, Twitter, ExternalLink } from 'lucide-react';
 
 export default function AboutPage() {
   const navLinks = [
     { href: '/', label: 'Home' },
-    { href: '#ecosystem', label: 'Ecosystem' },
+    { href: '/#ecosystem', label: 'Ecosystem' },
     { href: '/products', label: 'Products' },
-    // { href: '/planai', label: 'PlanAI' },
     { href: '/contact', label: 'Contact' },
   ];
 
@@ -20,7 +26,6 @@ export default function AboutPage() {
       links: [
         { href: 'https://amebogist.ng', label: 'AmeboGist', isExternal: true },
         { href: 'https://educenter.com.ng', label: 'EduCenter', isExternal: true },
-        { href: '/planai', label: 'PlanAI Suite' },
         { href: '/products', label: 'All Products', badge: '31+' },
       ],
     },
@@ -36,9 +41,8 @@ export default function AboutPage() {
     {
       title: '🔗 Connect',
       links: [
-        { href: 'https://twitter.com/', label: 'Twitter', isExternal: true },
-        { href: 'https://linkedin.com', label: 'LinkedIn', isExternal: true },
-        { href: 'https://instagram.com', label: 'Instagram', isExternal: true },
+        { href: 'https://twitter.com/charlesuchech', label: 'Twitter', isExternal: true },
+        { href: 'https://linkedin.com/in/charliedotcom', label: 'LinkedIn', isExternal: true },
         { href: '/contact', label: 'Contact' },
       ],
     },
@@ -48,7 +52,7 @@ export default function AboutPage() {
     {
       name: 'Charles Uche Chijuka',
       role: 'Founder & CEO',
-      bio: 'Visionary entrepreneur building technology solutions for Africa',
+      bio: 'Visionary entrepreneur building technology solutions for Africa. With over a decade of experience in software engineering and business strategy, Charles is dedicated to bridging the digital divide in Nigeria.',
       image: '👨‍💼',
       linkedin: 'https://linkedin.com/in/charliedotcom',
       twitter: 'https://twitter.com/charlesuchech',
@@ -59,32 +63,32 @@ export default function AboutPage() {
     {
       icon: Zap,
       title: 'Boldness',
-      description: "We tackle Nigeria's biggest problems with courage and innovation",
-      color: 'from-yellow-500 to-orange-500',
+      description: "We tackle Nigeria's biggest problems with courage and innovation, never settling for the status quo.",
+      color: 'gold',
     },
     {
       icon: Award,
       title: 'Excellence',
-      description: 'We deliver quality products that create measurable impact',
-      color: 'from-blue-500 to-cyan-500',
+      description: 'We deliver premium quality products that create measurable impact and exceed expectations.',
+      color: 'blue',
     },
     {
       icon: Heart,
       title: 'Relevance',
-      description: 'Solutions built specifically for the Nigerian context',
-      color: 'from-red-500 to-pink-500',
+      description: 'Solutions built specifically for the Nigerian context, addressing real-world needs.',
+      color: 'red',
     },
     {
       icon: Users,
       title: 'Authenticity',
-      description: 'True to our culture and community voice',
-      color: 'from-purple-500 to-indigo-500',
+      description: 'True to our culture and community voice, building trust through transparency and integrity.',
+      color: 'purple',
     },
     {
       icon: TrendingUp,
       title: 'Growth',
-      description: 'Continuous improvement and entrepreneur empowerment',
-      color: 'from-green-500 to-emerald-500',
+      description: 'Continuous improvement for ourselves and empowering entrepreneur growth across the nation.',
+      color: 'green',
     },
   ];
 
@@ -97,67 +101,98 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-[#000B21] transition-colors duration-500">
       <SuperNavbar
         links={navLinks}
-        cta={{ href: 'https://wa.me/2349138349271', label: 'Get Started' }}
+        cta={{ href: '/register', label: 'Join the Movement' }}
         logoSrc="/logo.png"
       />
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-[#00143C] via-[#0A1F4F] to-[#2A4A6E] text-white overflow-hidden pt-24 pb-32">
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-[#FFC800]/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#00A859]/10 rounded-full blur-3xl animate-pulse" />
-        </div>
-
+      <section className="relative min-h-[70vh] flex items-center bg-[#00143C] text-white overflow-hidden pt-20">
+        <ParticleBackground density={40} className="opacity-40" />
+        
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#00143C]/50 to-[#00143C]" />
+        
         <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <h1 className="text-5xl md:text-7xl font-black mb-8">
-              About <span className="text-[#FFC800]">BoldMind</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8">
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FFC800] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-[#FFC800]"></span>
+              </span>
+              <span className="text-sm font-medium text-white/80">Empowering Nigeria's Future</span>
+            </div>
+            
+            <h1 className="text-5xl md:text-8xl font-black mb-8 tracking-tight">
+              About <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFC800] to-[#E5B600]">BoldMind</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-              We're on a mission to empower 1 million Nigerian entrepreneurs by 2030 
-              through innovative technology solutions that solve fundamental problems.
+            <p className="text-xl md:text-3xl text-gray-300 max-w-4xl mx-auto leading-relaxed font-light">
+              We're on a mission to empower <span className="text-white font-bold">1 million</span> Nigerian entrepreneurs by 2030 
+              through innovative technology solutions that solve fundamental local problems.
             </p>
           </motion.div>
         </div>
+        
+        {/* Scroll Indicator */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        >
+          <div className="w-6 h-10 border-2 border-white/20 rounded-full flex justify-center p-1">
+            <motion.div 
+              animate={{ y: [0, 12, 0] }}
+              transition={{ repeat: Infinity, duration: 2 }}
+              className="w-1.5 h-1.5 bg-[#FFC800] rounded-full"
+            />
+          </div>
+        </motion.div>
       </section>
 
       {/* Our Story */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white dark:bg-[#000B21] relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
+          <div className="grid md:grid-cols-2 gap-20 items-center">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
             >
-              <h2 className="text-4xl md:text-5xl font-black text-[#00143C] mb-6">
-                Our Story
+              <h2 className="text-4xl md:text-5xl font-black text-[#00143C] dark:text-white mb-8">
+                The <span className="text-[#FFC800]">Genesis</span> of BoldMind
               </h2>
-              <div className="space-y-6 text-lg text-gray-700">
+              <div className="space-y-6 text-lg text-gray-800 dark:text-gray-300 leading-relaxed">
                 <p>
-                  BoldMind Technology Solution Enterprise was born from a simple observation: 
-                  Nigerian entrepreneurs face systemic barriers that technology can solve.
+                  BoldMind Technology Solution Enterprise was born from a simple but powerful observation: 
+                  Nigerian entrepreneurs face unique, systemic barriers that technology can and should solve.
                 </p>
                 <p>
-                  We're not just building apps – we're creating an ecosystem. Each product 
-                  strengthens the others, creating a flywheel effect that amplifies impact.
+                  We recognized that building isolated applications wasn't enough. We needed to create a 
+                  <span className="text-[#00143C] dark:text-white font-bold"> comprehensive ecosystem</span>. 
+                  Each of our products is designed to strengthen the others, creating a powerful flywheel effect 
+                  that amplifies impact for every business we touch.
                 </p>
                 <p>
                   From <span className="font-bold text-[#00A859]">AmeboGist</span> (mass awareness) 
                   to <span className="font-bold text-[#2A4A6E]">EduCenter</span> (education) 
                   to <span className="font-bold text-[#FFC800]">PlanAI</span> (enablement), 
-                  we're building the complete infrastructure for entrepreneurial success.
+                  we're building the complete digital infrastructure for Nigerian entrepreneurial success.
                 </p>
-                <p className="text-2xl font-bold text-[#00143C]">
-                  31+ products. 1 mission. Infinite impact.
-                </p>
+                <div className="pt-6">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="h-0.5 w-12 bg-[#FFC800]" />
+                    <p className="text-2xl font-black text-[#00143C] dark:text-white">
+                      31+ products. 1 mission. Infinite impact.
+                    </p>
+                  </div>
+                </div>
               </div>
             </motion.div>
 
@@ -165,48 +200,56 @@ export default function AboutPage() {
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
               className="relative"
             >
-              <div className="bg-gradient-to-br from-[#00143C] to-[#2A4A6E] p-12 rounded-3xl text-white">
-                <div className="text-6xl mb-6">🚀</div>
-                <h3 className="text-3xl font-bold mb-4">Our Vision</h3>
-                <p className="text-xl text-gray-300 mb-8">
-                  To become Africa's leading technology ecosystem, 
-                  empowering entrepreneurs to build the future they deserve.
-                </p>
-                <div className="grid grid-cols-2 gap-6">
-                  <div>
-                    <div className="text-4xl font-black text-[#FFC800]">31+</div>
-                    <p className="text-gray-400">Products</p>
-                  </div>
-                  <div>
-                    <div className="text-4xl font-black text-[#FFC800]">1M</div>
-                    <p className="text-gray-400">Target by 2030</p>
-                  </div>
-                  <div>
-                    <div className="text-4xl font-black text-[#FFC800]">75K+</div>
-                    <p className="text-gray-400">Active Users</p>
-                  </div>
-                  <div>
-                    <div className="text-4xl font-black text-[#FFC800]">3</div>
-                    <p className="text-gray-400">Live Products</p>
+              <Card variant="premium" className="p-12 border-none">
+                <div className="relative z-10">
+                  <div className="text-6xl mb-8">🚀</div>
+                  <h3 className="text-3xl font-black text-white mb-6">Our Vision</h3>
+                  <p className="text-xl text-gray-100 mb-12 leading-relaxed">
+                    To become Africa's leading technology ecosystem, 
+                    uniquely positioned to empower entrepreneurs to build the resilient, 
+                    high-impact businesses they deserve.
+                  </p>
+                  <div className="grid grid-cols-2 gap-8">
+                    <div className="space-y-1">
+                      <div className="text-4xl font-black text-[#FFC800]">31+</div>
+                      <p className="text-sm uppercase tracking-widest text-gray-400 font-bold">Proprietary Products</p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="text-4xl font-black text-[#FFC800]">1M</div>
+                      <p className="text-sm uppercase tracking-widest text-gray-500 font-bold">Target Impact 2030</p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="text-4xl font-black text-[#FFC800]">75K+</div>
+                      <p className="text-sm uppercase tracking-widest text-gray-500 font-bold">Growing Community</p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="text-4xl font-black text-[#FFC800]">3</div>
+                      <p className="text-sm uppercase tracking-widest text-gray-500 font-bold">High-Growth Verticals</p>
+                    </div>
                   </div>
                 </div>
-              </div>
+                
+                {/* Decorative Elements */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#FFC800]/10 rounded-full blur-3xl -mr-16 -mt-16" />
+                <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-500/10 rounded-full blur-3xl -ml-12 -mb-12" />
+              </Card>
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* Our Values */}
-      <section className="py-24 bg-gradient-to-b from-white to-gray-50">
+      <section className="py-24 bg-gray-50 dark:bg-[#020D26]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black text-[#00143C] mb-6">
-              Our Core Values
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-black text-[#00143C] dark:text-white mb-6">
+              Our Core <span className="text-[#FFC800]">Values</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              The principles that guide every decision we make and every product we build
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
+              The foundational principles that guide every strategic decision we make and every line of code we write
             </p>
           </div>
 
@@ -217,61 +260,79 @@ export default function AboutPage() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -10 }}
-                className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all"
+                transition={{ delay: index * 0.1, duration: 0.5 }}
               >
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${value.color} flex items-center justify-center mb-6`}>
-                  <value.icon className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-[#00143C] mb-4">{value.title}</h3>
-                <p className="text-gray-600">{value.description}</p>
+                <Card 
+                  className="h-full p-8 border-none hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
+                  variant="glass"
+                >
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${
+                    value.color === 'gold' ? 'from-[#FFC800] to-[#E5B600]' : 
+                    value.color === 'blue' ? 'from-blue-600 to-blue-400' :
+                    value.color === 'red' ? 'from-red-600 to-red-400' :
+                    value.color === 'purple' ? 'from-purple-600 to-purple-400' :
+                    'from-green-600 to-green-400'
+                  } flex items-center justify-center mb-8 shadow-lg`}>
+                    <value.icon className="w-7 h-7 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-black text-[#00143C] dark:text-white mb-4">{value.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{value.description}</p>
+                </Card>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Timeline */}
-      <section className="py-24 bg-white">
+      {/* Journey Timeline */}
+      <section className="py-24 bg-white dark:bg-[#000B21]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black text-[#00143C] mb-6">
-              Our Journey
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-black text-[#00143C] dark:text-white mb-6">
+              Our <span className="text-[#FFC800]">Journey</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              From inception to impact – the BoldMind story
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
+              From inception to nation-wide impact – tracking the BoldMind milestones
             </p>
           </div>
 
           <div className="relative">
             {/* Timeline Line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-[#FFC800] to-[#00143C]" />
+            <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-[#FFC800] to-[#00143C] hidden md:block" />
 
-            <div className="space-y-12">
+            <div className="space-y-20 relative">
               {milestones.map((milestone, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.2 }}
-                  className={`flex items-center gap-8 ${
-                    index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'
+                  className={`flex flex-col md:flex-row items-center gap-8 ${
+                    index % 2 === 0 ? 'md:flex-row-reverse' : ''
                   }`}
                 >
-                  <div className={`flex-1 ${index % 2 === 0 ? 'text-right' : 'text-left'}`}>
-                    <div className="bg-white p-6 rounded-2xl shadow-lg inline-block">
-                      <div className="text-[#FFC800] font-black text-2xl mb-2">{milestone.year}</div>
-                      <p className="text-gray-700 font-medium">{milestone.event}</p>
-                    </div>
+                  <div className="flex-1 w-full">
+                    <Card 
+                      className={`p-8 border-none ${index % 2 === 0 ? 'md:text-left' : 'md:text-right'} relative`}
+                      variant="glass"
+                    >
+                      <div className="inline-block px-4 py-1 rounded-full bg-[#FFC800]/20 text-[#FFC800] font-black text-sm mb-4">
+                        {milestone.year}
+                      </div>
+                      <h4 className="text-xl font-bold text-[#00143C] dark:text-white mb-2">{milestone.event}</h4>
+                      {/* Decorative arrow for desktop */}
+                      <div className={`hidden md:block absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-inherit transform rotate-45 ${
+                        index % 2 === 0 ? '-left-2' : '-right-2'
+                      }`} />
+                    </Card>
                   </div>
 
-                  <div className="relative z-10 w-16 h-16 bg-gradient-to-br from-[#FFC800] to-[#00143C] rounded-full flex items-center justify-center shadow-xl">
+                  <div className="relative z-10 w-16 h-16 bg-gradient-to-br from-[#FFC800] to-[#E5B600] rounded-full flex items-center justify-center shadow-xl border-4 border-white dark:border-[#000B21] flex-shrink-0">
                     <milestone.icon className="w-8 h-8 text-white" />
                   </div>
 
-                  <div className="flex-1" />
+                  <div className="hidden md:block flex-1" />
                 </motion.div>
               ))}
             </div>
@@ -280,46 +341,58 @@ export default function AboutPage() {
       </section>
 
       {/* Team Section */}
-      <section className="py-24 bg-gradient-to-b from-white to-gray-50">
+      <section className="py-24 bg-gray-50 dark:bg-[#020D26]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black text-[#00143C] mb-6">
-              Meet Our Founder
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-black text-[#00143C] dark:text-white mb-6">
+              The <span className="text-[#FFC800]">Visionary</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              The visionary behind BoldMind's mission
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+              Behind every great mission is a dedicated leadership driving innovation
             </p>
           </div>
 
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             {team.map((member, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                className="bg-white p-12 rounded-3xl shadow-2xl text-center"
+                transition={{ duration: 0.8 }}
               >
-                <div className="text-8xl mb-6">{member.image}</div>
-                <h3 className="text-3xl font-black text-[#00143C] mb-2">{member.name}</h3>
-                <p className="text-xl text-[#FFC800] font-bold mb-6">{member.role}</p>
-                <p className="text-lg text-gray-600 mb-8">{member.bio}</p>
-                <div className="flex justify-center gap-4">
-                  <a
-                    href={member.linkedin}
-                    target="_blank"
-                    className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center text-white hover:bg-blue-700 transition-colors"
-                  >
-                    💼
-                  </a>
-                  <a
-                    href={member.twitter}
-                    target="_blank"
-                    className="w-12 h-12 bg-sky-500 rounded-xl flex items-center justify-center text-white hover:bg-sky-600 transition-colors"
-                  >
-                    🐦
-                  </a>
-                </div>
+                <Card variant="premium" className="overflow-hidden p-0 border-none group">
+                  <div className="grid md:grid-cols-5 items-stretch">
+                    <div className="md:col-span-2 bg-gradient-to-br from-[#00143C] to-[#0A1F4F] flex items-center justify-center p-12 relative overflow-hidden">
+                      <div className="text-9xl z-10 filter drop-shadow-2xl transform group-hover:scale-110 transition-transform duration-500">{member.image}</div>
+                      <div className="absolute top-0 left-0 w-full h-full bg-[#FFC800]/5 animate-pulse" />
+                    </div>
+                    <div className="md:col-span-3 p-12 flex flex-col justify-center bg-white/5 backdrop-blur-3xl">
+                      <StatusBadge variant="builder" className="mb-4">LEADERSHIP</StatusBadge>
+                      <h3 className="text-4xl font-black text-white mb-2">{member.name}</h3>
+                      <p className="text-xl text-[#FFC800] font-bold mb-8 uppercase tracking-widest">{member.role}</p>
+                      <p className="text-lg text-gray-300 mb-10 leading-relaxed italic">"{member.bio}"</p>
+                      <div className="flex gap-4">
+                        <Button 
+                          variant="outline" 
+                          className="px-6 border-white/20 text-white hover:bg-white/10"
+                          onClick={() => window.open(member.linkedin, '_blank')}
+                        >
+                          <Linkedin className="w-5 h-5 mr-2" />
+                          Connect
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          className="px-6 border-white/20 text-white hover:bg-white/10"
+                          onClick={() => window.open(member.twitter, '_blank')}
+                        >
+                          <Twitter className="w-5 h-5 mr-2" />
+                          Follow
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
               </motion.div>
             ))}
           </div>
@@ -327,34 +400,40 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-r from-[#00143C] to-[#2A4A6E] text-white">
-        <div className="max-w-7xl mx-auto px-6 text-center">
+      <section className="py-32 bg-[#00143C] text-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#FFC800]/10 rounded-full blur-[120px] -mr-64 -mt-64" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] -ml-64 -mb-64" />
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-black mb-6">
-              Join the Movement
+            <h2 className="text-5xl md:text-7xl font-black mb-8 leading-tight">
+              Crafting the <span className="text-[#FFC800]">Future</span> <br className="hidden md:block"/> of African Tech
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-12">
-              Be part of the ecosystem empowering 1 million Nigerian entrepreneurs by 2030
+            <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-16 font-light leading-relaxed">
+              Join the movement that's transforming how business is done in Nigeria and across Africa.
             </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <a
-                href="https://wa.me/2349138349271"
-                className="inline-flex items-center justify-center gap-3 px-10 py-4 bg-[#FFC800] text-[#00143C] font-bold text-lg rounded-lg hover:bg-[#FFD700] transition-all shadow-xl"
+            <div className="flex flex-col sm:flex-row gap-8 justify-center items-center">
+              <Button 
+                size="lg" 
+                className="px-12 py-8 text-xl bg-[#FFC800] text-[#00143C] hover:bg-[#E5B600] font-black group"
+                onClick={() => window.open('https://wa.me/2349138349271', '_blank')}
               >
-                <span className="text-2xl">💬</span>
-                Connect on WhatsApp
-              </a>
-              <a
-                href="/#products"
-                className="inline-flex items-center justify-center gap-3 px-10 py-4 bg-white/10 border-2 border-white text-white font-bold text-lg rounded-lg hover:bg-white/20 transition-all"
+                Join Our WhatsApp Community
+                <ExternalLink className="ml-3 w-6 h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+              </Button>
+              <Button 
+                variant="outline"
+                size="lg" 
+                className="px-12 py-8 text-xl border-white/20 text-white hover:bg-white/5 font-bold"
+                onClick={() => window.location.href = '/products'}
               >
-                <span className="text-2xl">🚀</span>
-                Explore Products
-              </a>
+                See All 31+ Products
+              </Button>
             </div>
           </motion.div>
         </div>

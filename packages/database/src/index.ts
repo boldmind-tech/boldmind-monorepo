@@ -20,4 +20,5 @@ export * from './postgres/client';
 // ===================================
 // PRISMA CLIENT (Unified)
 // ===================================
-// export * from './prisma/client';
+export { prisma, default as prismaClient } from './prisma/client';  // ← Changed to ./prisma/client
+export * from '@prisma/client';

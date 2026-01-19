@@ -2,7 +2,20 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { SuperNavbar, SuperFooter } from "@boldmind/ui";
+import { 
+  SuperNavbar, 
+  SuperFooter, 
+  Button, 
+  Card, 
+  CardHeader, 
+  CardTitle, 
+  CardDescription, 
+  CardContent,
+  CardFooter,
+  StatusBadge,
+  ParticleBackground,
+  TypewriterEffect
+} from "@boldmind/ui";
 import { 
   getLiveProducts, 
   getBuildingProducts, 
@@ -176,18 +189,17 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-gray-950">
       {/* Navigation */}
       <SuperNavbar
         links={navLinks}
         cta={{
-          href: "https://wa.me/2349138349271",
-          label: "Join Movement",
+          href: "/login",
+          label: "Get Started",
           variant: "glow",
           icon: "🚀",
         }}
-        logoSrc="/logo.png"
-        // theme="transparent"
+        logoSrc="/icon-180x180.png"
         sticky={true}
         animated={true}
         showThemeControls={true}
@@ -195,61 +207,80 @@ export default function HomePage() {
       />
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-[#00143C] via-[#0A1F4F] to-[#2A4A6E] text-white overflow-hidden pt-24">
-        {/* Animated Background */}
-        <div className="absolute inset-0">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-[#000814]">
+        {/* Hero Background Image with Overlay */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="/hero-bg.jpg" 
+            alt="BoldMind Background" 
+            className="w-full h-full object-cover opacity-40 mix-blend-overlay"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#000814]/80 via-transparent to-[#000814]" />
+        </div>
+
+        <ParticleBackground className="opacity-50" />
+        
+        {/* Animated Background Gradients */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
           <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-[#FFC800]/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#00A859]/10 rounded-full blur-3xl animate-pulse delay-1000" />
+          <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-3xl animate-pulse delay-1000" />
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-32">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center"
           >
-            <div className="inline-flex items-center gap-3 px-4 sm:px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full mb-6 sm:mb-8">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-[#FFC800] rounded-full animate-pulse" />
-                <span className="text-[#FFC800] font-bold text-sm sm:text-base">
-                  EMPOWERING 1M NIGERIAN ENTREPRENEURS BY 2030
-                </span>
-              </div>
+            <div className="inline-flex items-center gap-3 px-6 py-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-full mb-8">
+              <div className="w-2 h-2 bg-[#FFC800] rounded-full animate-ping" />
+              <span className="text-[#FFC800] font-black tracking-widest text-xs sm:text-sm uppercase">
+                EMPOWERING 1M NIGERIAN ENTREPRENEURS BY 2030
+              </span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-6 sm:mb-8 leading-tight tracking-tight">
-              Building Systems That
-              <br />
-              <span className="text-[#FFC800] bg-clip-text bg-gradient-to-r from-[#FFC800] to-[#FFD700]">
-                Shift Nations
-              </span>
-            </h1>
+            <div className="mb-8">
+              <TypewriterEffect 
+                words={[
+                  { text: "Building", className: "text-white" },
+                  { text: "Systems", className: "text-white" },
+                  { text: "That", className: "text-white" },
+                  { text: "Shift", className: "text-[#FFC800]" },
+                  { text: "Nations", className: "text-[#FFC800]" },
+                ]}
+                className="text-5xl sm:text-6xl md:text-8xl font-black leading-tight"
+                cursorClassName="bg-[#FFC800]"
+              />
+            </div>
 
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto mb-8 sm:mb-12 leading-relaxed px-4">
-              Welcome to <span className="font-bold">{SITE_NAME}</span> - a
-              Nigerian tech ecosystem creating impact-driven products that solve
-              fundamental problems.
-            </p>
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 1 }}
+              className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-12 leading-relaxed font-medium"
+            >
+              Welcome to <span className="text-white font-bold">{SITE_NAME}</span>.
+              We are a Nigerian tech ecosystem scaling impact-driven products that solve fundamental problems.
+            </motion.p>
 
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center px-4">
-              <motion.a
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                href="#products"
-                className="px-6 sm:px-10 py-3 sm:py-4 bg-[#FFC800] text-[#00143C] font-bold text-base sm:text-lg rounded-lg hover:bg-[#FFD700] transition-all shadow-xl w-full sm:w-auto text-center"
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+              <Button 
+                variant="primary" 
+                size="lg" 
+                className="min-w-[200px] text-lg h-14"
+                onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}
               >
-                Explore Our Ecosystem
-              </motion.a>
-              <motion.a
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                href="/planai"
-                className="px-6 sm:px-10 py-3 sm:py-4 bg-transparent border-2 border-white text-white font-bold text-base sm:text-lg rounded-lg hover:bg-white/10 transition-all w-full sm:w-auto text-center"
+                Explore Ecosystem
+              </Button>
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="min-w-[200px] text-lg h-14 border-white text-white hover:bg-white/10"
+                onClick={() => window.location.href = '/planai'}
               >
-                Discover PlanAI Suite
-              </motion.a>
+                Discover PlanAI
+              </Button>
             </div>
 
             {/* Live Products Badges */}
@@ -384,55 +415,39 @@ export default function HomePage() {
               <div className="w-2 sm:w-3 h-6 sm:h-8 bg-green-500 rounded" />
               <h3 className="text-xl sm:text-2xl font-bold text-[#00143C]">✅ LIVE PRODUCTS</h3>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {liveProducts.map((product) => (
-                <motion.a
-                  key={product.id}
-                  href={product.links?.website || `/products/${product.slug}`}
-                  target={product.links?.website ? "_blank" : undefined}
-                  rel={product.links?.website ? "noopener noreferrer" : undefined}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  whileHover={{ y: -5 }}
-                  className="group bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl border-2 border-gray-100 shadow-lg hover:shadow-2xl transition-all duration-300"
+                <Card 
+                  key={product.id} 
+                  variant="elevated" 
+                  className="group hover:border-[#FFC800] transition-all duration-500 cursor-pointer"
+                  onClick={() => window.open(product.links?.website || `/products/${product.slug}`, '_blank')}
                 >
-                  <div className="flex items-start justify-between mb-3 sm:mb-4">
-                    <div className="flex items-center gap-3 sm:gap-4">
-                      <div
-                        className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center text-xl sm:text-2xl"
-                        style={{ backgroundColor: getProductColor(product) }}
-                      >
-                        {product.icon}
-                      </div>
-                      <span className="text-xs font-bold px-2 sm:px-3 py-0.5 sm:py-1 bg-green-100 text-green-800 rounded-full">
-                        🚀 LIVE
-                      </span>
-                    </div>
-                  </div>
-                  <h4 className="text-lg sm:text-xl font-bold text-[#00143C] mb-2">
-                    {product.name}
-                  </h4>
-                  <p className="text-gray-600 text-sm sm:text-base mb-3 sm:mb-4 line-clamp-3">
-                    {product.description}
-                  </p>
-                  <div className="flex items-center text-[#00143C] font-semibold text-sm sm:text-base group-hover:gap-2 transition-all">
-                    <span>Visit Product</span>
-                    <svg
-                      className="w-4 h-4 sm:w-5 sm:h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+                  <CardHeader className="flex-row items-center gap-4">
+                    <div
+                      className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-[#00143C]/10 transition-transform group-hover:scale-110"
+                      style={{ backgroundColor: getProductColor(product) }}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M17 8l4 4m0 0l-4 4m4-4H3"
-                      />
-                    </svg>
-                  </div>
-                </motion.a>
+                      {product.icon}
+                    </div>
+                    <div>
+                      <CardTitle className="group-hover:text-[#FFC800] transition-colors">
+                        {product.name}
+                      </CardTitle>
+                      <StatusBadge variant="live">LIVE</StatusBadge>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-base line-clamp-3">
+                      {product.description}
+                    </CardDescription>
+                  </CardContent>
+                  <CardFooter className="group-hover:border-[#FFC800]/20">
+                    <span className="text-[#00143C] dark:text-[#FFC800] font-bold inline-flex items-center gap-2 group-hover:gap-3 transition-all">
+                      Launch Product 🚀
+                    </span>
+                  </CardFooter>
+                </Card>
               ))}
             </div>
           </div>
@@ -646,11 +661,15 @@ export default function HomePage() {
 
       {/* Footer */}
       <SuperFooter
-        variant="default"
-        showStats={true}
-        animated={true}
-        newsletter={true}
+        logoSrc="/logo.png"
         sections={footerSections}
+        contactInfo={{
+          email: 'hello@boldmind.ng',
+          phone: '+2349138349271',
+          whatsapp: '+2349138349271',
+          address: 'No 5 Olusoji imole str ikosi ketu Lagos Nigeria',
+        }}
+        copyright={`© ${new Date().getFullYear()} BoldMind Technology Solution Enterprise. All rights reserved.`}
       />
     </div>
   );

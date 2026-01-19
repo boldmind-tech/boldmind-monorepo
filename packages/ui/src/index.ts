@@ -70,13 +70,6 @@ export {
 // ============================================
 // THEME & STYLES
 // ============================================
-export { 
-  boldmindColors, 
-  boldmindTypography, 
-  boldmindAnimations, 
-  productThemes,
-  type ProductTheme 
-} from './styles/theme';
 
 // ============================================
 // GLOBAL STYLES (Import CSS last)

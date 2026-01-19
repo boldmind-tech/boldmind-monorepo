@@ -1,91 +1,883 @@
-export const COLORS = {
-  // Primary colors
-  primary: {
-    50: '#eff6ff',
-    100: '#dbeafe',
-    200: '#bfdbfe',
-    300: '#93c5fd',
-    400: '#60a5fa',
-    500: '#3b82f6',
-    600: '#2563eb',
-    700: '#1d4ed8',
-    800: '#1e40af',
-    900: '#1e3a8a',
-    950: '#172554'
+// packages/utils/src/constants/colors.ts
+
+export type ColorScheme = {
+  primary: string;
+  secondary: string;
+  accent: string;
+  background: string;
+  foreground: string;
+  muted: string;
+  success: string;
+  warning: string;
+  error: string;
+  info: string;
+};
+
+export type ProductColorScheme = ColorScheme & {
+  name: string;
+  slug: string;
+  category: string;
+  gradients: {
+    primary: string[];
+    secondary: string[];
+    background: string[];
+  };
+  shadows: {
+    sm: string;
+    md: string;
+    lg: string;
+    xl: string;
+  };
+};
+
+export const BOLDMIND_COLOR_SCHEMES: Record<string, ProductColorScheme> = {
+  // Main Products
+  'boldmind-hub': {
+    name: 'BoldMind Hub',
+    slug: 'boldmind-hub',
+    category: 'ecosystem',
+    primary: '#00143C', // Navy Blue
+    secondary: '#FFC800', // Gold
+    accent: '#2A4A6E', // Light Navy
+    background: '#FFFFFF',
+    foreground: '#111827',
+    muted: '#F3F4F6',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
+    gradients: {
+      primary: ['#00143C', '#002966'],
+      secondary: ['#FFC800', '#FFD95C'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(0, 20, 60, 0.05)',
+      md: '0 4px 6px -1px rgba(0, 20, 60, 0.1)',
+      lg: '0 10px 15px -3px rgba(0, 20, 60, 0.1)',
+      xl: '0 20px 25px -5px rgba(0, 20, 60, 0.1)'
+    }
   },
-  
-  // Secondary colors
-  secondary: {
-    50: '#faf5ff',
-    100: '#f3e8ff',
-    200: '#e9d5ff',
-    300: '#d8b4fe',
-    400: '#c084fc',
-    500: '#a855f7',
-    600: '#9333ea',
-    700: '#7e22ce',
-    800: '#6b21a8',
-    900: '#581c87',
-    950: '#3b0764'
+
+  'amebogist': {
+    name: 'AmeboGist',
+    slug: 'amebogist',
+    category: 'media',
+    primary: '#00A859', // Green
+    secondary: '#FF6B35', // Orange
+    accent: '#007A3D', // Dark Green
+    background: '#FFFFFF',
+    foreground: '#1A1A1A',
+    muted: '#E8F5E9',
+    success: '#00A859',
+    warning: '#FF6B35',
+    error: '#FF3B30',
+    info: '#007AFF',
+    gradients: {
+      primary: ['#00A859', '#00C964'],
+      secondary: ['#FF6B35', '#FF8C42'],
+      background: ['#FFFFFF', '#F8F9FA']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(0, 168, 89, 0.05)',
+      md: '0 4px 6px -1px rgba(0, 168, 89, 0.1)',
+      lg: '0 10px 15px -3px rgba(0, 168, 89, 0.1)',
+      xl: '0 20px 25px -5px rgba(0, 168, 89, 0.1)'
+    }
   },
-  
-  // Success colors
-  success: {
-    50: '#f0fdf4',
-    100: '#dcfce7',
-    200: '#bbf7d0',
-    300: '#86efac',
-    400: '#4ade80',
-    500: '#22c55e',
-    600: '#16a34a',
-    700: '#15803d',
-    800: '#166534',
-    900: '#14532d',
-    950: '#052e16'
+
+  'educenter': {
+    name: 'EduCenter',
+    slug: 'educenter',
+    category: 'education',
+    primary: '#2A4A6E', // Blue
+    secondary: '#FFD95C', // Yellow
+    accent: '#1A3452', // Dark Blue
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#E3F2FD',
+    success: '#4CAF50',
+    warning: '#FF9800',
+    error: '#F44336',
+    info: '#2196F3',
+    gradients: {
+      primary: ['#2A4A6E', '#3A5A8E'],
+      secondary: ['#FFD95C', '#FFE68C'],
+      background: ['#FFFFFF', '#F5F7FA']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(42, 74, 110, 0.05)',
+      md: '0 4px 6px -1px rgba(42, 74, 110, 0.1)',
+      lg: '0 10px 15px -3px rgba(42, 74, 110, 0.1)',
+      xl: '0 20px 25px -5px rgba(42, 74, 110, 0.1)'
+    }
   },
-  
-  // Warning colors
-  warning: {
-    50: '#fffbeb',
-    100: '#fef3c7',
-    200: '#fde68a',
-    300: '#fcd34d',
-    400: '#fbbf24',
-    500: '#f59e0b',
-    600: '#d97706',
-    700: '#b45309',
-    800: '#92400e',
-    900: '#78350f',
-    950: '#451a03'
+
+  // PlanAI Suite Products
+  'planai-suite': {
+    name: 'PlanAI Suite',
+    slug: 'planai-suite',
+    category: 'ai',
+    primary: '#7C3AED', // Purple
+    secondary: '#10B981', // Emerald
+    accent: '#5B21B6', // Dark Purple
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#F5F3FF',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
+    gradients: {
+      primary: ['#7C3AED', '#8B5CF6'],
+      secondary: ['#10B981', '#34D399'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(124, 58, 237, 0.05)',
+      md: '0 4px 6px -1px rgba(124, 58, 237, 0.1)',
+      lg: '0 10px 15px -3px rgba(124, 58, 237, 0.1)',
+      xl: '0 20px 25px -5px rgba(124, 58, 237, 0.1)'
+    }
   },
-  
-  // Error colors
-  error: {
-    50: '#fef2f2',
-    100: '#fee2e2',
-    200: '#fecaca',
-    300: '#fca5a5',
-    400: '#f87171',
-    500: '#ef4444',
-    600: '#dc2626',
-    700: '#b91c1c',
-    800: '#991b1b',
-    900: '#7f1d1d',
-    950: '#450a0a'
+
+  'ai-receptionist': {
+    name: 'AI Receptionist',
+    slug: 'ai-receptionist',
+    category: 'ai',
+    primary: '#3B82F6', // Blue
+    secondary: '#8B5CF6', // Purple
+    accent: '#1D4ED8', // Dark Blue
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#DBEAFE',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
+    gradients: {
+      primary: ['#3B82F6', '#60A5FA'],
+      secondary: ['#8B5CF6', '#A78BFA'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(59, 130, 246, 0.05)',
+      md: '0 4px 6px -1px rgba(59, 130, 246, 0.1)',
+      lg: '0 10px 15px -3px rgba(59, 130, 246, 0.1)',
+      xl: '0 20px 25px -5px rgba(59, 130, 246, 0.1)'
+    }
   },
-  
-  // Gray colors
-  gray: {
-    50: '#f9fafb',
-    100: '#f3f4f6',
-    200: '#e5e7eb',
-    300: '#d1d5db',
-    400: '#9ca3af',
-    500: '#6b7280',
-    600: '#4b5563',
-    700: '#374151',
-    800: '#1f2937',
-    900: '#111827',
-    950: '#030712'
+
+  // Building Products
+  'boldmind-os': {
+    name: 'BoldMind OS',
+    slug: 'boldmind-os',
+    category: 'productivity',
+    primary: '#E63946', // Red
+    secondary: '#FFC800', // Gold
+    accent: '#B91C1C', // Dark Red
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#FEF2F2',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
+    gradients: {
+      primary: ['#E63946', '#EF4444'],
+      secondary: ['#FFC800', '#FFD95C'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(230, 57, 70, 0.05)',
+      md: '0 4px 6px -1px rgba(230, 57, 70, 0.1)',
+      lg: '0 10px 15px -3px rgba(230, 57, 70, 0.1)',
+      xl: '0 20px 25px -5px rgba(230, 57, 70, 0.1)'
+    }
+  },
+
+  'naija-fither': {
+    name: 'Naija FitHer',
+    slug: 'naija-fither',
+    category: 'health',
+    primary: '#FF4081', // Pink
+    secondary: '#9C27B0', // Purple
+    accent: '#E91E63', // Dark Pink
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#FCE4EC',
+    success: '#4CAF50',
+    warning: '#FF9800',
+    error: '#F44336',
+    info: '#2196F3',
+    gradients: {
+      primary: ['#FF4081', '#FF79B0'],
+      secondary: ['#9C27B0', '#BA68C8'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(255, 64, 129, 0.05)',
+      md: '0 4px 6px -1px rgba(255, 64, 129, 0.1)',
+      lg: '0 10px 15px -3px rgba(255, 64, 129, 0.1)',
+      xl: '0 20px 25px -5px rgba(255, 64, 129, 0.1)'
+    }
+  },
+
+  'emailscraper-pro': {
+    name: 'EmailScraper Pro',
+    slug: 'emailscraper-pro',
+    category: 'lead-gen',
+    primary: '#2196F3', // Blue
+    secondary: '#FFFFFF',
+    accent: '#0D47A1', // Dark Blue
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#E3F2FD',
+    success: '#4CAF50',
+    warning: '#FF9800',
+    error: '#F44336',
+    info: '#2196F3',
+    gradients: {
+      primary: ['#2196F3', '#42A5F5'],
+      secondary: ['#FFFFFF', '#F5F5F5'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(33, 150, 243, 0.05)',
+      md: '0 4px 6px -1px rgba(33, 150, 243, 0.1)',
+      lg: '0 10px 15px -3px rgba(33, 150, 243, 0.1)',
+      xl: '0 20px 25px -5px rgba(33, 150, 243, 0.1)'
+    }
+  },
+
+  // Concept Apps
+  'safe-ai': {
+    name: 'SAFE AI',
+    slug: 'safe-ai',
+    category: 'security',
+    primary: '#FF5722', // Orange
+    secondary: '#FFFFFF',
+    accent: '#D84315', // Dark Orange
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#FFF3E0',
+    success: '#4CAF50',
+    warning: '#FF9800',
+    error: '#F44336',
+    info: '#2196F3',
+    gradients: {
+      primary: ['#FF5722', '#FF7043'],
+      secondary: ['#FFFFFF', '#F5F5F5'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(255, 87, 34, 0.05)',
+      md: '0 4px 6px -1px rgba(255, 87, 34, 0.1)',
+      lg: '0 10px 15px -3px rgba(255, 87, 34, 0.1)',
+      xl: '0 20px 25px -5px rgba(255, 87, 34, 0.1)'
+    }
+  },
+
+  'afrohustle-os': {
+    name: 'AfroHustle OS',
+    slug: 'afrohustle-os',
+    category: 'education',
+    primary: '#9C27B0', // Purple
+    secondary: '#FF9800', // Orange
+    accent: '#7B1FA2', // Dark Purple
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#F3E5F5',
+    success: '#4CAF50',
+    warning: '#FF9800',
+    error: '#F44336',
+    info: '#2196F3',
+    gradients: {
+      primary: ['#9C27B0', '#AB47BC'],
+      secondary: ['#FF9800', '#FFB74D'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(156, 39, 176, 0.05)',
+      md: '0 4px 6px -1px rgba(156, 39, 176, 0.1)',
+      lg: '0 10px 15px -3px rgba(156, 39, 176, 0.1)',
+      xl: '0 20px 25px -5px rgba(156, 39, 176, 0.1)'
+    }
+  },
+
+  'kolo-ai': {
+    name: 'KoloAI',
+    slug: 'kolo-ai',
+    category: 'fintech',
+    primary: '#009688', // Teal
+    secondary: '#FFC107', // Amber
+    accent: '#00796B', // Dark Teal
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#E0F2F1',
+    success: '#4CAF50',
+    warning: '#FF9800',
+    error: '#F44336',
+    info: '#2196F3',
+    gradients: {
+      primary: ['#009688', '#26A69A'],
+      secondary: ['#FFC107', '#FFD54F'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(0, 150, 136, 0.05)',
+      md: '0 4px 6px -1px rgba(0, 150, 136, 0.1)',
+      lg: '0 10px 15px -3px rgba(0, 150, 136, 0.1)',
+      xl: '0 20px 25px -5px rgba(0, 150, 136, 0.1)'
+    }
+  },
+
+  'afrocopy-ai': {
+    name: 'AfroCopy AI',
+    slug: 'afrocopy-ai',
+    category: 'ai',
+    primary: '#FF9800', // Orange
+    secondary: '#4CAF50', // Green
+    accent: '#F57C00', // Dark Orange
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#FFF3E0',
+    success: '#4CAF50',
+    warning: '#FF9800',
+    error: '#F44336',
+    info: '#2196F3',
+    gradients: {
+      primary: ['#FF9800', '#FFB74D'],
+      secondary: ['#4CAF50', '#66BB6A'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(255, 152, 0, 0.05)',
+      md: '0 4px 6px -1px rgba(255, 152, 0, 0.1)',
+      lg: '0 10px 15px -3px rgba(255, 152, 0, 0.1)',
+      xl: '0 20px 25px -5px rgba(255, 152, 0, 0.1)'
+    }
+  },
+
+  'skill2cash-board': {
+    name: 'Skill2Cash Board',
+    slug: 'skill2cash-board',
+    category: 'marketplace',
+    primary: '#673AB7', // Deep Purple
+    secondary: '#00BCD4', // Cyan
+    accent: '#512DA8', // Dark Purple
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#EDE7F6',
+    success: '#4CAF50',
+    warning: '#FF9800',
+    error: '#F44336',
+    info: '#2196F3',
+    gradients: {
+      primary: ['#673AB7', '#7E57C2'],
+      secondary: ['#00BCD4', '#26C6DA'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(103, 58, 183, 0.05)',
+      md: '0 4px 6px -1px rgba(103, 58, 183, 0.1)',
+      lg: '0 10px 15px -3px rgba(103, 58, 183, 0.1)',
+      xl: '0 20px 25px -5px rgba(103, 58, 183, 0.1)'
+    }
+  },
+
+  'anontruth-mic': {
+    name: 'AnonTruth Mic',
+    slug: 'anontruth-mic',
+    category: 'social',
+    primary: '#607D8B', // Blue Grey
+    secondary: '#CFD8DC',
+    accent: '#455A64', // Dark Blue Grey
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#ECEFF1',
+    success: '#4CAF50',
+    warning: '#FF9800',
+    error: '#F44336',
+    info: '#2196F3',
+    gradients: {
+      primary: ['#607D8B', '#78909C'],
+      secondary: ['#CFD8DC', '#E0E0E0'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(96, 125, 139, 0.05)',
+      md: '0 4px 6px -1px rgba(96, 125, 139, 0.1)',
+      lg: '0 10px 15px -3px rgba(96, 125, 139, 0.1)',
+      xl: '0 20px 25px -5px rgba(96, 125, 139, 0.1)'
+    }
+  },
+
+  // === SOCIAL FACTORY ===
+  'social-factory': {
+    name: 'Social Media Content Factory',
+    slug: 'social-factory',
+    category: 'ai',
+    primary: '#9C27B0', // Purple
+    secondary: '#FF4081', // Pink
+    accent: '#7B1FA2', // Dark Purple
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#F3E5F5',
+    success: '#4CAF50',
+    warning: '#FF9800',
+    error: '#F44336',
+    info: '#2196F3',
+    gradients: {
+      primary: ['#9C27B0', '#AB47BC'],
+      secondary: ['#FF4081', '#FF79B0'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(156, 39, 176, 0.05)',
+      md: '0 4px 6px -1px rgba(156, 39, 176, 0.1)',
+      lg: '0 10px 15px -3px rgba(156, 39, 176, 0.1)',
+      xl: '0 20px 25px -5px rgba(156, 39, 176, 0.1)'
+    }
+  },
+
+  // === PLANAI SUITE SUB-PRODUCTS (Inherit Purple Theme) ===
+  'credibility-hubs': {
+    name: 'Professional Credibility Hubs',
+    slug: 'credibility-hubs',
+    category: 'ai',
+    primary: '#7C3AED', // Purple
+    secondary: '#10B981', // Emerald
+    accent: '#5B21B6', // Dark Purple
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#F5F3FF',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
+    gradients: {
+      primary: ['#7C3AED', '#8B5CF6'],
+      secondary: ['#10B981', '#34D399'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(124, 58, 237, 0.05)',
+      md: '0 4px 6px -1px rgba(124, 58, 237, 0.1)',
+      lg: '0 10px 15px -3px rgba(124, 58, 237, 0.1)',
+      xl: '0 20px 25px -5px rgba(124, 58, 237, 0.1)'
+    }
+  },
+
+  'business-planning': {
+    name: 'AI Business Planning',
+    slug: 'business-planning',
+    category: 'ai',
+    primary: '#7C3AED',
+    secondary: '#10B981',
+    accent: '#5B21B6',
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#F5F3FF',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
+    gradients: {
+      primary: ['#7C3AED', '#8B5CF6'],
+      secondary: ['#10B981', '#34D399'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(124, 58, 237, 0.05)',
+      md: '0 4px 6px -1px rgba(124, 58, 237, 0.1)',
+      lg: '0 10px 15px -3px rgba(124, 58, 237, 0.1)',
+      xl: '0 20px 25px -5px rgba(124, 58, 237, 0.1)'
+    }
+  },
+
+  'financial-forecasting': {
+    name: 'Financial Forecasting',
+    slug: 'financial-forecasting',
+    category: 'ai',
+    primary: '#7C3AED',
+    secondary: '#10B981',
+    accent: '#5B21B6',
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#F5F3FF',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
+    gradients: {
+      primary: ['#7C3AED', '#8B5CF6'],
+      secondary: ['#10B981', '#34D399'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(124, 58, 237, 0.05)',
+      md: '0 4px 6px -1px rgba(124, 58, 237, 0.1)',
+      lg: '0 10px 15px -3px rgba(124, 58, 237, 0.1)',
+      xl: '0 20px 25px -5px rgba(124, 58, 237, 0.1)'
+    }
+  },
+
+  'investor-readiness': {
+    name: 'Investor Readiness Suite',
+    slug: 'investor-readiness',
+    category: 'ai',
+    primary: '#7C3AED',
+    secondary: '#10B981',
+    accent: '#5B21B6',
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#F5F3FF',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
+    gradients: {
+      primary: ['#7C3AED', '#8B5CF6'],
+      secondary: ['#10B981', '#34D399'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(124, 58, 237, 0.05)',
+      md: '0 4px 6px -1px rgba(124, 58, 237, 0.1)',
+      lg: '0 10px 15px -3px rgba(124, 58, 237, 0.1)',
+      xl: '0 20px 25px -5px rgba(124, 58, 237, 0.1)'
+    }
+  },
+
+  'branding-design': {
+    name: 'Branding & Design Tools',
+    slug: 'branding-design',
+    category: 'ai',
+    primary: '#7C3AED',
+    secondary: '#10B981',
+    accent: '#5B21B6',
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#F5F3FF',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
+    gradients: {
+      primary: ['#7C3AED', '#8B5CF6'],
+      secondary: ['#10B981', '#34D399'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(124, 58, 237, 0.05)',
+      md: '0 4px 6px -1px rgba(124, 58, 237, 0.1)',
+      lg: '0 10px 15px -3px rgba(124, 58, 237, 0.1)',
+      xl: '0 20px 25px -5px rgba(124, 58, 237, 0.1)'
+    }
+  },
+
+  'digital-storefronts': {
+    name: 'Digital Storefronts',
+    slug: 'digital-storefronts',
+    category: 'marketplace',
+    primary: '#7C3AED',
+    secondary: '#10B981',
+    accent: '#5B21B6',
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#F5F3FF',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
+    gradients: {
+      primary: ['#7C3AED', '#8B5CF6'],
+      secondary: ['#10B981', '#34D399'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(124, 58, 237, 0.05)',
+      md: '0 4px 6px -1px rgba(124, 58, 237, 0.1)',
+      lg: '0 10px 15px -3px rgba(124, 58, 237, 0.1)',
+      xl: '0 20px 25px -5px rgba(124, 58, 237, 0.1)'
+    }
+  },
+
+  'marketing-automation': {
+    name: 'Marketing Automation',
+    slug: 'marketing-automation',
+    category: 'ai',
+    primary: '#7C3AED',
+    secondary: '#10B981',
+    accent: '#5B21B6',
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#F5F3FF',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
+    gradients: {
+      primary: ['#7C3AED', '#8B5CF6'],
+      secondary: ['#10B981', '#34D399'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(124, 58, 237, 0.05)',
+      md: '0 4px 6px -1px rgba(124, 58, 237, 0.1)',
+      lg: '0 10px 15px -3px rgba(124, 58, 237, 0.1)',
+      xl: '0 20px 25px -5px rgba(124, 58, 237, 0.1)'
+    }
+  },
+
+  'analytics-dashboard': {
+    name: 'Analytics Dashboard',
+    slug: 'analytics-dashboard',
+    category: 'ai',
+    primary: '#7C3AED',
+    secondary: '#10B981',
+    accent: '#5B21B6',
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#F5F3FF',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
+    gradients: {
+      primary: ['#7C3AED', '#8B5CF6'],
+      secondary: ['#10B981', '#34D399'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(124, 58, 237, 0.05)',
+      md: '0 4px 6px -1px rgba(124, 58, 237, 0.1)',
+      lg: '0 10px 15px -3px rgba(124, 58, 237, 0.1)',
+      xl: '0 20px 25px -5px rgba(124, 58, 237, 0.1)'
+    }
+  },
+
+  // === MARKETPLACE PRODUCTS ===
+  'naijagig-matcher': {
+    name: 'NaijaGig Matcher',
+    slug: 'naijagig-matcher',
+    category: 'marketplace',
+    primary: '#795548', // Brown
+    secondary: '#FF9800', // Orange
+    accent: '#5D4037', // Dark Brown
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#EFEBE9',
+    success: '#4CAF50',
+    warning: '#FF9800',
+    error: '#F44336',
+    info: '#2196F3',
+    gradients: {
+      primary: ['#795548', '#8D6E63'],
+      secondary: ['#FF9800', '#FFB74D'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(121, 85, 72, 0.05)',
+      md: '0 4px 6px -1px rgba(121, 85, 72, 0.1)',
+      lg: '0 10px 15px -3px rgba(121, 85, 72, 0.1)',
+      xl: '0 20px 25px -5px rgba(121, 85, 72, 0.1)'
+    }
+  },
+
+  // === FINTECH PRODUCTS ===
+  'borderless-remit': {
+    name: 'BorderlessRemit Tracker',
+    slug: 'borderless-remit',
+    category: 'fintech',
+    primary: '#1565C0', // Blue
+    secondary: '#4CAF50', // Green
+    accent: '#0D47A1', // Dark Blue
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#E3F2FD',
+    success: '#4CAF50',
+    warning: '#FF9800',
+    error: '#F44336',
+    info: '#2196F3',
+    gradients: {
+      primary: ['#1565C0', '#1976D2'],
+      secondary: ['#4CAF50', '#66BB6A'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(21, 101, 192, 0.05)',
+      md: '0 4px 6px -1px rgba(21, 101, 192, 0.1)',
+      lg: '0 10px 15px -3px rgba(21, 101, 192, 0.1)',
+      xl: '0 20px 25px -5px rgba(21, 101, 192, 0.1)'
+    }
+  },
+
+  'receipt-genius': {
+    name: 'ReceiptGenius NG',
+    slug: 'receipt-genius',
+    category: 'fintech',
+    primary: '#4CAF50', // Green
+    secondary: '#FF9800', // Orange
+    accent: '#388E3C', // Dark Green
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#E8F5E9',
+    success: '#4CAF50',
+    warning: '#FF9800',
+    error: '#F44336',
+    info: '#2196F3',
+    gradients: {
+      primary: ['#4CAF50', '#66BB6A'],
+      secondary: ['#FF9800', '#FFB74D'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(76, 175, 80, 0.05)',
+      md: '0 4px 6px -1px rgba(76, 175, 80, 0.1)',
+      lg: '0 10px 15px -3px rgba(76, 175, 80, 0.1)',
+      xl: '0 20px 25px -5px rgba(76, 175, 80, 0.1)'
+    }
+  },
+
+  // === UTILITY PRODUCTS ===
+  'power-alert': {
+    name: 'PowerAlert NG',
+    slug: 'power-alert',
+    category: 'utilities',
+    primary: '#FFC107', // Amber (Electric)
+    secondary: '#FF5722', // Orange
+    accent: '#FFA000', // Dark Amber
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#FFF8E1',
+    success: '#4CAF50',
+    warning: '#FF9800',
+    error: '#F44336',
+    info: '#2196F3',
+    gradients: {
+      primary: ['#FFC107', '#FFD54F'],
+      secondary: ['#FF5722', '#FF7043'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(255, 193, 7, 0.05)',
+      md: '0 4px 6px -1px rgba(255, 193, 7, 0.1)',
+      lg: '0 10px 15px -3px rgba(255, 193, 7, 0.1)',
+      xl: '0 20px 25px -5px rgba(255, 193, 7, 0.1)'
+    }
+  },
+
+  'farmgate-direct': {
+    name: 'FarmGate Direct',
+    slug: 'farmgate-direct',
+    category: 'marketplace',
+    primary: '#8BC34A', // Light Green (Agriculture)
+    secondary: '#795548', // Brown
+    accent: '#689F38', // Dark Light Green
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#DCEDC8',
+    success: '#4CAF50',
+    warning: '#FF9800',
+    error: '#F44336',
+    info: '#2196F3',
+    gradients: {
+      primary: ['#8BC34A', '#9CCC65'],
+      secondary: ['#795548', '#8D6E63'],
+      background: ['#FFFFFF', '#F9FAFB']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(139, 195, 74, 0.05)',
+      md: '0 4px 6px -1px rgba(139, 195, 74, 0.1)',
+      lg: '0 10px 15px -3px rgba(139, 195, 74, 0.1)',
+      xl: '0 20px 25px -5px rgba(139, 195, 74, 0.1)'
+    }
   }
-} as const;
+};
+
+// Utility Functions
+export function getColorScheme(slug: string): ProductColorScheme {
+  return BOLDMIND_COLOR_SCHEMES[slug] || BOLDMIND_COLOR_SCHEMES['boldmind-hub'];
+}
+
+export function getCategoryColorSchemes(category: string): ProductColorScheme[] {
+  return Object.values(BOLDMIND_COLOR_SCHEMES)
+    .filter(scheme => scheme.category === category);
+}
+
+export function generateCSSVariables(slug: string): string {
+  const scheme = getColorScheme(slug);
+
+  return `
+    :root[data-product="${slug}"] {
+      /* Primary Colors */
+      --color-primary: ${scheme.primary};
+      --color-primary-dark: color-mix(in srgb, ${scheme.primary} 90%, black);
+      --color-primary-light: color-mix(in srgb, ${scheme.primary} 10%, white);
+      
+      /* Secondary Colors */
+      --color-secondary: ${scheme.secondary};
+      --color-secondary-dark: color-mix(in srgb, ${scheme.secondary} 90%, black);
+      --color-secondary-light: color-mix(in srgb, ${scheme.secondary} 10%, white);
+      
+      /* Accent Colors */
+      --color-accent: ${scheme.accent};
+      
+      /* Background & Foreground */
+      --color-background: ${scheme.background};
+      --color-foreground: ${scheme.foreground};
+      --color-muted: ${scheme.muted};
+      
+      /* Status Colors */
+      --color-success: ${scheme.success};
+      --color-warning: ${scheme.warning};
+      --color-error: ${scheme.error};
+      --color-info: ${scheme.info};
+      
+      /* Gradients */
+      --gradient-primary: linear-gradient(135deg, ${scheme.gradients.primary[0]}, ${scheme.gradients.primary[1]});
+      --gradient-secondary: linear-gradient(135deg, ${scheme.gradients.secondary[0]}, ${scheme.gradients.secondary[1]});
+      --gradient-background: linear-gradient(135deg, ${scheme.gradients.background[0]}, ${scheme.gradients.background[1]});
+      
+      /* Shadows */
+      --shadow-sm: ${scheme.shadows.sm};
+      --shadow-md: ${scheme.shadows.md};
+      --shadow-lg: ${scheme.shadows.lg};
+      --shadow-xl: ${scheme.shadows.xl};
+    }
+  `;
+}
+
+export function getContrastColor(hexColor: string): string {
+  // Remove the # if present
+  const hex = hexColor.replace('#', '');
+
+  // Convert hex to RGB
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+
+  // Calculate luminance
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+  // Return black or white based on luminance
+  return luminance > 0.5 ? '#000000' : '#FFFFFF';
+}
+
+export function generateThemeClasses(slug: string): Record<string, string> {
+  const scheme = getColorScheme(slug);
+
+  return {
+    'bg-primary': `bg-[${scheme.primary}]`,
+    'text-primary': `text-[${scheme.primary}]`,
+    'border-primary': `border-[${scheme.primary}]`,
+    'bg-secondary': `bg-[${scheme.secondary}]`,
+    'text-secondary': `text-[${scheme.secondary}]`,
+    'border-secondary': `border-[${scheme.secondary}]`,
+    'bg-accent': `bg-[${scheme.accent}]`,
+    'text-accent': `text-[${scheme.accent}]`,
+    'border-accent': `border-[${scheme.accent}]`,
+  };
+}

@@ -1,4 +1,4 @@
-import { APIClient } from '../client';
+import  APIClient  from '../client';
 
 export class UsersEndpoints {
   constructor(private client: APIClient) {}

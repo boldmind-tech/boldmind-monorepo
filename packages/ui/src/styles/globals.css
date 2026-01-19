@@ -1,434 +1,1057 @@
+/* packages/ui/src/styles/globals.css */
+/* SOPHISTICATED GLOBAL STYLES FOR ALL BOLDMIND PRODUCTS - ENHANCED */
+
 @import "tw-animate-css";
-@import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
-/* ===============================
-   CSS CUSTOM PROPERTIES (THEMING)
-   =============================== */
+/* =============================================
+   CSS CUSTOM PROPERTIES - PREMIUM DESIGN SYSTEM
+   ============================================= */
 :root {
-  /* === BOLDMIND.ng Colors === */
-  --boldmind-navy: #00143C;
-  --boldmind-gold: #FFC800;
-  --boldmind-light-navy: #2A4A6E;
-  
-  /* === AMEBOGIST.ng Colors === */
-  --amebogist-green: #00A859;
-  --amebogist-dark-green: #007A3D;
-  --amebogist-light-green: #E8F5E9;
-  
-  /* === EDUCENTER.com.ng Colors === */
-  --educenter-blue: #2A4A6E;
-  --educenter-dark-blue: #1A3452;
-  --educenter-light-blue: #E3F2FD;
-  
-  /* === CONCEPT APPS Colors === */
-  --concept-purple: #9C27B0;
-  --concept-pink: #FF4081;
-  --concept-red: #E63946;
-  --concept-orange: #FF5722;
-  --concept-teal: #009688;
-  
-  /* === SHARED NEUTRAL Colors === */
+  /* === SOPHISTICATED NEUTRALS === */
   --neutral-white: #FFFFFF;
-  --neutral-light: #F0F4F8;
+  --neutral-light: #F8FAFC;
   --neutral-gray: #6B7280;
-  --neutral-dark: #1F2937;
-  --neutral-black: #111827;
-  
-  /* === PRODUCT-DETECTED VARIABLES === */
-  /* These will be set by JS based on current product */
-  --product-primary: var(--boldmind-navy);
-  --product-secondary: var(--boldmind-gold);
-  --product-accent: var(--boldmind-light-navy);
-  --product-background: var(--neutral-white);
-  --product-foreground: var(--neutral-black);
-  --product-muted: var(--neutral-light);
-  
-  /* === FONTS === */
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --neutral-dark: #1E293B;
+  --neutral-black: #0F172A;
+  --neutral-silver: #F1F5F9;
+  --neutral-platinum: #E2E8F0;
+
+  /* === STATUS COLORS WITH DEPTH === */
+  --color-success: #10B981;
+  --color-success-dark: #059669;
+  --color-warning: #F59E0B;
+  --color-warning-dark: #D97706;
+  --color-error: #EF4444;
+  --color-error-dark: #DC2626;
+  --color-info: #3B82F6;
+  --color-info-dark: #2563EB;
+
+  /* === DEFAULT (BoldMind Hub - Navy & Gold Luxury) === */
+  --product-primary: #00143C;
+  --product-secondary: #FFC800;
+  --product-accent: #2A4A6E;
+  --product-background: #FFFFFF;
+  --product-foreground: #111827;
+  --product-muted: #F8FAFC;
+  --product-highlight: rgba(255, 200, 0, 0.1);
+  --product-glow: rgba(255, 200, 0, 0.2);
+
+  /* === ELEGANT FONTS === */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
   --font-serif: 'Lora', Georgia, 'Times New Roman', serif;
+  --font-heading: 'Plus Jakarta Sans', 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
   --font-dyslexic: 'OpenDyslexic', 'Comic Sans MS', sans-serif;
-  
-  /* === BORDERS & RADIUS === */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
+
+  /* === LUXURY BORDERS & RADIUS === */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
   --radius-full: 9999px;
-  
-  /* === SHADOWS === */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-  
-  /* === ANIMATIONS === */
-  --transition-fast: 150ms ease-in-out;
-  --transition-normal: 300ms ease-in-out;
-  --transition-slow: 500ms ease-in-out;
+  --radius-pill: 50rem;
+
+  /* === PREMIUM SHADOWS === */
+  --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  --shadow-soft: 0 4px 12px 0 rgba(0, 0, 0, 0.05);
+  --shadow-medium: 0 8px 24px -4px rgba(0, 0, 0, 0.1);
+  --shadow-elevated: 0 20px 40px -8px rgba(0, 0, 0, 0.12);
+  --shadow-floating: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-glow: 0 0 40px rgba(255, 200, 0, 0.15);
+
+  /* === SMOOTH TRANSITIONS === */
+  --transition-fast: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 400ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* === GLASS MORPHISM === */
+  --glass-background: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --glass-blur: blur(12px);
+
+  /* === GRADIENTS === */
+  --gradient-primary: linear-gradient(135deg, var(--product-primary) 0%, color-mix(in srgb, var(--product-primary) 70%, black) 100%);
+  --gradient-secondary: linear-gradient(135deg, var(--product-secondary) 0%, color-mix(in srgb, var(--product-secondary) 70%, white) 100%);
+  --gradient-accent: linear-gradient(135deg, var(--product-accent) 0%, color-mix(in srgb, var(--product-accent) 70%, white) 100%);
 }
 
-/* ===============================
-   PRODUCT-SPECIFIC THEME OVERRIDES
-   =============================== */
+/* =============================================
+   PREMIUM PRODUCT-SPECIFIC THEMES (File 1 Colors)
+   ============================================= */
+
+/* BoldMind Hub - Navy & Gold Luxury */
 [data-product="boldmind-hub"] {
-  --product-primary: var(--boldmind-navy);
-  --product-secondary: var(--boldmind-gold);
-  --product-accent: var(--boldmind-light-navy);
+  --product-primary: #00143C;
+  --product-secondary: #FFC800;
+  --product-accent: #2A4A6E;
+  --product-glow: rgba(255, 200, 0, 0.25);
 }
 
-[data-product="amebogist"] {
-  --product-primary: var(--amebogist-green);
-  --product-secondary: var(--boldmind-gold);
-  --product-accent: var(--amebogist-dark-green);
+/* AmeboGist - Vibrant Green & Orange */
+[data-product="amebogist"],
+[data-product="amebogist-twa"] {
+  --product-primary: #00A859;
+  --product-secondary: #FF6B35;
+  --product-accent: #007A3D;
+  --product-glow: rgba(255, 107, 53, 0.2);
 }
 
-[data-product="educenter"] {
-  --product-primary: var(--educenter-blue);
-  --product-secondary: #FFFFFF;
-  --product-accent: var(--educenter-dark-blue);
+/* EduCenter - Trustworthy Blue & Gold */
+[data-product="educenter"],
+[data-product="educenter-twa"] {
+  --product-primary: #2A4A6E;
+  --product-secondary: #FFD95C;
+  --product-accent: #1A3452;
+  --product-glow: rgba(255, 217, 92, 0.2);
 }
 
-[data-product="boldmind-os"] {
-  --product-primary: var(--concept-red);
-  --product-secondary: var(--boldmind-gold);
+/* BoldMind OS - Bold Red & Gold */
+[data-product="boldmind-os"],
+[data-product="boldmind-os-twa"] {
+  --product-primary: #E63946;
+  --product-secondary: #FFC800;
   --product-accent: #B91C1C;
+  --product-glow: rgba(230, 57, 70, 0.15);
 }
 
-[data-product="naija-fither"] {
-  --product-primary: var(--concept-pink);
-  --product-secondary: var(--concept-purple);
+/* Naija FitHer - Feminine Pink & Purple */
+[data-product="naija-fither"],
+[data-product="naija-fither-twa"] {
+  --product-primary: #FF4081;
+  --product-secondary: #9C27B0;
   --product-accent: #E91E63;
+  --product-glow: rgba(255, 64, 129, 0.2);
 }
 
-[data-product="emailscraper-pro"] {
+/* EmailScraper Pro - Professional Blue */
+[data-product="emailscraper-pro"],
+[data-product="emailscraper-twa"] {
   --product-primary: #2196F3;
   --product-secondary: #FFFFFF;
   --product-accent: #0D47A1;
+  --product-glow: rgba(33, 150, 243, 0.15);
 }
 
-[data-product="safe-ai"] {
-  --product-primary: var(--concept-orange);
+/* SAFE AI - Warning Orange */
+[data-product="safe-ai"],
+[data-product="safe-ai-native"] {
+  --product-primary: #FF5722;
   --product-secondary: #FFFFFF;
   --product-accent: #D84315;
+  --product-glow: rgba(255, 87, 34, 0.15);
 }
 
-/* ===============================
-   DARK MODE
-   =============================== */
+/* PlanAI Suite - AI Purple & Emerald */
+[data-product="planai-suite"] {
+  --product-primary: #7C3AED;
+  --product-secondary: #10B981;
+  --product-accent: #5B21B6;
+  --product-glow: rgba(124, 58, 237, 0.2);
+}
+
+/* AI Receptionist - Friendly Blue & Purple */
+[data-product="ai-receptionist"] {
+  --product-primary: #3B82F6;
+  --product-secondary: #8B5CF6;
+  --product-accent: #1D4ED8;
+  --product-glow: rgba(59, 130, 246, 0.15);
+}
+
+/* PlanAI Sub-products - Consistent Purple Theme */
+[data-product="credibility-hubs"],
+[data-product="business-planning"],
+[data-product="financial-forecasting"],
+[data-product="investor-readiness"],
+[data-product="branding-design"],
+[data-product="digital-storefronts"],
+[data-product="marketing-automation"],
+[data-product="analytics-dashboard"] {
+  --product-primary: #7C3AED;
+  --product-secondary: #10B981;
+  --product-accent: #5B21B6;
+  --product-glow: rgba(124, 58, 237, 0.15);
+}
+
+/* Social Factory - Social Purple & Pink */
+[data-product="social-factory"] {
+  --product-primary: #9C27B0;
+  --product-secondary: #FF4081;
+  --product-accent: #7B1FA2;
+  --product-glow: rgba(156, 39, 176, 0.15);
+}
+
+/* AfroHustle OS - Creative Purple & Orange */
+[data-product="afrohustle-os"] {
+  --product-primary: #9C27B0;
+  --product-secondary: #FF9800;
+  --product-accent: #7B1FA2;
+  --product-glow: rgba(156, 39, 176, 0.15);
+}
+
+/* KoloAI - Financial Teal & Amber */
+[data-product="kolo-ai"] {
+  --product-primary: #009688;
+  --product-secondary: #FFC107;
+  --product-accent: #00796B;
+  --product-glow: rgba(0, 150, 136, 0.15);
+}
+
+/* AfroCopy AI - Creative Orange & Green */
+[data-product="afrocopy-ai"] {
+  --product-primary: #FF9800;
+  --product-secondary: #4CAF50;
+  --product-accent: #F57C00;
+  --product-glow: rgba(255, 152, 0, 0.15);
+}
+
+/* Skill2Cash - Premium Purple & Cyan */
+/* ===================================
+   PRODUCT-SPECIFIC THEMES (From File 1 colors.ts)
+   =================================== */
+
+/* BoldMind Hub (Navy + Gold) */
+[data-product="boldmind-hub"] {
+  --product-primary: #00143C;
+  --product-secondary: #FFC800;
+  --product-accent: #2A4A6E;
+  --product-background: #FFFFFF;
+  --product-foreground: #111827;
+  --product-muted: #F3F4F6;
+}
+
+/* AmeboGist (Green + Orange) */
+[data-product="amebogist"],
+[data-product="amebogist-twa"] {
+  --product-primary: #00A859;
+  --product-secondary: #FF6B35;
+  --product-accent: #007A3D;
+  --product-background: #FFFFFF;
+  --product-foreground: #1A1A1A;
+  --product-muted: #E8F5E9;
+}
+
+/* EduCenter (Blue + Yellow) */
+[data-product="educenter"],
+[data-product="educenter-twa"] {
+  --product-primary: #2A4A6E;
+  --product-secondary: #FFD95C;
+  --product-accent: #1A3452;
+  --product-background: #FFFFFF;
+  --product-foreground: #1F2937;
+  --product-muted: #E3F2FD;
+}
+
+/* PlanAI Suite (Purple + Emerald) */
+[data-product="planai-suite"] {
+  --product-primary: #7C3AED;
+  --product-secondary: #10B981;
+  --product-accent: #5B21B6;
+  --product-background: #FFFFFF;
+  --product-foreground: #1F2937;
+  --product-muted: #F5F3FF;
+}
+
+/* AI Receptionist (Blue + Purple) */
+[data-product="ai-receptionist"] {
+  --product-primary: #3B82F6;
+  --product-secondary: #8B5CF6;
+  --product-accent: #1D4ED8;
+  --product-background: #FFFFFF;
+  --product-foreground: #1F2937;
+  --product-muted: #DBEAFE;
+}
+
+/* BoldMind OS (Red + Gold) */
+[data-product="boldmind-os"],
+[data-product="boldmind-os-twa"] {
+  --product-primary: #E63946;
+  --product-secondary: #FFC800;
+  --product-accent: #B91C1C;
+  --product-background: #FFFFFF;
+  --product-foreground: #1F2937;
+  --product-muted: #FEF2F2;
+}
+
+/* Naija FitHer (Pink + Purple) */
+[data-product="naija-fither"],
+[data-product="naija-fither-twa"] {
+  --product-primary: #FF4081;
+  --product-secondary: #9C27B0;
+  --product-accent: #E91E63;
+  --product-background: #FFFFFF;
+  --product-foreground: #1F2937;
+  --product-muted: #FCE4EC;
+}
+
+/* EmailScraper Pro (Blue + White) */
+[data-product="emailscraper-pro"],
+[data-product="emailscraper-twa"] {
+  --product-primary: #2196F3;
+  --product-secondary: #FFFFFF;
+  --product-accent: #0D47A1;
+  --product-background: #FFFFFF;
+  --product-foreground: #1F2937;
+  --product-muted: #E3F2FD;
+}
+
+/* SAFE AI (Orange + White) */
+[data-product="safe-ai"],
+[data-product="safe-ai-native"] {
+  --product-primary: #FF5722;
+  --product-secondary: #FFFFFF;
+  --product-accent: #D84315;
+  --product-background: #FFFFFF;
+  --product-foreground: #1F2937;
+  --product-muted: #FFF3E0;
+}
+
+/* AfroHustle OS (Purple + Orange) */
+[data-product="afrohustle-os"] {
+  --product-primary: #9C27B0;
+  --product-secondary: #FF9800;
+  --product-accent: #7B1FA2;
+  --product-background: #FFFFFF;
+  --product-foreground: #1F2937;
+  --product-muted: #F3E5F5;
+}
+
+/* KoloAI (Teal + Amber) */
+[data-product="kolo-ai"] {
+  --product-primary: #009688;
+  --product-secondary: #FFC107;
+  --product-accent: #00796B;
+  --product-background: #FFFFFF;
+  --product-foreground: #1F2937;
+  --product-muted: #E0F2F1;
+}
+
+/* AfroCopy AI (Orange + Green) */
+[data-product="afrocopy-ai"] {
+  --product-primary: #FF9800;
+  --product-secondary: #4CAF50;
+  --product-accent: #F57C00;
+  --product-background: #FFFFFF;
+  --product-foreground: #1F2937;
+  --product-muted: #FFF3E0;
+}
+
+/* Skill2Cash Board (Deep Purple + Cyan) */
+[data-product="skill2cash"],
+[data-product="skill2cash-board"] {
+  --product-primary: #673AB7;
+  --product-secondary: #00BCD4;
+  --product-accent: #512DA8;
+  --product-background: #FFFFFF;
+  --product-foreground: #1F2937;
+  --product-muted: #EDE7F6;
+}
+
+/* AnonTruth Mic (Blue Grey) */
+[data-product="anontruth-mic"] {
+  --product-primary: #607D8B;
+  --product-secondary: #CFD8DC;
+  --product-accent: #455A64;
+  --product-background: #FFFFFF;
+  --product-foreground: #1F2937;
+  --product-muted: #ECEFF1;
+}
+
+/* Social Factory (Purple + Pink) */
+[data-product="social-factory"] {
+  --product-primary: #9C27B0;
+  --product-secondary: #FF4081;
+  --product-accent: #7B1FA2;
+  --product-background: #FFFFFF;
+  --product-foreground: #1F2937;
+  --product-muted: #F3E5F5;
+}
+
+/* NaijaGig Matcher (Brown + Orange) */
+[data-product="naijagig-matcher"] {
+  --product-primary: #795548;
+  --product-secondary: #FF9800;
+  --product-accent: #5D4037;
+  --product-background: #FFFFFF;
+  --product-foreground: #1F2937;
+  --product-muted: #EFEBE9;
+  --product-glow: rgba(121, 85, 72, 0.15);
+}
+
+/* BorderlessRemit Tracker (Blue + Green) */
+[data-product="borderless-remit"] {
+  --product-primary: #1565C0;
+  --product-secondary: #4CAF50;
+  --product-accent: #0D47A1;
+  --product-background: #FFFFFF;
+  --product-foreground: #1F2937;
+  --product-muted: #E3F2FD;
+  --product-glow: rgba(21, 101, 192, 0.15);
+}
+
+/* ReceiptGenius NG (Green + Orange) */
+[data-product="receipt-genius"] {
+  --product-primary: #4CAF50;
+  --product-secondary: #FF9800;
+  --product-accent: #388E3C;
+  --product-background: #FFFFFF;
+  --product-foreground: #1F2937;
+  --product-muted: #E8F5E9;
+  --product-glow: rgba(76, 175, 80, 0.15);
+}
+
+/* PowerAlert NG (Amber + Orange) */
+[data-product="power-alert"] {
+  --product-primary: #FFC107;
+  --product-secondary: #FF5722;
+  --product-accent: #FFA000;
+  --product-background: #FFFFFF;
+  --product-foreground: #1F2937;
+  --product-muted: #FFF8E1;
+  --product-glow: rgba(255, 193, 7, 0.15);
+}
+
+/* FarmGate Direct (Light Green + Brown) */
+[data-product="farmgate-direct"] {
+  --product-primary: #8BC34A;
+  --product-secondary: #795548;
+  --product-accent: #689F38;
+  --product-background: #FFFFFF;
+  --product-foreground: #1F2937;
+  --product-muted: #DCEDC8;
+  --product-glow: rgba(139, 195, 74, 0.15);
+}
+
+/* =============================================
+   DARK MODE - SOPHISTICATED
+   ============================================= */
 [data-theme="dark"] {
-  --product-background: var(--neutral-black);
-  --product-foreground: var(--neutral-white);
-  --product-muted: var(--neutral-dark);
+  --product-background: #0F172A;
+  --product-foreground: #F1F5F9;
+  --product-muted: #1E293B;
+  --neutral-white: #0F172A;
+  --neutral-light: #1E293B;
+  --neutral-dark: #F1F5F9;
+  --neutral-black: #F8FAFC;
+  --glass-background: rgba(30, 41, 59, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
 }
 
-/* ===============================
-   DYSLEXIA MODE
-   =============================== */
-[data-dyslexia="true"] {
+/* =============================================
+   DYSLEXIA MODE - EXCLUSIVELY BOLDMIND OS
+   ============================================= */
+[data-product="boldmind-os"][data-dyslexia="true"],
+[data-product="boldmind-os"][data-dyslexia="true"] *,
+[data-product="boldmind-os-twa"][data-dyslexia="true"],
+[data-product="boldmind-os-twa"][data-dyslexia="true"] * {
   font-family: var(--font-dyslexic) !important;
-  letter-spacing: 0.05em;
-  line-height: 1.8;
+  letter-spacing: 0.05em !important;
+  line-height: 1.8 !important;
+  word-spacing: 0.16em !important;
+  text-align: left !important;
 }
 
-/* ===============================
-   BASE STYLES
-   =============================== */
+/* Disable for other products */
+[data-product]:not([data-product="boldmind-os"]):not([data-product="boldmind-os-twa"])[data-dyslexia="true"],
+[data-product]:not([data-product="boldmind-os"]):not([data-product="boldmind-os-twa"])[data-dyslexia="true"] * {
+  font-family: var(--font-sans) !important;
+  letter-spacing: normal !important;
+  line-height: 1.6 !important;
+  word-spacing: normal !important;
+}
+
+/* =============================================
+   LUXURY BASE STYLES
+   ============================================= */
 @layer base {
   * {
     box-sizing: border-box;
-    padding: 0;
     margin: 0;
-    border-color: hsl(var(--border));
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
   }
-  
+
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
-  
+
   body {
     font-family: var(--font-sans);
     background-color: var(--product-background);
     color: var(--product-foreground);
-    line-height: 1.6;
+    line-height: 1.7;
     overflow-x: hidden;
-    font-feature-settings: 'ss01' on, 'ss02' on, 'cv01' on, 'cv03' on;
+    min-height: 100vh;
+    transition: background-color var(--transition-normal), color var(--transition-normal);
   }
-  
-  /* Improved focus for accessibility */
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--product-muted);
+    border-radius: var(--radius-full);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--product-primary);
+    border-radius: var(--radius-full);
+    border: 2px solid var(--product-muted);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--product-primary) 90%, black);
+  }
+
   :focus-visible {
-    outline: 2px solid var(--product-secondary);
+    outline: 3px solid var(--product-secondary);
     outline-offset: 2px;
+    box-shadow: 0 0 0 4px var(--product-glow);
   }
-  
-  /* Selection colors */
+
   ::selection {
-    background-color: color-mix(in srgb, var(--product-primary) 20%, transparent);
+    background-color: color-mix(in srgb, var(--product-primary) 30%, transparent);
     color: var(--product-foreground);
   }
+
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
 }
 
-/* ===============================
-   TYPOGRAPHY
-   =============================== */
+/* =============================================
+   PREMIUM TYPOGRAPHY SYSTEM
+   ============================================= */
 @layer base {
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-serif);
-    font-weight: 700;
-    line-height: 1.2;
-    color: var(--product-primary);
-    margin-bottom: 1rem;
-  }
-  
-  h1 {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-  }
-  
-  h2 {
-    font-size: clamp(2rem, 4vw, 3rem);
-  }
-  
-  h3 {
-    font-size: clamp(1.5rem, 3vw, 2rem);
-  }
-  
-  p {
-    font-size: clamp(1rem, 2.5vw, 1.125rem);
-    line-height: 1.7;
-    margin-bottom: 1.5rem;
-    text-wrap: pretty;
-  }
-  
-  /* NIGERIAN-STYLE TYPOGRAPHY FOR AMEBOGIST */
-  [data-product="amebogist"] h1,
-  [data-product="amebogist"] h2,
-  [data-product="amebogist"] h3 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
     font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: -0.5px;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--product-primary);
+    margin-bottom: 1.25rem;
+    text-wrap: balance;
   }
-  
-  /* EDUCATIONAL TYPOGRAPHY FOR EDUCENTER */
-  [data-product="educenter"] h1,
-  [data-product="educenter"] h2,
-  [data-product="educenter"] h3 {
+
+  h1 {
+    font-size: clamp(3rem, 8vw, 5rem);
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  h2 {
+    font-size: clamp(2.25rem, 6vw, 3.5rem);
+    font-weight: 700;
+  }
+
+  h3 {
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+    font-weight: 700;
+  }
+
+  h4 {
+    font-size: clamp(1.5rem, 4vw, 2rem);
     font-weight: 600;
-    letter-spacing: -0.25px;
+  }
+
+  h5 {
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    font-weight: 600;
+  }
+
+  p {
+    font-size: clamp(1.0625rem, 2.5vw, 1.125rem);
+    line-height: 1.75;
+    margin-bottom: 1.75rem;
+    color: color-mix(in srgb, var(--product-foreground) 90%, var(--product-background));
+    max-width: 65ch;
+  }
+
+  /* Product-specific typography personalities */
+  [data-product="amebogist"] {
+
+    & h1,
+    & h2,
+    & h3 {
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.5px;
+      font-style: italic;
+    }
+
+    & p {
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+  }
+
+  [data-product="educenter"] {
+
+    & h1,
+    & h2,
+    & h3 {
+      font-weight: 700;
+      letter-spacing: -0.25px;
+      font-family: var(--font-serif);
+    }
+
+    & p {
+      font-family: var(--font-serif);
+      line-height: 1.8;
+    }
+  }
+
+  [data-product="boldmind-os"] {
+
+    & h1,
+    & h2,
+    & h3 {
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      text-transform: uppercase;
+    }
+  }
+
+  /* Lead paragraph */
+  .lead {
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    line-height: 1.6;
+    color: color-mix(in srgb, var(--product-foreground) 80%, var(--product-background));
+    font-weight: 500;
+  }
+
+  /* Caption text */
+  .caption {
+    font-size: 0.875rem;
+    color: color-mix(in srgb, var(--product-foreground) 60%, var(--product-background));
+    letter-spacing: 0.025em;
   }
 }
 
-/* ===============================
-   COMPONENTS
-   =============================== */
+/* =============================================
+   PREMIUM COMPONENTS - MODERN DESIGN SYSTEM
+   ============================================= */
 @layer components {
-  /* === BUTTONS === */
+
+  /* === LUXURY BUTTONS === */
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
     border-radius: var(--radius-md);
-    font-weight: 600;
+    font-family: var(--font-heading);
+    font-weight: 700;
     font-size: 1rem;
     line-height: 1.5;
+    letter-spacing: 0.01em;
     transition: all var(--transition-normal);
     cursor: pointer;
-    border: 2px solid transparent;
+    border: none;
     white-space: nowrap;
-  }
-  
-  .btn-primary {
-    background-color: var(--product-primary);
-    color: white;
-  }
-  
-  .btn-primary:hover {
-    background-color: color-mix(in srgb, var(--product-primary) 90%, black);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-  }
-  
-  .btn-secondary {
-    background-color: transparent;
-    color: var(--product-primary);
-    border-color: var(--product-primary);
-  }
-  
-  .btn-secondary:hover {
-    background-color: var(--product-primary);
-    color: white;
-  }
-  
-  /* === CARDS === */
-  .card {
-    background-color: var(--product-background);
-    border: 1px solid var(--product-muted);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
-    transition: all var(--transition-normal);
-  }
-  
-  .card:hover {
-    border-color: var(--product-primary);
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-4px);
-  }
-  
-  /* === NAVIGATION === */
-  .nav-link {
-    color: var(--product-foreground);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
     text-decoration: none;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.2) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(255, 255, 255, 0.2) 100%);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    z-index: -1;
+  }
+
+  .btn:hover::before {
+    opacity: 1;
+  }
+
+  .btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: var(--shadow-medium), var(--shadow-glow);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: var(--shadow-elevated), 0 0 50px var(--product-glow);
+  }
+
+  .btn-primary:active {
+    transform: translateY(-1px) scale(0.98);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--product-primary);
+    border: 2px solid var(--product-primary);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-secondary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+    z-index: -1;
+  }
+
+  .btn-secondary:hover {
+    color: white;
+    border-color: transparent;
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-medium);
+  }
+
+  .btn-secondary:hover::after {
+    opacity: 1;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--product-primary);
+    border: 2px solid transparent;
+  }
+
+  .btn-ghost:hover {
+    background: var(--product-highlight);
+    border-color: var(--product-primary);
+    transform: translateY(-2px);
+  }
+
+  /* Button sizes */
+  .btn-sm {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+  }
+
+  .btn-lg {
+    padding: 1.25rem 2.5rem;
+    font-size: 1.125rem;
+    border-radius: var(--radius-lg);
+  }
+
+  /* Button with icon */
+  .btn-icon {
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border-radius: var(--radius-full);
+  }
+
+  /* === GLASS CARDS === */
+  .card {
+    background: var(--glass-background);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+  }
+
+  .card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-elevated), var(--shadow-glow);
+    border-color: var(--product-primary);
+  }
+
+  .card:hover::before {
+    opacity: 1;
+  }
+
+  .card-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--product-primary);
+  }
+
+  .card-subtitle {
+    font-size: 1rem;
+    color: color-mix(in srgb, var(--product-foreground) 70%, var(--product-background));
+  }
+
+  /* === PREMIUM BADGES === */
+  .product-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     padding: 0.5rem 1rem;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-pill);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid transparent;
     transition: all var(--transition-fast);
   }
-  
-  .nav-link:hover {
-    background-color: color-mix(in srgb, var(--product-primary) 10%, transparent);
-    color: var(--product-primary);
-  }
-  
-  .nav-link.active {
-    background-color: var(--product-primary);
+
+  .badge-live {
+    background: linear-gradient(135deg, var(--color-success), var(--color-success-dark));
     color: white;
+    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
   }
-  
-  /* === AD CONTAINERS (FOR ALL PRODUCTS) === */
-  .ad-container {
-    background: linear-gradient(135deg, 
-      color-mix(in srgb, var(--product-muted) 30%, transparent) 0%,
-      color-mix(in srgb, var(--product-muted) 50%, transparent) 100%
-    );
-    border: 2px dashed color-mix(in srgb, var(--product-foreground) 20%, transparent);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
-    text-align: center;
-    min-height: 120px;
+
+  .badge-building {
+    background: linear-gradient(135deg, var(--color-warning), var(--color-warning-dark));
+    color: white;
+    box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
+  }
+
+  .badge-planned {
+    background: linear-gradient(135deg, var(--color-info), var(--color-info-dark));
+    color: white;
+    box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
+  }
+
+  .badge-concept {
+    background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+    color: white;
+    box-shadow: 0 2px 10px rgba(139, 92, 246, 0.3);
+  }
+
+  /* === GLASS NAVBAR === */
+  .navbar-glass {
+    background: var(--glass-background);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-subtle);
+  }
+
+  /* === FLOATING ACTION BUTTON === */
+  .fab {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 4rem;
+    height: 4rem;
+    border-radius: var(--radius-full);
+    background: var(--gradient-primary);
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all var(--transition-normal);
+    font-size: 1.5rem;
+    box-shadow: var(--shadow-floating), var(--shadow-glow);
+    transition: all var(--transition-bounce);
+    z-index: 1000;
   }
-  
-  .ad-container:hover {
-    border-color: var(--product-primary);
-    background: linear-gradient(135deg, 
-      color-mix(in srgb, var(--product-primary) 5%, transparent) 0%,
-      color-mix(in srgb, var(--product-primary) 10%, transparent) 100%
-    );
+
+  .fab:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: var(--shadow-floating), 0 0 60px var(--product-glow);
   }
-  
-  /* === PRODUCT-SPECIFIC CARD STYLES === */
-  .card-amebogist {
-    @apply card;
-    border-left: 4px solid var(--amebogist-green);
+
+  /* === PREMIUM TOOLTIPS === */
+  .tooltip {
+    position: relative;
   }
-  
-  .card-educenter {
-    @apply card;
-    border-left: 4px solid var(--educenter-blue);
+
+  .tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-0.5rem);
+    background: var(--neutral-dark);
+    color: var(--neutral-white);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-fast);
+    z-index: 1000;
+    pointer-events: none;
   }
-  
-  .card-boldmind {
-    @apply card;
-    border-left: 4px solid var(--boldmind-navy);
+
+  .tooltip:hover::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-0.75rem);
   }
 }
 
-/* ===============================
-   UTILITIES
-   =============================== */
+/* =============================================
+   UTILITY CLASSES - MODERN
+   ============================================= */
 @layer utilities {
-  /* Scrollbar */
+
+  /* Glass effect */
+  .glass {
+    background: var(--glass-background);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Shine effect */
+  .shine {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shine::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 70%);
+    transform: rotate(30deg);
+    transition: transform 0.6s;
+  }
+
+  .shine:hover::after {
+    transform: rotate(30deg) translate(20%, 20%);
+  }
+
+  /* Floating animation */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* Pulse animation */
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  /* Shimmer effect */
+  .shimmer {
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+
+  /* Custom scrollbar */
   .scrollbar-custom {
     scrollbar-width: thin;
     scrollbar-color: var(--product-primary) var(--product-muted);
   }
-  
-  .scrollbar-custom::-webkit-scrollbar {
-    width: 8px;
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hidden {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
-  
-  .scrollbar-custom::-webkit-scrollbar-track {
-    background: var(--product-muted);
-    border-radius: var(--radius-full);
+
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
   }
-  
-  .scrollbar-custom::-webkit-scrollbar-thumb {
-    background: var(--product-primary);
-    border-radius: var(--radius-full);
+
+  /* Aspect ratios */
+  .aspect-video {
+    aspect-ratio: 16 / 9;
   }
-  
-  /* Animations */
-  .animate-float {
-    animation: float 3s ease-in-out infinite;
+
+  .aspect-square {
+    aspect-ratio: 1 / 1;
   }
-  
-  .animate-shimmer {
-    background: linear-gradient(
-      90deg,
-      var(--product-muted) 0%,
-      color-mix(in srgb, var(--product-primary) 20%, var(--product-muted)) 50%,
-      var(--product-muted) 100%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 2s infinite;
+
+  /* Text balance */
+  .text-balance {
+    text-wrap: balance;
   }
-  
-  /* Product badges */
-  .product-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--radius-full);
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+
+  /* Grid utilities */
+  .grid-auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
-  
-  .badge-live {
-    background-color: #10B981;
-    color: white;
-  }
-  
-  .badge-building {
-    background-color: #F59E0B;
-    color: white;
-  }
-  
-  .badge-planned {
-    background-color: #3B82F6;
-    color: white;
-  }
-  
-  .badge-concept {
-    background-color: #8B5CF6;
-    color: white;
+
+  .grid-auto-fill {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
 }
 
-/* ===============================
-   ANIMATIONS
-   =============================== */
+/* =============================================
+   PREMIUM ANIMATIONS
+   ============================================= */
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0);
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
   }
-  50% {
-    transform: translateY(-10px);
+
+  33% {
+    transform: translateY(-15px) rotate(1deg);
+  }
+
+  66% {
+    transform: translateY(-8px) rotate(-1deg);
   }
 }
 
@@ -436,81 +1059,193 @@
   0% {
     background-position: -200% 0;
   }
+
   100% {
     background-position: 200% 0;
   }
 }
 
-@keyframes pulse-slow {
-  0%, 100% {
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 20px var(--product-glow);
+  }
+
+  50% {
+    opacity: 0.8;
+    box-shadow: 0 0 40px var(--product-glow);
+  }
+}
+
+@keyframes slide-in-right {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0);
     opacity: 1;
   }
-  50% {
-    opacity: 0.5;
+}
+
+@keyframes slide-in-left {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 1;
   }
 }
 
-/* ===============================
-   RESPONSIVE DESIGN
-   =============================== */
+@keyframes fade-in-up {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes spin-slow {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* =============================================
+   RESPONSIVE DESIGN - MOBILE FIRST
+   ============================================= */
 @media (max-width: 640px) {
   :root {
-    --radius-lg: 0.5rem;
-    --radius-xl: 0.75rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
   }
-  
+
   h1 {
-    font-size: 2rem !important;
+    font-size: 2.5rem;
+    letter-spacing: -0.02em;
   }
-  
+
   h2 {
-    font-size: 1.5rem !important;
+    font-size: 2rem;
   }
-  
+
+  h3 {
+    font-size: 1.5rem;
+  }
+
   .btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
+    padding: 0.875rem 1.5rem;
+    width: 100%;
   }
-  
+
+  .btn-lg {
+    padding: 1rem 2rem;
+  }
+
   .card {
-    padding: 1rem;
+    padding: 1.5rem;
+  }
+
+  .fab {
+    width: 3.5rem;
+    height: 3.5rem;
+    bottom: 1.5rem;
+    right: 1.5rem;
   }
 }
 
-/* ===============================
+@media (min-width: 768px) {
+  .btn {
+    width: auto;
+  }
+
+  .lead {
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+}
+
+/* =============================================
    PRINT STYLES
-   =============================== */
+   ============================================= */
 @media print {
   .no-print {
     display: none !important;
   }
-  
-  .ad-container,
-  .btn {
-    display: none !important;
-  }
-  
+
   body {
-    color: black !important;
-    background: white !important;
+    color: #000 !important;
+    background: #fff !important;
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #000 !important;
+    page-break-after: avoid;
+  }
+
+  .btn,
+  .fab,
+  .card {
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+  }
+
+  a {
+    color: #000 !important;
+    text-decoration: underline;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 90%;
   }
 }
 
-/* ===============================
-   DARK MODE ENHANCEMENTS
-   =============================== */
-@media (prefers-color-scheme: dark) {
-  [data-theme="auto"] {
-    --product-background: var(--neutral-black);
-    --product-foreground: var(--neutral-white);
-    --product-muted: var(--neutral-dark);
-  }
-}
-
-/* ===============================
-   REDUCED MOTION
-   =============================== */
+/* =============================================
+   ACCESSIBILITY & REDUCED MOTION
+   ============================================= */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -518,9 +1253,96 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  
+
   .btn:hover,
-  .card:hover {
+  .card:hover,
+  .fab:hover {
     transform: none !important;
+  }
+
+  .animate-float,
+  .animate-pulse-glow,
+  .shimmer {
+    animation: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  :root {
+    --product-primary: #000080;
+    --product-secondary: #FFD700;
+    --product-accent: #0000CD;
+  }
+
+  .btn-primary {
+    border: 3px solid currentColor;
+  }
+}
+
+/* =============================================
+   PRODUCT-SPECIFIC ENHANCEMENTS
+   ============================================= */
+
+/* AmeboGist - Vibrant & Bold */
+[data-product="amebogist"] {
+  .btn-primary {
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+  }
+
+  .card {
+    border-radius: var(--radius-lg);
+    border-top: 4px solid var(--product-primary);
+  }
+}
+
+/* EduCenter - Clean & Professional */
+[data-product="educenter"] {
+  .card {
+    background: white;
+    border: 1px solid var(--neutral-platinum);
+  }
+
+  .btn-primary {
+    font-family: var(--font-serif);
+    font-weight: 600;
+  }
+}
+
+/* BoldMind OS - Dyslexia Focused */
+[data-product="boldmind-os"] {
+  .btn {
+    font-family: var(--font-dyslexic);
+  }
+
+  .card {
+    background: white;
+    border: 2px solid var(--product-primary);
+  }
+}
+
+/* Naija FitHer - Feminine & Soft */
+[data-product="naija-fither"] {
+  .card {
+    border-radius: var(--radius-2xl);
+    background: linear-gradient(135deg, #FFF0F5, #FFFFFF);
+  }
+
+  .btn-primary {
+    border-radius: var(--radius-pill);
+  }
+}
+
+/* PlanAI Suite - Modern & Tech */
+[data-product="planai-suite"] {
+  .card {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.05), rgba(16, 185, 129, 0.05));
+    border: 1px solid rgba(124, 58, 237, 0.2);
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #7C3AED, #10B981);
   }
 }

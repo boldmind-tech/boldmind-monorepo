@@ -2,5 +2,9 @@
   "name": "@boldmind/config",
   "version": "1.0.0",
   "private": true,
-  "main": "index.js"
+  "main": "./index.js",
+  "files": [
+    "**/*.js",
+    "**/*.json"
+  ]
 }

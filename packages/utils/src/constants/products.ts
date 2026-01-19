@@ -1,7 +1,10 @@
 // packages/utils/src/constants/products.ts
+// COMPLETE BOLDMIND PRODUCTS CATALOG - Updated Jan 18, 2026
+// Full blow lauch 19/1/2026
 
 export type ProductStatus = 'LIVE' | 'BUILDING' | 'PLANNED' | 'CONCEPT';
 export type ProductCategory = 'media' | 'education' | 'ai' | 'productivity' | 'security' | 'health' | 'marketplace' | 'fintech' | 'utilities' | 'social';
+export type DatabaseType = 'postgres' | 'mongodb';
 
 export interface Product {
   id: string;
@@ -12,10 +15,13 @@ export interface Product {
   version: string;
   slug: string;
   icon: string;
+  domain: string;
+  subdomain?: string;
   revenueModel: string;
   monthlyRevenue?: number;
   users?: string | number;
   techStack: string[];
+  database: DatabaseType;
   teamSize?: number;
   timeline?: string;
   priority: number;
@@ -35,22 +41,25 @@ export interface Product {
   updatedAt: string;
 }
 
+
 export const PRODUCT_CATEGORIES = [
-  { id: 'media', name: 'Media & Content', count: 1 },
-  { id: 'education', name: 'Education', count: 1 },
-  { id: 'ai', name: 'AI Automation', count: 10 },
-  { id: 'productivity', name: 'Productivity', count: 1 },
-  { id: 'lead-gen', name: 'Lead Generation', count: 1 },
-  { id: 'security', name: 'Security', count: 1 },
-  { id: 'health', name: 'Health & Wellness', count: 1 },
-  { id: 'marketplace', name: 'Marketplaces', count: 3 },
-  { id: 'fintech', name: 'Fintech', count: 3 },
-  { id: 'utilities', name: 'Utilities', count: 1 },
-  { id: 'marketing', name: 'Marketing', count: 1 },
-  { id: 'social', name: 'Social', count: 1 },
+  { id: 'media', name: 'Media & Content', count: 2 },
+  { id: 'education', name: 'Education', count: 3 },
+  { id: 'ai', name: 'AI Automation', count: 13 },
+  { id: 'productivity', name: 'Productivity', count: 5 },
+  { id: 'lead-gen', name: 'Lead Generation', count: 2 },
+  { id: 'security', name: 'Security', count: 2 },
+  { id: 'health', name: 'Health & Wellness', count: 2 },
+  { id: 'marketplace', name: 'Marketplaces', count: 6 },
+  { id: 'fintech', name: 'Fintech', count: 5 },
+  { id: 'utilities', name: 'Utilities', count: 2 },
+  { id: 'marketing', name: 'Marketing', count: 2 },
+  { id: 'social', name: 'Social', count: 2 },
 ];
 
+
 export const BOLDMIND_PRODUCTS: Product[] = [
+  // === LIVE PRODUCTS ===
   {
     id: 'prod_000',
     name: 'BoldMind Hub',
@@ -59,133 +68,103 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     status: 'LIVE',
     version: '1.0.0',
     slug: 'boldmind-hub',
+    domain: 'boldmind.ng',
     icon: '🚀',
     revenueModel: 'Portfolio management',
+    database: 'postgres',
     monthlyRevenue: 0,
     users: '100+',
-    techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
+    techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Prisma', 'Neon'],
     teamSize: 1,
     timeline: 'Launched Q4 2025',
     priority: 0,
-    dependencies: [],
-    integrations: [],
     tags: ['ecosystem', 'hub', 'portfolio', 'showcase'],
-    links: {
-      website: 'https://boldmind.ng',
-    },
+    links: { website: 'https://boldmind.ng' },
     features: [
       'Product ecosystem dashboard',
       'Real-time revenue tracking',
-      'Team management tools',
+      'Team management',
       'Product launch roadmap',
-      'Entrepreneur resources'
+      'Entrepreneur resources',
+      'Authentication system',
+      'User profiles'
     ],
-    challenges: ['Managing 31+ product portfolio', 'Resource allocation'],
+    challenges: ['Managing 31+ products', 'Resource allocation'],
     opportunities: ['Ecosystem partnerships', 'Investment opportunities'],
     createdAt: '2025-01-01',
-    updatedAt: '2025-12-28'
+    updatedAt: '2026-01-18'
   },
   {
     id: 'prod_001',
     name: 'AmeboGist',
-    description: 'Nigeria\'s #1 Pidgin English platform led by AI/Tech education 🤖 and Creator entrepreneurship ✍️, plus Sports ⚽, Politics 🏛️, Entertainment 🎭, and Trending Gist 🔥. "Amebo wey make sense, gist wey fit change your level!"',
+    description: 'Nigeria\'s #1 Pidgin English platform led by AI/Tech education 🤖 and Creator entrepreneurship ✍️, plus Sports ⚽, Politics 🏛️, Entertainment 🎭, and Trending Gist 🔥.',
     status: 'LIVE',
     version: '1.0.0',
     slug: 'amebogist',
+    domain: 'amebogist.ng',
     category: 'media',
     icon: '📰',
-    revenueModel: 'Google AdSense + Affiliate Marketing (Tech/AI tools), Local Advert for SME\'s',
+    database: 'mongodb',
+    revenueModel: 'AdSense + Affiliate + Local Ads',
     monthlyRevenue: 15000,
     users: '12,000+',
-    techStack: ['Next.js', 'MongoDB', 'PWA', 'Tailwind CSS', 'AI Content Tools'],
+    techStack: ['Next.js', 'MongoDB', 'PWA', 'Tailwind CSS', 'AI Tools'],
     teamSize: 2,
-    timeline: 'Launched Q2 2025, Pidgin AI/Tech Focus Q4 2025',
+    timeline: 'Launched Q2 2025',
     priority: 1,
-    integrations: ['Google AdSense', 'Meta API', 'Paystack', 'Analytics'],
-    tags: ['news', 'pidgin', 'nigeria', 'ai-tech', 'amebo', 'gist', 'content-creation', 'education', 'tech-reviews'],
-    links: {
-      website: 'https://amebogist.ng',
-    },
+    integrations: ['Google AdSense', 'Meta API', 'Paystack'],
+    tags: ['news', 'pidgin', 'nigeria', 'ai-tech', 'content'],
+    links: { website: 'https://amebogist.ng' },
     features: [
-      '🤖-ai-tech Amebo AI & Tech - Technical tools, business use cases, reviews',
-      '✍️-creator-life Creator Life - Side hustles, content hacks, platform tips',
-      '⚽-sports Sports Wahala - Super Eagles, EPL Naija stars',
-      '🏛️-politics Politics Naija Style - Political events, policies, bills',
-      '🎭-entertainment Entertainment Vibes - Nollywood, afrobeat, celeb news',
-      '🔥-trending Trending Gist - Viral content, what\'s hot on the street',
-      'AI SEO-Optimized Content Generation',
-      'Mobile-First PWA Experience',
-      'Structured Post Templates (Gist format)',
-      'Local Use Case Focus for Tech/AI',
-      'Google AdSense + Affiliate Integration',
-      'Community Engagement Features',
-      'Daily Gist Roundups',
+      'AI & Tech Amebo',
+      'Creator Life guidance',
+      'Sports coverage',
+      'Politics analysis',
+      'Entertainment news',
+      'Trending gists',
+      'SEO-optimized content',
+      'PWA experience'
     ],
-    challenges: [
-      'Maintaining authentic Pidgin voice at scale',
-      'Balancing trending vs. evergreen AI/Tech content',
-      'Monetization beyond ads for sustainability',
-      'Fact-checking in fast-paced gist environment'
-    ],
-    opportunities: [
-      'Video Content (Short-form Pidgin explainers)',
-      'Amebo AI Tools Marketplace (Curated for Nigerians)',
-      'Sponsored Tech/AI Masterclasses',
-      'Premium Subscription (Early access + exclusive gist)',
-      'Community-Driven "Amebo Corner" UGC',
-      'Interview Series with Nigerian Tech Leaders',
-      'Comparison Reviews (AI tools, gadgets for Naija)',
-      'WhatsApp Newsletter Expansion'
-    ],
-
+    challenges: ['Pidgin authenticity', 'Content balance', 'Monetization'],
+    opportunities: ['Video content', 'Marketplace', 'Masterclasses', 'Premium tier'],
     createdAt: '2025-01-15',
-    updatedAt: '2025-12-28'
+    updatedAt: '2026-01-18'
   },
   {
     id: 'prod_002',
     name: 'EduCenter',
-    description: 'A comprehensive Nigerian ed-tech platform combining exam prep (JAMB/WAEC/NECO), digital business education, and AI skills training. Features include interactive past questions, CBT simulation, business courses, and AI tools for modern career development.',
+    description: 'A comprehensive Nigerian ed-tech platform combining exam prep (JAMB/WAEC/NECO), digital business education, and AI skills training.',
     category: 'education',
     status: 'LIVE',
     version: '1.0.0',
     slug: 'educenter',
+    domain: 'educenter.com.ng',
     icon: '🎓',
+    database: 'postgres',
     revenueModel: 'Subscription (₦3k/month)',
     monthlyRevenue: 60000,
     users: '20',
-    techStack: ['Next.js', 'MongoDB', 'Paystack', 'PWA'],
+    techStack: ['Next.js', 'Prisma', 'Neon', 'Paystack', 'PWA'],
     teamSize: 2,
     timeline: 'Launched Q3 2025',
     priority: 2,
     integrations: ['Paystack', 'WhatsApp API'],
-    tags: ['education', 'jamb', 'courses', 'nigeria'],
-    links: {
-      website: 'https://educenter.com.ng',
-    },
+    tags: ['education', 'jamb', 'waec', 'neco', 'nigeria'],
+    links: { website: 'https://educenter.com.ng' },
     features: [
-      'JAMB/WAEC/NECO past questions (10,000+)',
-      'Subject-based practice',
-      'CBT simulation mode',
-      'Performance tracking & analytics',
-      'Study streak system',
-      'Random practice (5 daily attempts for free users)',
+      '10,000+ past questions',
+      'CBT simulation',
+      'Performance analytics',
+      'Study streaks',
       'Leaderboard',
-      'Course library (free & paid)',
-      'Sales funnel templates',
-      'WhatsApp automation guides',
+      'Course library',
       'Marketing playbooks',
-      'Expert-led masterclasses',
-      'Community access',
-      'AI video generation',
-      'Prompt engineering course',
-      'WhatsApp AI automation',
-      'Content creation suite',
-      'AI tools marketplace'
+      'AI tools training'
     ],
-    challenges: ['User acquisition', 'Content creation'],
-    opportunities: ['WAEC/NECO questions', 'Video tutorials', 'Live classes'],
+    challenges: ['User acquisition', 'Content expansion'],
+    opportunities: ['More exam types', 'Video tutorials', 'Live classes'],
     createdAt: '2025-03-20',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
     id: 'prod_003',
@@ -195,32 +174,35 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     status: 'LIVE',
     version: '1.0.0',
     slug: 'ai-receptionist',
+    domain: 'planai.boldmind.ng',
+    subdomain: '/receptionist',
     icon: '🤖',
-    revenueModel: 'Monthly subscription (₦20k-₦50k/client)',
+    database: 'postgres',
+    revenueModel: 'Monthly (₦20k-₦50k/client)',
     monthlyRevenue: 20000,
     users: '1',
     techStack: ['Next.js', 'NestJS', 'Meta Graph API', 'Webhooks'],
     teamSize: 1,
     timeline: 'Deployed Q4 2025',
     priority: 3,
-    dependencies: ['PlanAI Suite'],
+    dependencies: ['planai-suite'],
     integrations: ['Meta API', 'WhatsApp', 'Instagram', 'Facebook'],
     tags: ['ai', 'automation', 'customer-service', 'whatsapp'],
-    links: {
-      website: "planai.boldmind.ng/receptionist"
-    },
+    links: { website: 'https://planai.boldmind.ng/receptionist' },
     features: [
-      'Auto-reply to comments and DMs',
+      'Auto-reply DMs',
       'Lead qualification',
       'Appointment booking',
-      'Multi-platform support',
+      'Multi-platform',
       'Analytics dashboard'
     ],
-    challenges: ['Client onboarding', 'Platform API changes'],
-    opportunities: ['More clients', 'Enterprise features', 'SMS integration'],
+    challenges: ['Client onboarding', 'API changes'],
+    opportunities: ['More clients', 'Enterprise', 'SMS integration'],
     createdAt: '2025-10-15',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
+
+  // === BUILDING PRODUCTS ===
   {
     id: 'prod_004',
     name: 'Social Media Content Factory',
@@ -229,30 +211,29 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     status: 'BUILDING',
     version: '0.5.0',
     slug: 'social-factory',
+    domain: 'social.boldmind.ng',
     icon: '🎬',
-    revenueModel: 'Monthly subscription + usage-based',
+    database: 'mongodb',
+    revenueModel: 'Subscription + usage',
     monthlyRevenue: 0,
-    techStack: ['Next.js', 'n8n', 'Open Source AI Model or API', 'Meta API', 'Twitter API'],
+    techStack: ['Next.js', 'n8n', 'AI Models', 'Meta API'],
     teamSize: 2,
-    timeline: '12 weeks (Jan-Mar 2026)',
+    timeline: 'Q2 2026 (12 weeks)',
     priority: 4,
-    dependencies: [],
-    integrations: ['Open source ai video generator', 'YouTube', 'Instagram', 'Facebook', 'Twitter', 'TikTok'],
-    tags: ['content-creation', 'video', 'social-media', 'automation'],
-    links: {
-      website: 'social.boldmind.ng'
-    },
+    integrations: ['YouTube', 'Instagram', 'Facebook', 'Twitter', 'TikTok'],
+    tags: ['content', 'video', 'social-media', 'automation'],
+    links: { website: 'https://social.boldmind.ng' },
     features: [
       'AI video generation',
       'Multi-platform publishing',
       'Content calendar',
       'Analytics aggregation',
-      'n8n automation workflows'
+      'n8n workflows'
     ],
-    challenges: ['API rate limits', 'Content quality control'],
-    opportunities: ['Agency partnerships', 'Content marketplace', 'White-label solution'],
+    challenges: ['API limits', 'Quality control'],
+    opportunities: ['Agency partnerships', 'White-label'],
     createdAt: '2025-11-01',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
     id: 'prod_005',
@@ -262,214 +243,291 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     status: 'BUILDING',
     version: '0.1.0',
     slug: 'boldmind-os',
+    domain: 'os.boldmind.ng',
     icon: '🧠',
-    revenueModel: 'Freemium (Free/₦5k Pro/₦15k Team)',
+    database: 'postgres',
+    revenueModel: 'Freemium (Free/₦5k/₦15k)',
     monthlyRevenue: 0,
-    techStack: ['Next.js 14', 'NestJS', 'MongoDB', 'OpenAI API', 'Supabase'],
+    techStack: ['Next.js', 'NestJS', 'Prisma', 'OpenAI', 'Supabase'],
     teamSize: 3,
-    timeline: '12 weeks to MVP (Jan-Mar 2026)',
+    timeline: 'Q2 2026 MVP',
     priority: 5,
-    dependencies: [],
-    integrations: ['n8n', 'OpenAI', 'Whisper API', 'Supabase Auth'],
-    tags: ['productivity', 'adhd', 'dyslexia', 'ai', 'pomodoro'],
-    links: {
-      website: "os.boldmind.ng"
-    },
+    integrations: ['n8n', 'OpenAI', 'Whisper', 'Supabase'],
+    tags: ['productivity', 'adhd', 'dyslexia', 'ai', 'neurodivergent'],
+    links: { website: 'https://os.boldmind.ng' },
     features: [
-      'Capture Brain (multi-modal input)',
-      'Focus Brain (ADHD-friendly Pomodoro)',
-      'Connect Brain (visual knowledge graph)',
-      'Create Brain (content pipeline)',
-      'Reflect Brain (analytics)',
-      'Dyslexia Mode (OpenDyslexic font, TTS)'
+      'Multi-modal capture',
+      'ADHD-friendly Pomodoro',
+      'Visual knowledge graph',
+      'Content pipeline',
+      'Analytics',
+      'Dyslexia Mode'
     ],
-    challenges: ['Complex UI/UX', 'Performance optimization'],
-    opportunities: ['Therapist partnerships', 'Research collaborations', 'Enterprise sales'],
+    challenges: ['Complex UI/UX', 'Performance'],
+    opportunities: ['Therapist partnerships', 'Research', 'Enterprise'],
     createdAt: '2025-12-01',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
     id: 'prod_006',
+    name: 'Naija FitHer',
+    description: 'Weight loss and wellness platform for Nigerian women',
+    category: 'health',
+    status: 'BUILDING',
+    version: '0.1.0',
+    slug: 'naija-fither',
+    domain: 'fit.boldmind.ng',
+    icon: '💪',
+    database: 'postgres',
+    revenueModel: 'Freemium (₦3k/month)',
+    monthlyRevenue: 0,
+    techStack: ['React Native', 'NestJS', 'Prisma', 'AI APIs'],
+    teamSize: 4,
+    timeline: 'Q2 2026 MVP',
+    priority: 6,
+    integrations: ['WhatsApp', 'Fitness trackers', 'Nutrition DB'],
+    tags: ['health', 'fitness', 'women', 'weight-loss', 'nigeria'],
+    links: { website: 'https://fit.boldmind.ng' },
+    features: [
+      'Nigerian meal plans',
+      'Home workouts',
+      'Community support',
+      'Health tracking',
+      'AI wellness coach',
+      '500+ Nigerian dishes'
+    ],
+    challenges: ['Nutrition data', 'User retention'],
+    opportunities: ['Corporate wellness', 'Insurance partnerships'],
+    createdAt: '2025-12-26',
+    updatedAt: '2026-01-18'
+  },
+  {
+    id: 'prod_007',
+    name: 'EmailScraper Pro',
+    description: 'Advanced email discovery and verification for Nigerian B2B market',
+    category: 'productivity',
+    status: 'BUILDING',
+    version: '0.1.0',
+    slug: 'emailscraper-pro',
+    domain: 'email.boldmind.ng',
+    icon: '🔍',
+    database: 'mongodb',
+    revenueModel: 'Tiered (Free/₦5k/₦15k/₦50k)',
+    monthlyRevenue: 0,
+    techStack: ['NestJS', 'MongoDB', 'Custom scraper', 'Hunter.io'],
+    teamSize: 2,
+    timeline: 'Q2 2026',
+    priority: 7,
+    integrations: ['LinkedIn', 'Hunter.io', 'CRM systems'],
+    tags: ['lead-gen', 'sales', 'email', 'b2b'],
+    links: { website: 'https://email.boldmind.ng' },
+    features: [
+      'Email finding',
+      'Real-time verification',
+      'Lead enrichment',
+      'Bulk CSV ops',
+      'API access',
+      'Nigerian directory scraping'
+    ],
+    challenges: ['Privacy regulations', 'API limits'],
+    opportunities: ['Sales partnerships', 'Recruitment agencies'],
+    createdAt: '2025-12-26',
+    updatedAt: '2026-01-18'
+  },
+
+  // === PLANAI SUITE ===
+  {
+    id: 'prod_008',
     name: 'Professional Credibility Hubs',
-    description: 'AI-assisted personal branding and one-pager sites',
+    description: 'AI-assisted personal branding and portfolio sites',
     category: 'ai',
     status: 'BUILDING',
-    version: '0.0.1',
+    version: '0.1.0',
     slug: 'credibility-hubs',
+    domain: 'planai.boldmind.ng',
+    subdomain: '/credibility',
     icon: '💼',
-    revenueModel: 'One-time setup (₦5k-₦15k)',
+    database: 'postgres',
+    revenueModel: 'One-time (₦5k-₦15k)',
     monthlyRevenue: 0,
-    techStack: ['Next.js', 'AI APIs', 'Tailwind CSS'],
+    techStack: ['Next.js', 'AI APIs', 'Tailwind'],
     teamSize: 1,
     timeline: 'Q2 2026',
-    priority: 6,
-    dependencies: ['PlanAI Suite'],
+    priority: 8,
+    dependencies: ['planai-suite'],
     integrations: ['LinkedIn API', 'Resume parsers'],
-    tags: ['portfolio', 'personal-branding', 'resume', 'linkedin'],
-    links: {},
+    tags: ['portfolio', 'branding', 'resume'],
+    links: { website: 'https://planai.boldmind.ng/credibility' },
     features: [
-      'Portfolio website builder',
-      'LinkedIn profile optimizer',
-      'Resume/CV generator',
-      'Personal branding AI coach',
+      'Portfolio builder',
+      'LinkedIn optimizer',
+      'Resume generator',
+      'AI branding coach',
       'Templates library'
     ],
     challenges: ['Design variations', 'Export formats'],
     opportunities: ['University partnerships', 'Recruiter tools'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
-    id: 'prod_007',
+    id: 'prod_009',
     name: 'AI Business Planning',
     description: 'Generate dynamic business plans and market analysis',
     category: 'ai',
     status: 'PLANNED',
     version: '0.0.1',
     slug: 'business-planning',
+    domain: 'planai.boldmind.ng',
+    subdomain: '/planning',
     icon: '📊',
-    revenueModel: 'Per business plan (₦10k)',
+    database: 'postgres',
+    revenueModel: 'Per plan (₦10k)',
     monthlyRevenue: 0,
     techStack: ['Next.js', 'AI APIs', 'Chart.js'],
     teamSize: 2,
     timeline: 'Q2 2026',
-    priority: 7,
-    dependencies: ['PlanAI Suite'],
+    priority: 9,
+    dependencies: ['planai-suite'],
     integrations: ['Financial APIs', 'Market data'],
-    tags: ['business', 'planning', 'market-analysis', 'pitch-deck'],
-    links: {
-      website: "businessplan.boldmind.ng"
-    },
+    tags: ['business', 'planning', 'market-analysis'],
+    links: { website: 'https://planai.boldmind.ng/planning' },
     features: [
-      'AI-generated business plans',
+      'AI business plans',
       'Pitch deck creator',
-      'Market analysis (Nigerian-focused)',
+      'Nigerian market analysis',
       'Financial projections',
       'Competitor analysis'
     ],
-    challenges: ['Accurate Nigerian market data', 'Complex financial modeling'],
-    opportunities: ['Bank partnerships', 'Government grants assistance'],
+    challenges: ['Market data accuracy', 'Financial modeling'],
+    opportunities: ['Bank partnerships', 'Government grants'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
-    id: 'prod_008',
+    id: 'prod_010',
     name: 'Financial Forecasting',
     description: 'AI-driven cashflow modeling and revenue forecasting',
     category: 'ai',
     status: 'PLANNED',
     version: '0.0.1',
     slug: 'financial-forecasting',
+    domain: 'planai.boldmind.ng',
+    subdomain: '/finance',
     icon: '💰',
+    database: 'postgres',
     revenueModel: 'Subscription (₦8k/month)',
     monthlyRevenue: 0,
     techStack: ['Next.js', 'Python', 'ML models', 'Chart.js'],
     teamSize: 2,
     timeline: 'Q2 2026',
-    priority: 8,
-    dependencies: ['PlanAI Suite'],
+    priority: 10,
+    dependencies: ['planai-suite'],
     integrations: ['Accounting software', 'Bank APIs'],
-    tags: ['finance', 'forecasting', 'cashflow', 'analytics'],
-    links: {
-      website: "financialforecasting.boldmind.ng"
-    },
+    tags: ['finance', 'forecasting', 'cashflow'],
+    links: { website: 'https://planai.boldmind.ng/finance' },
     features: [
       'Cashflow projections',
       'Revenue forecasting',
       'Break-even analysis',
-      'Investor-ready financial models',
+      'Financial models',
       'Scenario planning'
     ],
     challenges: ['Data accuracy', 'Regulatory compliance'],
-    opportunities: ['SME market', 'Financial advisor partnerships'],
+    opportunities: ['SME market', 'Financial advisors'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
-    id: 'prod_009',
+    id: 'prod_011',
     name: 'Investor Readiness Suite',
     description: 'Automated funding documentation and workflows',
     category: 'ai',
     status: 'PLANNED',
     version: '0.0.1',
     slug: 'investor-readiness',
+    domain: 'planai.boldmind.ng',
+    subdomain: '/investor',
     icon: '📈',
-    revenueModel: 'One-time + monthly (₦50k + ₦10k/month)',
+    database: 'postgres',
+    revenueModel: 'Setup + Monthly (₦50k + ₦10k)',
     monthlyRevenue: 0,
-    techStack: ['Next.js', 'Document generation', 'E-signature'],
+    techStack: ['Next.js', 'Document gen', 'E-signature'],
     teamSize: 3,
     timeline: 'Q3 2026',
-    priority: 9,
-    dependencies: ['PlanAI Suite'],
-    integrations: ['Legal document templates', 'E-signature APIs'],
+    priority: 11,
+    dependencies: ['planai-suite'],
+    integrations: ['Legal templates', 'E-signature APIs'],
     tags: ['investment', 'funding', 'legal', 'startups'],
-    links: {
-      website: "investorreadiness.boldmind.ng"
-    },
+    links: { website: 'https://planai.boldmind.ng/investor' },
     features: [
-      'SAFE/term sheet generator',
-      'Data room scaffolding',
-      'Investor pitch deck templates',
+      'SAFE/term sheets',
+      'Data room setup',
+      'Pitch deck templates',
       'Cap table management',
       'Due diligence checklist'
     ],
-    challenges: ['Legal compliance', 'Complex document structures'],
-    opportunities: ['VC firm partnerships', 'Startup incubators'],
+    challenges: ['Legal compliance', 'Complex docs'],
+    opportunities: ['VC partnerships', 'Incubators'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
-    id: 'prod_010',
+    id: 'prod_012',
     name: 'Branding & Design Tools',
     description: 'AI-powered logo creation and marketing visuals',
     category: 'ai',
     status: 'BUILDING',
-    version: '0.0.1',
+    version: '0.1.0',
     slug: 'branding-design',
+    domain: 'planai.boldmind.ng',
+    subdomain: '/design',
     icon: '🎨',
-    revenueModel: 'Per design package (₦3k)',
+    database: 'mongodb',
+    revenueModel: 'Per package (₦3k)',
     monthlyRevenue: 0,
-    techStack: ['Next.js', 'AI image generation', 'Canvas API'],
+    techStack: ['Next.js', 'AI image gen', 'Canvas API'],
     teamSize: 2,
     timeline: 'Q2 2026',
-    priority: 10,
-    dependencies: ['PlanAI Suite'],
-    integrations: ['DALL-E', 'Midjourney API', 'Social media'],
+    priority: 12,
+    dependencies: ['planai-suite'],
+    integrations: ['DALL-E', 'Midjourney', 'Social media'],
     tags: ['design', 'branding', 'logo', 'marketing'],
-    links: {},
+    links: { website: 'https://planai.boldmind.ng/design' },
     features: [
       'Logo generator',
-      'Color palette creator',
-      'Marketing visual templates',
-      'Brand guidelines generator',
-      'Social media kit generator'
+      'Color palettes',
+      'Marketing templates',
+      'Brand guidelines',
+      'Social media kits'
     ],
-    challenges: ['Design quality', 'Intellectual property'],
-    opportunities: ['Agency white-label', 'Bulk creation for businesses'],
+    challenges: ['Design quality', 'IP issues'],
+    opportunities: ['White-label', 'Bulk creation'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
-    id: 'prod_011',
+    id: 'prod_013',
     name: 'Digital Storefronts',
     description: 'Instant e-commerce stores for SMEs and creators',
     category: 'marketplace',
     status: 'BUILDING',
-    version: '0.0.1',
+    version: '0.1.0',
     slug: 'digital-storefronts',
+    domain: 'planai.boldmind.ng',
+    subdomain: '/store',
     icon: '🛍️',
-    revenueModel: 'Setup + monthly (₦5k + ₦2k/month)',
+    database: 'postgres',
+    revenueModel: 'Setup + Monthly (₦5k + ₦2k)',
     monthlyRevenue: 0,
-    techStack: ['Next.js', 'Paystack', 'Inventory management'],
+    techStack: ['Next.js', 'Paystack', 'Inventory mgmt'],
     teamSize: 3,
     timeline: 'Q3 2026',
-    priority: 11,
-    dependencies: ['PlanAI Suite'],
+    priority: 13,
+    dependencies: ['planai-suite'],
     integrations: ['Paystack', 'Delivery APIs', 'WhatsApp'],
     tags: ['ecommerce', 'store', 'payments', 'inventory'],
-    links: {
-      website: "brandingdesign.boldmind.ng"
-    },
+    links: { website: 'https://planai.boldmind.ng/store' },
     features: [
       'Instant store creation',
       'Paystack integration',
@@ -478,208 +536,143 @@ export const BOLDMIND_PRODUCTS: Product[] = [
       'Customer management'
     ],
     challenges: ['Delivery logistics', 'Payment disputes'],
-    opportunities: ['WhatsApp commerce', 'Social commerce integration'],
+    opportunities: ['WhatsApp commerce', 'Social commerce'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
-    id: 'prod_012',
+    id: 'prod_014',
     name: 'Marketing Automation',
     description: 'AI-driven marketing campaigns and lead nurturing',
     category: 'ai',
     status: 'BUILDING',
-    version: '0.0.1',
+    version: '0.1.0',
     slug: 'marketing-automation',
+    domain: 'planai.boldmind.ng',
+    subdomain: '/marketing',
     icon: '📧',
+    database: 'postgres',
     revenueModel: 'Subscription (₦10k/month)',
     monthlyRevenue: 0,
     techStack: ['Next.js', 'Email APIs', 'CRM', 'Analytics'],
     teamSize: 3,
     timeline: 'Q3 2026',
-    priority: 12,
-    dependencies: ['PlanAI Suite'],
-    integrations: ['Email services', 'CRM systems', 'Analytics'],
+    priority: 14,
+    dependencies: ['planai-suite'],
+    integrations: ['Email services', 'CRM', 'Analytics'],
     tags: ['marketing', 'automation', 'email', 'crm'],
-    links: {
-      website: "marketingautomation.boldmind.ng"
-    },
+    links: { website: 'https://planai.boldmind.ng/marketing' },
     features: [
-      'Email campaign automation',
+      'Email automation',
       'Customer segmentation',
       'Personalized campaigns',
       'Lead scoring',
       'A/B testing'
     ],
     challenges: ['Email deliverability', 'Spam compliance'],
-    opportunities: ['E-commerce integration', 'B2B marketing'],
+    opportunities: ['E-commerce integration', 'B2B'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
-    id: 'prod_013',
+    id: 'prod_015',
     name: 'Analytics Dashboard',
     description: 'Cross-platform business intelligence',
     category: 'ai',
     status: 'BUILDING',
-    version: '0.0.1',
+    version: '0.1.0',
     slug: 'analytics-dashboard',
+    domain: 'planai.boldmind.ng',
+    subdomain: '/analytics',
     icon: '📊',
+    database: 'postgres',
     revenueModel: 'Subscription (₦8k/month)',
     monthlyRevenue: 0,
-    techStack: ['Next.js', 'Data visualization', 'API aggregation'],
+    techStack: ['Next.js', 'Data viz', 'API aggregation'],
     teamSize: 3,
     timeline: 'Q3 2026',
-    priority: 13,
-    dependencies: ['PlanAI Suite'],
+    priority: 15,
+    dependencies: ['planai-suite'],
     integrations: ['Google Analytics', 'Social APIs', 'Payment processors'],
-    tags: ['analytics', 'business-intelligence', 'dashboards', 'reports'],
-    links: {
-      website: "analytics.boldmind.ng"
-    },
+    tags: ['analytics', 'bi', 'dashboards', 'reports'],
+    links: { website: 'https://planai.boldmind.ng/analytics' },
     features: [
-      'Unified analytics (all platforms)',
-      'Customer behavior insights',
-      'Growth opportunity identification',
+      'Unified analytics',
+      'Behavior insights',
+      'Growth opportunities',
       'Custom reports',
       'Real-time monitoring'
     ],
     challenges: ['Data aggregation', 'Real-time processing'],
     opportunities: ['Agency analytics', 'Enterprise BI'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
+
+  // === CONCEPT APPS ===
   {
-    id: 'prod_014',
-    name: 'EmailScraper Pro',
-    description: 'Advanced email discovery and verification tool for Nigerian B2B market',
-    category: 'productivity',
-    status: 'BUILDING',
-    version: '0.0.1',
-    slug: 'emailscraper-pro',
-    icon: '🔍',
-    revenueModel: 'Tiered subscription (Free/₦5k/₦15k/₦50k)',
-    monthlyRevenue: 0,
-    techStack: ['NestJS', 'MongoDB', 'Custom scraper', 'Hunter.io API'],
-    teamSize: 2,
-    timeline: 'Q2 2026 (8 weeks)',
-    priority: 14,
-    dependencies: [],
-    integrations: ['LinkedIn', 'Hunter.io', 'CRM systems'],
-    tags: ['lead-generation', 'sales', 'email', 'b2b'],
-    links: {
-      website: 'email.boldmind.ng'
-    },
-    features: [
-      'Email finding from LinkedIn/company domains',
-      'Real-time email verification',
-      'Lead enrichment with company data',
-      'Bulk CSV operations',
-      'API access for automation',
-      'Nigerian business directory scraping'
-    ],
-    challenges: ['Email privacy regulations', 'API rate limits'],
-    opportunities: ['Sales team partnerships', 'Recruitment agencies'],
-    createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
-  },
-  {
-    id: 'prod_015',
+    id: 'prod_016',
     name: 'SAFE AI',
-    description: 'AI-powered security intelligence platform for Nigerian police and private security',
+    description: 'AI-powered security intelligence for Nigerian police',
     category: 'security',
     status: 'CONCEPT',
     version: '0.0.1',
     slug: 'safe-ai',
+    domain: 'safe.boldmind.ng',
     icon: '🛡️',
-    revenueModel: 'Government contracts + private subscriptions',
+    database: 'postgres',
+    revenueModel: 'Government contracts + private',
     monthlyRevenue: 0,
-    techStack: ['React Native', 'NestJS', 'PostgreSQL', 'TensorFlow', 'Python'],
+    techStack: ['React Native', 'NestJS', 'PostgreSQL', 'TensorFlow'],
     teamSize: 5,
-    timeline: '18-24 months (pilot to deployment)',
-    priority: 15,
-    dependencies: [],
-    integrations: ['Facial recognition', 'Vehicle plate recognition', 'GIS'],
-    tags: ['security', 'law-enforcement', 'ai', 'crime-prevention'],
-    links: {
-      website: "safe.boldmind.ng"
-    },
-    features: [
-      'Incident reporting & management',
-      'Criminal database & pattern recognition',
-      'Predictive policing (crime hotspots)',
-      'Investigation tools',
-      'Secure officer communication',
-      'Body cam footage management'
-    ],
-    challenges: ['Government bureaucracy', 'Data privacy compliance', 'Infrastructure'],
-    opportunities: ['Police partnerships', 'Private security companies', 'International expansion'],
-    createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
-  },
-  {
-    id: 'prod_016',
-    name: 'Naija FitHer',
-    description: 'Weight loss and wellness platform specifically for Nigerian women',
-    category: 'health',
-    status: 'BUILDING',
-    version: '0.0.1',
-    slug: 'naija-fither',
-    icon: '💪',
-    revenueModel: 'Freemium + coaching (₦3k/month premium)',
-    monthlyRevenue: 0,
-    techStack: ['React Native', 'NestJS', 'MongoDB', 'AI APIs'],
-    teamSize: 4,
-    timeline: '6 months to MVP (Q2 2026)',
+    timeline: '18-24 months',
     priority: 16,
-    dependencies: [],
-    integrations: ['WhatsApp', 'Fitness trackers', 'Nutrition databases'],
-    tags: ['health', 'fitness', 'women', 'weight-loss', 'nigeria'],
-    links: {
-      website: 'fit.boldmind.ng'
-    },
+    integrations: ['Facial recognition', 'Plate recognition', 'GIS'],
+    tags: ['security', 'law-enforcement', 'ai', 'crime'],
+    links: { website: 'https://safe.boldmind.ng' },
     features: [
-      'Personalized Nigerian meal plans',
-      'Home workouts (no gym equipment)',
-      'Community & accountability (WhatsApp groups)',
-      'Health tracking',
-      'AI wellness coach',
-      'Nigerian food database (500+ dishes)'
+      'Incident reporting',
+      'Criminal database',
+      'Pattern recognition',
+      'Predictive policing',
+      'Investigation tools',
+      'Officer communication'
     ],
-    challenges: ['Nutrition data accuracy', 'User retention'],
-    opportunities: ['Corporate wellness programs', 'Insurance partnerships'],
+    challenges: ['Government bureaucracy', 'Privacy', 'Infrastructure'],
+    opportunities: ['Police partnerships', 'Private security', 'International'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
     id: 'prod_017',
     name: 'AfroHustle OS',
-    description: 'Notion-style workspace with 100 proven side-hustle blueprints',
+    description: 'Notion-style workspace with 100 side-hustle blueprints',
     category: 'education',
     status: 'CONCEPT',
     version: '0.0.1',
     slug: 'afrohustle-os',
+    domain: 'hustle.boldmind.ng',
     icon: '💼',
-    revenueModel: 'One-time or subscription (₦5k-₦15k one-time or ₦2k/month)',
+    database: 'mongodb',
+    revenueModel: 'One-time/Sub (₦5k-₦15k or ₦2k/mo)',
     monthlyRevenue: 0,
     techStack: ['Next.js', 'Notion-like editor', 'Database'],
     teamSize: 2,
     timeline: 'Q3 2026',
     priority: 17,
-    dependencies: [],
-    integrations: [],
     tags: ['side-hustle', 'education', 'templates', 'productivity'],
-    links: {},
+    links: { website: 'https://hustle.boldmind.ng' },
     features: [
       '100 side-hustle blueprints',
       'Income tracker',
-      'Community accountability circles',
+      'Community circles',
       'Progress tracking',
       'Resource library'
     ],
     challenges: ['Content creation', 'User engagement'],
-    opportunities: ['University partnerships', 'Youth empowerment programs'],
+    opportunities: ['University partnerships', 'Youth programs'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
     id: 'prod_018',
@@ -689,96 +682,93 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     status: 'CONCEPT',
     version: '0.0.1',
     slug: 'naijagig-matcher',
+    domain: 'gig.educenter.com.ng',
     icon: '🔧',
+    database: 'mongodb',
     revenueModel: 'Commission (10-15%)',
     monthlyRevenue: 0,
-    techStack: ['Next.js', 'Geolocation', 'Payment processing', 'Reviews'],
+    techStack: ['Next.js', 'Geolocation', 'Payment', 'Reviews'],
     teamSize: 3,
     timeline: 'Q3 2026',
     priority: 18,
-    dependencies: [],
     integrations: ['Payment gateways', 'Maps API'],
-    tags: ['marketplace', 'gigs', 'artisans', 'local-services'],
-    links: {
-      website:  "naijagigmatcher.boldmind.ng"
-    },
+    tags: ['marketplace', 'gigs', 'artisans', 'local'],
+    links: { website: 'https://gig.educenter.com.ng' },
     features: [
       'Gig worker profiles',
-      'Location-based matching',
-      'Wallet payout same-day',
+      'Location matching',
+      'Same-day wallet payout',
       'Reviews and ratings',
-      'Job posting and bidding'
+      'Job posting'
     ],
     challenges: ['Quality control', 'Payment disputes'],
     opportunities: ['Corporate contracts', 'Training partnerships'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
     id: 'prod_019',
     name: 'KoloAI',
-    description: 'Digital thrift collector (esusu/ajo) with AI default prediction',
+    description: 'Digital thrift collector with AI default prediction',
     category: 'fintech',
     status: 'CONCEPT',
     version: '0.0.1',
     slug: 'kolo-ai',
+    domain: 'kolo.boldmind.ng',
     icon: '👥',
-    revenueModel: 'Monthly subscription per group (₦5k-₦10k)',
+    database: 'postgres',
+    revenueModel: 'Per group (₦5k-₦10k/month)',
     monthlyRevenue: 0,
-    techStack: ['Next.js', 'AI/ML', 'Payment processing', 'Group management'],
+    techStack: ['Next.js', 'AI/ML', 'Payment', 'Group mgmt'],
     teamSize: 3,
     timeline: 'Q4 2026',
     priority: 19,
-    dependencies: [],
     integrations: ['Bank APIs', 'Credit scoring'],
     tags: ['fintech', 'thrift', 'savings', 'groups', 'ai'],
-    links: {
-      website: "kolo.boldmind.ng"
-    },
+    links: { website: 'https://kolo.boldmind.ng' },
     features: [
       'Group thrift management',
-      'AI predicts who will default',
-      'Auto-pause contributions for risky members',
+      'AI default prediction',
+      'Auto-pause contributions',
       'Payment reminders',
       'Savings analytics'
     ],
-    challenges: ['Default prediction accuracy', 'Regulatory compliance'],
+    challenges: ['Prediction accuracy', 'Regulatory compliance'],
     opportunities: ['Microfinance partnerships', 'Credit building'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
-  {
+ {
     id: 'prod_020',
     name: 'BorderlessRemit Tracker',
     description: 'Real-time remittance rate comparison',
     category: 'fintech',
     status: 'BUILDING',
-    version: '0.0.1',
-    slug: 'borderless-remit-tracker',
+    version: '0.1.0',
+    slug: 'borderless-remit',
+    domain: 'border.boldmind.ng',
     icon: '💱',
+    database: 'mongodb',
     revenueModel: 'Affiliate commissions',
     monthlyRevenue: 0,
     techStack: ['Next.js', 'Real-time data', 'Comparison engine'],
     teamSize: 2,
     timeline: 'Q4 2026',
     priority: 20,
-    dependencies: [],
     integrations: ['Remittance APIs', 'Bank APIs'],
     tags: ['fintech', 'remittance', 'comparison', 'money-transfer'],
-    links: {
-      website: "borderlessremit.boldmind.ng"
-    },
+    links: { website: 'https://border.boldmind.ng' },
     features: [
-      'Compare bank rates vs. black market',
+      'Compare bank vs black market rates',
       'Receipt generator',
-      'Affiliate links to licensed services',
+      'Affiliate links to services',
       'Rate alerts',
       'Transfer tracking'
     ],
     challenges: ['Data accuracy', 'Regulatory compliance'],
-    opportunities: ['Remittance company partnerships', 'Financial education'],
+    opportunities: ['Remittance partnerships', 'Financial education'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
     id: 'prod_021',
@@ -786,21 +776,20 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'Instant VAT-compliant invoice/receipt generator',
     category: 'fintech',
     status: 'BUILDING',
-    version: '0.0.1',
-    slug: 'receipt-genius-ng',
+    version: '0.1.0',
+    slug: 'receipt-genius',
+    domain: 'receipt.boldmind.ng',
     icon: '🧾',
+    database: 'postgres',
     revenueModel: 'Subscription (₦1k/month)',
     monthlyRevenue: 0,
-    techStack: ['Next.js', 'Document generation', 'SMS/Email'],
+    techStack: ['Next.js', 'Document gen', 'SMS/Email'],
     teamSize: 2,
     timeline: 'Q4 2026',
     priority: 21,
-    dependencies: [],
     integrations: ['SMS APIs', 'Email services', 'FIRS compliance'],
-    tags: ['fintech', 'invoicing', 'receipts', 'tax', 'business-tools'],
-    links: {
-      website: "receiptgenius.boldmind.ng"
-    },
+    tags: ['fintech', 'invoicing', 'receipts', 'tax', 'business'],
+    links: { website: 'https://receipt.boldmind.ng' },
     features: [
       'VAT-compliant receipts',
       'Invoice generation',
@@ -811,7 +800,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     challenges: ['Tax compliance updates', 'User adoption'],
     opportunities: ['POS agent partnerships', 'Business registrations'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
     id: 'prod_022',
@@ -820,29 +809,30 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     category: 'utilities',
     status: 'CONCEPT',
     version: '0.0.1',
-    slug: 'power-alert-ng',
+    slug: 'power-alert',
+    domain: 'power.boldmind.ng',
     icon: '⚡',
-    revenueModel: 'Lead generation to solar installers (₦2k-₦5k/lead)',
+    database: 'mongodb',
+    revenueModel: 'Lead gen to solar installers (₦2k-₦5k/lead)',
     monthlyRevenue: 0,
     techStack: ['Next.js', 'Geolocation', 'Crowdsourcing', 'Calculator'],
     teamSize: 2,
     timeline: 'Q4 2026',
     priority: 22,
-    dependencies: [],
     integrations: ['Maps API', 'Solar data APIs'],
     tags: ['utilities', 'energy', 'solar', 'crowdsourcing'],
-    links: {},
+    links: { website: 'https://power.boldmind.ng' },
     features: [
       'Real-time NEPA status by area',
-      'Solar calculator (panels + batteries needed)',
+      'Solar calculator',
       'Installer directory',
       'Energy cost tracking',
       'Outage reporting'
     ],
     challenges: ['Data accuracy', 'User contributions'],
-    opportunities: ['Solar company partnerships', 'Energy efficiency consulting'],
+    opportunities: ['Solar partnerships', 'Energy consulting'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
     id: 'prod_023',
@@ -852,171 +842,170 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     status: 'CONCEPT',
     version: '0.0.1',
     slug: 'farmgate-direct',
+    domain: 'farm.boldmind.ng',
     icon: '🌾',
+    database: 'mongodb',
     revenueModel: 'Commission (3-5%) or listing fee (₦3k/season)',
     monthlyRevenue: 0,
-    techStack: ['Next.js', 'Marketplace', 'Logistics', 'Quality verification'],
+    techStack: ['Next.js', 'Marketplace', 'Logistics', 'Quality'],
     teamSize: 4,
     timeline: 'Q4 2026',
     priority: 23,
-    dependencies: [],
     integrations: ['Logistics APIs', 'Payment gateways', 'Weather APIs'],
-    tags: ['agriculture', 'marketplace', 'farmers', 'produce', 'logistics'],
-    links: {
-      website: "poweralerts.boldmind.ng"
-    },
+    tags: ['agriculture', 'marketplace', 'farmers', 'produce'],
+    links: { website: 'https://farm.boldmind.ng' },
     features: [
-      'Farmers post produce + price + location',
-      'Buyers contact directly',
+      'Farmers post produce',
+      'Direct buyer contact',
       'Quality verification',
       'Logistics coordination',
       'Market price tracking'
     ],
-    challenges: ['Quality control', 'Logistics management'],
+    challenges: ['Quality control', 'Logistics'],
     opportunities: ['Export partnerships', 'Agricultural financing'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
     id: 'prod_024',
     name: 'AfroCopy AI',
-    description: 'African-trained copywriting tool with local languages and slang',
+    description: 'African-trained copywriting tool with local languages',
     category: 'ai',
     status: 'CONCEPT',
     version: '0.0.1',
     slug: 'afrocopy-ai',
+    domain: 'copy.amebogist.ng',
     icon: '✍️',
+    database: 'mongodb',
     revenueModel: 'Subscription (₦2k-₦5k/month)',
     monthlyRevenue: 0,
-    techStack: ['Next.js', 'AI language models', 'Local training data'],
+    techStack: ['Next.js', 'AI models', 'Local training data'],
     teamSize: 3,
     timeline: 'Q4 2026',
     priority: 24,
-    dependencies: [],
-    integrations: [],
     tags: ['ai', 'copywriting', 'content', 'marketing', 'african'],
-    links: {
-      website: "afrocopy.boldmind.ng"
-    },
+    links: { website: 'https://copy.amebogist.ng' },
     features: [
-      'Pidgin, Yoruba slang, Igbo proverbs, Hausa vibes',
+      'Pidgin, Yoruba, Igbo, Hausa',
       'Social media captions',
       'Ad copy',
       'Email templates',
       'Blog content generation'
     ],
-    challenges: ['Training data collection', 'Language accuracy'],
-    opportunities: ['Marketing agencies', 'Content creators', 'International expansion'],
+    challenges: ['Training data', 'Language accuracy'],
+    opportunities: ['Marketing agencies', 'Content creators', 'International'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
     id: 'prod_025',
     name: 'Skill2Cash Board',
-    description: 'Anonymous job board for "unserious" skills with video profiles',
+    description: 'Anonymous job board for creative skills with video profiles',
     category: 'marketplace',
     status: 'CONCEPT',
     version: '0.0.1',
-    slug: 'skill2cash-board',
+    slug: 'skill2cash',
+    domain: 'skills.educenter.com.ng',
     icon: '🎭',
-    revenueModel: 'Listing fee (₦500/month) or commission (10%)',
+    database: 'mongodb',
+    revenueModel: 'Listing (₦500/month) or commission (10%)',
     monthlyRevenue: 0,
-    techStack: ['Next.js', 'Video upload', 'Payment escrow', 'Anonymous profiles'],
+    techStack: ['Next.js', 'Video upload', 'Payment escrow', 'Anonymous'],
     teamSize: 3,
     timeline: 'Q4 2026',
     priority: 25,
-    dependencies: [],
     integrations: ['Video hosting', 'Payment processing'],
     tags: ['marketplace', 'gigs', 'gen-z', 'creative', 'video'],
-    links: {
-      website: "skill2cash.boldmind.ng"
-    },
+    links: { website: 'https://skills.educenter.com.ng' },
     features: [
-      'No CV required (30-sec video + price)',
-      'Skills: DJ, makeup, tailoring, phone repair',
+      'No CV required (30-sec video)',
+      'Skills: DJ, makeup, tailoring',
       'Instant booking',
       'Payment escrow',
       'Anonymous profiles'
     ],
-    challenges: ['Quality control', 'Safety and verification'],
-    opportunities: ['University partnerships', 'Event industry connections'],
+    challenges: ['Quality control', 'Safety verification'],
+    opportunities: ['University partnerships', 'Event industry'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
     id: 'prod_026',
     name: 'AnonTruth Mic',
-    description: 'Temporary anonymous audio drop platform for whistleblowers and activists',
+    description: 'Temporary anonymous audio drop for whistleblowers',
     category: 'social',
     status: 'CONCEPT',
     version: '0.0.1',
     slug: 'anontruth-mic',
+    domain: 'anon.amebogist.ng',
     icon: '🎤',
-    revenueModel: 'Boost feature (₦500-₦1k to boost drops)',
+    database: 'mongodb',
+    revenueModel: 'Boost feature (₦500-₦1k)',
     monthlyRevenue: 0,
-    techStack: ['Next.js', 'Audio recording', 'Encryption', 'Geolocation', 'Auto-delete'],
+    techStack: ['Next.js', 'Audio', 'Encryption', 'Geo', 'Auto-delete'],
     teamSize: 4,
-    timeline: 'Q4 2026 (High risk - legal review needed)',
+    timeline: 'Q4 2026 (High risk)',
     priority: 26,
-    dependencies: [],
-    integrations: [],
     tags: ['social', 'anonymous', 'audio', 'whistleblower', 'high-risk'],
-    links: {
-      website: "anonmic.boldmind.ng"
-    },
+    links: { website: 'https://anon.amebogist.ng' },
     features: [
       '100% anonymous + encrypted',
-      'Temporary (auto-delete after time)',
-      'Location-targeted (state/LGA level)',
-      'Boost feature (paid visibility)',
-      'Voice distortion options'
+      'Temporary (auto-delete)',
+      'Location-targeted',
+      'Boost feature',
+      'Voice distortion'
     ],
-    challenges: ['Legal risks (defamation, abuse)', 'Moderation', 'Platform abuse'],
+    challenges: ['Legal risks', 'Moderation', 'Platform abuse'],
     opportunities: ['Journalism partnerships', 'Community feedback'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
+
+  // === MOBILE APPS (TWA) ===
   {
     id: 'prod_027',
     name: 'AmeboGist TWA',
-    description: 'Mobile app (Trusted Web Activity) for AmeboGist.ng',
+    description: 'Mobile app (Trusted Web Activity) for AmeboGist',
     category: 'media',
     status: 'PLANNED',
-    version: '0.0.1',
+    version: '0.1.0',
     slug: 'amebogist-twa',
+    domain: 'amebogist.ng',
     icon: '📱',
-    revenueModel: 'Mobile AdSense revenue',
+    database: 'mongodb',
+    revenueModel: 'Mobile AdSense',
     monthlyRevenue: 0,
-    techStack: ['PWA', 'Android', 'Trusted Web Activity'],
+    techStack: ['PWA', 'Android', 'TWA'],
     teamSize: 1,
     timeline: 'Q2 2026',
     priority: 27,
     dependencies: ['amebogist'],
-    integrations: ['Google Play Store', 'Mobile ads'],
+    integrations: ['Google Play', 'Mobile ads'],
     tags: ['mobile', 'pwa', 'android', 'news'],
-    links: {},
     features: [
-      'Mobile-optimized news reading',
+      'Mobile-optimized reading',
       'Push notifications',
       'Offline reading',
-      'Mobile ad integration',
+      'Mobile ads',
       'App store distribution'
     ],
     challenges: ['App store approval', 'Mobile performance'],
     opportunities: ['Mobile user growth', 'In-app purchases'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
     id: 'prod_028',
     name: 'EduCenter TWA',
-    description: 'Mobile app for EduCenter educational platform',
+    description: 'Mobile app for EduCenter platform',
     category: 'education',
     status: 'BUILDING',
-    version: '0.0.1',
+    version: '0.1.0',
     slug: 'educenter-twa',
+    domain: 'educenter.com.ng',
     icon: '📚',
-    revenueModel: 'Mobile subscription management',
+    database: 'postgres',
+    revenueModel: 'Mobile subscriptions',
     monthlyRevenue: 0,
     techStack: ['PWA', 'Android', 'In-app payments'],
     teamSize: 1,
@@ -1025,7 +1014,6 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: ['educenter'],
     integrations: ['Google Play Billing', 'Mobile payments'],
     tags: ['mobile', 'education', 'android', 'subscription'],
-    links: {},
     features: [
       'Mobile course access',
       'In-app payments',
@@ -1034,142 +1022,161 @@ export const BOLDMIND_PRODUCTS: Product[] = [
       'Mobile notifications'
     ],
     challenges: ['Payment integration', 'Content delivery'],
-    opportunities: ['Mobile learning growth', 'Parent tracking features'],
+    opportunities: ['Mobile learning', 'Parent tracking'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
     id: 'prod_029',
     name: 'BoldMind OS TWA',
-    description: 'Mobile companion app for BoldMind OS',
+    description: 'Mobile companion for BoldMind OS',
     category: 'productivity',
     status: 'PLANNED',
-    version: '0.0.1',
+    version: '0.1.0',
     slug: 'boldmind-os-twa',
+    domain: 'os.boldmind.ng',
     icon: '🧠',
+    database: 'postgres',
     revenueModel: 'Mobile Pro subscription',
     monthlyRevenue: 0,
-    techStack: ['PWA', 'Android', 'Mobile-first features'],
+    techStack: ['PWA', 'Android', 'Mobile-first'],
     teamSize: 2,
-    timeline: 'Q2 2026 (after BoldMind OS MVP)',
+    timeline: 'Q2 2026',
     priority: 29,
     dependencies: ['boldmind-os'],
     integrations: ['Mobile sensors', 'Notifications'],
     tags: ['mobile', 'productivity', 'adhd', 'android'],
-    links: {},
     features: [
-      'Mobile capture (voice, photos)',
-      'Focus timer on mobile',
-      'Quick notes and reminders',
+      'Mobile capture',
+      'Focus timer',
+      'Quick notes',
       'Mobile analytics',
       'Offline functionality'
     ],
     challenges: ['Mobile performance', 'Battery optimization'],
     opportunities: ['Mobile-first users', 'Wearable integration'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
     id: 'prod_030',
     name: 'Naija FitHer TWA',
-    description: 'Mobile app for weight loss and wellness platform',
+    description: 'Mobile app for wellness platform',
     category: 'health',
     status: 'PLANNED',
-    version: '0.0.1',
+    version: '0.1.0',
     slug: 'naija-fither-twa',
+    domain: 'fit.boldmind.ng',
     icon: '💪',
-    revenueModel: 'Mobile premium subscriptions',
+    database: 'postgres',
+    revenueModel: 'Mobile premium',
     monthlyRevenue: 0,
     techStack: ['PWA', 'Android', 'Health tracking'],
     teamSize: 2,
-    timeline: 'Q3 2026 (after Naija FitHer web)',
+    timeline: 'Q3 2026',
     priority: 30,
     dependencies: ['naija-fither'],
     integrations: ['Health sensors', 'Mobile cameras'],
     tags: ['mobile', 'health', 'fitness', 'android', 'women'],
-    links: {},
     features: [
-      'Mobile workout videos',
-      'Meal plan tracking',
+      'Mobile workouts',
+      'Meal tracking',
       'Progress photos',
       'Community chat',
       'Health reminders'
     ],
     challenges: ['Health data privacy', 'Mobile storage'],
-    opportunities: ['Wearable integration', 'Health data analytics'],
+    opportunities: ['Wearable integration', 'Health analytics'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
     id: 'prod_031',
     name: 'EmailScraper TWA',
-    description: 'Mobile app for lead generation tool',
+    description: 'Mobile app for lead generation',
     category: 'productivity',
     status: 'PLANNED',
-    version: '0.0.1',
+    version: '0.1.0',
     slug: 'emailscraper-twa',
+    domain: 'email.boldmind.ng',
     icon: '🔍',
+    database: 'mongodb',
     revenueModel: 'Mobile subscriptions',
     monthlyRevenue: 0,
     techStack: ['PWA', 'Android', 'Mobile APIs'],
     teamSize: 1,
-    timeline: 'Q3 2026 (after EmailScraper Pro web)',
+    timeline: 'Q3 2026',
     priority: 31,
     dependencies: ['emailscraper-pro'],
-    integrations: ['Mobile contacts', 'Camera for business cards'],
-    tags: ['mobile', 'sales', 'lead-generation', 'android'],
-    links: {},
+    integrations: ['Mobile contacts', 'Camera'],
+    tags: ['mobile', 'sales', 'lead-gen', 'android'],
     features: [
-      'Mobile contact scanning',
+      'Contact scanning',
       'Business card scanning',
-      'On-the-go lead lookup',
+      'Lead lookup',
       'Mobile notifications',
       'Quick actions'
     ],
-    challenges: ['Mobile camera quality', 'OCR accuracy'],
-    opportunities: ['Sales teams on mobile', 'Conference networking'],
+    challenges: ['Camera quality', 'OCR accuracy'],
+    opportunities: ['Sales teams', 'Conference networking'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   },
   {
     id: 'prod_032',
     name: 'SAFE AI Native',
-    description: 'Full React Native mobile app for SAFE AI (police officers)',
+    description: 'Full React Native app for police officers',
     category: 'security',
     status: 'PLANNED',
-    version: '0.0.1',
+    version: '0.1.0',
     slug: 'safe-ai-native',
+    domain: 'safe.boldmind.ng',
     icon: '📱',
+    database: 'postgres',
     revenueModel: 'Government deployment',
     monthlyRevenue: 0,
     techStack: ['React Native', 'iOS', 'Android', 'Offline-first'],
     teamSize: 4,
-    timeline: 'Q4 2026 (after SAFE AI pilot)',
+    timeline: 'Q4 2026',
     priority: 32,
     dependencies: ['safe-ai'],
     integrations: ['Mobile cameras', 'GPS', 'Offline storage'],
     tags: ['mobile', 'security', 'react-native', 'ios', 'android'],
-    links: {},
     features: [
       'Offline incident reporting',
-      'Voice-to-text reports (Pidgin/English)',
-      'Photo/video evidence upload',
-      'GPS location tagging',
-      'Real-time officer communication'
+      'Voice-to-text (Pidgin/English)',
+      'Photo/video evidence',
+      'GPS tagging',
+      'Real-time communication'
     ],
     challenges: ['Offline functionality', 'Mobile security'],
     opportunities: ['Government contracts', 'Field officer adoption'],
     createdAt: '2025-12-26',
-    updatedAt: '2025-12-26'
+    updatedAt: '2026-01-18'
   }
 ];
 
+
+// Helper Functions
 export function getProductById(id: string): Product | undefined {
   return BOLDMIND_PRODUCTS.find(product => product.id === id);
 }
 
 export function getProductBySlug(slug: string): Product | undefined {
   return BOLDMIND_PRODUCTS.find(product => product.slug === slug);
+}
+
+export function getProductByDomain(domain: string): Product | undefined {
+  return BOLDMIND_PRODUCTS.find(p => p.domain === domain);
+}
+
+export function getProductByFullDomain(fullDomain: string): Product | undefined {
+  return BOLDMIND_PRODUCTS.find(product => {
+    const productFullDomain = product.subdomain 
+      ? `${product.subdomain}.${product.domain}`
+      : product.domain;
+    return productFullDomain === fullDomain;
+  });
 }
 
 export function getProductsByStatus(status: ProductStatus): Product[] {
@@ -1189,6 +1196,7 @@ export function getProductsByPriority(minPriority: number, maxPriority?: number)
   return BOLDMIND_PRODUCTS.filter(product => product.priority >= minPriority);
 }
 
+
 export function getLiveProducts(): Product[] {
   return getProductsByStatus('LIVE');
 }
@@ -1205,6 +1213,42 @@ export function getConceptProducts(): Product[] {
   return getProductsByStatus('CONCEPT');
 }
 
+export function getProductsByDomainName(domain: string): Product[] {
+  return BOLDMIND_PRODUCTS.filter(product => product.domain === domain);
+}
+
+export function getProductsBySubdomain(subdomain: string): Product[] {
+  return BOLDMIND_PRODUCTS.filter(product => product.subdomain === subdomain);
+}
+
+export function getProductsWithSubdomain(): Product[] {
+  return BOLDMIND_PRODUCTS.filter(product => product.subdomain !== undefined);
+}
+
+export function getProductsWithoutSubdomain(): Product[] {
+  return BOLDMIND_PRODUCTS.filter(product => product.subdomain === undefined);
+}
+
+export function getPlanAISuiteProducts(): Product[] {
+  return BOLDMIND_PRODUCTS.filter(product => 
+    product.domain === 'planai.boldmind.ng' || 
+    product.slug.includes('planai') || 
+    product.slug.includes('receptionist') ||
+    product.slug.includes('credibility') || 
+    product.slug.includes('business-planning') ||
+    product.slug.includes('financial-forecasting') || 
+    product.slug.includes('investor-readiness') ||
+    product.slug.includes('branding-design') || 
+    product.slug.includes('digital-storefronts') ||
+    product.slug.includes('marketing-automation') || 
+    product.slug.includes('analytics-dashboard')
+  );
+}
+
+export function getProductsByDatabase(dbType: DatabaseType): Product[] {
+  return BOLDMIND_PRODUCTS.filter(product => product.database === dbType);
+}
+
 // Revenue calculations
 export function calculateTotalMonthlyRevenue(): number {
   return BOLDMIND_PRODUCTS.reduce((total, product) =>
@@ -1217,21 +1261,20 @@ export function calculateProjectedRevenue(months: number = 12): number {
     total + (product.monthlyRevenue || 0) * months, 0
   );
 
-  // Estimate growth for building/planned products
-  const buildingRevenue = getBuildingProducts().length * 100000 * months * 0.5; // 50% chance of launch
-  const plannedRevenue = getPlannedProducts().length * 50000 * months * 0.3; // 30% chance of launch
+  const buildingRevenue = getBuildingProducts().length * 100000 * months * 0.5;
+  const plannedRevenue = getPlannedProducts().length * 50000 * months * 0.3;
+  const conceptRevenue = getConceptProducts().length * 25000 * months * 0.1;
 
-  return liveRevenue + buildingRevenue + plannedRevenue;
+  return liveRevenue + buildingRevenue + plannedRevenue + conceptRevenue;
 }
 
 // Team size calculations
 export function calculateTotalTeamSize(): number {
-  const uniqueTeamSizes = new Set<number>();
-  BOLDMIND_PRODUCTS.forEach(product => {
-    if (product.teamSize) uniqueTeamSizes.add(product.teamSize);
-  });
-
-  return Array.from(uniqueTeamSizes).reduce((total, size) => total + size, 0);
+  const teamSizes = BOLDMIND_PRODUCTS
+    .map(product => product.teamSize || 0)
+    .reduce((total, size) => total + size, 0);
+  
+  return Math.ceil(teamSizes / 2); // Account for overlapping team members
 }
 
 // Timeline analysis
@@ -1243,7 +1286,6 @@ export function getUpcomingReleases(months: number = 6): Product[] {
   return BOLDMIND_PRODUCTS.filter(product => {
     if (!product.timeline) return false;
 
-    // Simple parsing of timeline strings
     const timelineMatch = product.timeline.match(/Q(\d) (\d{4})/);
     if (timelineMatch) {
       const quarter = parseInt(timelineMatch[1]);
@@ -1254,7 +1296,7 @@ export function getUpcomingReleases(months: number = 6): Product[] {
     }
 
     return false;
-  });
+  }).sort((a, b) => a.priority - b.priority);
 }
 
 // Product dependencies analysis
@@ -1280,20 +1322,211 @@ export interface ProductStatusSummary {
 }
 
 export function getProductStatusSummary(): ProductStatusSummary {
-  const liveProducts = getLiveProducts();
-  const buildingProducts = getBuildingProducts();
-  const plannedProducts = getPlannedProducts();
-  const conceptProducts = getConceptProducts();
-
   return {
     total: BOLDMIND_PRODUCTS.length,
-    live: liveProducts.length,
-    building: buildingProducts.length,
-    planned: plannedProducts.length,
-    concept: conceptProducts.length,
+    live: getLiveProducts().length,
+    building: getBuildingProducts().length,
+    planned: getPlannedProducts().length,
+    concept: getConceptProducts().length,
     revenue: calculateTotalMonthlyRevenue(),
     teamSize: calculateTotalTeamSize(),
-    upcomingReleases: getUpcomingReleases(6).length
+    upcomingReleases: getUpcomingReleases(6).length,
+  };
+}
+
+// Tech stack analysis
+export function getProductsByTech(tech: string): Product[] {
+  return BOLDMIND_PRODUCTS.filter(product => 
+    product.techStack.some(t => t.toLowerCase().includes(tech.toLowerCase()))
+  );
+}
+
+// Domain utility functions
+export function getProductWebsiteUrl(product: Product): string {
+  if (product.subdomain) {
+    return `https://${product.subdomain}.${product.domain}`;
+  }
+  return `https://${product.domain}`;
+}
+
+export function getAllDomains(): string[] {
+  const domains = new Set<string>();
+  BOLDMIND_PRODUCTS.forEach(product => domains.add(product.domain));
+  return Array.from(domains);
+}
+
+export function getAllSubdomains(): string[] {
+  const subdomains = new Set<string>();
+  BOLDMIND_PRODUCTS.forEach(product => {
+    if (product.subdomain) subdomains.add(product.subdomain);
+  });
+  return Array.from(subdomains);
+}
+
+// Priority-based functions
+export function getHighPriorityProducts(threshold: number = 10): Product[] {
+  return BOLDMIND_PRODUCTS.filter(product => product.priority <= threshold)
+    .sort((a, b) => a.priority - b.priority);
+}
+
+export function getLowPriorityProducts(threshold: number = 20): Product[] {
+  return BOLDMIND_PRODUCTS.filter(product => product.priority > threshold)
+    .sort((a, b) => a.priority - b.priority);
+}
+
+// Revenue-focused functions
+export function getRevenueGeneratingProducts(): Product[] {
+  return BOLDMIND_PRODUCTS.filter(product => (product.monthlyRevenue || 0) > 0)
+    .sort((a, b) => (b.monthlyRevenue || 0) - (a.monthlyRevenue || 0));
+}
+
+export function getTopRevenueProducts(limit: number = 5): Product[] {
+  return getRevenueGeneratingProducts().slice(0, limit);
+}
+
+// Team size analysis
+export function getProductsByTeamSize(minSize: number, maxSize?: number): Product[] {
+  if (maxSize) {
+    return BOLDMIND_PRODUCTS.filter(product =>
+      (product.teamSize || 0) >= minSize && (product.teamSize || 0) <= maxSize
+    );
+  }
+  return BOLDMIND_PRODUCTS.filter(product => (product.teamSize || 0) >= minSize);
+}
+
+// Timeline-based functions
+export function getProductsLaunchingThisYear(year: number = 2026): Product[] {
+  return BOLDMIND_PRODUCTS.filter(product => {
+    if (!product.timeline) return false;
+    const timelineMatch = product.timeline.match(/Q(\d) (\d{4})/);
+    if (timelineMatch) {
+      const timelineYear = parseInt(timelineMatch[2]);
+      return timelineYear === year;
+    }
+    return false;
+  });
+}
+
+// Integration-based functions
+export function getProductsWithIntegration(integration: string): Product[] {
+  return BOLDMIND_PRODUCTS.filter(product => 
+    product.integrations?.some(integ => integ.toLowerCase().includes(integration.toLowerCase()))
+  );
+}
+
+// Category summary
+export interface CategorySummary {
+  category: string;
+  count: number;
+  live: number;
+  building: number;
+  planned: number;
+  concept: number;
+  revenue: number;
+}
+
+export function getCategorySummary(): CategorySummary[] {
+  const summary: Record<string, CategorySummary> = {};
+  
+  BOLDMIND_PRODUCTS.forEach(product => {
+    if (!summary[product.category]) {
+      summary[product.category] = {
+        category: product.category,
+        count: 0,
+        live: 0,
+        building: 0,
+        planned: 0,
+        concept: 0,
+        revenue: 0
+      };
+    }
+    
+    const catSummary = summary[product.category];
+    catSummary.count++;
+    catSummary[product.status.toLowerCase() as keyof Omit<CategorySummary, 'category' | 'count' | 'revenue'>]++;
+    catSummary.revenue += (product.monthlyRevenue || 0);
+  });
+  
+  return Object.values(summary).sort((a, b) => b.count - a.count);
+}
+
+// Search functionality
+export function searchProducts(query: string): Product[] {
+  const lowerQuery = query.toLowerCase();
+  
+  return BOLDMIND_PRODUCTS.filter(product => 
+    product.name.toLowerCase().includes(lowerQuery) ||
+    product.description.toLowerCase().includes(lowerQuery) ||
+    product.tags.some(tag => tag.toLowerCase().includes(lowerQuery)) ||
+    product.category.toLowerCase().includes(lowerQuery) ||
+    product.slug.toLowerCase().includes(lowerQuery)
+  );
+}
+
+// Budget estimation
+export function estimateDevelopmentCost(product: Product): number {
+  // Rough estimation based on team size and timeline
+  const teamSize = product.teamSize || 1;
+  const months = getTimelineMonths(product.timeline);
+  
+  // Average developer cost in Nigeria: ₦500,000/month
+  const monthlyCostPerDev = 500000;
+  const totalCost = teamSize * months * monthlyCostPerDev;
+  
+  return totalCost;
+}
+
+function getTimelineMonths(timeline?: string): number {
+  if (!timeline) return 3; // Default 3 months
+  
+  if (timeline.includes('week')) {
+    const weeksMatch = timeline.match(/(\d+)\s*weeks?/);
+    if (weeksMatch) {
+      return parseInt(weeksMatch[1]) / 4;
+    }
+  }
+  
+  if (timeline.includes('month')) {
+    const monthsMatch = timeline.match(/(\d+)\s*months?/);
+    if (monthsMatch) {
+      return parseInt(monthsMatch[1]);
+    }
+  }
+  
+  return 3; // Default fallback
+}
+
+export function calculateTotalDevelopmentCost(): number {
+  return BOLDMIND_PRODUCTS.reduce((total, product) => 
+    total + estimateDevelopmentCost(product), 0
+  );
+}
+
+// ROI calculation
+export function calculateROI(product: Product): number {
+  const developmentCost = estimateDevelopmentCost(product);
+  const annualRevenue = (product.monthlyRevenue || 0) * 12;
+  
+  if (developmentCost === 0) return 0;
+  
+  return (annualRevenue / developmentCost) * 100;
+}
+
+// Quick stats
+export function getQuickStats() {
+  const totalProducts = BOLDMIND_PRODUCTS.length;
+  const totalRevenue = calculateTotalMonthlyRevenue();
+  const totalTeamSize = calculateTotalTeamSize();
+  const upcomingReleases = getUpcomingReleases(6).length;
+  const developmentCost = calculateTotalDevelopmentCost();
+  
+  return {
+    totalProducts,
+    totalRevenue: `₦${totalRevenue.toLocaleString()}/month`,
+    totalTeamSize,
+    upcomingReleases,
+    developmentCost: `₦${developmentCost.toLocaleString()}`,
+    averageROI: `${(totalRevenue * 12 / developmentCost * 100).toFixed(1)}%`
   };
 }
 

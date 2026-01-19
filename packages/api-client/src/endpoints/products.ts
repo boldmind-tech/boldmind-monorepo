@@ -1,4 +1,6 @@
-import { api } from '../client';
+import APIClient from '../client';
+
+const defaultClient = new APIClient(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api');
 
 export interface Product {
   id: string;
@@ -43,35 +45,32 @@ export const productsApi = {
     limit?: number; 
     offset?: number 
   }) => 
-    api.get<{ products: Product[]; total: number }>('/products', {
-        params,
-        headers: undefined
-    }),
+    defaultClient.get<{ products: Product[]; total: number }>('/products', { params }),
   
   getProduct: (productId: string) => 
-    api.get<Product>(`/products/${productId}`),
+    defaultClient.get<Product>(`/products/${productId}`),
   
   getProductBySlug: (slug: string) => 
-    api.get<Product>(`/products/slug/${slug}`),
+    defaultClient.get<Product>(`/products/slug/${slug}`),
   
   createProduct: (data: CreateProductData) => 
-    api.post<Product>('/products', data),
+    defaultClient.post<Product>('/products', data),
   
   updateProduct: (productId: string, data: Partial<CreateProductData>) => 
-    api.put<Product>(`/products/${productId}`, data),
+    defaultClient.put<Product>(`/products/${productId}`, data),
   
   deleteProduct: (productId: string) => 
-    api.delete(`/products/${productId}`),
+    defaultClient.delete(`/products/${productId}`),
   
   getProductStats: (productId: string) => 
-    api.get<any>(`/products/${productId}/stats`),
+    defaultClient.get<any>(`/products/${productId}/stats`),
   
   updateProductStatus: (productId: string, status: string) => 
-    api.put(`/products/${productId}/status`, { status }),
+    defaultClient.put(`/products/${productId}/status`, { status }),
   
   getProductCategories: () => 
-    api.get<string[]>('/products/categories'),
+    defaultClient.get<string[]>('/products/categories'),
   
   searchProducts: (query: string, params?: { limit?: number }) => 
-    api.get<Product[]>(`/products/search?q=${query}`, { params })
-};  
+    defaultClient.get<Product[]>(`/products/search?q=${query}`, { params })
+};

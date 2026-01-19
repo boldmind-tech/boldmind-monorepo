@@ -1,24 +1,17 @@
-// lib/theme.ts
 "use client";
 
 import { createContext, useContext, useEffect, useState, useMemo } from "react";
 import {
   detectCurrentProduct,
   getProductThemeClass,
-} from "../lib/utils";
-import {
   getProductTheme,
   productThemes,
-  type ProductThemeValue,
   boldmindColors,
   getProductColors,
-} from "../styles/theme";
-import { 
-  BOLDMIND_PRODUCTS, 
-  getProductBySlug, 
-  type Product,
+  BOLDMIND_PRODUCTS,
+  getProductBySlug,
   getLiveProducts,
-  getBuildingProducts
+  getBuildingProducts,
 } from '@boldmind/utils';
 
 // Types
@@ -42,15 +35,15 @@ export interface ThemeContextType {
   theme: Theme;
   setTheme: (theme: Theme) => void;
   productTheme: ProductThemeType;
-  currentProduct: Product | null;
+  currentProduct: any;
   toggleTheme: () => void;
   toggleDyslexiaMode: () => void;
   dyslexiaMode: boolean;
   allProducts: typeof productThemes;
   allColors: typeof boldmindColors;
-  availableProducts: Product[];
-  liveProducts: Product[];
-  buildingProducts: Product[];
+  availableProducts: any[];
+  liveProducts: any[];
+  buildingProducts: any[];
   switchProduct: (productSlug: string) => void;
 }
 
@@ -83,9 +76,14 @@ export function ThemeToggle() {
   );
 }
 
-// Component: DyslexiaModeToggle
+// Component: DyslexiaModeToggle - ONLY VISIBLE FOR BOLDMIND OS
 export function DyslexiaModeToggle() {
-  const { dyslexiaMode, toggleDyslexiaMode } = useTheme();
+  const { dyslexiaMode, toggleDyslexiaMode, currentProduct } = useTheme();
+
+  // Only show for BoldMind OS
+  if (!currentProduct || !currentProduct.slug.includes('boldmind-os')) {
+    return null;
+  }
 
   return (
     <button
@@ -103,14 +101,14 @@ export function DyslexiaModeToggle() {
 
 // Hook: useProductTheme
 export function useProductTheme() {
-  const { 
-    productTheme, 
-    allProducts, 
-    allColors, 
+  const {
+    productTheme,
+    allProducts,
+    allColors,
     availableProducts,
     liveProducts,
     buildingProducts,
-    switchProduct 
+    switchProduct
   } = useTheme();
 
   return {
@@ -125,14 +123,14 @@ export function useProductTheme() {
 }
 
 // Helper: getCurrentProductFromSlug - FIXED TYPE
-function getCurrentProductFromSlug(slug: string): Product | null {
+function getCurrentProductFromSlug(slug: string): any | null {
   const found = getProductBySlug(slug);
-  
+
   if (found) {
     console.log('Theme: Found product in database:', found.name, found.slug);
     return found; // found is Product | undefined, but we return null if undefined
   }
-  
+
   console.warn('Theme: Product not found in database:', slug);
   return null;
 }
@@ -140,15 +138,15 @@ function getCurrentProductFromSlug(slug: string): Product | null {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 // Helper: createProductThemeFromProduct - FIXED TYPE
-function createProductThemeFromProduct(product: Product | null, productSlug: string): ProductThemeType {
+function createProductThemeFromProduct(product: any | null, productSlug: string): ProductThemeType {
   // Convert undefined to null
   const productOrNull = product || null;
-  
+
   if (!productOrNull) {
     // Fallback if product not found in database
     const themeData = getProductTheme(productSlug);
     const colors = getProductColors(productSlug);
-    
+
     return {
       slug: productSlug,
       name: productSlug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
@@ -163,10 +161,10 @@ function createProductThemeFromProduct(product: Product | null, productSlug: str
       },
     };
   }
-  
+
   const themeData = getProductTheme(productOrNull.slug);
   const colors = getProductColors(productOrNull.slug);
-  
+
   return {
     slug: productOrNull.slug,
     name: productOrNull.name,
@@ -212,55 +210,53 @@ export function ThemeProvider({
     setThemeState(initialTheme);
     console.log('Theme: Initializing theme to:', initialTheme);
 
-    // Initialize dyslexia mode
+    // Initialize dyslexia mode - FORCE DISABLE FOR NON-BOLDMIND-OS PRODUCTS
     const savedDyslexia = localStorage.getItem('dyslexia-mode');
     const initialDyslexia = savedDyslexia === 'true' || defaultDyslexia;
-    setDyslexiaMode(initialDyslexia);
-    console.log('Theme: Initializing dyslexia mode to:', initialDyslexia);
 
-    // Initialize product theme
-    let initialProductTheme: ProductThemeType;
-    
-    // 1. If defaultProduct is provided, use it
+    // Check if current product is BoldMind OS
+    let finalProductTheme: ProductThemeType;
+
+    // Determine initial product theme first
     if (defaultProduct) {
       console.log('Theme: Using defaultProduct prop:', defaultProduct.slug);
-      initialProductTheme = defaultProduct;
-    }
-    // 2. If forceProductSlug is provided, use it
-    else if (forceProductSlug) {
+      finalProductTheme = defaultProduct;
+    } else if (forceProductSlug) {
       console.log('Theme: Using forceProductSlug:', forceProductSlug);
       const product = getProductBySlug(forceProductSlug);
-      // Convert undefined to null
-      initialProductTheme = createProductThemeFromProduct(product || null, forceProductSlug);
-    }
-    // 3. Try to get from localStorage first
-    else {
+      finalProductTheme = createProductThemeFromProduct(product || null, forceProductSlug);
+    } else {
       const savedProductSlug = localStorage.getItem('product-theme');
       if (savedProductSlug) {
         const product = getProductBySlug(savedProductSlug);
         if (product) {
           console.log('Theme: Using saved product from localStorage:', savedProductSlug);
-          initialProductTheme = createProductThemeFromProduct(product, savedProductSlug);
+          finalProductTheme = createProductThemeFromProduct(product, savedProductSlug);
         } else {
-          // Saved slug not found in database, detect from URL
           const detectedSlug = detectCurrentProduct();
           console.log('Theme: Saved product not found, detecting from URL:', detectedSlug);
-          const detectedProduct = getProductBySlug(detectedSlug);
-          initialProductTheme = createProductThemeFromProduct(detectedProduct || null, detectedSlug);
+          const detectedProduct = getProductBySlug(detectedSlug || '');
+          finalProductTheme = createProductThemeFromProduct(detectedProduct || null, detectedSlug || '');
         }
-      }
-      // 4. Use detectCurrentProduct() from utils.ts
-      else {
+      } else {
         const detectedSlug = detectCurrentProduct();
         console.log('Theme: Detected product slug:', detectedSlug, 'from URL:', window.location.href);
-        
-        const product = getProductBySlug(detectedSlug);
-        initialProductTheme = createProductThemeFromProduct(product || null, detectedSlug);
-        console.log('Theme: Initial product theme:', initialProductTheme.slug, initialProductTheme.name);
+
+        const product = getProductBySlug(detectedSlug || '');
+        finalProductTheme = createProductThemeFromProduct(product || null, detectedSlug || '');
+        console.log('Theme: Initial product theme:', finalProductTheme.slug, finalProductTheme.name);
       }
     }
-    
-    setProductTheme(initialProductTheme);
+
+    setProductTheme(finalProductTheme);
+
+    // Only enable dyslexia mode for BoldMind OS
+    const isBoldMindOS = finalProductTheme.slug.includes('boldmind-os');
+    const finalDyslexiaMode = isBoldMindOS ? initialDyslexia : false;
+
+    setDyslexiaMode(finalDyslexiaMode);
+    console.log('Theme: Initializing dyslexia mode to:', finalDyslexiaMode, '(BoldMind OS:', isBoldMindOS, ')');
+
   }, [defaultProduct, defaultTheme, defaultDyslexia, forceProductSlug]);
 
   // Memoized current product from @boldmind/utils
@@ -283,21 +279,28 @@ export function ThemeProvider({
     if (productTheme && !defaultProduct && !forceProductSlug) {
       const detectedSlug = detectCurrentProduct();
       console.log('Theme: Checking for product change. Current:', productTheme.slug, 'Detected:', detectedSlug);
-      
+
       if (detectedSlug !== productTheme.slug) {
-        const product = getProductBySlug(detectedSlug);
-        const newProductTheme = createProductThemeFromProduct(product || null, detectedSlug);
-        
+        const product = getProductBySlug(detectedSlug || '');
+        const newProductTheme = createProductThemeFromProduct(product || null, detectedSlug || '');
+
         console.log('Theme: Switching to detected product:', {
           old: productTheme.slug,
           new: detectedSlug,
           productName: product?.name || 'Unknown'
         });
-        
+
         setProductTheme(newProductTheme);
+
+        // Update dyslexia mode based on new product
+        const isBoldMindOS = newProductTheme.slug.includes('boldmind-os');
+        if (!isBoldMindOS && dyslexiaMode) {
+          setDyslexiaMode(false);
+          localStorage.removeItem('dyslexia-mode');
+        }
       }
     }
-  }, [defaultProduct, forceProductSlug, productTheme]);
+  }, [defaultProduct, forceProductSlug, productTheme, dyslexiaMode]);
 
   // Apply theme effects
   useEffect(() => {
@@ -309,7 +312,8 @@ export function ThemeProvider({
       product: productTheme.slug,
       theme,
       dyslexiaMode,
-      currentProduct: currentProduct?.name
+      currentProduct: currentProduct?.name,
+      isBoldMindOS: productTheme.slug.includes('boldmind-os')
     });
 
     // Set CSS custom properties
@@ -320,7 +324,10 @@ export function ThemeProvider({
     // Set data attributes
     root.setAttribute("data-product", productTheme.slug);
     root.setAttribute("data-theme", theme);
-    root.setAttribute("data-dyslexia", dyslexiaMode.toString());
+
+    // Only set dyslexia mode for BoldMind OS
+    const isBoldMindOS = productTheme.slug.includes('boldmind-os');
+    root.setAttribute("data-dyslexia", (isBoldMindOS && dyslexiaMode).toString());
 
     // Remove previous theme classes
     Object.keys(productThemes).forEach((slug) => {
@@ -351,8 +358,9 @@ export function ThemeProvider({
       root.classList.add(theme);
     }
 
-    // Handle dyslexia mode
-    if (dyslexiaMode) {
+    // Handle dyslexia mode - only for BoldMind OS
+    const isBoldMindProduct = productTheme.slug.includes('boldmind-os');
+    if (isBoldMindProduct && dyslexiaMode) {
       root.classList.add("dyslexia-mode");
       document.body.classList.add("dyslexia-friendly");
     } else {
@@ -365,7 +373,7 @@ export function ThemeProvider({
     return () => {
       mediaQuery.removeEventListener("change", handleSystemThemeChange);
     };
-  }, [theme, productTheme, dyslexiaMode]);
+  }, [theme, productTheme, dyslexiaMode, currentProduct]);
 
   // Theme functions
   const setTheme = (newTheme: Theme) => {
@@ -385,6 +393,13 @@ export function ThemeProvider({
 
   const toggleDyslexiaMode = () => {
     if (dyslexiaMode === undefined) return;
+
+    // Only allow toggling for BoldMind OS
+    if (!productTheme || !productTheme.slug.includes('boldmind-os')) {
+      console.warn('Dyslexia mode is only available for BoldMind OS');
+      return;
+    }
+
     const newMode = !dyslexiaMode;
     setDyslexiaMode(newMode);
     if (typeof window !== "undefined") {
@@ -394,11 +409,18 @@ export function ThemeProvider({
 
   const switchProduct = (productSlug: string) => {
     console.log('Theme: Manually switching product to:', productSlug);
-    
+
     const product = getProductBySlug(productSlug);
     if (product) {
       const newProductTheme = createProductThemeFromProduct(product, productSlug);
       setProductTheme(newProductTheme);
+
+      // Update dyslexia mode based on new product
+      const isBoldMindOS = productSlug.includes('boldmind-os');
+      if (!isBoldMindOS && dyslexiaMode) {
+        setDyslexiaMode(false);
+        localStorage.removeItem('dyslexia-mode');
+      }
 
       if (typeof window !== "undefined") {
         localStorage.setItem("product-theme", productSlug);

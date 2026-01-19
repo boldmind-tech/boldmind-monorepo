@@ -1,9 +1,8 @@
-import { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-import apiClient from './client';
+import { AxiosResponse, InternalAxiosRequestConfig, AxiosInstance } from 'axios';
 
 // Logging interceptor
-export const setupLoggingInterceptor = () => {
-  apiClient.interceptors.request.use(
+export const setupLoggingInterceptor = (client: AxiosInstance) => {
+  client.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
       console.log(`[API Request] ${config.method?.toUpperCase()} ${config.url}`);
       if (config.data) {
@@ -17,7 +16,7 @@ export const setupLoggingInterceptor = () => {
     }
   );
 
-  apiClient.interceptors.response.use(
+  client.interceptors.response.use(
     (response: AxiosResponse) => {
       console.log(`[API Response] ${response.status} ${response.config.url}`);
       return response;
@@ -30,8 +29,8 @@ export const setupLoggingInterceptor = () => {
 };
 
 // Retry interceptor for failed requests
-export const setupRetryInterceptor = (maxRetries: number = 3) => {
-  apiClient.interceptors.response.use(undefined, async (error) => {
+export const setupRetryInterceptor = (client: AxiosInstance, maxRetries: number = 3) => {
+  client.interceptors.response.use(undefined, async (error) => {
     const config = error.config as InternalAxiosRequestConfig & { retry?: boolean; retryCount?: number };
     
     if (!config || !config.retry || (config.retryCount && config.retryCount >= maxRetries)) {
@@ -44,16 +43,16 @@ export const setupRetryInterceptor = (maxRetries: number = 3) => {
     const delay = Math.pow(2, config.retryCount) * 1000;
     await new Promise(resolve => setTimeout(resolve, delay));
     
-    return apiClient(config);
+    return client(config);
   });
 };
 
-// Cache interceptor - Simplified version
-export const setupCacheInterceptor = () => {
+// Cache interceptor
+export const setupCacheInterceptor = (client: AxiosInstance) => {
   const cache = new Map<string, { data: any; timestamp: number }>();
   const CACHE_DURATION = 5 * 60 * 1000;
 
-  apiClient.interceptors.request.use(
+  client.interceptors.request.use(
     (config: InternalAxiosRequestConfig & { _cache?: boolean; _cacheKey?: string }) => {
       if (config.method?.toLowerCase() === 'get' && config._cache) {
         const cacheKey = JSON.stringify({
@@ -79,7 +78,7 @@ export const setupCacheInterceptor = () => {
     }
   );
 
-  apiClient.interceptors.response.use(
+  client.interceptors.response.use(
     (response: AxiosResponse) => {
       const config = response.config as InternalAxiosRequestConfig & { _cacheKey?: string };
       if (config._cacheKey && response.status === 200) {

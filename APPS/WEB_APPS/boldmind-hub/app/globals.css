@@ -1,10 +1,3 @@
-/* apps/web/boldmind-hub/app/globals.css */
-
-/* ============================================
-   TAILWIND DIRECTIVES - MUST BE FIRST
-   DO NOT import @boldmind/ui styles here
-   They are imported in layout.tsx before this file
-   ============================================ */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -22,11 +15,11 @@
   --app-danger: #E63946;
   --app-background: #FFFFFF;
   --app-foreground: #111827;
-  
+
   /* Spacing for this app */
   --app-header-height: 80px;
   --app-footer-min-height: 400px;
-  
+
   /* Animation timings specific to this app */
   --app-transition-fast: 150ms;
   --app-transition-normal: 300ms;
@@ -43,18 +36,19 @@
    RESET & BASE - SCOPED TO AVOID CONFLICTS
    ============================================ */
 @layer base {
+
   /* Only reset what's needed for this app */
   .app-container * {
     box-sizing: border-box;
   }
-  
+
   /* App-specific HTML settings */
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
   }
-  
+
   /* App-specific body settings */
   body {
     font-feature-settings: 'ss01' on, 'ss02' on, 'cv01' on, 'cv03' on;
@@ -69,35 +63,91 @@
    These extend/override shared components
    ============================================ */
 @layer components {
+
   /* Better focus styles for BoldMind Hub */
   .app-focus-ring:focus {
     @apply outline-none ring-2 ring-[#FFC800] ring-offset-2 ring-offset-[#00143C];
   }
-  
+
   .app-focus-ring:focus:not(:focus-visible) {
     @apply ring-0 ring-offset-0;
   }
-  
+
   /* App-specific button styles */
   .btn-boldmind {
     @apply px-6 py-3 rounded-xl font-bold transition-all duration-300;
     background: linear-gradient(135deg, var(--app-primary), var(--app-accent));
     color: white;
   }
-  
+
   .btn-boldmind:hover {
     @apply shadow-2xl transform -translate-y-1;
     background: linear-gradient(135deg, var(--app-accent), var(--app-primary));
   }
-  
+
   /* App-specific card styles */
   .card-boldmind {
     @apply bg-white rounded-2xl border-2 border-gray-100 shadow-lg;
     transition: all var(--app-transition-normal);
   }
-  
+
   .card-boldmind:hover {
     @apply border-[#FFC800] shadow-2xl transform -translate-y-2;
+  }
+
+  /* === AUTH PAGE STYLES === */
+  .auth-input {
+    @apply w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-gray-900 placeholder-gray-400 transition-all duration-200;
+  }
+
+  .auth-input:focus {
+    @apply border-[#FFC800] ring-2 ring-[#FFC800]/20 outline-none;
+  }
+
+  .auth-input.error {
+    @apply border-red-500 ring-2 ring-red-500/20;
+  }
+
+  .auth-input.success {
+    @apply border-green-500 ring-2 ring-green-500/20;
+  }
+
+  .auth-btn-primary {
+    @apply w-full py-3.5 px-6 font-bold rounded-xl shadow-lg transition-all duration-200 flex items-center justify-center gap-2;
+    background: linear-gradient(135deg, #00143C, #2A4A6E);
+    color: white;
+  }
+
+  .auth-btn-primary:hover:not(:disabled) {
+    @apply -translate-y-0.5 shadow-xl;
+    background: linear-gradient(135deg, #001F5C, #3A5A8E);
+  }
+
+  .auth-btn-primary:disabled {
+    @apply opacity-70 cursor-not-allowed;
+  }
+
+  .auth-btn-social {
+    @apply flex items-center justify-center gap-3 py-3 px-4 rounded-xl font-medium transition-all duration-200 border;
+  }
+
+  .auth-btn-social:hover {
+    @apply -translate-y-0.5 shadow-md;
+  }
+
+  /* Glass morphism card */
+  .glass-card {
+    @apply backdrop-blur-xl border border-white/20 rounded-2xl;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Premium glow effect */
+  .glow-gold {
+    box-shadow: 0 0 40px rgba(255, 200, 0, 0.3);
+  }
+
+  .glow-gold:hover {
+    box-shadow: 0 0 60px rgba(255, 200, 0, 0.5);
   }
 }
 
@@ -105,40 +155,41 @@
    APP-SPECIFIC UTILITIES
    ============================================ */
 @layer utilities {
+
   /* Custom scrollbar for BoldMind Hub */
   .scrollbar-boldmind::-webkit-scrollbar {
     width: 10px;
   }
-  
+
   .scrollbar-boldmind::-webkit-scrollbar-track {
     @apply bg-gray-100 rounded-full;
   }
-  
+
   .scrollbar-boldmind::-webkit-scrollbar-thumb {
     background: var(--app-primary);
     @apply rounded-full;
   }
-  
+
   .scrollbar-boldmind::-webkit-scrollbar-thumb:hover {
     background: var(--app-accent);
   }
-  
+
   /* Hide scrollbar utility */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
-  
+
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
+
   /* Gradient text utility */
   .text-gradient-boldmind {
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(135deg, var(--app-primary), var(--app-secondary));
   }
-  
+
   /* Shimmer effect for loading states */
   .animate-shimmer-boldmind {
     animation: shimmer 2s infinite linear;
@@ -154,24 +205,31 @@
   0% {
     background-position: -1000px 0;
   }
+
   100% {
     background-position: 1000px 0;
   }
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-20px);
   }
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 20px rgba(255, 200, 0, 0.3);
   }
+
   50% {
     box-shadow: 0 0 40px rgba(255, 200, 0, 0.6);
   }
@@ -183,12 +241,15 @@
     transform: translateY(0) translateX(0);
     opacity: 0;
   }
+
   10% {
     opacity: 1;
   }
+
   90% {
     opacity: 1;
   }
+
   100% {
     transform: translateY(-100vh) translateX(20px);
     opacity: 0;
@@ -202,22 +263,22 @@
   :root {
     --app-header-height: 64px;
   }
-  
+
   h1 {
     font-size: 2rem !important;
     line-height: 1.2 !important;
   }
-  
+
   h2 {
     font-size: 1.5rem !important;
     line-height: 1.3 !important;
   }
-  
+
   .container {
     padding-left: 1rem;
     padding-right: 1rem;
   }
-  
+
   /* Smaller buttons on mobile */
   .btn-boldmind {
     @apply px-4 py-2 text-sm;
@@ -237,6 +298,7 @@
    PRINT STYLES
    ============================================ */
 @media print {
+
   .no-print,
   header,
   footer,
@@ -244,7 +306,7 @@
   .btn-boldmind {
     display: none !important;
   }
-  
+
   body {
     background: white !important;
     color: black !important;
@@ -255,6 +317,7 @@
    ACCESSIBILITY - REDUCED MOTION
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -262,7 +325,7 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  
+
   html {
     scroll-behavior: auto;
   }

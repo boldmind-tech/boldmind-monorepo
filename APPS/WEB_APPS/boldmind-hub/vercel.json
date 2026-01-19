@@ -10,5 +10,8 @@
     "NEXT_PUBLIC_API_URL": "https://api.boldmind.ng",
     "NEXT_PUBLIC_SITE_URL": "https://boldmind.ng"
   },
-  "alias": ["boldmind.ng", "www.boldmind.ng"]
+  "alias": ["boldmind.ng", "www.boldmind.ng"],
+  "nodejs": {
+    "version": "20.x"
+  }
 }

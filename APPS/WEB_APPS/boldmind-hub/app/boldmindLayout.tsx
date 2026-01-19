@@ -1,9 +1,8 @@
 // apps/web/boldmind-hub/components/BoldMindLayout.tsx - UPDATED
 'use client';
 
-import { ThemeProvider } from '@boldmind/ui';
-import { BOLDMIND_PRODUCTS } from '@boldmind/utils';
-import { productThemes } from '@boldmind/ui';
+import { Providers } from '../components/Providers';
+import { BOLDMIND_PRODUCTS, productThemes } from '@boldmind/utils';
 
 export function BoldMindLayout({ children }: { children: React.ReactNode }) {
   const forceProduct = 'boldmind-hub';
@@ -55,8 +54,8 @@ export function BoldMindLayout({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <ThemeProvider defaultProduct={productTheme}>
+    <Providers defaultProductTheme={productTheme}>
       {children}
-    </ThemeProvider>
+    </Providers>
   );
 }
