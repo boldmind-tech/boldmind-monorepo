@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -19,15 +23,37 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"],
-      "@boldmind/ui": ["../../packages/ui/src"],
-      "@boldmind/auth": ["../../packages/auth/src"],
-      "@boldmind/database": ["../../packages/database/src"],
-      "@boldmind/utils": ["../../packages/utils/src"],
-      "@boldmind/api-client": ["../../packages/api-client/src"],
-      "@boldmind/payments": ["../../packages/payments/src"]
+      "@/*": [
+        "./*"
+      ],
+      "@boldmind/ui": [
+        "../../../PACKAGES/ui/src"
+      ],
+      "@boldmind/auth": [
+        "../../../PACKAGES/auth/src"
+      ],
+      "@boldmind/database": [
+        "../../../PACKAGES/database/src"
+      ],
+      "@boldmind/utils": [
+        "../../../PACKAGES/utils/src"
+      ],
+      "@boldmind/api-client": [
+        "../../../PACKAGES/api-client/src"
+      ],
+      "@boldmind/payments": [
+        "../../../PACKAGES/payments/src"
+      ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/(auth)/register"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "app/(auth)/register"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

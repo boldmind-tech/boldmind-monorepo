@@ -1,11 +1,40 @@
 import Image from "next/image";
-import { Button } from "@boldmind/ui/button";
-import { Card, CardContent, CardFooter } from "@boldmind/ui/card";
-import { Badge } from "@boldmind/ui/badge";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@boldmind/ui/tabs";
 import Link from "next/link";
-import { db, PopulatedPostLean } from "@boldmind/database/mongodb";
-import { getAllCategories, getTrendingPosts } from "@boldmind/database/helpers";
+import Script from "next/script";
+import mongoose from "mongoose";
+
+// Use your existing UI package exports
+import { Button } from "@boldmind/ui";
+import { Card, CardContent, CardFooter } from "@boldmind/ui";
+import { 
+  SuperNavbar, 
+  SuperFooter,
+  ParticleBackground,
+  Confetti,
+  TypewriterEffect,
+  Input,
+  Modal,
+  Logo,
+  SocialLinks,
+  StatusBadge,
+  LoadingSpinner,
+  ErrorBoundary,
+  ProductLayout,
+  ThemeProvider,
+  ThemeToggle,
+  DyslexiaModeToggle,
+  useProductTheme,
+  cn,
+  getProductFromPath,
+  detectCurrentProduct,
+  getProductThemeColors,
+  formatCurrency,
+  formatDate,
+  truncateText
+} from "@boldmind/ui";
+
+import { db, PopulatedPostLean } from "@/lib/db";
+import { getAllCategories, getTrendingPosts } from "@/lib/db-helpers";
 import SearchBar from "@/components/SearchBar";
 import PopularPosts from "@/components/PopularPosts";
 import TrendingCarousel from "@/components/TrendingCarousel";
@@ -13,14 +42,115 @@ import AdBanner from "@/components/AdBanner";
 import ShareButtons from "@/components/ShareButtons";
 import { TrendingUp, Clock, Eye, Check, Brain, Zap, Users, Target } from "lucide-react";
 import type { Category } from "@/types/post";
-import NewsletterForm from "@boldmind/ui/newsletter-form";
-import Script from "next/script";
-import mongoose from "mongoose";
-import { EcosystemBadge, ProductCard } from "@boldmind/ui/ecosystem";
-import { getColorScheme } from "@boldmind/utils/colors";
+import NewsletterForm from "@/components/NewsletterForm";
 
-// Get AmeboGist color scheme
-const ameboColors = getColorScheme('amebogist');
+// Badge component since it's not exported in your UI package
+function Badge({ 
+  children, 
+  className = "",
+  variant = "default"
+}: { 
+  children: React.ReactNode;
+  className?: string;
+  variant?: "default" | "secondary" | "destructive" | "outline";
+}) {
+  const variants = {
+    default: "bg-blue-100 text-blue-800 border border-blue-200",
+    secondary: "bg-gray-100 text-gray-800 border border-gray-200",
+    destructive: "bg-red-100 text-red-800 border border-red-200",
+    outline: "bg-transparent text-gray-700 border border-gray-300"
+  };
+
+  return (
+    <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${variants[variant]} ${className}`}>
+      {children}
+    </span>
+  );
+}
+
+// Tabs components since they're not exported in your UI package
+const Tabs = ({ children, defaultValue }: { children: React.ReactNode; defaultValue: string }) => {
+  return (
+    <div data-state="active" data-orientation="horizontal" className="tabs">
+      {children}
+    </div>
+  );
+};
+
+const TabsList = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
+  return (
+    <div className={`inline-flex h-10 items-center justify-center rounded-md bg-gray-100 p-1 text-gray-500 ${className}`}>
+      {children}
+    </div>
+  );
+};
+
+const TabsTrigger = ({ 
+  children, 
+  value, 
+  className = "",
+  asChild = false
+}: { 
+  children: React.ReactNode; 
+  value: string;
+  className?: string;
+  asChild?: boolean;
+}) => {
+  return (
+    <button
+      type="button"
+      role="tab"
+      data-state="active"
+      className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:text-gray-950 data-[state=active]:shadow-sm ${className}`}
+    >
+      {children}
+    </button>
+  );
+};
+
+const TabsContent = ({ children, value, className = "" }: { children: React.ReactNode; value: string; className?: string }) => {
+  return (
+    <div className={`mt-2 ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 ${className}`}>
+      {children}
+    </div>
+  );
+};
+
+// EcosystemBadge component
+function EcosystemBadge({ 
+  children, 
+  product = "amebogist",
+  variant = "default" 
+}: { 
+  children: React.ReactNode;
+  product?: string;
+  variant?: string;
+}) {
+  const colors = {
+    amebogist: { primary: "#00A859", secondary: "#FF6B35" },
+    boldmind: { primary: "#00143C", secondary: "#FFC800" },
+    educenter: { primary: "#2A4A6E", secondary: "#FFD95C" },
+    naija_fither: { primary: "#FF4081", secondary: "#9C27B0" },
+    planai: { primary: "#7C3AED", secondary: "#10B981" }
+  };
+
+  const color = colors[product as keyof typeof colors] || colors.amebogist;
+  
+  const baseStyles = "inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold";
+  
+  const variantStyles = {
+    default: `bg-[${color.primary}] text-white`,
+    breaking: "bg-red-600 text-white animate-pulse",
+    live: "bg-green-600 text-white",
+    outline: `border border-[${color.primary}] text-[${color.primary}] bg-transparent`
+  };
+
+  return (
+    <div className={`${baseStyles} ${variantStyles[variant as keyof typeof variantStyles] || variantStyles.default}`}>
+      {children}
+    </div>
+  );
+}
 
 export const revalidate = 60;
 
@@ -209,7 +339,6 @@ export default async function Home({
   const heroPost = posts[0];
   const currentUrl = `https://amebogist.ng${selectedCategory ? `?category=${selectedCategory}` : ""}`;
 
-  // BoldMind Ecosystem products for promotion
   const ecosystemProducts = [
     {
       id: 'boldmind-hub',
@@ -247,100 +376,9 @@ export default async function Home({
 
   return (
     <>
-      <style jsx global>{`
-        :root {
-          --amebo-primary: ${ameboColors.primary};
-          --amebo-secondary: ${ameboColors.secondary};
-          --amebo-accent: ${ameboColors.accent};
-          --amebo-success: ${ameboColors.success};
-          --amebo-warning: ${ameboColors.warning};
-          --amebo-error: ${ameboColors.error};
-          --gradient-amebo: linear-gradient(135deg, ${ameboColors.gradients.primary[0]}, ${ameboColors.gradients.primary[1]});
-        }
-        
-        .bg-amebo-gradient {
-          background: linear-gradient(135deg, ${ameboColors.primary}20, ${ameboColors.secondary}20);
-        }
-        
-        .border-amebo {
-          border-color: ${ameboColors.primary}30;
-        }
-        
-        .text-amebo-primary {
-          color: ${ameboColors.primary};
-        }
-        
-        .hover-bg-amebo:hover {
-          background-color: ${ameboColors.primary}10;
-        }
-      `}</style>
-      
-      <Script
-        id="homepage-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "CollectionPage",
-            "@id": currentUrl,
-            name: selectedCategory
-              ? `${categories.find((c) => c.slug === selectedCategory)?.name} News | AmeboGist.ng - BoldMind Ecosystem`
-              : "Amebo Wey Make Sense! - Latest Nigerian Amebo",
-            description: selectedCategory
-              ? `${categories.find((c) => c.slug === selectedCategory)?.metaDescription || "Latest amebo and news from Nigeria's BoldMind Ecosystem"}`
-              : "Nigeria's top source for trending amebo, politics, entertainment, AI & tech, and creator life. Part of the BoldMind Ecosystem.",
-            url: currentUrl,
-            publisher: {
-              "@type": "Organization",
-              name: "BoldMind Technology Solutions",
-              url: "https://boldmind.ng",
-              logo: { "@type": "ImageObject", url: "https://boldmind.ng/logo.png" },
-            },
-            mainEntity: {
-              "@type": "ItemList",
-              numberOfItems: posts.length,
-              itemListElement: posts.map((post, index) => ({
-                "@type": "ListItem",
-                position: index + 1,
-                item: {
-                  "@type": "NewsArticle",
-                  "@id": `https://amebogist.ng/posts/${post.slug}`,
-                  headline: post.title,
-                  description: post.excerpt,
-                  image: post.imageUrl,
-                  datePublished: post.createdAt,
-                  author: { "@type": "Person", name: post.author.name },
-                  publisher: {
-                    "@type": "Organization",
-                    name: "AmeboGist - BoldMind Ecosystem",
-                    logo: { "@type": "ImageObject", url: "https://amebogist.ng/logo.png" },
-                  },
-                },
-              })),
-            },
-            breadcrumb: {
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Home", item: "https://amebogist.ng" },
-                ...(selectedCategory
-                  ? [
-                      {
-                        "@type": "ListItem",
-                        position: 2,
-                        name: categories.find((c) => c.slug === selectedCategory)?.name || selectedCategory,
-                        item: currentUrl,
-                      },
-                    ]
-                  : []),
-              ],
-            },
-          }),
-        }}
-      />
-      
-      <div className="container mx-auto px-4 py-8" data-product="amebogist">
+      <div className="container mx-auto px-4 py-8">
         {/* BoldMind Ecosystem Header */}
-        <div className="flex items-center justify-between mb-8 p-4 rounded-lg bg-amebo-gradient border border-amebo">
+        <div className="flex items-center justify-between mb-8 p-4 rounded-lg bg-gradient-to-r from-green-50 to-orange-50 border border-green-200">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-white shadow-md">
               <span className="text-2xl">🚀</span>
@@ -350,7 +388,7 @@ export default async function Home({
               <p className="text-sm text-muted-foreground">Connecting 31+ products for Nigerian entrepreneurs</p>
             </div>
           </div>
-          <Button asChild variant="outline" className="border-amebo text-amebo-primary hover-bg-amebo">
+          <Button asChild variant="outline" className="border-green-500 text-green-600 hover:bg-green-50">
             <Link href="https://boldmind.ng">
               Explore Ecosystem →
             </Link>
@@ -367,13 +405,11 @@ export default async function Home({
               height={500}
               className="object-cover"
               priority
-              placeholder="blur"
-              blurDataURL="data:image/jpeg;base64,/9j/2w..."
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex flex-col justify-end p-8">
               <div className="flex flex-wrap gap-2 mb-4">
                 <EcosystemBadge product="amebogist" variant="breaking">🔥 BREAKING</EcosystemBadge>
-                <Badge variant="secondary" className="bg-amebo-primary text-white">
+                <Badge variant="secondary" className="bg-green-600 text-white">
                   {heroPost?.category.name || "Top Story"}
                 </Badge>
                 {heroPost?.source === "newsdata" && (
@@ -391,7 +427,7 @@ export default async function Home({
                   "Stay updated with Nigeria's freshest gist..."}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 items-start">
-                <Button asChild className="bg-amebo-primary hover:bg-amebo-accent text-white text-lg px-8 py-3">
+                <Button asChild className="bg-green-600 hover:bg-green-700 text-white text-lg px-8 py-3">
                   <Link href={heroPost?.slug ? `/posts/${heroPost.slug}` : "#"}>Read Full Story →</Link>
                 </Button>
                 <div className="flex items-center gap-4 text-white/80">
@@ -450,8 +486,8 @@ export default async function Home({
         {/* Main Content Grid */}
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-amebo-gradient rounded-xl p-8 border border-amebo">
-              <h2 className="text-3xl font-bold mb-6 font-serif text-center text-amebo-primary">🔍 Find Your Next Amebo</h2>
+            <div className="bg-gradient-to-r from-green-50 to-orange-50 rounded-xl p-8 border border-green-200">
+              <h2 className="text-3xl font-bold mb-6 font-serif text-center text-green-600">🔍 Find Your Next Amebo</h2>
               <SearchBar showTrending={true} />
               <div className="mt-4 flex flex-wrap gap-2">
                 <span className="text-sm text-muted-foreground">Popular searches:</span>
@@ -459,7 +495,7 @@ export default async function Home({
                   <Link
                     key={term}
                     href={`/search?q=${term}`}
-                    className="text-sm bg-amebo-primary/10 hover:bg-amebo-primary/20 px-3 py-1 rounded-full transition-colors text-amebo-primary"
+                    className="text-sm bg-green-100 hover:bg-green-200 px-3 py-1 rounded-full transition-colors text-green-600"
                   >
                     {term}
                   </Link>
@@ -470,7 +506,7 @@ export default async function Home({
             {/* Ecosystem Products Mini Showcase */}
             <div className="bg-white rounded-xl p-6 border border-gray-200">
               <div className="flex items-center gap-2 mb-4">
-                <Target className="h-6 w-6 text-amebo-primary" />
+                <Target className="h-6 w-6 text-green-600" />
                 <h3 className="font-bold text-xl font-serif">🎯 BoldMind Ecosystem Products</h3>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -478,10 +514,10 @@ export default async function Home({
                   <Link 
                     key={product.id}
                     href={product.url}
-                    className="p-4 rounded-lg border border-gray-200 hover:border-amebo-primary hover:bg-amebo-primary/5 transition-all group"
+                    className="p-4 rounded-lg border border-gray-200 hover:border-green-500 hover:bg-green-50 transition-all group"
                   >
                     <div className="text-2xl mb-2">{product.icon}</div>
-                    <h4 className="font-semibold group-hover:text-amebo-primary transition-colors">
+                    <h4 className="font-semibold group-hover:text-green-600 transition-colors">
                       {product.name}
                     </h4>
                     <p className="text-xs text-gray-500 mt-1">{product.category}</p>
@@ -495,14 +531,14 @@ export default async function Home({
             <Card className="bg-gradient-to-br from-white to-gray-50 border border-gray-200">
               <CardContent className="p-6">
                 <div className="flex items-center gap-2 mb-4">
-                  <TrendingUp className="h-6 w-6 text-amebo-primary animate-pulse" />
+                  <TrendingUp className="h-6 w-6 text-green-600 animate-pulse" />
                   <h3 className="font-bold text-xl font-serif">🔥 Trending Now</h3>
                 </div>
                 <TrendingCarousel topics={categories} posts={trendingPosts} />
               </CardContent>
             </Card>
             
-            <Card className="bg-amebo-gradient border border-amebo">
+            <Card className="bg-gradient-to-r from-green-500 to-orange-500 border border-green-400">
               <CardContent className="p-6">
                 <h3 className="font-bold text-lg font-serif mb-3 text-white">📧 Daily Amebo Alert</h3>
                 <p className="text-sm text-white/90 mb-4">
@@ -523,21 +559,21 @@ export default async function Home({
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Brain className="h-5 w-5 text-amebo-primary" />
+                      <Brain className="h-5 w-5 text-green-600" />
                       <span className="text-sm">AI Products</span>
                     </div>
                     <span className="font-semibold">8+</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Users className="h-5 w-5 text-amebo-primary" />
+                      <Users className="h-5 w-5 text-green-600" />
                       <span className="text-sm">Active Users</span>
                     </div>
                     <span className="font-semibold">12,000+</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Zap className="h-5 w-5 text-amebo-primary" />
+                      <Zap className="h-5 w-5 text-green-600" />
                       <span className="text-sm">Products Live</span>
                     </div>
                     <span className="font-semibold">4</span>
@@ -549,11 +585,11 @@ export default async function Home({
         </section>
 
         {/* Latest Stories Section */}
-        <section className="mb-12 p-8 rounded-xl bg-amebo-gradient/20 border border-amebo">
+        <section className="mb-12 p-8 rounded-xl bg-green-50 border border-green-200">
           <Tabs defaultValue={selectedCategory || "all"}>
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
               <div>
-                <h2 className="text-3xl font-bold font-serif text-amebo-primary">📰 Latest Amebo Stories</h2>
+                <h2 className="text-3xl font-bold font-serif text-green-600">📰 Latest Amebo Stories</h2>
                 <p className="text-sm text-muted-foreground mt-1">From AmeboGist - Part of BoldMind Ecosystem</p>
               </div>
               <div className="text-sm text-muted-foreground">
@@ -564,7 +600,7 @@ export default async function Home({
               <TabsTrigger value="all" asChild className="mb-2">
                 <Link
                   href="?category="
-                  className="font-serif data-[state=active]:bg-amebo-primary data-[state=active]:text-white px-4 py-2 rounded-md"
+                  className="font-serif data-[state=active]:bg-green-600 data-[state=active]:text-white px-4 py-2 rounded-md"
                 >
                   🏠 All Stories
                 </Link>
@@ -573,7 +609,7 @@ export default async function Home({
                 <TabsTrigger key={cat._id} value={cat.slug} asChild className="mb-2">
                   <Link
                     href={`?category=${cat.slug}`}
-                    className="font-serif data-[state=active]:bg-amebo-primary data-[state=active]:text-white px-4 py-2 rounded-md"
+                    className="font-serif data-[state=active]:bg-green-600 data-[state=active]:text-white px-4 py-2 rounded-md"
                   >
                     {cat.name}
                   </Link>
@@ -585,7 +621,7 @@ export default async function Home({
                 {posts.map((post, index) => (
                   <Card
                     key={post._id}
-                    className="overflow-hidden group hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-gray-200 hover:border-amebo-primary"
+                    className="overflow-hidden group hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-gray-200 hover:border-green-500"
                   >
                     <Link href={`/posts/${post.slug}`}>
                       <div className="relative h-56 overflow-hidden">
@@ -595,14 +631,11 @@ export default async function Home({
                           width={600}
                           height={400}
                           className="object-cover group-hover:scale-110 transition-transform duration-500"
-                          placeholder="blur"
-                          blurDataURL="data:image/jpeg;base64,/9j/2w..."
                           loading={index < 3 ? "eager" : "lazy"}
                         />
                         <div className="absolute top-3 left-3">
                           <EcosystemBadge 
                             product={post.boldmindProduct || "amebogist"} 
-                            size="sm"
                           >
                             {post.boldmindProduct === "amebogist" ? "Amebo" : post.boldmindProduct}
                           </EcosystemBadge>
@@ -611,7 +644,7 @@ export default async function Home({
                       </div>
                       <CardContent className="pt-6 pb-4">
                         <div className="flex flex-wrap gap-2 mb-3">
-                          <Badge className="font-serif bg-amebo-primary/10 text-amebo-primary hover:bg-amebo-primary hover:text-white">
+                          <Badge className="font-serif bg-green-100 text-green-600 hover:bg-green-600 hover:text-white">
                             {post.category.name}
                           </Badge>
                           {post.source === "newsdata" && (
@@ -621,7 +654,7 @@ export default async function Home({
                             <Badge variant="outline" className="font-serif border-yellow-500 text-yellow-500">💰 Sponsored</Badge>
                           )}
                         </div>
-                        <h3 className="text-xl font-bold mb-3 font-serif line-clamp-2 group-hover:text-amebo-primary transition-colors leading-tight">
+                        <h3 className="text-xl font-bold mb-3 font-serif line-clamp-2 group-hover:text-green-600 transition-colors leading-tight">
                           {post.title}
                         </h3>
                         <p className="text-muted-foreground mb-4 font-serif line-clamp-3 text-sm leading-relaxed">
@@ -663,12 +696,12 @@ export default async function Home({
                     </p>
                     <div className="w-full bg-gray-200 rounded-full h-2 max-w-md mx-auto">
                       <div
-                        className="bg-amebo-primary h-2 rounded-full transition-all duration-300"
+                        className="bg-green-600 h-2 rounded-full transition-all duration-300"
                         style={{ width: `${((skip + posts.length) / total) * 100}%` }}
                       />
                     </div>
                   </div>
-                  <Button asChild className="bg-amebo-primary hover:bg-amebo-accent text-white font-serif text-lg px-8 py-3">
+                  <Button asChild className="bg-green-600 hover:bg-green-700 text-white font-serif text-lg px-8 py-3">
                     <Link href={`?category=${selectedCategory}&page=${pageNum + 1}`}>
                       Load More Stories ({(total - (skip + limit)).toLocaleString()} remaining) →
                     </Link>
@@ -718,16 +751,16 @@ export default async function Home({
         </section>
 
         {/* Most Popular Section */}
-        <section className="mb-12 p-8 rounded-xl bg-amebo-gradient/20 border border-amebo">
+        <section className="mb-12 p-8 rounded-xl bg-green-50 border border-green-200">
           <div className="flex items-center gap-3 mb-6">
-            <h2 className="text-3xl font-bold font-serif text-amebo-primary">🏆 Most Popular This Week</h2>
+            <h2 className="text-3xl font-bold font-serif text-green-600">🏆 Most Popular This Week</h2>
           </div>
           <PopularPosts />
         </section>
 
         {/* Newsletter Signup */}
         <section
-          className="rounded-2xl p-8 mb-8 bg-gradient-to-r from-amebo-primary/10 to-amebo-secondary/10 border border-amebo animate-slide-up"
+          className="rounded-2xl p-8 mb-8 bg-gradient-to-r from-green-50 to-orange-50 border border-green-200 animate-slide-up"
           role="complementary"
           aria-label="Newsletter signup section"
         >
@@ -746,15 +779,15 @@ export default async function Home({
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
               <div className="flex items-center justify-center gap-2 animate-slide-in-left" style={{ animationDelay: "0.1s" }}>
-                <Check className="h-4 w-4 text-amebo-primary" aria-hidden="true" />
+                <Check className="h-4 w-4 text-green-600" aria-hidden="true" />
                 <span>Daily AI & Tech Gist</span>
               </div>
               <div className="flex items-center justify-center gap-2 animate-slide-in-left" style={{ animationDelay: "0.2s" }}>
-                <Check className="h-4 w-4 text-amebo-primary" aria-hidden="true" />
+                <Check className="h-4 w-4 text-green-600" aria-hidden="true" />
                 <span>Breaking News Alerts</span>
               </div>
               <div className="flex items-center justify-center gap-2 animate-slide-in-left" style={{ animationDelay: "0.3s" }}>
-                <Check className="h-4 w-4 text-amebo-primary" aria-hidden="true" />
+                <Check className="h-4 w-4 text-green-600" aria-hidden="true" />
                 <span>Ecosystem Product Updates</span>
               </div>
             </div>
@@ -780,7 +813,7 @@ export default async function Home({
                 <Link
                   key={product.name}
                   href={product.url}
-                  className="p-3 rounded-lg border border-gray-200 hover:border-amebo-primary hover:bg-amebo-primary/5 transition-all text-center"
+                  className="p-3 rounded-lg border border-gray-200 hover:border-green-500 hover:bg-green-50 transition-all text-center"
                 >
                   <div className="font-medium text-sm">{product.name}</div>
                   <div className="text-xs text-gray-500 mt-1">{product.category}</div>
