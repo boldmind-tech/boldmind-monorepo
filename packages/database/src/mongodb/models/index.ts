@@ -1,3 +1,3 @@
-// packages/database/src/mongodb/models/index.ts
 // Export all Mongoose/MongoDB models here
-export {};
+export * from './category.schema';
+export * from './post.schema';

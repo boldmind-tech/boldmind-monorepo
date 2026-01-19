@@ -2,8 +2,7 @@
 "use client";
 
 import { ThemeProvider } from "@boldmind/ui";
-import { BOLDMIND_PRODUCTS } from "@boldmind/utils";
-import { productThemes } from "@boldmind/ui";
+import { BOLDMIND_PRODUCTS, productThemes } from "@boldmind/utils";
 
 export function EducenterLayout({ children }: { children: React.ReactNode }) {
   const forceProduct = "educenter";

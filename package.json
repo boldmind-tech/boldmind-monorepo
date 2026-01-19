@@ -46,10 +46,10 @@
     "vercel-build:educenter": "pnpm install && pnpm run vercel:educenter",
     "vercel-build:amebogist": "pnpm install && pnpm run vercel:amebogist",
     "vercel:boldmind-hub": "turbo run build --filter=...@boldmind/boldmind-hub",
-  "vercel:educenter": "turbo run build --filter=...@boldmind/educenter",
-  "vercel:planai-landing": "turbo run build --filter=...@boldmind/planai-landing",
+    "vercel:educenter": "turbo run build --filter=...@boldmind/educenter",
+    "vercel:planai-landing": "turbo run build --filter=...@boldmind/planai-landing",
     "vercel-build:planai-receptionist": "pnpm install && pnpm run vercel:planai-receptionist",
-  "vercel-build:planai-landing": "pnpm install && pnpm run vercel:planai-landing"
+    "vercel-build:planai-landing": "pnpm install && pnpm run vercel:planai-landing"
   },
   "devDependencies": {
     "@types/node": "^20.11.5",
@@ -96,7 +96,9 @@
       "typescript": "^5.3.3",
       "@types/react": "^18.2.61",
       "@types/react-dom": "^18.2.19",
-      "@types/node": "^20.11.5"
+      "@types/node": "^20.11.5",
+      "mongoose": "^8.7.0",
+      "mongodb": "^6.10.0"
     }
   }
 }

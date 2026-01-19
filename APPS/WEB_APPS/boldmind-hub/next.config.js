@@ -3,11 +3,20 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ['@boldmind/ui', '@boldmind/utils', '@boldmind/seo', '@boldmind/analytics'],
+  transpilePackages: [
+    '@boldmind/ui', 
+    '@boldmind/utils', 
+    '@boldmind/seo', 
+    '@boldmind/analytics',
+    '@boldmind/auth',
+    '@boldmind/database'
+  ],
   swcMinify: true,
+  env: {
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  },
   eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
   images: {
@@ -17,7 +26,10 @@ const nextConfig = {
         hostname: '**',
       },
     ],
-    domains: [], // Empty to avoid deprecation warning
+    domains: [], 
+  },
+  experimental: {
+    serverComponentsExternalPackages: ['mongoose', 'mongodb', '@prisma/client'],
   },
 }
 
