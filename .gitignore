@@ -102,3 +102,6 @@ apps/web/educenter/public/courses/
 
 # Services
 services/**/dist/
+
+.turbo/
+.next/cache/

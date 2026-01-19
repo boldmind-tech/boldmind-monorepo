@@ -1,17 +1,19 @@
 {
   "name": "boldmind-hub",
   "framework": "nextjs",
-  "buildCommand": "cd ../../.. && pnpm run vercel-build:boldmind-hub",
+  "buildCommand": "pnpm turbo run build --filter=@boldmind/boldmind-hub... --cache-dir=.turbo",
   "outputDirectory": ".next",
-  "installCommand": "cd ../../.. && pnpm install",
-  "devCommand": "cd ../../.. && pnpm run dev --filter=@boldmind/boldmind-hub",
-  "regions": ["fra1"],
+  "installCommand": "pnpm install --frozen-lockfile --prefer-offline",
+  "devCommand": "pnpm turbo run dev --filter=@boldmind/boldmimd-hub...",
+  "regions": [
+    "fra1"
+  ],
   "env": {
     "NEXT_PUBLIC_API_URL": "https://api.boldmind.ng",
     "NEXT_PUBLIC_SITE_URL": "https://boldmind.ng"
   },
-  "alias": ["boldmind.ng", "www.boldmind.ng"],
-  "nodejs": {
-    "version": "20.x"
-  }
+  "alias": [
+    "boldmind.ng",
+    "www.boldmind.ng"
+  ]
 }

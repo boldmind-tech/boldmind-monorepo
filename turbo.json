@@ -1,16 +1,23 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": [
-    ".env.example",
     "tsconfig.json",
     "tailwind.config.js",
     "postcss.config.js",
-    "package.json"
+    "package.json",
+    "pnpm-lock.yaml"
   ],
   "pipeline": {
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "dist/**", "!.next/cache/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "dist/**"
+      ],
+      "cache": true
     },
     "dev": {
       "cache": false,
@@ -29,7 +36,11 @@
       "outputs": []
     },
     "deploy": {
-      "dependsOn": ["build", "test", "lint"]
+      "dependsOn": [
+        "build",
+        "test",
+        "lint"
+      ]
     }
   }
 }

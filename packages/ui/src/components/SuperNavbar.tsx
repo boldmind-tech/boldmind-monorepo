@@ -24,7 +24,7 @@ import { cn } from "../lib/utils";
 import {
   BOLDMIND_PRODUCTS,
   getProductBySlug,
-  ProductStatus,
+  getProductsByStatus
 } from "@boldmind/utils";
 
 export interface NavLink {

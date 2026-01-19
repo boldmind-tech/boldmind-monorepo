@@ -87,8 +87,8 @@ export default function HomePage() {
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
-    { href: "#products", label: "Products" }, 
-    { href: "/planai", label: "PlanAI" },
+    { href: "/products", label: "Products" }, 
+    { href: "https://planai.boldmind.ng", label: "PlanAI" },
     { href: "/contact", label: "Contact" },
   ];
 
@@ -99,7 +99,7 @@ export default function HomePage() {
       links: [
         { href: "https://amebogist.ng", label: "AmeboGist", isExternal: true },
         { href: "https://educenter.com.ng", label: "EduCenter", isExternal: true },
-        { href: "/planai", label: "PlanAI Suite" },
+        { href: "https://planai.boldmind.ng", label: "PlanAI Suite", isExternal: true },
         { href: "/products/boldmind-os", label: "BoldMind OS" },
       ],
     },
@@ -107,7 +107,7 @@ export default function HomePage() {
       title: "Company",
       links: [
         { href: "/#ecosystem", label: "Ecosystem" },
-        { href: "/#products", label: "Products" },
+        { href: "/products", label: "Products" },
         { href: "https://amebogist.ng", label: "Blog", isExternal: true },
         { href: "/contact", label: "Contact" },
       ],
@@ -149,7 +149,8 @@ export default function HomePage() {
       description: "Providing high-leverage tools for entrepreneurs",
       color: "#FFC800",
       icon: "🤖",
-      link: "/planai",
+      link: "https://planai.boldmind.ng",
+      isExternal: true,
     },
   ];
 
@@ -661,7 +662,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <SuperFooter
-        logoSrc="/logo.png"
+      logoSrc="/icon-180x180.png"
         sections={footerSections}
         contactInfo={{
           email: 'hello@boldmind.ng',

@@ -14,7 +14,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   const productTheme = {
     slug: forceProduct,
     name: "AmeboGist",
-    description: "Nigeria's #1 Gist Hub",
+    description: "Nigeria\'s #1 Pidgin English platform led by AI/Tech education 🤖 and Creator entrepreneurship ✍️, plus Sports ⚽, Politics 🏛️, Entertainment 🎭, and Trending Gist 🔥.",
     icon: "🔥",
     status: "LIVE" as const,
     colors: {
