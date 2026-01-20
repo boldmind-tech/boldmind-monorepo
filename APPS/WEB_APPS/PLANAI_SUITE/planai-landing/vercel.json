@@ -1,10 +1,10 @@
 {
   "name": "planai-landing",
   "framework": "nextjs",
-  "buildCommand": "pnpm turbo run build --filter=@boldmind/planai-landing.. --cache-dir=.turbo",
+  "buildCommand": "pnpm turbo run build --filter=@boldmind/planai-landing --cache-dir=.turbo",
   "outputDirectory": ".next",
-  "installCommand": "pnpm install --frozen-lockfile --prefer-offline",
-  "devCommand": "pnpm turbo run dev --filter=@boldmind/planai-landing...",
+  "installCommand": "pnpm install --no-frozen-lockfile --prefer-offline",
+  "devCommand": "pnpm turbo run dev --filter=@boldmind/planai-landing",
   "regions": [
     "fra1"
   ],

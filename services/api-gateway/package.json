@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "nest start",
-    "start:dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch",
+    "start": "pnpm run build && nest start",
+    "start:dev": "pnpm run build && nest start --watch",
+    "start:debug": "pnpm run build && nest start --debug --watch",
     "start:prod": "node dist/main",
     "build": "nest build",
+    "nest": "nest build --verbose",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest"
   },

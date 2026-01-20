@@ -1,14 +1,19 @@
 {
   "name": "socail-factory",
   "framework": "nextjs",
-  "buildCommand": "npm run build",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install",
+  "buildCommand": "pnpm turbo run build --filter=@boldmind/social-factory --cache-dir=.turbo",
   "outputDirectory": ".next",
-  "regions": ["fra1"],
+  "installCommand": "pnpm install --no-frozen-lockfile --prefer-offline",
+  "devCommand": "pnpm turbo run dev --filter=@boldmind/social-factory",
+  "regions": [
+    "fra1"
+  ],
   "env": {
     "NEXT_PUBLIC_API_URL": "https://api.boldmind.ng",
-    "NEXT_PUBLIC_APP_URL": "https://social.boldmind.ng"
+    "NEXT_PUBLIC_SITE_URL": "https://socail.boldmind.ng"
   },
-  "alias": ["social.boldmind.ng"]
+  "alias": [
+    "socail.boldmind.ng",
+    "www.socail.boldmind.ng"
+  ]
 }

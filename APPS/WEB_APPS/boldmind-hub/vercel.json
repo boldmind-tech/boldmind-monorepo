@@ -1,10 +1,10 @@
 {
   "name": "boldmind-hub",
   "framework": "nextjs",
-  "buildCommand": "pnpm turbo run build --filter=@boldmind/boldmind-hub... --cache-dir=.turbo",
+  "buildCommand": "pnpm turbo run build --filter=@boldmind/boldmind-hub --cache-dir=.turbo",
   "outputDirectory": ".next",
-  "installCommand": "pnpm install --frozen-lockfile --prefer-offline",
-  "devCommand": "pnpm turbo run dev --filter=@boldmind/boldmimd-hub...",
+  "installCommand": "pnpm install --no-frozen-lockfile --prefer-offline",
+  "devCommand": "pnpm turbo run dev --filter=@boldmind/boldmind-hub",
   "regions": [
     "fra1"
   ],

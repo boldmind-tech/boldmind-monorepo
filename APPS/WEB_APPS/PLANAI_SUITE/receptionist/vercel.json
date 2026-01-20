@@ -1,0 +1,19 @@
+{
+    "name": "receptionist",
+    "framework": "nextjs",
+    "buildCommand": "pnpm turbo run build --filter=@boldmind/planai-receptionist --cache-dir=.turbo",
+    "outputDirectory": ".next",
+    "installCommand": "pnpm install --no-frozen-lockfile --prefer-offline",
+    "devCommand": "pnpm turbo run dev --filter=@boldmind/planai-receptionist",
+    "regions": [
+        "fra1"
+    ],
+    "env": {
+        "NEXT_PUBLIC_API_URL": "https://apiplanai.boldmind.ng",
+        "NEXT_PUBLIC_SITE_URL": "https://planai.boldmind.ng/receptionist"
+    },
+    "alias": [
+        "planai.boldmind.ng/receptionist",
+        "www.planai.boldmind.ng/receptionist"
+    ]
+}

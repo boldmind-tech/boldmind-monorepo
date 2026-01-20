@@ -1,14 +1,19 @@
 {
   "name": "naija-fither",
   "framework": "nextjs",
-  "buildCommand": "npm run build",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install",
+  "buildCommand": "pnpm turbo run build --filter=@boldmind/naija-fither --cache-dir=.turbo",
   "outputDirectory": ".next",
-  "regions": ["fra1"],
+  "installCommand": "pnpm install --no-frozen-lockfile --prefer-offline",
+  "devCommand": "pnpm turbo run dev --filter=@boldmind/naija-fither",
+  "regions": [
+    "fra1"
+  ],
   "env": {
     "NEXT_PUBLIC_API_URL": "https://api.boldmind.ng",
-    "NEXT_PUBLIC_APP_URL": "https://fit.boldmind.ng"
+    "NEXT_PUBLIC_SITE_URL": "https://fit.boldmind.ng"
   },
-  "alias": ["fit.boldmind.ng"]
+  "alias": [
+    "fit.boldmind.ng",
+    "www.fit.boldmind.ng"
+  ]
 }

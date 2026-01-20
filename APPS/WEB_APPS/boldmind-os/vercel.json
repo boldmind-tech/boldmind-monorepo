@@ -1,14 +1,19 @@
 {
-  "name": "boldmind-so",
+  "name": "boldmind-os",
   "framework": "nextjs",
-  "buildCommand": "cd ../.. && pnpm install && pnpm turbo run build --filter=boldmind-so",
+  "buildCommand": "pnpm turbo run build --filter=@boldmind/boldmind-os --cache-dir=.turbo",
   "outputDirectory": ".next",
-  "installCommand": "cd ../.. && pnpm install",
-  "devCommand": "cd ../.. && pnpm turbo run dev --filter=boldmind-hub",
-  "regions": ["fra1"],
+  "installCommand": "pnpm install --no-frozen-lockfile --prefer-offline",
+  "devCommand": "pnpm turbo run dev --filter=@boldmind/boldmind-os",
+  "regions": [
+    "fra1"
+  ],
   "env": {
     "NEXT_PUBLIC_API_URL": "https://api.boldmind.ng",
     "NEXT_PUBLIC_SITE_URL": "https://os.boldmind.ng"
   },
-  "alias": ["os.boldmind.ng", "www.os.boldmind.ng"]
+  "alias": [
+    "os.boldmind.ng",
+    "www.os.boldmind.ng"
+  ]
 }

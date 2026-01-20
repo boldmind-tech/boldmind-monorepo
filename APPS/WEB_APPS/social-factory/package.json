@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "@boldmind/planai-social-factory",
+  "name": "@boldmind/social-factory",
   "version": "0.1.0",
   "private": true,
   "scripts": {

@@ -1,5 +1,5 @@
 {
-  "extends": "../../packages/config/typescript/tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "module": "preserve",
     "declaration": true,
@@ -19,12 +19,27 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@boldmind/auth": ["../../packages/auth/src"],
-      "@boldmind/database": ["../../packages/database/src"],
-      "@boldmind/types": ["../../packages/types/src"],
-      "@boldmind/utils": ["../../packages/utils/src"]
+      "@boldmind/auth": [
+        "../../packages/auth/src"
+      ],
+      "@boldmind/database": [
+        "../../packages/database/src"
+      ],
+      "@boldmind/types": [
+        "../../packages/types/src"
+      ],
+      "@boldmind/utils": [
+        "../../packages/utils/src"
+      ]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "test", "**/*.spec.ts"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "test",
+    "**/*.spec.ts"
+  ]
 }
