@@ -23,7 +23,7 @@ import ShareButtons from "../components/ShareButtons";
 import NewsletterForm from "../components/NewsletterForm";
 
 // Types
-import type { Category } from "../types/post";
+import type { Category } from "../types/index";
 
 export const revalidate = 60;
 
@@ -69,11 +69,11 @@ async function fetchPosts({
 }> {
   try {
     await db.connect();
-    
-    const query: { status: string; category?: mongoose.Types.ObjectId } = { 
-      status: "published" 
+
+    const query: { status: string; category?: mongoose.Types.ObjectId } = {
+      status: "published"
     };
-    
+
     if (category) {
       const categoryObj = await db.category.findOne({ slug: category }).lean();
       if (!categoryObj || Array.isArray(categoryObj)) {
@@ -81,11 +81,11 @@ async function fetchPosts({
       }
       query.category = new mongoose.Types.ObjectId((categoryObj as { _id: mongoose.Types.ObjectId })._id);
     }
-    
+
     const sort: Record<string, 1 | -1> = sortBy === "trending"
       ? { views: -1 as const, createdAt: -1 as const }
       : { createdAt: -1 as const };
-    
+
     const posts = await db.post
       .find(query)
       .populate("category", "name slug metaTitle metaDescription")
@@ -94,39 +94,39 @@ async function fetchPosts({
       .skip(skip)
       .limit(limit)
       .lean() as unknown as PopulatedPostLean[];
-    
+
     const total = await db.post.countDocuments(query);
-    
+
     return {
       posts: posts
         .map((post) => {
-          const excerpt = post.excerpt || 
+          const excerpt = post.excerpt ||
             (post.content?.replace(/<[^>]*>/g, "")?.substring(0, 160) || "") + "...";
-          
+
           return {
             _id: post._id.toString(),
             title: post.title,
             excerpt,
             category: post.category
               ? {
-                  _id: post.category._id.toString(),
-                  name: post.category.name || "Uncategorized",
-                  slug: post.category.slug || "uncategorized",
-                  metaTitle: post.category.metaTitle || "",
-                  metaDescription: post.category.metaDescription || "",
-                }
+                _id: post.category._id.toString(),
+                name: post.category.name || "Uncategorized",
+                slug: post.category.slug || "uncategorized",
+                metaTitle: post.category.metaTitle || "",
+                metaDescription: post.category.metaDescription || "",
+              }
               : {
-                  _id: "",
-                  name: "Uncategorized",
-                  slug: "uncategorized",
-                  metaTitle: "",
-                  metaDescription: "",
-                },
+                _id: "",
+                name: "Uncategorized",
+                slug: "uncategorized",
+                metaTitle: "",
+                metaDescription: "",
+              },
             author: post.authorId
               ? {
-                  name: post.authorId.name || "BoldMind Team",
-                  avatar: post.authorId.avatar,
-                }
+                name: post.authorId.name || "BoldMind Team",
+                avatar: post.authorId.avatar,
+              }
               : { name: "BoldMind Team" },
             imageUrl: post.imageUrl || "/placeholder.svg",
             slug: post.slug,
@@ -155,15 +155,15 @@ export async function generateMetadata({
 }) {
   const { category } = await searchParams;
   const categories = await fetchCategories();
-  
+
   let title = {
     default: "AmeboGist.ng - Nigeria's #1 Gist, AI, Tech, Politics & Entertainment Hub",
     template: "%s | AmeboGist.ng - BoldMind Ecosystem",
   };
-  
+
   let description =
     "Amebo wey make sense! Part of BoldMind Ecosystem - Nigeria's premier source for authentic gist, breaking politics, trending entertainment, game-changing AI & Tech insights, and real-life hustle tips.";
-  
+
   let keywords = [
     "AmeboGist",
     "Naija gist",
@@ -179,7 +179,7 @@ export async function generateMetadata({
       ? [categories.find((c) => c.slug === category)?.name.toLowerCase() || "news"]
       : []),
   ];
-  
+
   if (category) {
     const selectedCat = categories.find((cat) => cat.slug === category);
     if (selectedCat) {
@@ -195,7 +195,7 @@ export async function generateMetadata({
       keywords = [...keywords, `${selectedCat.name.toLowerCase()} amebo`, "AI insights", "entrepreneurship"];
     }
   }
-  
+
   return {
     metadataBase: new URL("https://amebogist.ng"),
     title,
@@ -401,15 +401,15 @@ export default async function Home({
                 },
                 ...(selectedCategory
                   ? [
-                      {
-                        "@type": "ListItem",
-                        position: 2,
-                        name:
-                          categories.find((c) => c.slug === selectedCategory)
-                            ?.name || selectedCategory,
-                        item: currentUrl,
-                      },
-                    ]
+                    {
+                      "@type": "ListItem",
+                      position: 2,
+                      name:
+                        categories.find((c) => c.slug === selectedCategory)
+                          ?.name || selectedCategory,
+                      item: currentUrl,
+                    },
+                  ]
                   : []),
               ],
             },
@@ -498,11 +498,11 @@ export default async function Home({
                     <span className="text-sm">
                       {heroPost?.createdAt
                         ? new Date(heroPost.createdAt).toLocaleDateString("en-NG", {
-                            day: "numeric",
-                            month: "short",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })
+                          day: "numeric",
+                          month: "short",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
                         : "Just now"}
                     </span>
                   </div>
