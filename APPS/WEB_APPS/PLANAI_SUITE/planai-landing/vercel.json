@@ -1,7 +1,7 @@
 {
   "name": "planai-landing",
   "framework": "nextjs",
-  "buildCommand": "cd APPS/WEB_APPS/PLANAI_SUITE/planai-landing && pnpm run build",
+  "buildCommand": "pnpm run vercel:planai-landing",
   "outputDirectory": "APPS/WEB_APPS/PLANAI_SUITE/planai-landing/.next",
   "installCommand": "pnpm install --filter=@boldmind/planai-landing...",
   "devCommand": "cd APPS/WEB_APPS/PLANAI_SUITE/planai-landing && pnpm run dev",

@@ -1,7 +1,7 @@
 {
   "name": "amebogist",
   "framework": "nextjs",
-  "buildCommand": "cd APPS/WEB_APPS/amebogist && pnpm run build",
+  "buildCommand": "pnpm run vercel:amebogist",
   "outputDirectory": "APPS/WEB_APPS/amebogist/.next",
   "installCommand": "pnpm install --filter=@boldmind/amebogist...",
   "devCommand": "cd APPS/WEB_APPS/amebogist && pnpm run dev",

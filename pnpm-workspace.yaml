@@ -1,15 +1,18 @@
 packages:
-  # All web applications
-  - 'APPS/WEB_APPS/*'
-  - 'APPS/WEB_APPS/PLANAI_SUITE/*'
-  - 'APPS/CONCEPT_APPS/*'
+  # Apps - use glob patterns
+  - 'APPS/**'
   
-  # Mobile applications
-  - 'APPS/MOBILE/native/*'
-  - 'APPS/MOBILE/twa/*'
-  
-  # Shared packages
-  - 'PACKAGES/*'
+  # Packages - list individually
+  - 'PACKAGES/ui'
+  - 'PACKAGES/utils'
+  - 'PACKAGES/seo'
+  - 'PACKAGES/analytics'
+  - 'PACKAGES/auth'
+  - 'PACKAGES/api-client'
+  - 'PACKAGES/database'
+  - 'PACKAGES/payments'
+  - 'PACKAGES/email'
+  - 'PACKAGES/ai'
   
   # Backend services
   - 'SERVICES/*'

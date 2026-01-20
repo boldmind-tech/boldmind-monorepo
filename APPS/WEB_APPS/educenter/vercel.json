@@ -1,7 +1,7 @@
 {
   "name": "educenter",
   "framework": "nextjs",
-  "buildCommand": "cd APPS/WEB_APPS/educenter && pnpm run build",
+  "buildCommand": "pnpm run vercel:educenter",
   "outputDirectory": "APPS/WEB_APPS/educenter/.next",
   "installCommand": "pnpm install --filter=@boldmind/educenter...",
   "devCommand": "cd APPS/WEB_APPS/educenter && pnpm run dev",
