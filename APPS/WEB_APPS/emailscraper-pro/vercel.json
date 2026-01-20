@@ -3,7 +3,7 @@
   "framework": "nextjs",
   "buildCommand": "cd APPS/WEB_APPS/emailscraper-pro && pnpm run build",
   "outputDirectory": "APPS/WEB_APPS/emailscraper-pro/.next",
-  "installCommand": "cd APPS/WEB_APPS/emailscraper-pro && pnpm install --filter=@boldmind/emailscraper-pro...",
+  "installCommand": "pnpm install --filter=@boldmind/emailscraper-pro...",
   "devCommand": "cd APPS/WEB_APPS/emailscraper-pro && pnpm run dev",
   "regions": [
     "fra1"

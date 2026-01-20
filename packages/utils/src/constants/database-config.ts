@@ -7,7 +7,7 @@ export const DATABASE_CONFIG = {
     'boldmind-hub',
     'educenter',
     'educenter-twa',
-    'ai-receptionist',
+    'receptionist',
     'boldmind-os',
     'boldmind-os-twa',
     'naija-fither',
@@ -24,7 +24,7 @@ export const DATABASE_CONFIG = {
     'safe-ai-native',
     'kolo-ai'
   ],
-  
+
   // MongoDB Products (Flexible schema, unstructured data)
   mongodb: [
     'amebogist',

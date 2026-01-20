@@ -3,7 +3,7 @@
   "framework": "nextjs",
   "buildCommand": "cd APPS/WEB_APPS/educenter && pnpm run build",
   "outputDirectory": "APPS/WEB_APPS/educenter/.next",
-  "installCommand": "cd APPS/WEB_APPS/educenter && pnpm install --filter=@boldmind/educenter...",
+  "installCommand": "pnpm install --filter=@boldmind/educenter...",
   "devCommand": "cd APPS/WEB_APPS/educenter && pnpm run dev",
   "regions": [
     "fra1"

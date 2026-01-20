@@ -3,7 +3,7 @@
   "framework": "nextjs",
   "buildCommand": "cd APPS/WEB_APPS/amebogist && pnpm run build",
   "outputDirectory": "APPS/WEB_APPS/amebogist/.next",
-  "installCommand": "cd APPS/WEB_APPS/amebogist && pnpm install --filter=@boldmind/amebogist...",
+  "installCommand": "pnpm install --filter=@boldmind/amebogist...",
   "devCommand": "cd APPS/WEB_APPS/amebogist && pnpm run dev",
   "regions": [
     "fra1"

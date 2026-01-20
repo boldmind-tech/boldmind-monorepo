@@ -3,7 +3,7 @@
     "framework": "nextjs",
     "buildCommand": "cd APPS/WEB_APPS/PLANAI_SUITE/receptionist && pnpm run build",
     "outputDirectory": "APPS/WEB_APPS/PLANAI_SUITE/receptionist/.next",
-    "installCommand": "cd APPS/WEB_APPS/PLANAI_SUITE/receptionist && pnpm install --filter=@boldmind/planai-receptionist...",
+    "installCommand": "pnpm install --filter=@boldmind/planai-receptionist...",
     "devCommand": "cd APPS/WEB_APPS/PLANAI_SUITE/receptionist && pnpm run dev",
     "regions": [
         "fra1"

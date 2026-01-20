@@ -46,11 +46,9 @@ import { useTheme } from "../providers/theme-provider";
 import { cn } from "../lib/utils";
 import {
   BOLDMIND_PRODUCTS,
-  Product,
   getProductBySlug,
   getLiveProducts,
   getProductsByCategory,
-  ProductStatus,
 } from "@boldmind/utils";
 
 export interface FooterLink {
@@ -108,16 +106,16 @@ export function SuperFooter({
   const currentYear = new Date().getFullYear();
 
   const currentProduct = useMemo(() => {
-  const product = getProductBySlug(productTheme.slug);
-  
-  if (product) {
-    console.log('✅ Found product:', product.name, 'for slug:', productTheme.slug);
-    return product;
-  }
-  
-  console.warn('⚠️ Product not found for slug:', productTheme.slug, '- Falling back to BoldMind Hub');
-  return BOLDMIND_PRODUCTS[0]; // ✅ CORRECT
-}, [productTheme.slug]);
+    const product = getProductBySlug(productTheme.slug);
+
+    if (product) {
+      console.log('✅ Found product:', product.name, 'for slug:', productTheme.slug);
+      return product;
+    }
+
+    console.warn('⚠️ Product not found for slug:', productTheme.slug, '- Falling back to BoldMind Hub');
+    return BOLDMIND_PRODUCTS[0]; // ✅ CORRECT
+  }, [productTheme.slug]);
   // Get all live products (except current one) for related products section
   const liveProducts = useMemo(() => {
     return getLiveProducts()
@@ -170,13 +168,13 @@ export function SuperFooter({
           { href: "/docs", label: "Documentation", icon: "📚" },
           ...(currentProduct.links?.website
             ? [
-                {
-                  href: currentProduct.links.website,
-                  label: "Live Website",
-                  icon: "🌐",
-                  isExternal: true,
-                },
-              ]
+              {
+                href: currentProduct.links.website,
+                label: "Live Website",
+                icon: "🌐",
+                isExternal: true,
+              },
+            ]
             : []),
         ],
       },
@@ -188,7 +186,7 @@ export function SuperFooter({
           icon: product.icon,
           isExternal: true,
           badge:
-            product.status === ("LIVE" as ProductStatus)
+            product.status === ("LIVE")
               ? "🚀 LIVE"
               : undefined,
         })),
@@ -263,7 +261,7 @@ export function SuperFooter({
   // Dynamic stats based on product
   const getStats = () => {
     // For non-live products, show projected stats
-    if (currentProduct.status !== ("LIVE" as ProductStatus)) {
+    if (currentProduct.status !== ("LIVE")) {
       return [
         {
           icon: TrendingUp,

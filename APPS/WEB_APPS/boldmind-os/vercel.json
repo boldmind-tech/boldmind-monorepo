@@ -3,7 +3,7 @@
   "framework": "nextjs",
   "buildCommand": "cd APPS/WEB_APPS/boldmind-os && pnpm run build",
   "outputDirectory": "APPS/WEB_APPS/boldmind-os/.next",
-  "installCommand": "cd APPS/WEB_APPS/boldmind-os && pnpm install --filter=@boldmind/boldmind-os...",
+  "installCommand": "pnpm install --filter=@boldmind/boldmind-os...",
   "devCommand": "cd APPS/WEB_APPS/boldmind-os && pnpm run dev",
   "regions": [
     "fra1"

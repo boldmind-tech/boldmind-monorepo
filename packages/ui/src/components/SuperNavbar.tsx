@@ -95,7 +95,7 @@ export function SuperNavbar({
   // Get product-specific CTA
   const getDefaultCTA = () => {
     if (
-      currentProduct.status === ("LIVE" as ProductStatus) &&
+      currentProduct.status === ("LIVE") &&
       currentProduct.links?.website
     ) {
       return {
@@ -362,7 +362,7 @@ export function SuperNavbar({
                     animate={{ opacity: 1, y: 0 }}
                     className="text-xs text-gray-400 -mt-1"
                   >
-                      
+
                     {/* {currentProduct.status === ('LIVE' as ProductStatus) ? '🚀 LIVE' : 
                      currentProduct.status === ('BUILDING' as ProductStatus) ? '🔨 BUILDING' :
                      currentProduct.status === ('PLANNED' as ProductStatus) ? '📅 PLANNED' : '💡 CONCEPT'} */}

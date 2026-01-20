@@ -3,7 +3,7 @@
   "framework": "nextjs",
   "buildCommand": "cd APPS/WEB_APPS/social-factory && pnpm run build",
   "outputDirectory": "APPS/WEB_APPS/social-factory/.next",
-  "installCommand": "cd APPS/WEB_APPS/social-factory && pnpm install --filter=@boldmind/social-factory...",
+  "installCommand": "pnpm install --filter=@boldmind/social-factory...",
   "devCommand": "cd APPS/WEB_APPS/social-factory && pnpm run dev",
   "regions": [
     "fra1"

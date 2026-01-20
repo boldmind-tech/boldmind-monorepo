@@ -3,7 +3,7 @@
   "framework": "nextjs",
   "buildCommand": "cd APPS/WEB_APPS/safe-naija && pnpm run build",
   "outputDirectory": "APPS/WEB_APPS/safe-naija/.next",
-  "installCommand": "cd APPS/WEB_APPS/safe-naija && pnpm install --filter=@boldmind/safe-naija...",
+  "installCommand": "pnpm install --filter=@boldmind/safe-naija...",
   "devCommand": "cd APPS/WEB_APPS/safe-naija && pnpm run dev",
   "regions": [
     "fra1"
