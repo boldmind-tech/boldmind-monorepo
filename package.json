@@ -55,7 +55,12 @@
     "vercel:amebogist": "turbo run build --filter=...@boldmind/amebogist",
     "vercel:educenter": "turbo run build --filter=...@boldmind/educenter",
     "vercel:planai-landing": "turbo run build --filter=...@boldmind/planai-landing",
-    "vercel:planai-receptionist": "turbo run build --filter=...@boldmind/planai-receptionist"
+    "vercel:planai-receptionist": "turbo run build --filter=...@boldmind/planai-receptionist",
+    "build:educenter-deps": "turbo run build --filter=@boldmind/ui --filter=@boldmind/auth --filter=@boldmind/utils",
+    "build:boldmind-hub-deps": "turbo run build --filter=@boldmind/ui --filter=@boldmind/auth --filter=@boldmind/utils --filter=@boldmind/seo --filter=@boldmind/analytics --filter=@boldmind/api-client",
+    "build:amebogist-deps": "turbo run build --filter=@boldmind/ui --filter=@boldmind/auth --filter=@boldmind/utils",
+    "build:planai-landing-deps": "turbo run build --filter=@boldmind/ui --filter=@boldmind/auth --filter=@boldmind/utils --filter=@boldmind/payments --filter=@boldmind/api-client",
+    "build:planai-receptionist-deps": "turbo run build --filter=@boldmind/ui --filter=@boldmind/auth --filter=@boldmind/utils --filter=@boldmind/payments --filter=@boldmind/api-client"
   },
   "devDependencies": {
     "@types/node": "^20.11.5",
