@@ -1,66 +1,51 @@
 // lib/db-helpers.ts
 import { db } from "./db";
 import mongoose from "mongoose";
+import { cache } from "react";
 
-// Cache for categories
-let categoriesCache: Array<{
+export interface Category {
   _id: string;
   name: string;
   slug: string;
-  description: string;
-  metaTitle: string;
-  metaDescription: string;
-  createdAt: Date;
-  updatedAt: Date;
-}> | null = null;
-let cacheTimestamp: number = 0;
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+  metaTitle?: string;
+  metaDescription?: string;
+  description?: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 /**
  * Get all categories with caching
  */
-export async function getAllCategories() {
-  const now = Date.now();
-  
-  // Return cached data if still valid
-  if (categoriesCache && (now - cacheTimestamp) < CACHE_DURATION) {
-    return categoriesCache;
-  }
-
+export const getAllCategories = cache(async (): Promise<Category[]> => {
   try {
     await db.connect();
-    
-    const categories = await db.category.find({}).sort({ name: 1 }).lean();
-    
-    categoriesCache = categories.map(cat => ({
-      _id: cat._id.toString(),
-      name: cat.name,
-      slug: cat.slug,
-      description: cat.description || '',
-      metaTitle: cat.metaTitle || '',
-      metaDescription: cat.metaDescription || '',
-      createdAt: cat.createdAt,
-      updatedAt: cat.updatedAt
+    const categories = await db.category.find().lean<Category[]>();
+    return categories.map((category) => ({
+      _id: category._id.toString(),
+      name: category.name,
+      slug: category.slug,
+      description: category.description,
+      metaTitle: category.metaTitle,
+      metaDescription: category.metaDescription,
+      createdAt: category.createdAt,
+      updatedAt: category.updatedAt,
     }));
-    
-    cacheTimestamp = now;
-    return categoriesCache;
   } catch (error) {
     console.error('Error fetching categories:', error);
     return [];
   }
-}
-
+});
 /**
  * Get trending posts
  */
 export async function getTrendingPosts(limit = 8) {
   try {
     await db.connect();
-    
+
     // Last 7 days
     const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-    
+
     const trendingPosts = await db.post
       .find({
         status: 'published',
@@ -78,7 +63,7 @@ export async function getTrendingPosts(limit = 8) {
       const readTime = Math.ceil(wordCount / 200);
 
       return {
-        _id: post._id.toString(),
+        _id: post._id,
         title: post.title,
         excerpt: post.excerpt || content.substring(0, 160) + '...',
         category: post.category ? {

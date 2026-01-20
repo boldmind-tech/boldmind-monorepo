@@ -40,7 +40,7 @@ async function dbConnect() {
     };
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongooseInstance) => {
-      console.log(`✅ MongoDB Connected: ${mongooseInstance.connection.db.databaseName}`);
+      console.log(`✅ MongoDB Connected: ${MONGODB_URI}`);
       return mongooseInstance;
     }).catch((error) => {
       console.error("❌ MongoDB connection error:", error);
@@ -66,11 +66,11 @@ const categorySchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
-    description: String,
-    metaTitle: String,
-    metaDescription: String,
+    description: { type: String },
+    metaTitle: { type: String },
+    metaDescription: { type: String },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 /**
@@ -99,10 +99,10 @@ const postSchema = new mongoose.Schema(
     category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
     authorId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     views: { type: Number, default: 0 },
-    status: { 
-      type: String, 
-      default: "published", 
-      enum: ["draft", "published", "archived"] 
+    status: {
+      type: String,
+      default: "published",
+      enum: ["draft", "published", "archived"]
     },
     source: { type: String, default: "manual" },
     commentary: String,
@@ -113,6 +113,8 @@ const postSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+
 
 // Create models with proper typing
 const Category = mongoose.models.Category || mongoose.model("Category", categorySchema);
@@ -160,20 +162,20 @@ export const db = {
   // Connection
   connect: dbConnect,
   mongoose,
-  
+
   // Models - direct access
   Category,
   User,
   Post,
-  
+
   // Aliases for original code compatibility
   category: Category,
   post: Post,
   user: User,
-  
+
   // Raw MongoDB client (if needed)
   getClient: () => mongoose.connection.getClient(),
-  
+
   // Helper methods
   isConnected: () => mongoose.connection.readyState === 1,
   disconnect: () => mongoose.disconnect(),

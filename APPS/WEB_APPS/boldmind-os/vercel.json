@@ -1,10 +1,10 @@
 {
   "name": "boldmind-os",
   "framework": "nextjs",
-  "buildCommand": "pnpm turbo run build --filter=@boldmind/boldmind-os --cache-dir=.turbo",
-  "outputDirectory": ".next",
-  "installCommand": "pnpm install --no-frozen-lockfile --prefer-offline",
-  "devCommand": "pnpm turbo run dev --filter=@boldmind/boldmind-os",
+  "buildCommand": "cd APPS/WEB_APPS/boldmind-os && pnpm run build",
+  "outputDirectory": "APPS/WEB_APPS/boldmind-os/.next",
+  "installCommand": "cd APPS/WEB_APPS/boldmind-os && pnpm install --filter=@boldmind/boldmind-os...",
+  "devCommand": "cd APPS/WEB_APPS/boldmind-os && pnpm run dev",
   "regions": [
     "fra1"
   ],

@@ -1,10 +1,10 @@
 {
   "name": "naija-fither",
   "framework": "nextjs",
-  "buildCommand": "pnpm turbo run build --filter=@boldmind/naija-fither --cache-dir=.turbo",
-  "outputDirectory": ".next",
-  "installCommand": "pnpm install --no-frozen-lockfile --prefer-offline",
-  "devCommand": "pnpm turbo run dev --filter=@boldmind/naija-fither",
+  "buildCommand": "cd APPS/WEB_APPS/naija-fither && pnpm run build",
+  "outputDirectory": "APPS/WEB_APPS/naija-fither/.next",
+  "installCommand": "cd APPS/WEB_APPS/naija-fither && pnpm install --filter=@boldmind/naija-fither...",
+  "devCommand": "cd APPS/WEB_APPS/naija-fither && pnpm run dev",
   "regions": [
     "fra1"
   ],

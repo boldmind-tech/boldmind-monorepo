@@ -1,10 +1,10 @@
 {
   "name": "emailscraper-pro",
   "framework": "nextjs",
-  "buildCommand": "pnpm turbo run build --filter=@boldmind/emailscraper-pro --cache-dir=.turbo",
-  "outputDirectory": ".next",
-  "installCommand": "pnpm install --no-frozen-lockfile --prefer-offline",
-  "devCommand": "pnpm turbo run dev --filter=@boldmind/emailscraper-pro",
+  "buildCommand": "cd APPS/WEB_APPS/emailscraper-pro && pnpm run build",
+  "outputDirectory": "APPS/WEB_APPS/emailscraper-pro/.next",
+  "installCommand": "cd APPS/WEB_APPS/emailscraper-pro && pnpm install --filter=@boldmind/emailscraper-pro...",
+  "devCommand": "cd APPS/WEB_APPS/emailscraper-pro && pnpm run dev",
   "regions": [
     "fra1"
   ],

@@ -1,10 +1,10 @@
 {
   "name": "amebogist",
   "framework": "nextjs",
-  "buildCommand": "pnpm turbo run build --filter=@boldmind/amebogist --cache-dir=.turbo",
-  "outputDirectory": ".next",
-  "installCommand": "pnpm install --no-frozen-lockfile --prefer-offline",
-  "devCommand": "pnpm turbo run dev --filter=@boldmind/amebogist",
+  "buildCommand": "cd APPS/WEB_APPS/amebogist && pnpm run build",
+  "outputDirectory": "APPS/WEB_APPS/amebogist/.next",
+  "installCommand": "cd APPS/WEB_APPS/amebogist && pnpm install --filter=@boldmind/amebogist...",
+  "devCommand": "cd APPS/WEB_APPS/amebogist && pnpm run dev",
   "regions": [
     "fra1"
   ],

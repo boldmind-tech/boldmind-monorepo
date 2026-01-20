@@ -1,10 +1,10 @@
 {
   "name": "planai-landing",
   "framework": "nextjs",
-  "buildCommand": "pnpm turbo run build --filter=@boldmind/planai-landing --cache-dir=.turbo",
-  "outputDirectory": ".next",
-  "installCommand": "pnpm install --no-frozen-lockfile --prefer-offline",
-  "devCommand": "pnpm turbo run dev --filter=@boldmind/planai-landing",
+  "buildCommand": "cd APPS/WEB_APPS/PLANAI_SUITE/planai-landing && pnpm run build",
+  "outputDirectory": "APPS/WEB_APPS/PLANAI_SUITE/planai-landing/.next",
+  "installCommand": "cd APPS/WEB_APPS/PLANAI_SUITE/planai-landing && pnpm install --filter=@boldmind/planai-landing...",
+  "devCommand": "cd APPS/WEB_APPS/PLANAI_SUITE/planai-landing && pnpm run dev",
   "regions": [
     "fra1"
   ],

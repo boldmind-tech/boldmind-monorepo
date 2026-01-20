@@ -1,10 +1,10 @@
 {
   "name": "educenter",
   "framework": "nextjs",
-  "buildCommand": "pnpm turbo run build --filter=@boldmind/educenter --cache-dir=.turbo",
-  "outputDirectory": ".next",
-  "installCommand": "pnpm install --no-frozen-lockfile --prefer-offline",
-  "devCommand": "pnpm turbo run dev --filter=@boldmind/educenter",
+  "buildCommand": "cd APPS/WEB_APPS/educenter && pnpm run build",
+  "outputDirectory": "APPS/WEB_APPS/educenter/.next",
+  "installCommand": "cd APPS/WEB_APPS/educenter && pnpm install --filter=@boldmind/educenter...",
+  "devCommand": "cd APPS/WEB_APPS/educenter && pnpm run dev",
   "regions": [
     "fra1"
   ],

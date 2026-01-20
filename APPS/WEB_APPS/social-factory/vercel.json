@@ -1,10 +1,10 @@
 {
   "name": "socail-factory",
   "framework": "nextjs",
-  "buildCommand": "pnpm turbo run build --filter=@boldmind/social-factory --cache-dir=.turbo",
-  "outputDirectory": ".next",
-  "installCommand": "pnpm install --no-frozen-lockfile --prefer-offline",
-  "devCommand": "pnpm turbo run dev --filter=@boldmind/social-factory",
+  "buildCommand": "cd APPS/WEB_APPS/social-factory && pnpm run build",
+  "outputDirectory": "APPS/WEB_APPS/social-factory/.next",
+  "installCommand": "cd APPS/WEB_APPS/social-factory && pnpm install --filter=@boldmind/social-factory...",
+  "devCommand": "cd APPS/WEB_APPS/social-factory && pnpm run dev",
   "regions": [
     "fra1"
   ],

@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "cd ../../../../ && turbo run build --filter=...@boldmind/planai-landing",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "vercel --prod"
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@boldmind/ui": "workspace:*",

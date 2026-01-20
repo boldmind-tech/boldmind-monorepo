@@ -1,10 +1,10 @@
 {
   "name": "safe-naija",
   "framework": "nextjs",
-  "buildCommand": "pnpm turbo run build --filter=@boldmind/safe-naija --cache-dir=.turbo",
-  "outputDirectory": ".next",
-  "installCommand": "pnpm install --no-frozen-lockfile --prefer-offline",
-  "devCommand": "pnpm turbo run dev --filter=@boldmind/safe-naija",
+  "buildCommand": "cd APPS/WEB_APPS/safe-naija && pnpm run build",
+  "outputDirectory": "APPS/WEB_APPS/safe-naija/.next",
+  "installCommand": "cd APPS/WEB_APPS/safe-naija && pnpm install --filter=@boldmind/safe-naija...",
+  "devCommand": "cd APPS/WEB_APPS/safe-naija && pnpm run dev",
   "regions": [
     "fra1"
   ],
