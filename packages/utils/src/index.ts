@@ -110,6 +110,19 @@ export {
   getProductThemeClass,
 } from './styles/theme';
 
+import {
+  SocialAccount,
+  PlatformRules,
+  ProductRules,
+  crossPostingRules,
+  SocialIntegration,
+} from './constants/social';
+
+export {
+  crossPostingRules,
+  SocialIntegration,
+};
+
 // ===================================
 // UTILITY FUNCTIONS
 // ===================================
@@ -119,10 +132,10 @@ export {
  */
 export function detectCurrentProduct(): string | null {
   if (typeof window === 'undefined') return null;
-  
+
   const hostname = window.location.hostname;
   const pathname = window.location.pathname;
-  
+
   // Check for subdomain routes (PlanAI Suite)
   if (hostname.includes('planai.boldmind.ng')) {
     if (pathname.startsWith('/receptionist')) return 'ai-receptionist';
@@ -136,7 +149,7 @@ export function detectCurrentProduct(): string | null {
     if (pathname.startsWith('/analytics')) return 'analytics-dashboard';
     return 'planai-suite';
   }
-  
+
   // Map domains to products
   const domainMap: Record<string, string> = {
     'boldmind.ng': 'boldmind-hub',
@@ -163,7 +176,7 @@ export function detectCurrentProduct(): string | null {
     'localhost': 'boldmind-hub',
     '127.0.0.1': 'boldmind-hub',
   };
-  
+
   return domainMap[hostname] || 'boldmind-hub';
 }
 
@@ -193,7 +206,7 @@ export function formatCurrency(amount: number, currency: string = 'NGN'): string
  */
 export function formatDate(date: string | Date, format: 'short' | 'long' = 'short'): string {
   const d = typeof date === 'string' ? new Date(date) : date;
-  
+
   if (format === 'long') {
     return d.toLocaleDateString('en-NG', {
       year: 'numeric',
@@ -201,7 +214,7 @@ export function formatDate(date: string | Date, format: 'short' | 'long' = 'shor
       day: 'numeric',
     });
   }
-  
+
   return d.toLocaleDateString('en-NG', {
     year: 'numeric',
     month: 'short',
@@ -313,7 +326,7 @@ export async function shareContent(data: {
     console.warn('Web Share API not supported');
     return false;
   }
-  
+
   try {
     await navigator.share(data);
     return true;
@@ -328,17 +341,17 @@ export async function shareContent(data: {
  */
 export function formatPhoneNumber(phone: string): string {
   const cleaned = phone.replace(/\D/g, '');
-  
+
   // Nigerian format: +234 XXX XXX XXXX
   if (cleaned.startsWith('234')) {
     return `+234 ${cleaned.slice(3, 6)} ${cleaned.slice(6, 9)} ${cleaned.slice(9)}`;
   }
-  
+
   // Local format: 0XXX XXX XXXX
   if (cleaned.startsWith('0')) {
     return `${cleaned.slice(0, 4)} ${cleaned.slice(4, 7)} ${cleaned.slice(7)}`;
   }
-  
+
   return phone;
 }
 
@@ -355,11 +368,11 @@ export function isValidEmail(email: string): boolean {
  */
 export function isValidNigerianPhone(phone: string): boolean {
   const cleaned = phone.replace(/\D/g, '');
-  
+
   // Must be 11 digits starting with 0, or 13 digits starting with 234
   if (cleaned.length === 11 && cleaned.startsWith('0')) return true;
   if (cleaned.length === 13 && cleaned.startsWith('234')) return true;
-  
+
   return false;
 }
 
@@ -402,7 +415,7 @@ export function getRelativeTime(date: string | Date): string {
   const d = typeof date === 'string' ? new Date(date) : date;
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - d.getTime()) / 1000);
-  
+
   if (diffInSeconds < 60) return 'just now';
   if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
   if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
@@ -422,7 +435,7 @@ export default {
   database: DATABASE_CONFIG,
   domains: DOMAIN_MAPPINGS,
   colors: BOLDMIND_COLOR_SCHEMES,
-  
+
   // Utils
   utils: {
     detectCurrentProduct,
