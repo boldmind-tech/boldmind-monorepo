@@ -1,35 +1,51 @@
 {
-  "$schema": "https://vercel.com/schema.json",
-  "version": 2,
-  "installCommand": "corepack enable && pnpm install --frozen-lockfile --prefer-offline",
-  "buildCommand": null,
-  "outputDirectory": null,
-  "framework": null,
-  "env": {
-    "NODE_ENV": "production",
-    "PNPM_FLAGS": "--shamefully-hoist=false --strict-peer-dependencies=false"
-  },
-  "builds": [
-    {
-      "src": "APPS/WEB_APPS/amebogist/package.json",
-      "use": "@vercel/next"
+    "$schema": "https://vercel.com/schema.json",
+    "version": 2,
+    "installCommand": "corepack enable && pnpm install --frozen-lockfile --prefer-offline",
+    "buildCommand": null,
+    "outputDirectory": null,
+    "framework": null,
+    "env": {
+        "NODE_ENV": "production",
+        "PNPM_FLAGS": "--shamefully-hoist=false --strict-peer-dependencies=false"
     },
-    {
-      "src": "APPS/WEB_APPS/educenter/package.json",
-      "use": "@vercel/next"
-    },
-    {
-      "src": "APPS/WEB_APPS/boldmind-hub/package.json",
-      "use": "@vercel/next"
-    },
-    {
-      "src": "APPS/WEB_APPS/PLANAI_SUITE/planai-landing/package.json",
-      "use": "@vercel/next"
-    }
-  ],
-  "routes": [
-    {
-      "handle": "filesystem"
-    }
-  ]
+    "builds": [
+        {
+            "src": "APPS/WEB_APPS/boldmind-hub/package.json",
+            "use": "@vercel/next",
+            "config": {
+                "outputDirectory": "APPS/WEB_APPS/boldmind-hub/.next",
+                "buildCommand": "cd ../../.. && pnpm turbo run build --filter=./PACKAGES/ui --filter=./PACKAGES/utils --filter=./PACKAGES/auth --filter=./PACKAGES/database --filter=...{@boldmind/boldmind-hub}"
+            }
+        },
+        {
+            "src": "APPS/WEB_APPS/amebogist/package.json",
+            "use": "@vercel/next",
+            "config": {
+                "outputDirectory": "APPS/WEB_APPS/amebogist/.next",
+                "buildCommand": "cd ../../.. && pnpm turbo run build --filter=./PACKAGES/ui --filter=./PACKAGES/utils --filter=./PACKAGES/auth --filter=./PACKAGES/database --filter=./PACKAGES/seo --filter=./PACKAGES/analytics --filter=...{@boldmind/amebogist}"
+            }
+        },
+        {
+            "src": "APPS/WEB_APPS/educenter/package.json",
+            "use": "@vercel/next",
+            "config": {
+                "outputDirectory": "APPS/WEB_APPS/educenter/.next",
+                "buildCommand": "cd ../../.. && pnpm turbo run build --filter=./PACKAGES/ui --filter=./PACKAGES/utils --filter=./PACKAGES/auth --filter=./PACKAGES/database --filter=./PACKAGES/ai --filter=./PACKAGES/payments --filter=...{@boldmind/educenter}"
+            }
+        },
+        {
+            "src": "APPS/WEB_APPS/PLANAI_SUITE/planai-landing/package.json",
+            "use": "@vercel/next",
+            "config": {
+                "outputDirectory": "APPS/WEB_APPS/PLANAI_SUITE/planai-landing/.next",
+                "buildCommand": "cd ../../../.. && pnpm turbo run build --filter=./PACKAGES/ui --filter=./PACKAGES/utils --filter=./PACKAGES/auth --filter=./PACKAGES/database --filter=./PACKAGES/ai --filter=./PACKAGES/payments --filter=...{@boldmind/planai-landing}"
+            }
+        }
+    ],
+    "routes": [
+        {
+            "handle": "filesystem"
+        }
+    ]
 }
