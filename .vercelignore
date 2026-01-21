@@ -1,5 +1,23 @@
+# Dependencies
 node_modules
+.pnp
+.pnp.js
+
+# Testing
+coverage
+.nyc_output
+
+# Misc
+.DS_Store
 *.log
-.env*
+.env*.local
+
+# Don't ignore turbo.json!
+# turbo.json  <-- REMOVE THIS LINE
+
+# Build outputs (but not turbo.json!)
 dist
+.turbo
 .next
+out
+build
