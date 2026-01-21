@@ -9,16 +9,11 @@ const nextConfig = {
     '@boldmind/utils',
     '@boldmind/auth',
     '@boldmind/database',
-    '@boldmind/api-client',
-    '@boldmind/payments',
-    '@boldmind/ai',
-    // add others as needed
   ],
-
-  outputFileTracingRoot: path.join(__dirname, '../../'), // ← critical for Vercel to trace workspace deps
 
   experimental: {
     serverComponentsExternalPackages: ['mongoose', 'mongodb'],
+    outputFileTracingRoot: path.join(__dirname, '../../')
   },
 
   images: {
