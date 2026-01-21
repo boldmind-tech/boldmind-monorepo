@@ -2,6 +2,7 @@
     "$schema": "https://vercel.com/schema.json",
     "installCommand": "corepack enable && pnpm install --frozen-lockfile --prefer-offline",
     "buildCommand": "cd ../../../.. && pnpm run vercel:planai-landing",
+    "outputDirectory": "APPS/WEB_APPS/PLANAI_SUITE/planai-landing/.next",
     "env": {
         "NODE_ENV": "production",
         "PNPM_FLAGS": "--shamefully-hoist=false --strict-peer-dependencies=false"
