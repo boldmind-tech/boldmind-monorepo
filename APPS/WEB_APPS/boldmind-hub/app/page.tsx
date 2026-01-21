@@ -2,26 +2,25 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { 
-  SuperNavbar, 
-  SuperFooter, 
-  Button, 
-  Card, 
-  CardHeader, 
-  CardTitle, 
-  CardDescription, 
+import {
+  SuperNavbar,
+  SuperFooter,
+  Button,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
   CardContent,
   CardFooter,
   StatusBadge,
   ParticleBackground,
   TypewriterEffect
 } from "@boldmind/ui";
-import { 
-  getLiveProducts, 
-  getBuildingProducts, 
-  getPlannedProducts, 
+import {
+  getLiveProducts,
+  getBuildingProducts,
+  getPlannedProducts,
   getConceptProducts,
-  type Product 
 } from "@boldmind/utils";
 
 const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || "BoldMind Technology Solution Enterprise";
@@ -54,12 +53,12 @@ export default function HomePage() {
   const conceptProducts = getConceptProducts();
 
   // Get PlanAI products (from ai category)
-  const planAIProducts = plannedProducts.filter(p => 
+  const planAIProducts = plannedProducts.filter(p =>
     p.category === 'ai' || p.dependencies?.includes('PlanAI Suite')
   );
 
   // Helper function to get product color
-  const getProductColor = (product: Product): string => {
+  const getProductColor = (product: any): string => {
     const colorMap: Record<string, string> = {
       'amebogist': '#00A859',
       'educenter': '#2A4A6E',
@@ -79,7 +78,7 @@ export default function HomePage() {
       'analytics-dashboard': '#00BCD4',
       'boldmind-hub': '#00143C',
     };
-    
+
     return colorMap[product.slug] || '#00143C';
   };
 
@@ -87,7 +86,7 @@ export default function HomePage() {
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
-    { href: "/products", label: "Products" }, 
+    { href: "/products", label: "Products" },
     { href: "https://planai.boldmind.ng", label: "PlanAI" },
     { href: "/contact", label: "Contact" },
   ];
@@ -211,16 +210,16 @@ export default function HomePage() {
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-[#000814]">
         {/* Hero Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
-          <img 
-            src="/hero-bg.jpg" 
-            alt="BoldMind Background" 
+          <img
+            src="/hero-bg.jpg"
+            alt="BoldMind Background"
             className="w-full h-full object-cover opacity-40 mix-blend-overlay"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#000814]/80 via-transparent to-[#000814]" />
         </div>
 
         <ParticleBackground className="opacity-50" />
-        
+
         {/* Animated Background Gradients */}
         <div className="absolute inset-0 z-0 pointer-events-none">
           <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-[#FFC800]/10 rounded-full blur-3xl animate-pulse" />
@@ -242,20 +241,21 @@ export default function HomePage() {
             </div>
 
             <div className="mb-8">
-              <TypewriterEffect 
-                words={[
-                  { text: "Building", className: "text-white" },
-                  { text: "Systems", className: "text-white" },
-                  { text: "That", className: "text-white" },
-                  { text: "Shift", className: "text-[#FFC800]" },
-                  { text: "Nations", className: "text-[#FFC800]" },
+              <TypewriterEffect
+                texts={[
+                  "Building",
+                  "Systems",
+                  "That",
+                  "Shift",
+                  "Nations"
                 ]}
                 className="text-5xl sm:text-6xl md:text-8xl font-black leading-tight"
                 cursorClassName="bg-[#FFC800]"
+                textClassName="text-white"
               />
             </div>
 
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 1 }}
@@ -266,17 +266,17 @@ export default function HomePage() {
             </motion.p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <Button 
-                variant="primary" 
-                size="lg" 
+              <Button
+                variant="primary"
+                size="lg"
                 className="min-w-[200px] text-lg h-14"
                 onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 Explore Ecosystem
               </Button>
-              <Button 
-                variant="outline" 
-                size="lg" 
+              <Button
+                variant="outline"
+                size="lg"
                 className="min-w-[200px] text-lg h-14 border-white text-white hover:bg-white/10"
                 onClick={() => window.location.href = '/planai'}
               >
@@ -418,9 +418,9 @@ export default function HomePage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {liveProducts.map((product) => (
-                <Card 
-                  key={product.id} 
-                  variant="elevated" 
+                <Card
+                  key={product.id}
+                  variant="elevated"
                   className="group hover:border-[#FFC800] transition-all duration-500 cursor-pointer"
                   onClick={() => window.open(product.links?.website || `/products/${product.slug}`, '_blank')}
                 >
@@ -662,7 +662,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <SuperFooter
-      logoSrc="/icon-180x180.png"
+        logoSrc="/icon-180x180.png"
         sections={footerSections}
         contactInfo={{
           email: 'hello@boldmind.ng',

@@ -1,0 +1,6 @@
+turbo.json
+node_modules
+*.log
+.env*
+dist
+.next

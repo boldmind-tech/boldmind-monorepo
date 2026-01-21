@@ -23,7 +23,7 @@
             "use": "@vercel/next",
             "config": {
                 "outputDirectory": "APPS/WEB_APPS/amebogist/.next",
-                "buildCommand": "cd ../../.. && pnpm turbo run build --filter=./PACKAGES/ui --filter=./PACKAGES/utils --filter=./PACKAGES/auth --filter=./PACKAGES/database --filter=./PACKAGES/seo --filter=./PACKAGES/analytics --filter=...{@boldmind/amebogist}"
+                "buildCommand": "cd ../../.. && pnpm turbo run build --filter=./PACKAGES/ui --filter=./PACKAGES/utils --filter=./PACKAGES/database --filter=./PACKAGES/seo --filter=./PACKAGES/analytics --filter=...{@boldmind/amebogist}"
             }
         },
         {
