@@ -1,0 +1,9 @@
+{
+    "$schema": "https://vercel.com/schema.json",
+    "installCommand": "corepack enable && pnpm install --frozen-lockfile --prefer-offline",
+    "buildCommand": "pnpm turbo run build --filter=./PACKAGES/ui --filter=./PACKAGES/utils --filter=./PACKAGES/database --filter=./PACKAGES/seo --filter=./PACKAGES/analytics --filter=...{@boldmind/educenter}",
+    "env": {
+        "NODE_ENV": "production",
+        "PNPM_FLAGS": "--shamefully-hoist=false --strict-peer-dependencies=false"
+    }
+}
