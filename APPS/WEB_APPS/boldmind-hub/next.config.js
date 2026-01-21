@@ -9,25 +9,17 @@ const __dirname = path.dirname(__filename);
 const nextConfig = {
   reactStrictMode: true,
 
-  // Critical for monorepo workspace deps resolution on Vercel
-  outputFileTracingRoot: path.join(__dirname, '../../'), // points to monorepo root
-
   transpilePackages: [
     '@boldmind/ui',
     '@boldmind/utils',
     '@boldmind/auth',
-    '@boldmind/database',
-    '@boldmind/api-client',
-    '@boldmind/payments',
-    '@boldmind/ai',
-    '@boldmind/seo',
-    '@boldmind/analytics',
-    // ← add any others your app imports
+    '@boldmind/database'
   ],
 
   experimental: {
     serverComponentsExternalPackages: ['mongoose', 'mongodb'],
-    // remove outputFileTracingRoot from here — it's top-level now
+    outputFileTracingRoot: path.join(__dirname, '../../'),
+
   },
 
   images: {
@@ -41,8 +33,6 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
 
-  // Optional: if you want standalone output later (good for Docker/self-host)
-  // output: 'standalone',
 };
 
 export default nextConfig;
