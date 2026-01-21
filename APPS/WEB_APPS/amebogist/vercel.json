@@ -1,7 +1,7 @@
 {
     "$schema": "https://vercel.com/schema.json",
     "installCommand": "corepack enable && pnpm install --frozen-lockfile --prefer-offline",
-    "buildCommand": "cd ../../.. && pnpm run vercel:amebogist",
+    "buildCommand": "pnpm run vercel:amebogist",
     "outputDirectory": "APPS/WEB_APPS/amebogist/.next",
     "env": {
         "NODE_ENV": "production",
