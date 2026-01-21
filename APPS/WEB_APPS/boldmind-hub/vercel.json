@@ -1,7 +1,7 @@
 {
     "$schema": "https://vercel.com/schema.json",
     "installCommand": "corepack enable && pnpm install --frozen-lockfile --prefer-offline",
-    "buildCommand": "pnpm turbo run build --filter=./PACKAGES/ui --filter=./PACKAGES/utils --filter=./PACKAGES/database --filter=./PACKAGES/seo --filter=./PACKAGES/analytics --filter=...{@boldmind/boldmind-hub}",
+    "buildCommand": "cd ../../.. && pnpm run vercel:boldmind-hub",
     "env": {
         "NODE_ENV": "production",
         "PNPM_FLAGS": "--shamefully-hoist=false --strict-peer-dependencies=false"

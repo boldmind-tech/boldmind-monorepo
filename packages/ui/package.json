@@ -26,6 +26,8 @@
   ],
   "scripts": {
     "build": "tsup",
+    "build:types": "tsc --emitDeclarationOnly --declaration --outDir dist",
+    "build:all": "pnpm build && pnpm build:types",
     "dev": "tsup --watch",
     "lint": "eslint . --ext ts,tsx",
     "clean": "rm -rf .turbo dist node_modules"

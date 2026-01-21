@@ -1,8 +1,11 @@
 packages:
-  # Apps - use glob patterns
-  - 'APPS/**'
+  # Apps
+  - 'APPS/WEB_APPS/*'
+  - 'APPS/WEB_APPS/PLANAI_SUITE/*'
+  - 'APPS/MOBILE/*'
+  - 'APPS/CONCEPT_APPS/*'
   
-  # Packages - list individually
+  # Packages
   - 'PACKAGES/ui'
   - 'PACKAGES/utils'
   - 'PACKAGES/seo'
@@ -13,15 +16,12 @@ packages:
   - 'PACKAGES/payments'
   - 'PACKAGES/email'
   - 'PACKAGES/ai'
-  
-  # Backend services
-  - 'SERVICES/*'
 
-# Force exact versions
 shared-workspace-dependencies: true
 shared-workspace-lockfile: true
 
-# Hoist common dependencies (reduce duplication)
 hoist-pattern:
-  - '*'
-  - '@boldmind/*'
+  - '*types*'
+  - '*eslint*'
+  - '*prettier*'
+  - '@types/*'

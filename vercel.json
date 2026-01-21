@@ -11,28 +11,28 @@
             "src": "APPS/WEB_APPS/boldmind-hub/package.json",
             "use": "@vercel/next",
             "config": {
-                "buildCommand": "pnpm turbo run build --filter=./PACKAGES/ui --filter=./PACKAGES/utils --filter=./PACKAGES/auth --filter=./PACKAGES/database --filter=...{@boldmind/boldmind-hub}"
+                "buildCommand": "pnpm turbo run build --filter='@boldmind/ui' --filter='@boldmind/utils' --filter='@boldmind/auth' --filter='@boldmind/database' --filter=...{@boldmind/boldmind-hub}"
             }
         },
         {
             "src": "APPS/WEB_APPS/amebogist/package.json",
             "use": "@vercel/next",
             "config": {
-                "buildCommand": "pnpm turbo run build --filter=./PACKAGES/ui --filter=./PACKAGES/utils --filter=./PACKAGES/database --filter=./PACKAGES/seo --filter=./PACKAGES/analytics --filter=...{@boldmind/amebogist}"
+                "buildCommand": "pnpm turbo run build --filter='@boldmind/ui' --filter='@boldmind/utils' --filter='@boldmind/database' --filter='@boldmind/seo' --filter='@boldmind/analytics' --filter=...{@boldmind/amebogist}"
             }
         },
         {
             "src": "APPS/WEB_APPS/educenter/package.json",
             "use": "@vercel/next",
             "config": {
-                "buildCommand": "pnpm turbo run build --filter=./PACKAGES/ui --filter=./PACKAGES/utils --filter=./PACKAGES/auth --filter=./PACKAGES/database --filter=./PACKAGES/ai --filter=./PACKAGES/payments --filter=...{@boldmind/educenter}"
+                "buildCommand": "pnpm turbo run build --filter='@boldmind/ui' --filter='@boldmind/utils' --filter='@boldmind/database' --filter='@boldmind/ai' --filter='@boldmind/payments' --filter=...{@boldmind/educenter}"
             }
         },
         {
             "src": "APPS/WEB_APPS/PLANAI_SUITE/planai-landing/package.json",
             "use": "@vercel/next",
             "config": {
-                "buildCommand": "pnpm turbo run build --filter=./PACKAGES/ui --filter=./PACKAGES/utils --filter=./PACKAGES/auth --filter=./PACKAGES/database --filter=./PACKAGES/ai --filter=./PACKAGES/payments --filter=...{@boldmind/planai-landing}"
+                "buildCommand": "pnpm turbo run build --filter='@boldmind/ui' --filter='@boldmind/utils' --filter='@boldmind/database' --filter='@boldmind/ai' --filter='@boldmind/payments' --filter=...{@boldmind/planai-landing}"
             }
         }
     ]
