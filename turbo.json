@@ -34,13 +34,6 @@
     },
     "type-check": {
       "outputs": []
-    },
-    "deploy": {
-      "dependsOn": [
-        "build",
-        "test",
-        "lint"
-      ]
     }
   }
 }

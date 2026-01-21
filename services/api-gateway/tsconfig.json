@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "module": "preserve",
+    "module": "commonjs",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -13,11 +13,14 @@
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false,
+    "noEmit": false,
+    // Strictness: Inherit strict: true from base, or explicitly set true.
+    // I will comment out the false overrides to try enabling strictness.
+    // "strictNullChecks": false,
+    // "noImplicitAny": false,
+    // "strictBindCallApply": false, 
+    // "forceConsistentCasingInFileNames": false,
+    // "noFallthroughCasesInSwitch": false,
     "paths": {
       "@boldmind/auth": [
         "../../packages/auth/src"

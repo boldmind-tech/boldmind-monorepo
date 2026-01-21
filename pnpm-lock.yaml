@@ -2125,6 +2125,9 @@ importers:
       '@supabase/supabase-js':
         specifier: ^2.89.0
         version: 2.90.1
+      '@types/bcrypt':
+        specifier: ^6.0.0
+        version: 6.0.0
       axios:
         specifier: ^1.6.0
         version: 1.13.2
@@ -6554,6 +6557,12 @@ packages:
     transitivePeerDependencies:
       - debug
     dev: true
+
+  /@types/bcrypt@6.0.0:
+    resolution: {integrity: sha512-/oJGukuH3D2+D+3H4JWLaAsJ/ji86dhRidzZ/Od7H/i8g+aCmvkeCc6Ni/f9uxGLSQVCRZkX2/lqEFG2BvWtlQ==}
+    dependencies:
+      '@types/node': 20.19.30
+    dev: false
 
   /@types/body-parser@1.19.6:
     resolution: {integrity: sha512-HLFeCYgz89uk22N5Qg3dvGvsv46B8GLvKKo1zKG4NybA8U2DiEO3w9lqGg29t/tfLRJpJ6iQxnVw4OnB7MoM9g==}

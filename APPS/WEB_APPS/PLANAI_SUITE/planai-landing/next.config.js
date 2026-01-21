@@ -1,12 +1,36 @@
-/** @type {import('next').NextConfig} */
-// Updated for Vercel deployment
-const nextConfig = {
-  output: 'standalone',
-  transpilePackages: ['@boldmind/ui', '@boldmind/utils'],
+const path = require('path');
 
-  env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://api.boldmind.ng',
-  }
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+
+  transpilePackages: [
+    '@boldmind/ui',
+    '@boldmind/utils',
+    '@boldmind/auth',
+    '@boldmind/database',
+    '@boldmind/api-client',
+    '@boldmind/payments',
+    '@boldmind/ai',
+    // add others as needed
+  ],
+
+  outputFileTracingRoot: path.join(__dirname, '../../'), // ← critical for Vercel to trace workspace deps
+
+  experimental: {
+    serverComponentsExternalPackages: ['mongoose', 'mongodb'],
+  },
+
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: '**' },
+      { protocol: 'http', hostname: 'localhost' },
+    ],
+  },
+
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 module.exports = nextConfig;

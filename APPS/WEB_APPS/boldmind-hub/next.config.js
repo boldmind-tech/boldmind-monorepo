@@ -1,36 +1,36 @@
-// apps/web/boldmind-hub/next.config.js
-// Updated for Vercel deployment
+const path = require('path');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+
   transpilePackages: [
-    '@boldmind/ui', 
-    '@boldmind/utils', 
-    '@boldmind/seo', 
-    '@boldmind/analytics',
+    '@boldmind/ui',
+    '@boldmind/utils',
     '@boldmind/auth',
-    '@boldmind/database'
+    '@boldmind/database',
+    '@boldmind/api-client',
+    '@boldmind/payments',
+    '@boldmind/ai',
+    // add others as needed
   ],
-  swcMinify: true,
-  env: {
-    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+
+  outputFileTracingRoot: path.join(__dirname, '../../'), // ← critical for Vercel to trace workspace deps
+
+  experimental: {
+    serverComponentsExternalPackages: ['mongoose', 'mongodb'],
   },
+
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: '**' },
+      { protocol: 'http', hostname: 'localhost' },
+    ],
+  },
+
   eslint: {
     ignoreDuringBuilds: true,
   },
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
-    domains: [], 
-  },
-  experimental: {
-    serverComponentsExternalPackages: ['mongoose', 'mongodb', '@prisma/client'],
-  },
-}
+};
 
-export default nextConfig
+module.exports = nextConfig;

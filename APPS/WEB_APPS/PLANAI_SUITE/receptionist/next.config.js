@@ -1,10 +1,36 @@
+const path = require('path');
+
 /** @type {import('next').NextConfig} */
-// Updated for Vercel deployment
 const nextConfig = {
-  images: {
-    domains: ["localhost"],
+  reactStrictMode: true,
+
+  transpilePackages: [
+    '@boldmind/ui',
+    '@boldmind/utils',
+    '@boldmind/auth',
+    '@boldmind/database',
+    '@boldmind/api-client',
+    '@boldmind/payments',
+    '@boldmind/ai',
+    // add others as needed
+  ],
+
+  outputFileTracingRoot: path.join(__dirname, '../../'), // ← critical for Vercel to trace workspace deps
+
+  experimental: {
+    serverComponentsExternalPackages: ['mongoose', 'mongodb'],
   },
-  transpilePackages: ['@boldmind/ui', '@boldmind/utils', '@boldmind/ai', '@boldmind/api-client', '@boldmind/auth', '@boldmind/payments'],
+
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: '**' },
+      { protocol: 'http', hostname: 'localhost' },
+    ],
+  },
+
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

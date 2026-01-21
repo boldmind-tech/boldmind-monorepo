@@ -1,6 +1,35 @@
 {
-  "buildCommand": "pnpm turbo run build",
-  "devCommand": "pnpm turbo run dev",
-  "installCommand": "pnpm install",
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD"
+  "$schema": "https://vercel.com/schema.json",
+  "version": 2,
+  "installCommand": "corepack enable && pnpm install --frozen-lockfile --prefer-offline",
+  "buildCommand": null,
+  "outputDirectory": null,
+  "framework": null,
+  "env": {
+    "NODE_ENV": "production",
+    "PNPM_FLAGS": "--shamefully-hoist=false --strict-peer-dependencies=false"
+  },
+  "builds": [
+    {
+      "src": "APPS/WEB_APPS/amebogist/package.json",
+      "use": "@vercel/next"
+    },
+    {
+      "src": "APPS/WEB_APPS/educenter/package.json",
+      "use": "@vercel/next"
+    },
+    {
+      "src": "APPS/WEB_APPS/boldmind-hub/package.json",
+      "use": "@vercel/next"
+    },
+    {
+      "src": "APPS/WEB_APPS/PLANAI_SUITE/planai-landing/package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "handle": "filesystem"
+    }
+  ]
 }

@@ -1,22 +1,36 @@
-// apps/web/boldmind-hub/next.config.js
+const path = require('path');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
-  eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: true,
+
+  transpilePackages: [
+    '@boldmind/ui',
+    '@boldmind/utils',
+    '@boldmind/auth',
+    '@boldmind/database',
+    '@boldmind/api-client',
+    '@boldmind/payments',
+    '@boldmind/ai',
+    // add others as needed
+  ],
+
+  outputFileTracingRoot: path.join(__dirname, '../../'), // ← critical for Vercel to trace workspace deps
+
+  experimental: {
+    serverComponentsExternalPackages: ['mongoose', 'mongodb'],
   },
+
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
+      { protocol: 'https', hostname: '**' },
+      { protocol: 'http', hostname: 'localhost' },
     ],
-    domains: [], // Empty to avoid deprecation warning
   },
-}
 
-export default nextConfig
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+};
+
+module.exports = nextConfig;
