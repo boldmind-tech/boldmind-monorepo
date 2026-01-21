@@ -120,9 +120,7 @@
         "@boldmind/ui#build",
         "@boldmind/auth#build",
         "@boldmind/utils#build",
-        "@boldmind/database#build",
-        "@boldmind/ai#build",
-        "@boldmind/payments#build"
+        "@boldmind/database#build"
       ]
     },
     "@boldmind/planai-landing#build": {
