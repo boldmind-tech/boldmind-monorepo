@@ -1,10 +1,6 @@
 {
-    "$schema": "https://vercel.com/schema.json",
-    "installCommand": "corepack enable && pnpm install --frozen-lockfile --prefer-offline --shamefully-hoist --filter=./PACKAGES/** --filter=./APPS/WEB_APPS/PLANAI_SUITE/planai-landing...",
-    "buildCommand": "pnpm -w run vercel:planai-landing",
-    "outputDirectory": "APPS/WEB_APPS/PLANAI_SUITE/planai-landing/.next",
+    "buildCommand": "next build",
+    "outputDirectory": ".next",
     "framework": "nextjs",
-    "env": {
-        "NODE_ENV": "production"
-    }
+    "installCommand": "cd ../../../../ && corepack enable && pnpm install --frozen-lockfile --prefer-offline --shamefully-hoist"
 }
