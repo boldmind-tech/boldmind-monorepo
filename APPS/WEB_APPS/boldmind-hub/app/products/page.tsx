@@ -3,22 +3,22 @@
 
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  SuperNavbar, 
-  SuperFooter, 
-  Card, 
-  Button, 
+import {
+  SuperNavbar,
+  SuperFooter,
+  Card,
+  Button,
   ParticleBackground,
   StatusBadge,
   TypewriterEffect
 } from '@boldmind/ui';
-import { 
-  ExternalLink, 
-  CheckCircle, 
-  Clock, 
-  Lightbulb, 
-  Rocket, 
-  Search, 
+import {
+  ExternalLink,
+  CheckCircle,
+  Clock,
+  Lightbulb,
+  Rocket,
+  Search,
   Filter,
   ArrowRight,
   TrendingUp,
@@ -127,8 +127,8 @@ export default function ProductsPage() {
   const filteredProducts = useMemo(() => {
     return allProducts.filter(product => {
       const matchesFilter = filter === 'ALL' || product.status === filter || product.category === filter;
-      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          product.description.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesFilter && matchesSearch;
     });
   }, [filter, searchQuery]);
@@ -145,7 +145,7 @@ export default function ProductsPage() {
       <section className="relative pt-32 pb-20 bg-[#00143C] text-white overflow-hidden">
         <ParticleBackground density={35} className="opacity-30" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#00143C]" />
-        
+
         <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -159,8 +159,8 @@ export default function ProductsPage() {
               The Product <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFC800] to-[#E5B600]">Ecosystem</span>
             </h1>
             <div className="text-xl md:text-3xl text-gray-300 max-w-4xl mx-auto mb-12 h-16">
-              <TypewriterEffect 
-                words={[
+              <TypewriterEffect
+                texts={[
                   "Empowering Nigerian Entrepreneurs",
                   "Building Africa's Tech Future",
                   "Innovative Solutions for Local Problems",
@@ -168,7 +168,7 @@ export default function ProductsPage() {
                 ]}
               />
             </div>
-            
+
             {/* Stats Bar */}
             <div className="flex flex-wrap justify-center gap-8 md:gap-16">
               {[
@@ -194,17 +194,16 @@ export default function ProductsPage() {
               <button
                 key={cat}
                 onClick={() => setFilter(cat)}
-                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
-                  filter === cat 
-                  ? 'bg-[#00143C] text-white shadow-lg dark:bg-[#FFC800] dark:text-[#00143C]' 
-                  : 'bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-white/5 dark:text-gray-300'
-                }`}
+                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${filter === cat
+                    ? 'bg-[#00143C] text-white shadow-lg dark:bg-[#FFC800] dark:text-[#00143C]'
+                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-white/5 dark:text-gray-300'
+                  }`}
               >
                 {cat}
               </button>
             ))}
           </div>
-          
+
           <div className="relative w-full md:w-80">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
@@ -222,7 +221,7 @@ export default function ProductsPage() {
       <section className="py-20 bg-gray-50 dark:bg-[#02091A]">
         <div className="max-w-7xl mx-auto px-6">
           <AnimatePresence mode='popLayout'>
-            <motion.div 
+            <motion.div
               layout
               className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
             >
@@ -235,22 +234,22 @@ export default function ProductsPage() {
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <Card 
-                    variant="glass" 
+                  <Card
+                    variant="premium"
                     className="h-full group hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_20px_50px_rgba(255,200,0,0.05)] border-none transition-all duration-500 overflow-hidden"
                   >
                     <div className="p-8 pb-4">
                       <div className="flex justify-between items-start mb-8">
-                        <div 
+                        <div
                           className="w-16 h-16 rounded-2xl flex items-center justify-center transform group-hover:rotate-6 transition-transform duration-500 shadow-lg"
                           style={{ backgroundColor: product.color }}
                         >
                           {product.icon}
                         </div>
-                        <StatusBadge 
+                        <StatusBadge
                           variant={
-                            product.status === 'LIVE' ? 'live' : 
-                            product.status === 'BUILDING' ? 'builder' : 'planned'
+                            product.status === 'LIVE' ? 'live' :
+                              product.status === 'BUILDING' ? 'building' : 'planned'
                           }
                         >
                           {product.status}
@@ -287,7 +286,7 @@ export default function ProductsPage() {
                         <ArrowRight className="ml-2 w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                       </Button>
                     </div>
-                    
+
                     {/* Hover Effect Light */}
                     <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-[#FFC800]/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                   </Card>
@@ -301,8 +300,8 @@ export default function ProductsPage() {
               <div className="text-6xl mb-6">🔍</div>
               <h3 className="text-2xl font-black text-[#00143C] dark:text-white mb-4">No Products Found</h3>
               <p className="text-gray-500">Try adjusting your filters or search query</p>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="mt-8"
                 onClick={() => { setFilter('ALL'); setSearchQuery(''); }}
               >

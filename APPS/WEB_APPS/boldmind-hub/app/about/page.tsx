@@ -2,11 +2,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { 
-  SuperNavbar, 
-  SuperFooter, 
-  Card, 
-  Button, 
+import {
+  SuperNavbar,
+  SuperFooter,
+  Card,
+  Button,
   ParticleBackground,
   StatusBadge
 } from '@boldmind/ui';
@@ -111,9 +111,9 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section className="relative min-h-[70vh] flex items-center bg-[#00143C] text-white overflow-hidden pt-20">
         <ParticleBackground density={40} className="opacity-40" />
-        
+
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#00143C]/50 to-[#00143C]" />
-        
+
         <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -127,26 +127,26 @@ export default function AboutPage() {
               </span>
               <span className="text-sm font-medium text-white/80">Empowering Nigeria's Future</span>
             </div>
-            
+
             <h1 className="text-5xl md:text-8xl font-black mb-8 tracking-tight">
               About <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFC800] to-[#E5B600]">BoldMind</span>
             </h1>
             <p className="text-xl md:text-3xl text-gray-300 max-w-4xl mx-auto leading-relaxed font-light">
-              We're on a mission to empower <span className="text-white font-bold">1 million</span> Nigerian entrepreneurs by 2030 
+              We're on a mission to empower <span className="text-white font-bold">1 million</span> Nigerian entrepreneurs by 2030
               through innovative technology solutions that solve fundamental local problems.
             </p>
           </motion.div>
         </div>
-        
+
         {/* Scroll Indicator */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
           className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         >
           <div className="w-6 h-10 border-2 border-white/20 rounded-full flex justify-center p-1">
-            <motion.div 
+            <motion.div
               animate={{ y: [0, 12, 0] }}
               transition={{ repeat: Infinity, duration: 2 }}
               className="w-1.5 h-1.5 bg-[#FFC800] rounded-full"
@@ -170,19 +170,19 @@ export default function AboutPage() {
               </h2>
               <div className="space-y-6 text-lg text-gray-800 dark:text-gray-300 leading-relaxed">
                 <p>
-                  BoldMind Technology Solution Enterprise was born from a simple but powerful observation: 
+                  BoldMind Technology Solution Enterprise was born from a simple but powerful observation:
                   Nigerian entrepreneurs face unique, systemic barriers that technology can and should solve.
                 </p>
                 <p>
-                  We recognized that building isolated applications wasn't enough. We needed to create a 
-                  <span className="text-[#00143C] dark:text-white font-bold"> comprehensive ecosystem</span>. 
-                  Each of our products is designed to strengthen the others, creating a powerful flywheel effect 
+                  We recognized that building isolated applications wasn't enough. We needed to create a
+                  <span className="text-[#00143C] dark:text-white font-bold"> comprehensive ecosystem</span>.
+                  Each of our products is designed to strengthen the others, creating a powerful flywheel effect
                   that amplifies impact for every business we touch.
                 </p>
                 <p>
-                  From <span className="font-bold text-[#00A859]">AmeboGist</span> (mass awareness) 
-                  to <span className="font-bold text-[#2A4A6E]">EduCenter</span> (education) 
-                  to <span className="font-bold text-[#FFC800]">PlanAI</span> (enablement), 
+                  From <span className="font-bold text-[#00A859]">AmeboGist</span> (mass awareness)
+                  to <span className="font-bold text-[#2A4A6E]">EduCenter</span> (education)
+                  to <span className="font-bold text-[#FFC800]">PlanAI</span> (enablement),
                   we're building the complete digital infrastructure for Nigerian entrepreneurial success.
                 </p>
                 <div className="pt-6">
@@ -208,8 +208,8 @@ export default function AboutPage() {
                   <div className="text-6xl mb-8">🚀</div>
                   <h3 className="text-3xl font-black text-white mb-6">Our Vision</h3>
                   <p className="text-xl text-gray-100 mb-12 leading-relaxed">
-                    To become Africa's leading technology ecosystem, 
-                    uniquely positioned to empower entrepreneurs to build the resilient, 
+                    To become Africa's leading technology ecosystem,
+                    uniquely positioned to empower entrepreneurs to build the resilient,
                     high-impact businesses they deserve.
                   </p>
                   <div className="grid grid-cols-2 gap-8">
@@ -231,7 +231,7 @@ export default function AboutPage() {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Decorative Elements */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-[#FFC800]/10 rounded-full blur-3xl -mr-16 -mt-16" />
                 <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-500/10 rounded-full blur-3xl -ml-12 -mb-12" />
@@ -262,17 +262,16 @@ export default function AboutPage() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1, duration: 0.5 }}
               >
-                <Card 
+                <Card
                   className="h-full p-8 border-none hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
-                  variant="glass"
+                  variant="premium"
                 >
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${
-                    value.color === 'gold' ? 'from-[#FFC800] to-[#E5B600]' : 
-                    value.color === 'blue' ? 'from-blue-600 to-blue-400' :
-                    value.color === 'red' ? 'from-red-600 to-red-400' :
-                    value.color === 'purple' ? 'from-purple-600 to-purple-400' :
-                    'from-green-600 to-green-400'
-                  } flex items-center justify-center mb-8 shadow-lg`}>
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${value.color === 'gold' ? 'from-[#FFC800] to-[#E5B600]' :
+                      value.color === 'blue' ? 'from-blue-600 to-blue-400' :
+                        value.color === 'red' ? 'from-red-600 to-red-400' :
+                          value.color === 'purple' ? 'from-purple-600 to-purple-400' :
+                            'from-green-600 to-green-400'
+                    } flex items-center justify-center mb-8 shadow-lg`}>
                     <value.icon className="w-7 h-7 text-white" />
                   </div>
                   <h3 className="text-2xl font-black text-[#00143C] dark:text-white mb-4">{value.title}</h3>
@@ -308,23 +307,21 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.2 }}
-                  className={`flex flex-col md:flex-row items-center gap-8 ${
-                    index % 2 === 0 ? 'md:flex-row-reverse' : ''
-                  }`}
+                  className={`flex flex-col md:flex-row items-center gap-8 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''
+                    }`}
                 >
                   <div className="flex-1 w-full">
-                    <Card 
+                    <Card
                       className={`p-8 border-none ${index % 2 === 0 ? 'md:text-left' : 'md:text-right'} relative`}
-                      variant="glass"
+                      variant="premium"
                     >
                       <div className="inline-block px-4 py-1 rounded-full bg-[#FFC800]/20 text-[#FFC800] font-black text-sm mb-4">
                         {milestone.year}
                       </div>
                       <h4 className="text-xl font-bold text-[#00143C] dark:text-white mb-2">{milestone.event}</h4>
                       {/* Decorative arrow for desktop */}
-                      <div className={`hidden md:block absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-inherit transform rotate-45 ${
-                        index % 2 === 0 ? '-left-2' : '-right-2'
-                      }`} />
+                      <div className={`hidden md:block absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-inherit transform rotate-45 ${index % 2 === 0 ? '-left-2' : '-right-2'
+                        }`} />
                     </Card>
                   </div>
 
@@ -368,21 +365,21 @@ export default function AboutPage() {
                       <div className="absolute top-0 left-0 w-full h-full bg-[#FFC800]/5 animate-pulse" />
                     </div>
                     <div className="md:col-span-3 p-12 flex flex-col justify-center bg-white/5 backdrop-blur-3xl">
-                      <StatusBadge variant="builder" className="mb-4">LEADERSHIP</StatusBadge>
+                      <StatusBadge variant="premium" className="mb-4">LEADERSHIP</StatusBadge>
                       <h3 className="text-4xl font-black text-white mb-2">{member.name}</h3>
                       <p className="text-xl text-[#FFC800] font-bold mb-8 uppercase tracking-widest">{member.role}</p>
                       <p className="text-lg text-gray-300 mb-10 leading-relaxed italic">"{member.bio}"</p>
                       <div className="flex gap-4">
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           className="px-6 border-white/20 text-white hover:bg-white/10"
                           onClick={() => window.open(member.linkedin, '_blank')}
                         >
                           <Linkedin className="w-5 h-5 mr-2" />
                           Connect
                         </Button>
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           className="px-6 border-white/20 text-white hover:bg-white/10"
                           onClick={() => window.open(member.twitter, '_blank')}
                         >
@@ -403,7 +400,7 @@ export default function AboutPage() {
       <section className="py-32 bg-[#00143C] text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#FFC800]/10 rounded-full blur-[120px] -mr-64 -mt-64" />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] -ml-64 -mb-64" />
-        
+
         <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -412,23 +409,23 @@ export default function AboutPage() {
             transition={{ duration: 0.8 }}
           >
             <h2 className="text-5xl md:text-7xl font-black mb-8 leading-tight">
-              Crafting the <span className="text-[#FFC800]">Future</span> <br className="hidden md:block"/> of African Tech
+              Crafting the <span className="text-[#FFC800]">Future</span> <br className="hidden md:block" /> of African Tech
             </h2>
             <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-16 font-light leading-relaxed">
               Join the movement that's transforming how business is done in Nigeria and across Africa.
             </p>
             <div className="flex flex-col sm:flex-row gap-8 justify-center items-center">
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="px-12 py-8 text-xl bg-[#FFC800] text-[#00143C] hover:bg-[#E5B600] font-black group"
                 onClick={() => window.open('https://wa.me/2349138349271', '_blank')}
               >
                 Join Our WhatsApp Community
                 <ExternalLink className="ml-3 w-6 h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
               </Button>
-              <Button 
+              <Button
                 variant="outline"
-                size="lg" 
+                size="lg"
                 className="px-12 py-8 text-xl border-white/20 text-white hover:bg-white/5 font-bold"
                 onClick={() => window.location.href = '/products'}
               >

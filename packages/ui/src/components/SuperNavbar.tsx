@@ -50,6 +50,10 @@ export interface SuperNavbarProps {
   showParticles?: boolean;
   showThemeControls?: boolean;
   className?: string;
+  user?: {
+    name: string;
+    role: string;
+  };
   onLinkClick?: (href: string) => void;
 }
 
@@ -63,6 +67,7 @@ export function SuperNavbar({
   showParticles = false,
   showThemeControls = true,
   className = "",
+  user,
   onLinkClick,
 }: SuperNavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -231,7 +236,11 @@ export function SuperNavbar({
   };
 
   // Helper to get icon component
-  const getIconComponent = (iconString: string) => {
+  const getIconComponent = (icon: React.ReactNode) => {
+    if (typeof icon !== 'string') {
+      return icon;
+    }
+
     const iconMap: Record<string, React.ReactNode> = {
       "🏠": <div>🏠</div>,
       "✨": <div>✨</div>,
@@ -243,7 +252,7 @@ export function SuperNavbar({
       "🎓": <div>🎓</div>,
       "📰": <div>📰</div>,
     };
-    return iconMap[iconString] || <Sparkles className="w-4 h-4" />;
+    return iconMap[icon] || <Sparkles className="w-4 h-4" />;
   };
   return (
     <>
@@ -404,7 +413,7 @@ export function SuperNavbar({
                             : "hover:bg-white/10",
                         )}
                       >
-                        {getIconComponent(link.icon as string)}
+                        {getIconComponent(link.icon)}
                         <span className="font-medium">{link.label}</span>
                         {link.badge && (
                           <span className="px-2 py-0.5 text-xs font-bold bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full">
@@ -429,7 +438,7 @@ export function SuperNavbar({
                               : "hover:bg-white/10",
                           )}
                         >
-                          {getIconComponent(link.icon as string)}
+                          {getIconComponent(link.icon)}
                           <span className="font-medium">{link.label}</span>
                           {link.badge && (
                             <span className="px-2 py-0.5 text-xs font-bold bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full">
@@ -575,7 +584,7 @@ export function SuperNavbar({
                           )}
                         >
                           <div className="flex items-center gap-3">
-                            {getIconComponent(link.icon as string)}
+                            {getIconComponent(link.icon)}
                             <span className="font-medium">{link.label}</span>
                           </div>
                           <div className="flex items-center gap-2">
@@ -599,7 +608,7 @@ export function SuperNavbar({
                             )}
                           >
                             <div className="flex items-center gap-3">
-                              {getIconComponent(link.icon as string)}
+                              {getIconComponent(link.icon)}
                               <span className="font-medium">{link.label}</span>
                             </div>
                             <div className="flex items-center gap-2">

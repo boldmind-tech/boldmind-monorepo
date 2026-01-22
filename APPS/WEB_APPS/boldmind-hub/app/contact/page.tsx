@@ -3,12 +3,12 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  SuperNavbar, 
-  SuperFooter, 
-  Card, 
-  Button, 
-  Input, 
+import {
+  SuperNavbar,
+  SuperFooter,
+  Card,
+  Button,
+  Input,
   ParticleBackground,
   StatusBadge
 } from '@boldmind/ui';
@@ -27,14 +27,14 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 2000));
-    
+
     setIsSubmitted(true);
     setIsSubmitting(false);
     setFormData({ name: '', email: '', subject: '', message: '' });
-    
+
     setTimeout(() => setIsSubmitted(false), 5000);
   };
 
@@ -129,14 +129,14 @@ export default function ContactPage() {
       {/* Hero Section */}
       <section className="relative pt-32 pb-24 bg-[#00143C] text-white overflow-hidden">
         <ParticleBackground density={30} className="opacity-30" />
-        
+
         <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <StatusBadge variant="builder" className="mb-6">WE'RE HERE TO HELP</StatusBadge>
+            <StatusBadge variant="building" className="mb-6">WE'RE HERE TO HELP</StatusBadge>
             <h1 className="text-5xl md:text-8xl font-black mb-8 tracking-tight">
               Get in <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFC800] to-[#E5B600]">Touch</span>
             </h1>
@@ -162,16 +162,15 @@ export default function ContactPage() {
                 transition={{ delay: index * 0.1 }}
                 className="group"
               >
-                <Card 
+                <Card
                   className="h-full p-8 border-none hover:shadow-2xl transition-all duration-300 bg-gray-50 dark:bg-white/5"
-                  variant="glass"
+                  variant="premium"
                 >
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${
-                    method.color === 'green' ? 'from-green-600 to-green-400' :
-                    method.color === 'blue' ? 'from-blue-600 to-blue-400' :
-                    method.color === 'gold' ? 'from-[#FFC800] to-[#E5B600]' :
-                    'from-purple-600 to-purple-400'
-                  } flex items-center justify-center mb-8 group-hover:scale-110 transition-transform shadow-lg`}>
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${method.color === 'green' ? 'from-green-600 to-green-400' :
+                      method.color === 'blue' ? 'from-blue-600 to-blue-400' :
+                        method.color === 'gold' ? 'from-[#FFC800] to-[#E5B600]' :
+                          'from-purple-600 to-purple-400'
+                    } flex items-center justify-center mb-8 group-hover:scale-110 transition-transform shadow-lg`}>
                     <method.icon className="w-7 h-7 text-white" />
                   </div>
                   <h3 className="text-2xl font-black text-[#00143C] dark:text-white mb-2">{method.title}</h3>
@@ -195,11 +194,11 @@ export default function ContactPage() {
               viewport={{ once: true }}
               className="relative"
             >
-              <Card className="p-10 md:p-12 border-none shadow-2xl relative overflow-hidden" variant="glass">
+              <Card className="p-10 md:p-12 border-none shadow-2xl relative overflow-hidden" variant="premium">
                 <h2 className="text-4xl font-black text-[#00143C] dark:text-white mb-8">
                   Send a <span className="text-[#FFC800]">Message</span>
                 </h2>
-                
+
                 {isSubmitted ? (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
@@ -275,7 +274,7 @@ export default function ContactPage() {
 
                     <Button
                       type="submit"
-                      loading={isSubmitting}
+                      isLoading={isSubmitting}
                       className="w-full py-8 text-xl font-black bg-[#00143C] text-white hover:bg-black group shadow-xl"
                     >
                       <Send className="w-6 h-6 mr-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
@@ -297,7 +296,7 @@ export default function ContactPage() {
               <div className="bg-[#00143C] p-10 rounded-3xl text-white relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-[#FFC800]/20 blur-3xl rounded-full -mr-16 -mt-16" />
                 <h3 className="text-3xl font-black mb-8">Priority Channels</h3>
-                
+
                 <div className="space-y-6">
                   <a
                     href="https://wa.me/2349138349271"
@@ -364,12 +363,12 @@ export default function ContactPage() {
       <section className="py-24 bg-gradient-to-r from-[#FFC800] to-[#E5B600] relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 text-center relative z-10">
           <h2 className="text-4xl md:text-6xl font-black text-[#00143C] mb-8 leading-tight">
-            Ready to <span className="underline decoration-[#00143C]/20 underline-offset-8">Level Up</span> <br className="hidden md:block"/> Your Business?
+            Ready to <span className="underline decoration-[#00143C]/20 underline-offset-8">Level Up</span> <br className="hidden md:block" /> Your Business?
           </h2>
           <p className="text-xl md:text-2xl text-[#00143C]/80 max-w-2xl mx-auto mb-12">
             Connect with us today and let's start building your success story together.
           </p>
-          <Button 
+          <Button
             size="lg"
             className="px-12 py-8 text-xl font-black bg-[#00143C] text-white hover:bg-black shadow-2xl transition-all"
             onClick={() => window.open('https://wa.me/2349138349271', '_blank')}
@@ -377,7 +376,7 @@ export default function ContactPage() {
             Start a Conversation Now
           </Button>
         </div>
-        
+
         {/* Decorative pattern */}
         <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#00143C 2px, transparent 2px)', backgroundSize: '40px 40px' }} />
       </section>

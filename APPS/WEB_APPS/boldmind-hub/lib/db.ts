@@ -7,13 +7,16 @@ import { prisma, mongoClient, connectMongo } from '@boldmind/database';
  */
 export async function getDb() {
   const dbType = getProductDatabase('boldmind-hub');
-  
+
   if (dbType === 'mongodb') {
-    await connectMongo();
+    await connectMongo({
+      uri: process.env.MONGODB_URI!,
+      dbName: "boldmind-hub",
+    });
     return { type: 'mongodb', client: mongoClient.db('boldmind_hub') };
   }
-  
-  return { type: 'postgres', client: prisma };
+
+  return { type: 'postgres', client: prisma as any };
 }
 
 /**

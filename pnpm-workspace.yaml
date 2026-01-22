@@ -1,11 +1,9 @@
 packages:
-  # Apps
   - 'APPS/WEB_APPS/*'
   - 'APPS/WEB_APPS/PLANAI_SUITE/*'
   - 'APPS/MOBILE/*'
   - 'APPS/CONCEPT_APPS/*'
   
-  # Packages
   - 'PACKAGES/ui'
   - 'PACKAGES/utils'
   - 'PACKAGES/seo'
@@ -21,7 +19,11 @@ shared-workspace-dependencies: true
 shared-workspace-lockfile: true
 
 hoist-pattern:
-  - '*types*'
-  - '*eslint*'
-  - '*prettier*'
-  - '@types/*'
+  - '*'
+
+shamefully-hoist: true
+strict-peer-dependencies: false
+auto-install-peers: true
+
+node-linker: hoisted
+hoist-workspace-packages: true

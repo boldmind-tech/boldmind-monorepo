@@ -3,13 +3,13 @@ import React from 'react';
 import { cn } from '../lib/utils';
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: 'default' | 'elevated' | 'outline';
+  variant?: 'default' | 'elevated' | 'outline' | 'premium';
   padding?: 'none' | 'sm' | 'md' | 'lg';
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant = 'default', padding = 'md', children, ...props }, ref) => {
-    
+
     const variantStyles = {
       default: {
         backgroundColor: 'white',
@@ -25,6 +25,11 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
         backgroundColor: 'transparent',
         border: '2px solid #00143C',
         boxShadow: 'none',
+      },
+      premium: {
+        backgroundColor: '#00143C',
+        border: 'none',
+        boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
       },
     };
 
@@ -64,7 +69,7 @@ const CardHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    style={{ 
+    style={{
       display: 'flex',
       flexDirection: 'column',
       gap: '0.5rem',
@@ -82,7 +87,7 @@ const CardTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <h3
     ref={ref}
-    style={{ 
+    style={{
       fontSize: '1.25rem',
       fontWeight: 700,
       color: '#00143C',
@@ -100,7 +105,7 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    style={{ 
+    style={{
       fontSize: '0.875rem',
       color: '#6B7280',
       margin: 0
@@ -130,7 +135,7 @@ const CardFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    style={{ 
+    style={{
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
@@ -143,11 +148,11 @@ const CardFooter = React.forwardRef<
 ));
 CardFooter.displayName = 'CardFooter';
 
-export { 
-  Card, 
-  CardHeader, 
-  CardFooter, 
-  CardTitle, 
-  CardDescription, 
-  CardContent 
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+  CardContent
 };

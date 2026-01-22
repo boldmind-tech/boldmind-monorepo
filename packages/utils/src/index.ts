@@ -111,15 +111,14 @@ export {
 } from './styles/theme';
 
 import {
-  SocialAccount,
-  PlatformRules,
-  ProductRules,
+  socialAccounts,
   crossPostingRules,
   SocialIntegration,
 } from './constants/social';
 
 export {
   crossPostingRules,
+  socialAccounts,
   SocialIntegration,
 };
 

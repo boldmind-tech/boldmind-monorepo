@@ -4,7 +4,7 @@
 import React from 'react';
 import { cn } from '../lib/utils';
 
-export type BadgeVariant = 'live' | 'building' | 'planned' | 'concept' | 'hiring' | 'new';
+export type BadgeVariant = 'live' | 'building' | 'planned' | 'concept' | 'hiring' | 'new' | 'premium';
 
 interface StatusBadgeProps {
   variant: BadgeVariant;
@@ -20,6 +20,7 @@ export function StatusBadge({ variant, children, className }: StatusBadgeProps) 
     concept: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
     hiring: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
     new: 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300',
+    premium: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
   };
 
   return (
