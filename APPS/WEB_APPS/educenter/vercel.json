@@ -1,6 +1,6 @@
 {
     "$schema": "https://vercel.com/schema.json",
-    "installCommand": "corepack enable && pnpm install --frozen-lockfile --prefer-offline",
+    "installCommand": "corepack enable && pnpm install --frozen-lockfile --prefer-offline --shamefully-hoist --filter=./PACKAGES/** --filter=./APPS/WEB_APPS/educenter...",
     "buildCommand": "pnpm -w run vercel:educenter",
     "outputDirectory": "APPS/WEB_APPS/educenter/.next",
     "framework": "nextjs",

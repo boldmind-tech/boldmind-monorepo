@@ -1,6 +1,6 @@
 {
     "$schema": "https://vercel.com/schema.json",
-    "installCommand": "corepack enable && pnpm install --frozen-lockfile --prefer-offline",
+    "installCommand": "corepack enable && pnpm install --frozen-lockfile --prefer-offline --shamefully-hoist --filter=./PACKAGES/** --filter=./APPS/WEB_APPS/boldmind-hub...",
     "buildCommand": "pnpm -w run vercel:boldmind-hub",
     "outputDirectory": "APPS/WEB_APPS/boldmind-hub/.next",
     "framework": "nextjs",
