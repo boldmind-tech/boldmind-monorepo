@@ -1050,6 +1050,9 @@ importers:
       '@auth/mongodb-adapter':
         specifier: ^3.9.0
         version: 3.11.1(mongodb@6.21.0)
+      '@boldmind/auth':
+        specifier: workspace:*
+        version: link:../../../PACKAGES/auth
       '@boldmind/database':
         specifier: workspace:*
         version: link:../../../PACKAGES/database
