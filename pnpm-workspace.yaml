@@ -20,6 +20,7 @@ shared-workspace-lockfile: true
 
 hoist-pattern:
   - '*'
+  - '@boldmind/*'
 
 shamefully-hoist: true
 strict-peer-dependencies: false

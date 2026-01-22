@@ -3,8 +3,8 @@
     "installCommand": "corepack enable && pnpm install --frozen-lockfile --prefer-offline",
     "buildCommand": "pnpm -w run vercel:amebogist",
     "outputDirectory": "APPS/WEB_APPS/amebogist/.next",
+    "framework": "nextjs",
     "env": {
-        "NODE_ENV": "production",
-        "PNPM_FLAGS": "--shamefully-hoist=false --strict-peer-dependencies=false"
+        "NODE_ENV": "production"
     }
 }
