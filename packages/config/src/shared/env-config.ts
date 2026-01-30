@@ -94,52 +94,52 @@ export const ENV_CONFIG = {
 
   // ==================== NEON POSTGRESQL DATABASES ====================
   // Main Database (Neon) - Shared data
-  DATABASE_URL: process.env['DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=verify-full&channel_binding=require',
+  DATABASE_URL: process.env['DATABASE_URL'] || '',
 
   // Service-Specific PostgreSQL Databases (Neon)
   POSTGRES_SERVICES: {
     // Replace YOUR_NEON_PASSWORD with actual passworD
-    USER_SERVICE_DATABASE_URL: process.env['USER_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/user_service?sslmode=verify-full',
-    PAYMENT_SERVICE_DATABASE_URL: process.env['PAYMENT_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/payment_service?sslmode=verify-full',
-    ANALYTICS_SERVICE_DATABASE_URL: process.env['ANALYTICS_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/analytics_service?sslmode=verify-full',
-    EDUCENTER_SERVICE_DATABASE_URL: process.env['EDUCENTER_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/educenter_service?sslmode=verify-full',
-    FITHER_SERVICE_DATABASE_URL: process.env['FITHER_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/fither_service?sslmode=verify-full',
-    PLANAI_SERVICE_DATABASE_URL: process.env['PLANAI_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/planai_service?sslmode=verify-full',
-    HUB_SERVICE_DATABASE_URL: process.env['HUB_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/hub_service?sslmode=verify-full',
-    RECEPTIONIST_SERVICE_DATABASE_URL: process.env['RECEPTIONIST_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/receptionist_service?sslmode=verify-full',
-    CREDIBILITY_SERVICE_DATABASE_URL: process.env['CREDIBILITY_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/credibility_service?sslmode=verify-full',
-    BUSINESS_PLANNING_SERVICE_DATABASE_URL: process.env['BUSINESS_PLANNING_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/business_planning_service?sslmode=verify-full',
-    FINANCIAL_SERVICE_DATABASE_URL: process.env['FINANCIAL_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/financial_service?sslmode=verify-full',
-    INVESTOR_SERVICE_DATABASE_URL: process.env['INVESTOR_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/investor_service?sslmode=verify-full',
-    STOREFRONTS_SERVICE_DATABASE_URL: process.env['STOREFRONTS_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/storefronts_service?sslmode=verify-full',
-    DIGITAL_STOREFRONTS_DATABASE_URL: process.env['DIGITAL_STOREFRONTS_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/digital_storefronts_service?sslmode=verify-full',
-    MARKETING_SERVICE_DATABASE_URL: process.env['MARKETING_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/marketing_service?sslmode=verify-full',
-    ANALYTICS_DASHBOARD_SERVICE_DATABASE_URL: process.env['ANALYTICS_DASHBOARD_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/analytics_dashboard_service?sslmode=verify-full',
-    SAFEAI_SERVICE_DATABASE_URL: process.env['SAFEAI_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/safeai_service?sslmode=verify-full',
-    KOLOAI_SERVICE_DATABASE_URL: process.env['KOLOAI_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/koloai_service?sslmode=verify-full',
-    RECEIPT_SERVICE_DATABASE_URL: process.env['RECEIPT_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/receipt_service?sslmode=verify-full',
-    BOLDMIND_OS_SERVICE_DATABASE_URL: process.env['BOLDMIND_OS_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/boldmind_main?sslmode=verify-full&channel_binding=require',
+    USER_SERVICE_DATABASE_URL: process.env['USER_SERVICE_DATABASE_URL'] || '',
+    PAYMENT_SERVICE_DATABASE_URL: process.env['PAYMENT_SERVICE_DATABASE_URL'] || '',
+    ANALYTICS_SERVICE_DATABASE_URL: process.env['ANALYTICS_SERVICE_DATABASE_URL'] || '',
+    EDUCENTER_SERVICE_DATABASE_URL: process.env['EDUCENTER_SERVICE_DATABASE_URL'] || '',
+    FITHER_SERVICE_DATABASE_URL: process.env['FITHER_SERVICE_DATABASE_URL'] || '',
+    PLANAI_SERVICE_DATABASE_URL: process.env['PLANAI_SERVICE_DATABASE_URL'] || '',
+    HUB_SERVICE_DATABASE_URL: process.env['HUB_SERVICE_DATABASE_URL'] || '',
+    RECEPTIONIST_SERVICE_DATABASE_URL: process.env['RECEPTIONIST_SERVICE_DATABASE_URL'] || '',
+    CREDIBILITY_SERVICE_DATABASE_URL: process.env['CREDIBILITY_SERVICE_DATABASE_URL'] || '',
+    BUSINESS_PLANNING_SERVICE_DATABASE_URL: process.env['BUSINESS_PLANNING_SERVICE_DATABASE_URL'] || '',
+    FINANCIAL_SERVICE_DATABASE_URL: process.env['FINANCIAL_SERVICE_DATABASE_URL'] || '',
+    INVESTOR_SERVICE_DATABASE_URL: process.env['INVESTOR_SERVICE_DATABASE_URL'] || '',
+    STOREFRONTS_SERVICE_DATABASE_URL: process.env['STOREFRONTS_SERVICE_DATABASE_URL'] || '',
+    DIGITAL_STOREFRONTS_DATABASE_URL: process.env['DIGITAL_STOREFRONTS_DATABASE_URL'] || '',
+    MARKETING_SERVICE_DATABASE_URL: process.env['MARKETING_SERVICE_DATABASE_URL'] || '',
+    ANALYTICS_DASHBOARD_SERVICE_DATABASE_URL: process.env['ANALYTICS_DASHBOARD_SERVICE_DATABASE_URL'] || '',
+    SAFEAI_SERVICE_DATABASE_URL: process.env['SAFEAI_SERVICE_DATABASE_URL'] || '',
+    KOLOAI_SERVICE_DATABASE_URL: process.env['KOLOAI_SERVICE_DATABASE_URL'] || '',
+    RECEIPT_SERVICE_DATABASE_URL: process.env['RECEIPT_SERVICE_DATABASE_URL'] || '',
+    BOLDMIND_OS_SERVICE_DATABASE_URL: process.env['BOLDMIND_OS_SERVICE_DATABASE_URL'] || '',
   },
 
   // ==================== MONGODB ATLAS DATABASES ====================
   // Main MongoDB (Atlas) - Development
-  MONGODB_URL: process.env['MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/boldmind_main_dev?retryWrites=true&w=majority',
+  MONGODB_URL: process.env['MONGODB_URL'] || '',
 
   // Service-Specific MongoDB Databases (Atlas)
   MONGODB_SERVICES: {
     // Development databases
-    AMEBOGIST_SERVICE_MONGODB_URL: process.env['AMEBOGIST_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/amebogist_dev?retryWrites=true&w=majority',
-    SOCIAL_FACTORY_SERVICE_MONGODB_URL: process.env['SOCIAL_FACTORY_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/social_factory_dev?retryWrites=true&w=majority',
-    EMAILSCRAPER_PRO_SERVICE_MONGODB_URL: process.env['EMAILSCRAPER_PRO_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/emailscraper_pro_dev?retryWrites=true&w=majority',
-    SAFEAI_SERVICE_MONGODB_URL: process.env['SAFEAI_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/safeai_dev?retryWrites=true&w=majority',
-    AFROHUSTLE_SERVICE_MONGODB_URL: process.env['AFROHUSTLE_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/afrohustle_dev?retryWrites=true&w=majority',
-    NAIJAGIG_MATCHER_SERVICE_MONGODB_URL: process.env['NAIJAGIG_MATCHER_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/naijagig_matcher_dev?retryWrites=true&w=majority',
-    BORDERLESS_REMIT_SERVICE_MONGODB_URL: process.env['BORDERLESS_REMIT_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/borderless_remit_dev?retryWrites=true&w=majority',
-    POWER_ALERT_SERVICE_MONGODB_URL: process.env['POWER_ALERT_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/power_alert_dev?retryWrites=true&w=majority',
-    FARMGATE_DIRECT_SERVICE_MONGODB_URL: process.env['FARMGATE_DIRECT_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/farmgate_direct_dev?retryWrites=true&w=majority',
-    AFROCOPY_AI_SERVICE_MONGODB_URL: process.env['AFROCOPY_AI_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/afrocopy_ai_dev?retryWrites=true&w=majority',
-    SKILL2CASH_SERVICE_MONGODB_URL: process.env['SKILL2CASH_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/skill2cash_dev?retryWrites=true&w=majority',
-    ANONTRUTH_MIC_SERVICE_MONGODB_URL: process.env['ANONTRUTH_MIC_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/anontruth_mic_dev?retryWrites=true&w=majority',
+    AMEBOGIST_SERVICE_MONGODB_URL: process.env['AMEBOGIST_SERVICE_MONGODB_URL'] || '',
+    SOCIAL_FACTORY_SERVICE_MONGODB_URL: process.env['SOCIAL_FACTORY_SERVICE_MONGODB_URL'] || '',
+    EMAILSCRAPER_PRO_SERVICE_MONGODB_URL: process.env['EMAILSCRAPER_PRO_SERVICE_MONGODB_URL'] || '',
+    SAFEAI_SERVICE_MONGODB_URL: process.env['SAFEAI_SERVICE_MONGODB_URL'] || '',
+    AFROHUSTLE_SERVICE_MONGODB_URL: process.env['AFROHUSTLE_SERVICE_MONGODB_URL'] || '',
+    NAIJAGIG_MATCHER_SERVICE_MONGODB_URL: process.env['NAIJAGIG_MATCHER_SERVICE_MONGODB_URL'] || '',
+    BORDERLESS_REMIT_SERVICE_MONGODB_URL: process.env['BORDERLESS_REMIT_SERVICE_MONGODB_URL'] || '',
+    POWER_ALERT_SERVICE_MONGODB_URL: process.env['POWER_ALERT_SERVICE_MONGODB_URL'] || '',
+    FARMGATE_DIRECT_SERVICE_MONGODB_URL: process.env['FARMGATE_DIRECT_SERVICE_MONGODB_URL'] || '',
+    AFROCOPY_AI_SERVICE_MONGODB_URL: process.env['AFROCOPY_AI_SERVICE_MONGODB_URL'] || '',
+    SKILL2CASH_SERVICE_MONGODB_URL: process.env['SKILL2CASH_SERVICE_MONGODB_URL'] || '',
+    ANONTRUTH_MIC_SERVICE_MONGODB_URL: process.env['ANONTRUTH_MIC_SERVICE_MONGODB_URL'] || '',
   },
 
   // ==================== DATABASE HELPERS ====================
