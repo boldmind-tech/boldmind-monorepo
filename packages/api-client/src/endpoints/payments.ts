@@ -1,45 +1,81 @@
+// PACKAGES/api-client/src/endpoints/payments.ts
+
 import APIClient from '../client';
 
+export interface InitializePaymentRequest {
+  userId: string;
+  amount: number;
+  currency: 'NGN' | 'USD';
+  email: string;
+  phone?: string;
+  subscriptionId?: string;
+  invoiceId?: string;
+  description?: string;
+  metadata?: any;
+  provider?: 'PAYSTACK' | 'FLUTTERWAVE';
+}
+
+export interface CreateSubscriptionRequest {
+  userId: string;
+  planId: string;
+  currentPeriodStart: string;
+  currentPeriodEnd: string;
+}
+
 export class PaymentsEndpoints {
-  constructor(private client: APIClient) {}
+  constructor(private client: APIClient) { }
 
-  // Products
-  async getProducts(app?: string) {
-    const url = app ? `/payments/products/app/${app}` : '/payments/products';
-    return this.client.get(url);
-  }
-
-  async getProduct(productId: string) {
-    return this.client.get(`/payments/products/${productId}`);
-  }
-
-  // Subscriptions
-  async subscribe(data: { uid: string; email: string; productId: string }) {
-    return this.client.post('/payments/subscriptions/subscribe', data);
+  // Payments
+  async initializePayment(data: InitializePaymentRequest) {
+    return this.client.post('/payments/initialize', data);
   }
 
   async verifyPayment(reference: string) {
-    return this.client.post('/payments/subscriptions/verify', { reference });
+    return this.client.get(`/payments/verify/${reference}`);
   }
 
-  async getUserSubscriptions(uid: string) {
-    return this.client.get(`/payments/subscriptions/${uid}`);
+  async getPayment(id: string) {
+    return this.client.get(`/payments/${id}`);
   }
 
-  // Transactions
-  async getUserTransactions(uid: string) {
-    return this.client.get(`/payments/transactions/user/${uid}`);
+  async getUserPayments(userId: string) {
+    return this.client.get(`/payments/user/${userId}`);
   }
 
-  async getTransaction(reference: string) {
-    return this.client.get(`/payments/transactions/${reference}`);
+  // Subscriptions
+  async createSubscription(data: CreateSubscriptionRequest) {
+    return this.client.post('/subscriptions', data);
   }
 
-  async getRevenue(params?: { app?: string; startDate?: string; endDate?: string }) {
-    return this.client.get('/payments/transactions/revenue', { params });
+  async getSubscription(id: string) {
+    return this.client.get(`/subscriptions/${id}`);
   }
 
-  async getRevenueByApp(params?: { startDate?: string; endDate?: string }) {
-    return this.client.get('/payments/transactions/revenue/by-app', { params });
+  async getUserSubscriptions(userId: string) {
+    return this.client.get(`/subscriptions/user/${userId}`);
+  }
+
+  async cancelSubscription(id: string) {
+    return this.client.post(`/subscriptions/${id}/cancel`);
+  }
+
+  // Payouts
+  async requestPayout(data: {
+    userId: string;
+    amount: number;
+    bankName: string;
+    accountNumber: string;
+    accountName: string;
+    notes?: string;
+  }) {
+    return this.client.post('/payouts', data);
+  }
+
+  async getPayout(id: string) {
+    return this.client.get(`/payouts/${id}`);
+  }
+
+  async getUserPayouts(userId: string) {
+    return this.client.get(`/payouts/user/${userId}`);
   }
 }

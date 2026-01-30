@@ -1,4 +1,5 @@
-import { BOLDMIND_PRODUCTS, Product } from './products';
+// PACKAGES/utils/src/constants/navigation.ts
+import { BOLDMIND_PRODUCTS } from './products';
 
 export interface NavigationItem {
   name: string;

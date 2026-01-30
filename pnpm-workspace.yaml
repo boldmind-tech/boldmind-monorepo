@@ -1,26 +1,24 @@
 packages:
+  # Web apps
   - 'APPS/WEB_APPS/*'
   - 'APPS/WEB_APPS/PLANAI_SUITE/*'
-  - 'APPS/MOBILE/*'
-  - 'APPS/CONCEPT_APPS/*'
-  
-  - 'PACKAGES/ui'
-  - 'PACKAGES/utils'
-  - 'PACKAGES/seo'
-  - 'PACKAGES/analytics'
-  - 'PACKAGES/auth'
-  - 'PACKAGES/api-client'
-  - 'PACKAGES/database'
-  - 'PACKAGES/payments'
-  - 'PACKAGES/email'
-  - 'PACKAGES/ai'
 
-shared-workspace-dependencies: true
+  # Mobile apps
+  - 'APPS/MOBILE/*'
+
+  # Concept apps
+  - 'APPS/CONCEPT_APPS/*'
+
+  # Backend services
+  - 'SERVICES/*'
+
+  # Shared packages
+  - 'PACKAGES/*'
+
 shared-workspace-lockfile: true
 
 hoist-pattern:
   - '*'
-  - '@boldmind/*'
 
 shamefully-hoist: true
 strict-peer-dependencies: false

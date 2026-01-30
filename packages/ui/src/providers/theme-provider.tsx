@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState, useMemo } from "react";
 import {
   detectCurrentProduct,
-  getProductThemeClass,
+  // getProductThemeClass,
   getProductTheme,
   productThemes,
   boldmindColors,
@@ -388,7 +388,7 @@ export function ThemeProvider({
     const themes: Theme[] = ["light", "dark", "system"];
     const currentIndex = themes.indexOf(theme);
     const nextIndex = (currentIndex + 1) % themes.length;
-    setTheme(themes[nextIndex]);
+    setTheme(themes[nextIndex] || "light");
   };
 
   const toggleDyslexiaMode = () => {

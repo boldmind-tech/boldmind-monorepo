@@ -1,7 +1,9 @@
+// SERVICES/api-gateway/src/proxy/proxy.module.ts
+
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
-import { ProxyService } from './proxy.service';
 import { ProxyController } from './proxy.controller';
+import { ProxyService } from './proxy.service';
 
 @Module({
   imports: [HttpModule],
@@ -9,4 +11,4 @@ import { ProxyController } from './proxy.controller';
   providers: [ProxyService],
   exports: [ProxyService],
 })
-export class ProxyModule {}
+export class ProxyModule { }

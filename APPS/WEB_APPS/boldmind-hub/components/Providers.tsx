@@ -1,21 +1,20 @@
 'use client';
 
 import { AuthProvider } from '@boldmind/auth';
-import { ThemeProvider } from '@boldmind/ui';
 import { Toaster } from 'sonner';
+import { ThemeProvider } from '@boldmind/ui';
+import { userAPIAdapter } from '../lib/user-api-adapter';
 
-interface ProvidersProps {
+export function Providers({ children, defaultProductTheme }: {
   children: React.ReactNode;
-  defaultProductTheme: any; // Keep it flexible or use proper type if available
-}
-
-export function Providers({ children, defaultProductTheme }: ProvidersProps) {
+  defaultProductTheme?: any;
+}) {
   return (
-    <AuthProvider>
-      <ThemeProvider defaultProduct={defaultProductTheme}>
+    <ThemeProvider defaultProduct={defaultProductTheme}>
+      <AuthProvider userAPI={userAPIAdapter}>
         {children}
-        <Toaster position="top-right" richColors closeButton />
-      </ThemeProvider>
-    </AuthProvider>
+        <Toaster position="top-right" richColors />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

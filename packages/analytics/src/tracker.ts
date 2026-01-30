@@ -1,4 +1,4 @@
-import { BOLDMIND_PRODUCTS } from '@boldmind/utils';
+// import { BOLDMIND_PRODUCTS } from '@boldmind/utils';
 
 export interface AnalyticsEvent {
   name: string;
@@ -48,54 +48,54 @@ export function trackEvent(event: AnalyticsEvent) {
   }
 }
 
-// Product-specific tracking
-export function trackProductView(productSlug: string, userId?: string) {
-  const product = BOLDMIND_PRODUCTS.find(p => p.slug === productSlug);
+// // Product-specific tracking
+// export function trackProductView(productSlug: string, userId?: string) {
+//   const product = BOLDMIND_PRODUCTS.find(p => p.slug === productSlug);
   
-  trackEvent({
-    name: 'product_view',
-    product: productSlug,
-    userId,
-    properties: {
-      product_name: product?.name,
-      product_category: product?.category,
-      product_status: product?.status
-    }
-  });
-}
+//   trackEvent({
+//     name: 'product_view',
+//     product: productSlug,
+//     userId,
+//     properties: {
+//       product_name: product?.name,
+//       product_category: product?.category,
+//       product_status: product?.status
+//     }
+//   });
+// }
 
-export function trackConversion(
-  productSlug: string, 
-  conversionType: string, 
-  userId?: string, 
-  amount?: number
-) {
-  trackEvent({
-    name: 'conversion',
-    product: productSlug,
-    userId,
-    properties: {
-      conversion_type: conversionType,
-      amount,
-      timestamp: new Date().toISOString()
-    }
-  });
-}
+// export function trackConversion(
+//   productSlug: string, 
+//   conversionType: string, 
+//   userId?: string, 
+//   amount?: number
+// ) {
+//   trackEvent({
+//     name: 'conversion',
+//     product: productSlug,
+//     userId,
+//     properties: {
+//       conversion_type: conversionType,
+//       amount,
+//       timestamp: new Date().toISOString()
+//     }
+//   });
+// }
 
-// Cross-product journey tracking
-export function trackCrossProductNavigation(
-  fromProduct: string,
-  toProduct: string,
-  userId?: string
-) {
-  trackEvent({
-    name: 'cross_product_navigation',
-    product: fromProduct,
-    userId,
-    properties: {
-      from_product: fromProduct,
-      to_product: toProduct,
-      navigation_path: `${fromProduct} → ${toProduct}`
-    }
-  });
-}
+// // Cross-product journey tracking
+// export function trackCrossProductNavigation(
+//   fromProduct: string,
+//   toProduct: string,
+//   userId?: string
+// ) {
+//   trackEvent({
+//     name: 'cross_product_navigation',
+//     product: fromProduct,
+//     userId,
+//     properties: {
+//       from_product: fromProduct,
+//       to_product: toProduct,
+//       navigation_path: `${fromProduct} → ${toProduct}`
+//     }
+//   });
+// }

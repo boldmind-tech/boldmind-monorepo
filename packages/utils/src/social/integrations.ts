@@ -1,16 +1,16 @@
 import { socialAccounts, crossPostingRules } from '../constants/social';
-import type { 
-  SocialAccount, 
-  PlatformRules, 
-  PostResult, 
+import type {
+  SocialAccount,
+  // PlatformRules, 
+  PostResult,
   AnalyticsData,
-  PlatformStats 
+  PlatformStats
 } from './type';
 
 
 export class SocialIntegration {
   private platformTokens: Map<string, string> = new Map();
-  private apiClients: Map<string, any> = new Map();
+  // private _apiClients: Map<string, any> = new Map();
   private postingQueue: Array<() => Promise<void>> = [];
   private isProcessingQueue = false;
 
@@ -19,7 +19,7 @@ export class SocialIntegration {
     delayBetweenPosts: 1000, // 1 second
     batchSize: 5,
     enableAnalytics: true
-  }) {}
+  }) { }
 
   // Connect to all social accounts with better error handling
   async connectAllAccounts(): Promise<{ success: number; failed: number; errors: string[] }> {
@@ -60,24 +60,24 @@ export class SocialIntegration {
     product: string;
   }): Promise<PostResult[]> {
     const rules = crossPostingRules[content.product as keyof typeof crossPostingRules];
-    
+
     if (!rules) {
       console.warn(`No cross-posting rules found for product: ${content.product}`);
       return [];
     }
 
     const results: PostResult[] = [];
-    
+
     // Group by platform to handle multiple accounts per platform
     for (const platform of rules.platforms) {
       const platformAccounts = socialAccounts[platform] || [];
-      const template = rules.templates[platform] || '{title}\n\n{body}\n\n{url}';
-      
+      // const template = rules.templates[platform] || '{title}\n\n{body}\n\n{url}';
+
       for (const account of platformAccounts) {
         try {
-          const message = this.formatMessage(template, content);
-          const result = await this.postToPlatform(platform, account.id, message, content.image, content.url);
-          
+          // const message = this.formatMessage(template, content);
+          const result = await this.postToPlatform(platform, account.id);
+
           results.push({
             platform,
             accountId: account.id,
@@ -91,10 +91,10 @@ export class SocialIntegration {
               url: content.url
             }
           });
-          
+
           // Respect rate limits
           await this.delay(this.config.delayBetweenPosts);
-          
+
         } catch (error) {
           results.push({
             platform,
@@ -116,47 +116,47 @@ export class SocialIntegration {
   private async postToPlatform(
     platform: string,
     accountId: string,
-    message: string,
-    image?: string,
-    url?: string
+    // message: string,
+    // image?: string,
+    // url?: string
   ): Promise<{ messageId: string; platform: string }> {
     // Implementation for each platform's API
-    switch(platform) {
+    switch (platform) {
       case 'facebook':
-        return this.postToFacebook(accountId, message, image, url);
+        return this.postToFacebook(accountId);
       case 'instagram':
-        return this.postToInstagram(accountId, message, image);
+        return this.postToInstagram(accountId);
       case 'twitter':
       case 'x':
-        return this.postToTwitter(accountId, message, image, url);
+        return this.postToTwitter(accountId);
       case 'youtube':
-        return this.postToYouTube(accountId, message, image || '', url);
+        return this.postToYouTube(accountId);
       case 'tiktok':
-        return this.postToTikTok(accountId, message, image);
+        return this.postToTikTok(accountId);
       case 'whatsapp':
-        return this.postToWhatsApp(accountId, message, url);
+        return this.postToWhatsApp(accountId);
       case 'linkedin':
-        return this.postToLinkedIn(accountId, message, image, url);
+        return this.postToLinkedIn(accountId);
       default:
         throw new Error(`Unsupported platform: ${platform}`);
     }
   }
 
   // Fixed formatMessage method
-  private formatMessage(template: string, content: {
-    title: string;
-    body: string;
-    excerpt: string;
-    url: string;
-    product: string;
-  }): string {
-    return template
-      .replace(/{title}/g, content.title)
-      .replace(/{body}/g, content.body)
-      .replace(/{excerpt}/g, content.excerpt)
-      .replace(/{url}/g, content.url)
-      .replace(/{product}/g, content.product);
-  }
+  // private formatMessage(template: string, content: {
+  //   title: string;
+  //   body: string;
+  //   excerpt: string;
+  //   url: string;
+  //   product: string;
+  // }): string {
+  //   return template
+  //     .replace(/{title}/g, content.title)
+  //     .replace(/{body}/g, content.body)
+  //     .replace(/{excerpt}/g, content.excerpt)
+  //     .replace(/{url}/g, content.url)
+  //     .replace(/{product}/g, content.product);
+  // }
 
   // Enhanced postToAllProducts with proper typing
   async postToAllProducts(productPost: {
@@ -173,7 +173,7 @@ export class SocialIntegration {
           ...productPost.amebogist,
           body: productPost.amebogist.body || productPost.amebogist.excerpt,
           product: 'amebogist'
-        }).then(result => { results.amebogist = result; })
+        }).then(result => { results['amebogist'] = result; })
       );
     }
 
@@ -183,7 +183,7 @@ export class SocialIntegration {
           ...productPost.educenter,
           body: productPost.educenter.body || productPost.educenter.excerpt,
           product: 'educenter'
-        }).then(result => { results.educenter = result; })
+        }).then(result => { results['educenter'] = result; })
       );
     }
 
@@ -193,7 +193,7 @@ export class SocialIntegration {
           ...productPost.boldmind,
           body: productPost.boldmind.body || productPost.boldmind.excerpt,
           product: 'boldmind'
-        }).then(result => { results.boldmind = result; })
+        }).then(result => { results['boldmind'] = result; })
       );
     }
 
@@ -204,7 +204,7 @@ export class SocialIntegration {
   // Queue posting for rate limiting
   async queuePost(postFn: () => Promise<void>): Promise<void> {
     this.postingQueue.push(postFn);
-    
+
     if (!this.isProcessingQueue) {
       this.processQueue();
     }
@@ -212,12 +212,12 @@ export class SocialIntegration {
 
   private async processQueue(): Promise<void> {
     if (this.isProcessingQueue || this.postingQueue.length === 0) return;
-    
+
     this.isProcessingQueue = true;
-    
+
     while (this.postingQueue.length > 0) {
       const batch = this.postingQueue.splice(0, this.config.batchSize);
-      
+
       await Promise.all(
         batch.map(async (postFn, index) => {
           // Stagger posts within batch
@@ -225,22 +225,22 @@ export class SocialIntegration {
           await this.retryOperation(postFn, this.config.maxRetries);
         })
       );
-      
+
       // Delay between batches
       if (this.postingQueue.length > 0) {
         await this.delay(this.config.delayBetweenPosts * 2);
       }
     }
-    
+
     this.isProcessingQueue = false;
   }
 
   // Platform-specific implementations (simplified)
   private async postToFacebook(
     accountId: string,
-    message: string,
-    image?: string,
-    url?: string
+    // message: string,
+    // image?: string,
+    // url?: string
   ): Promise<{ messageId: string; platform: string }> {
     // Implementation using Facebook Graph API
     console.log(`Posting to Facebook account ${accountId}`);
@@ -250,9 +250,9 @@ export class SocialIntegration {
 
   private async postToTwitter(
     accountId: string,
-    message: string,
-    image?: string,
-    url?: string
+    // message: string,
+    // image?: string,
+    // url?: string
   ): Promise<{ messageId: string; platform: string }> {
     // Implementation using Twitter API v2
     console.log(`Posting to Twitter account ${accountId}`);
@@ -261,8 +261,8 @@ export class SocialIntegration {
 
   private async postToInstagram(
     accountId: string,
-    message: string,
-    image?: string
+    // message: string,
+    // image?: string
   ): Promise<{ messageId: string; platform: string }> {
     // Implementation using Instagram Graph API
     console.log(`Posting to Instagram account ${accountId}`);
@@ -271,9 +271,9 @@ export class SocialIntegration {
 
   private async postToYouTube(
     accountId: string,
-    message: string,
-    image: string,
-    url?: string
+    // message: string,
+    // image: string,
+    // url?: string
   ): Promise<{ messageId: string; platform: string }> {
     // Implementation using YouTube Data API
     console.log(`Posting to YouTube account ${accountId}`);
@@ -282,8 +282,8 @@ export class SocialIntegration {
 
   private async postToWhatsApp(
     accountId: string,
-    message: string,
-    url?: string
+    // message: string,
+    // url?: string
   ): Promise<{ messageId: string; platform: string }> {
     // Implementation using WhatsApp Business API
     console.log(`Posting to WhatsApp account ${accountId}`);
@@ -292,8 +292,8 @@ export class SocialIntegration {
 
   private async postToTikTok(
     accountId: string,
-    message: string,
-    image?: string
+    // message: string,
+    // image?: string
   ): Promise<{ messageId: string; platform: string }> {
     // Implementation using TikTok API
     console.log(`Posting to TikTok account ${accountId}`);
@@ -302,9 +302,9 @@ export class SocialIntegration {
 
   private async postToLinkedIn(
     accountId: string,
-    message: string,
-    image?: string,
-    url?: string
+    // message: string,
+    // image?: string,
+    // url?: string
   ): Promise<{ messageId: string; platform: string }> {
     // Implementation using LinkedIn API
     console.log(`Posting to LinkedIn account ${accountId}`);
@@ -362,7 +362,7 @@ export class SocialIntegration {
 
       for (const account of accounts) {
         try {
-          const stats = await this.fetchPlatformStats(platform, account.id, startDate, endDate);
+          const stats = await this.fetchPlatformStats(platform);
           platformFollowers += stats.followers || 0;
           platformEngagement += stats.engagement || 0;
           platformReach += stats.reach || 0;
@@ -392,9 +392,9 @@ export class SocialIntegration {
 
   private async fetchPlatformStats(
     platform: string,
-    accountId: string,
-    startDate?: Date,
-    endDate?: Date
+    // accountId: string,
+    // startDate?: Date,
+    // endDate?: Date
   ): Promise<PlatformStats> {
     // Implementation to fetch platform-specific statistics
     return {

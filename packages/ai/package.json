@@ -23,23 +23,24 @@
     "dist/**"
   ],
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "lint": "eslint . --ext ts,tsx",
-    "clean": "rm -rf .turbo dist node_modules"
+    "build": "rm -rf dist && tsdown",
+    "dev": "tsdown --watch",
+    "clean": "rm -rf dist node_modules",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "openai": "^4.104.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.3",
+    "@types/react": "^18.3.27",
+    "@types/react-dom": "^18.3.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8",
-    "typescript": "^5.4.5",
-    "@types/react": "^18.3.27",
-    "@types/react-dom": "^18.3.7",
-    "tsup": "^7.2.0"
+    "tsdown": "^0.20.1",
+    "tsup": "^7.2.0",
+    "typescript": "^5.4.5"
   },
   "peerDependencies": {
     "next": "^14.0.0",

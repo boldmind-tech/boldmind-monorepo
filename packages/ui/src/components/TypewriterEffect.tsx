@@ -1,7 +1,7 @@
 // @boldmind/ui/components/TypewriterEffect.tsx
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface TypewriterEffectProps {
@@ -38,28 +38,28 @@ export function TypewriterEffect({
   const [isDeleting, setIsDeleting] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [cursorVisible, setCursorVisible] = useState(true);
-  
+
   if (!texts || texts.length === 0) {
     return null;
   }
   // Cursor blink effect
   useEffect(() => {
     if (!showCursor) return;
-    
+
     const cursorInterval = setInterval(() => {
       setCursorVisible((prev) => !prev);
     }, cursorBlinkSpeed);
-    
+
     return () => clearInterval(cursorInterval);
   }, [showCursor, cursorBlinkSpeed]);
-  
+
   // Typewriter effect logic
   useEffect(() => {
     if (texts.length === 0) return;
-    
-    const currentFullText = texts[currentTextIndex];
+
+    const currentFullText = texts[currentTextIndex] || '';
     let timeout: NodeJS.Timeout;
-    
+
     if (!isPaused) {
       if (!isDeleting && currentText.length < currentFullText.length) {
         // Typing mode
@@ -76,7 +76,7 @@ export function TypewriterEffect({
         if (currentTextIndex === texts.length - 1 && !loop && onComplete) {
           onComplete();
         }
-        
+
         timeout = setTimeout(() => {
           setIsDeleting(true);
         }, delay);
@@ -87,14 +87,14 @@ export function TypewriterEffect({
           const nextIndex = prev === texts.length - 1 ? 0 : prev + 1;
           return nextIndex;
         });
-        
+
         // Add a small pause before starting next text
         timeout = setTimeout(() => {
           setIsPaused(false);
         }, 300);
       }
     }
-    
+
     return () => clearTimeout(timeout);
   }, [
     currentText,
@@ -108,31 +108,31 @@ export function TypewriterEffect({
     loop,
     onComplete,
   ]);
-  
+
   // Pause/Resume functions for interaction
-  const pause = useCallback(() => setIsPaused(true), []);
-  const resume = useCallback(() => setIsPaused(false), []);
-  
+  // const pause = useCallback(() => setIsPaused(true), []);
+  // const resume = useCallback(() => setIsPaused(false), []);
+
   // Reset to specific text
-  const resetToText = useCallback((index: number) => {
-    if (index >= 0 && index < texts.length) {
-      setCurrentTextIndex(index);
-      setCurrentText('');
-      setIsDeleting(false);
-      setIsPaused(false);
-    }
-  }, [texts.length]);
-  
+  // const resetToText = useCallback((index: number) => {
+  //   if (index >= 0 && index < texts.length) {
+  //     setCurrentTextIndex(index);
+  //     setCurrentText('');
+  //     setIsDeleting(false);
+  //     setIsPaused(false);
+  //   }
+  // }, [texts.length]);
+
   // Calculate typing progress (0 to 1)
-const progress = texts && texts.length > 0 && texts[currentTextIndex]
-  ? currentText.length / texts[currentTextIndex].length
-  : 0;
-  
+  const progress = texts && texts.length > 0 && texts[currentTextIndex]
+    ? currentText.length / texts[currentTextIndex].length
+    : 0;
+
   return (
     <div className={`inline-flex items-center ${className}`}>
       <span className={`font-mono ${textClassName}`}>
         {currentText}
-        
+
         {/* Special effects for certain characters */}
         <AnimatePresence>
           {currentText && (
@@ -152,7 +152,7 @@ const progress = texts && texts.length > 0 && texts[currentTextIndex]
           )}
         </AnimatePresence>
       </span>
-      
+
       {showCursor && (
         <motion.span
           animate={{ opacity: cursorVisible ? 1 : 0 }}
@@ -162,7 +162,7 @@ const progress = texts && texts.length > 0 && texts[currentTextIndex]
           {cursorChar}
         </motion.span>
       )}
-      
+
       {/* Progress indicator (optional) */}
       <motion.div
         className="absolute -bottom-2 left-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"

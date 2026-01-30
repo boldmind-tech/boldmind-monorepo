@@ -1,10 +1,6 @@
-import { supabase } from "../../infrastructure/supabase/client";
+// PACKAGES/auth/src/application/password/requestPasswordReset.ts
+import { getSupabaseAuthProvider } from '../../providers/supabase/singleton';
 
-export async function requestPasswordReset(email: string, redirectTo: string) {
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo,
-  });
-
-  if (error) throw error;
+export async function requestPasswordReset(email: string): Promise<void> {
+  return getSupabaseAuthProvider().resetPasswordForEmail(email);
 }
-// use for /forgot-password

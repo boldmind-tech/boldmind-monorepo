@@ -59,7 +59,6 @@ export const PRODUCT_CATEGORIES = [
 
 
 export const BOLDMIND_PRODUCTS: Product[] = [
-  // === LIVE PRODUCTS ===
   {
     id: 'prod_000',
     name: 'BoldMind Hub',
@@ -201,8 +200,6 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     createdAt: '2025-10-15',
     updatedAt: '2026-01-18'
   },
-
-  // === BUILDING PRODUCTS ===
   {
     id: 'prod_004',
     name: 'Social Media Content Factory',
@@ -334,8 +331,6 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     createdAt: '2025-12-26',
     updatedAt: '2026-01-18'
   },
-
-  // === PLANAI SUITE ===
   {
     id: 'prod_008',
     name: 'Professional Credibility Hubs',
@@ -608,8 +603,6 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     createdAt: '2025-12-26',
     updatedAt: '2026-01-18'
   },
-
-  // === CONCEPT APPS ===
   {
     id: 'prod_016',
     name: 'SAFE AI',
@@ -738,7 +731,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     createdAt: '2025-12-26',
     updatedAt: '2026-01-18'
   },
- {
+  {
     id: 'prod_020',
     name: 'BorderlessRemit Tracker',
     description: 'Real-time remittance rate comparison',
@@ -1172,7 +1165,7 @@ export function getProductByDomain(domain: string): Product | undefined {
 
 export function getProductByFullDomain(fullDomain: string): Product | undefined {
   return BOLDMIND_PRODUCTS.find(product => {
-    const productFullDomain = product.subdomain 
+    const productFullDomain = product.subdomain
       ? `${product.subdomain}.${product.domain}`
       : product.domain;
     return productFullDomain === fullDomain;
@@ -1230,17 +1223,17 @@ export function getProductsWithoutSubdomain(): Product[] {
 }
 
 export function getPlanAISuiteProducts(): Product[] {
-  return BOLDMIND_PRODUCTS.filter(product => 
-    product.domain === 'planai.boldmind.ng' || 
-    product.slug.includes('planai') || 
+  return BOLDMIND_PRODUCTS.filter(product =>
+    product.domain === 'planai.boldmind.ng' ||
+    product.slug.includes('planai') ||
     product.slug.includes('receptionist') ||
-    product.slug.includes('credibility') || 
+    product.slug.includes('credibility') ||
     product.slug.includes('business-planning') ||
-    product.slug.includes('financial-forecasting') || 
+    product.slug.includes('financial-forecasting') ||
     product.slug.includes('investor-readiness') ||
-    product.slug.includes('branding-design') || 
+    product.slug.includes('branding-design') ||
     product.slug.includes('digital-storefronts') ||
-    product.slug.includes('marketing-automation') || 
+    product.slug.includes('marketing-automation') ||
     product.slug.includes('analytics-dashboard')
   );
 }
@@ -1273,7 +1266,7 @@ export function calculateTotalTeamSize(): number {
   const teamSizes = BOLDMIND_PRODUCTS
     .map(product => product.teamSize || 0)
     .reduce((total, size) => total + size, 0);
-  
+
   return Math.ceil(teamSizes / 2); // Account for overlapping team members
 }
 
@@ -1288,8 +1281,8 @@ export function getUpcomingReleases(months: number = 6): Product[] {
 
     const timelineMatch = product.timeline.match(/Q(\d) (\d{4})/);
     if (timelineMatch) {
-      const quarter = parseInt(timelineMatch[1]);
-      const year = parseInt(timelineMatch[2]);
+      const quarter = parseInt(timelineMatch[1] || '');
+      const year = parseInt(timelineMatch[2] || '');
 
       const releaseDate = new Date(year, (quarter - 1) * 3, 1);
       return releaseDate >= now && releaseDate <= future;
@@ -1336,7 +1329,7 @@ export function getProductStatusSummary(): ProductStatusSummary {
 
 // Tech stack analysis
 export function getProductsByTech(tech: string): Product[] {
-  return BOLDMIND_PRODUCTS.filter(product => 
+  return BOLDMIND_PRODUCTS.filter(product =>
     product.techStack.some(t => t.toLowerCase().includes(tech.toLowerCase()))
   );
 }
@@ -1400,7 +1393,7 @@ export function getProductsLaunchingThisYear(year: number = 2026): Product[] {
     if (!product.timeline) return false;
     const timelineMatch = product.timeline.match(/Q(\d) (\d{4})/);
     if (timelineMatch) {
-      const timelineYear = parseInt(timelineMatch[2]);
+      const timelineYear = parseInt(timelineMatch[2] || '');
       return timelineYear === year;
     }
     return false;
@@ -1409,7 +1402,7 @@ export function getProductsLaunchingThisYear(year: number = 2026): Product[] {
 
 // Integration-based functions
 export function getProductsWithIntegration(integration: string): Product[] {
-  return BOLDMIND_PRODUCTS.filter(product => 
+  return BOLDMIND_PRODUCTS.filter(product =>
     product.integrations?.some(integ => integ.toLowerCase().includes(integration.toLowerCase()))
   );
 }
@@ -1427,7 +1420,7 @@ export interface CategorySummary {
 
 export function getCategorySummary(): CategorySummary[] {
   const summary: Record<string, CategorySummary> = {};
-  
+
   BOLDMIND_PRODUCTS.forEach(product => {
     if (!summary[product.category]) {
       summary[product.category] = {
@@ -1440,21 +1433,21 @@ export function getCategorySummary(): CategorySummary[] {
         revenue: 0
       };
     }
-    
-    const catSummary = summary[product.category];
+
+    const catSummary: any = summary[product.category];
     catSummary.count++;
     catSummary[product.status.toLowerCase() as keyof Omit<CategorySummary, 'category' | 'count' | 'revenue'>]++;
     catSummary.revenue += (product.monthlyRevenue || 0);
   });
-  
+
   return Object.values(summary).sort((a, b) => b.count - a.count);
 }
 
 // Search functionality
 export function searchProducts(query: string): Product[] {
   const lowerQuery = query.toLowerCase();
-  
-  return BOLDMIND_PRODUCTS.filter(product => 
+
+  return BOLDMIND_PRODUCTS.filter(product =>
     product.name.toLowerCase().includes(lowerQuery) ||
     product.description.toLowerCase().includes(lowerQuery) ||
     product.tags.some(tag => tag.toLowerCase().includes(lowerQuery)) ||
@@ -1468,36 +1461,36 @@ export function estimateDevelopmentCost(product: Product): number {
   // Rough estimation based on team size and timeline
   const teamSize = product.teamSize || 1;
   const months = getTimelineMonths(product.timeline);
-  
+
   // Average developer cost in Nigeria: ₦500,000/month
   const monthlyCostPerDev = 500000;
   const totalCost = teamSize * months * monthlyCostPerDev;
-  
+
   return totalCost;
 }
 
 function getTimelineMonths(timeline?: string): number {
   if (!timeline) return 3; // Default 3 months
-  
+
   if (timeline.includes('week')) {
     const weeksMatch = timeline.match(/(\d+)\s*weeks?/);
     if (weeksMatch) {
-      return parseInt(weeksMatch[1]) / 4;
+      return parseInt(weeksMatch[1] || '') / 4;
     }
   }
-  
+
   if (timeline.includes('month')) {
     const monthsMatch = timeline.match(/(\d+)\s*months?/);
     if (monthsMatch) {
-      return parseInt(monthsMatch[1]);
+      return parseInt(monthsMatch[1] || '');
     }
   }
-  
+
   return 3; // Default fallback
 }
 
 export function calculateTotalDevelopmentCost(): number {
-  return BOLDMIND_PRODUCTS.reduce((total, product) => 
+  return BOLDMIND_PRODUCTS.reduce((total, product) =>
     total + estimateDevelopmentCost(product), 0
   );
 }
@@ -1506,9 +1499,9 @@ export function calculateTotalDevelopmentCost(): number {
 export function calculateROI(product: Product): number {
   const developmentCost = estimateDevelopmentCost(product);
   const annualRevenue = (product.monthlyRevenue || 0) * 12;
-  
+
   if (developmentCost === 0) return 0;
-  
+
   return (annualRevenue / developmentCost) * 100;
 }
 
@@ -1519,7 +1512,7 @@ export function getQuickStats() {
   const totalTeamSize = calculateTotalTeamSize();
   const upcomingReleases = getUpcomingReleases(6).length;
   const developmentCost = calculateTotalDevelopmentCost();
-  
+
   return {
     totalProducts,
     totalRevenue: `₦${totalRevenue.toLocaleString()}/month`,

@@ -23,7 +23,7 @@ import {
   getConceptProducts,
 } from "@boldmind/utils";
 
-const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || "BoldMind Technology Solution Enterprise";
+const SITE_NAME = process.env['NEXT_PUBLIC_SITE_NAME'] || "BoldMind Technology Solution Enterprise";
 
 export default function HomePage() {
   const [entrepreneurs, setEntrepreneurs] = useState(0);

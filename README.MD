@@ -131,6 +131,12 @@ boldmind-monorepo/
 │   ├── analytics/                             # Analytics utilities
 │   ├── seo/                                   # SEO utilities
 │   └── database/                              # Database clients
+│         └── src/
+│             ├── mongodb/                      # Database models
+│             │   ├── client.ts/                    #           client connectiom
+│             ├── postgres/                   # Database repositories
+│             │   ├── client.ts/                    # Database models                 
+│             └── index.ts/                    # Database services
 │
 ├── SERVICES/                               # Backend services
 │   ├── api-gateway/                           # NestJS API gateway
@@ -143,10 +149,27 @@ boldmind-monorepo/
 │   └── product-specific-services/
 │       ├── educenter-service/                 # EduCenter backend
 │       └── naija-fither-service/              # Naija FitHer backend
+│       └── amebogist-service/                 # AmeboGist backend
+│       └── boldmind-os-service/               # BoldMind OS backend
+│       └── emailscraper-pro-service/          # EmailScraper Pro backend
+│       └── hub-service/                       # Hub backend
+│       └── safeai-service/                    # SafeAI backend
+│       └── plannai-service/                   # PlannAI backend
+│       └── afrohustle-service/                # AfroHustle backend
+│       └── naijagigmatcher-service/           # Naija Gig Matcher backend
+│       └── receiptgenius-service/             # Receipt Genius backend
+│       └── poweralert-service/                # Power Alert backend
+│       └── farmgatedirect-service/            # FarmGate Direct backend
+│       └── afrocopyai-service/                # AfroCopy AI backend
+│       └── anontruthmic-service/              # AnonTruth Mic backend
+│       └── borderlessremit-service/           # Borderless Remit backend
+│       └── skill2cash-service/                # Skill2Cash backend
+│       └── social-factory-service/            # Social Factory backend
+│       
 │
 ├── INFRASTRUCTURE/                         # DevOps configuration
 │   ├── docker/                                # Docker configurations
-│   ├── kubernetes/                            # K8s manifests
+│   ├── kubernfetes/                            # K8s manifests
 │   ├── nginx/                                 # Nginx configurations
 │   └── scripts/                               # Deployment scripts
 │

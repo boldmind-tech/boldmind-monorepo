@@ -1,0 +1,40 @@
+# SERVICES/hub-service/docker-compose.yml
+version: '3.8'
+
+services:
+  hub-service:
+    build: .
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${HUB_SERVICE_DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+    volumes:
+      - ./logs:/app/logs
+    depends_on:
+      - hub-db
+    restart: unless-stopped
+    networks:
+      - boldmind-network
+
+  hub-db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=boldmind_hub
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - hub-db-data:/var/lib/postgresql/data
+    networks:
+      - boldmind-network
+
+volumes:
+  hub-db-data:
+
+
+networks:
+  boldmind-network:
+    driver: bridge

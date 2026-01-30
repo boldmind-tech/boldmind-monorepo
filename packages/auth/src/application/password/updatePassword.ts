@@ -1,14 +1,6 @@
-import { supabase } from "../../infrastructure/supabase/client";
+// PACKAGES/auth/src/application/password/updatePassword.ts
+import { getSupabaseAuthProvider } from '../../providers/supabase/singleton';
 
-export async function updatePassword(newPassword: string) {
-  const { error } = await supabase.auth.updateUser({
-    password: newPassword,
-  });
-
-  if (error) throw error;
+export async function updatePassword(newPassword: string): Promise<void> {
+  return getSupabaseAuthProvider().updatePassword(newPassword);
 }
-//This handles:
-
-// password reset
-
-// change password (when logged in)

@@ -1,3 +1,5 @@
+// SERVICES/api-gateway/src/health/health.controller.ts - FIXED
+
 import { Controller, Get } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 

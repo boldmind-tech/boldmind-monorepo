@@ -3,27 +3,27 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+// import Image from "next/image";
+import { motion } from "framer-motion";
 import {
   Mail,
-  Phone,
-  MapPin,
-  Send,
-  Heart,
-  Coffee,
+  // Phone,
+  // MapPin,
+  // Send,
+  // Heart,
+  // Coffee,
   Rocket,
   ExternalLink,
   Sparkles,
   TrendingUp,
   Users,
-  Globe,
+  // Globe,
   Github,
   Twitter,
   Instagram,
   Linkedin,
-  Youtube,
-  Facebook,
+  // Youtube,
+  // Facebook,
   BookOpen,
   GraduationCap,
   Newspaper,
@@ -33,13 +33,13 @@ import {
   Shield,
   ShoppingCart,
   DollarSign,
-  Wifi,
-  Droplets,
-  Utensils,
-  Battery,
-  AlertCircle,
+  // Wifi,
+  // Droplets,
+  // Utensils,
+  // Battery,
+  // AlertCircle,
   Smartphone,
-  Tablet,
+  // Tablet,
   Mic,
 } from "lucide-react";
 import { useTheme } from "../providers/theme-provider";
@@ -48,7 +48,7 @@ import {
   BOLDMIND_PRODUCTS,
   getProductBySlug,
   getLiveProducts,
-  getProductsByCategory,
+  // getProductsByCategory,
 } from "@boldmind/utils";
 
 export interface FooterLink {
@@ -66,7 +66,8 @@ export interface FooterSection {
 
 export interface SuperFooterProps {
   logoSrc?: string;
-  sections?: FooterSection[];
+  product?: string;
+  sections?: FooterSection[] | undefined;
   contactInfo?: {
     email?: string;
     phone?: string;
@@ -87,9 +88,9 @@ export interface SuperFooterProps {
 }
 
 export function SuperFooter({
-  logoSrc = "/logo.png",
-  sections,
-  contactInfo,
+  // logoSrc = "/logo.png",
+  sections = [],
+  // contactInfo,
   socialLinks = [],
   newsletter = true,
   showStats = true,
@@ -160,13 +161,13 @@ export function SuperFooter({
   const getDefaultSections = () => {
     const baseSections: FooterSection[] = [
       {
-        title: `${currentProduct.icon} ${currentProduct.name}`,
+        title: `${currentProduct?.icon} ${currentProduct?.name}`,
         links: [
           { href: "/features", label: "Features", icon: "✨" },
           { href: "/pricing", label: "Pricing", icon: "💰" },
           { href: "/demo", label: "Demo", icon: "🎥" },
           { href: "/docs", label: "Documentation", icon: "📚" },
-          ...(currentProduct.links?.website
+          ...(currentProduct?.links?.website
             ? [
               {
                 href: currentProduct.links.website,
@@ -185,10 +186,6 @@ export function SuperFooter({
           label: product.name,
           icon: product.icon,
           isExternal: true,
-          badge:
-            product.status === ("LIVE")
-              ? "🚀 LIVE"
-              : undefined,
         })),
       },
       {
@@ -261,7 +258,7 @@ export function SuperFooter({
   // Dynamic stats based on product
   const getStats = () => {
     // For non-live products, show projected stats
-    if (currentProduct.status !== ("LIVE")) {
+    if (currentProduct?.status !== ("LIVE")) {
       return [
         {
           icon: TrendingUp,
@@ -271,19 +268,19 @@ export function SuperFooter({
         },
         {
           icon: Calendar,
-          value: currentProduct.timeline?.split(" ")[1] || "2026",
+          value: currentProduct?.timeline?.split(" ")[1] || "2026",
           label: "Launch",
           color: "bg-blue-500",
         },
         {
           icon: Users,
-          value: currentProduct.teamSize || "2",
+          value: currentProduct?.teamSize || "2",
           label: "Team Size",
           color: "bg-purple-500",
         },
         {
           icon: Rocket,
-          value: currentProduct.priority.toString(),
+          value: currentProduct?.priority.toString(),
           label: "Priority",
           color: "bg-green-500",
         },
@@ -294,7 +291,7 @@ export function SuperFooter({
     return [
       {
         icon: Users,
-        value: currentProduct.users || "Growing",
+        value: currentProduct?.users || "Growing",
         label: "Users",
         color: "bg-blue-500",
       },
@@ -334,7 +331,7 @@ export function SuperFooter({
   };
 
   // Get the first letter of product name for logo
-  const productInitial = currentProduct.name.charAt(0);
+  const productInitial = currentProduct?.name.charAt(0);
 
   // Get product-specific color
   const getProductColor = () => {
@@ -376,9 +373,9 @@ export function SuperFooter({
                 </span>
               </div>
               <div className="flex flex-col">
-                <span className="text-lg font-bold">{currentProduct.name}</span>
+                <span className="text-lg font-bold">{currentProduct?.name}</span>
                 <span className="text-xs text-gray-400">
-                  {currentProduct.status === ("LIVE" as any)
+                  {currentProduct?.status === ("LIVE" as any)
                     ? "🚀 LIVE"
                     : "🔨 BUILDING"}
                 </span>
@@ -388,7 +385,7 @@ export function SuperFooter({
             {/* Dynamic Copyright */}
             <p className="text-gray-400 text-sm text-center">
               {copyright ||
-                `© ${currentYear} ${currentProduct.name}. ${currentProduct.description.split(".")[0]}`}
+                `© ${currentYear} ${currentProduct?.name}. ${currentProduct?.description.split(".")[0]}`}
             </p>
 
             {/* Dynamic Social Links */}
@@ -429,14 +426,14 @@ export function SuperFooter({
                   </span>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold">{currentProduct.name}</h3>
+                  <h3 className="text-xl font-bold">{currentProduct?.name}</h3>
                   <p className="text-sm text-gray-400 mt-1">
-                    {currentProduct.category}
+                    {currentProduct?.category}
                   </p>
                 </div>
               </div>
               <p className="text-gray-300 text-sm">
-                {currentProduct.description.substring(0, 120)}...
+                {currentProduct?.description.substring(0, 120)}...
               </p>
             </div>
 
@@ -444,7 +441,7 @@ export function SuperFooter({
             <div>
               <h4 className="font-semibold mb-4">Quick Links</h4>
               <div className="space-y-2">
-                {footerSections[0].links.slice(0, 4).map((link, index) => (
+                {footerSections?.[0]?.links.slice(0, 4).map((link, index) => (
                   <Link
                     key={index}
                     href={link.href}
@@ -579,13 +576,13 @@ export function SuperFooter({
                 </span>
               </div>
               <div>
-                <h2 className="text-2xl font-bold">{currentProduct.name}</h2>
+                <h2 className="text-2xl font-bold">{currentProduct?.name}</h2>
                 <p className="text-gray-400">
-                  {currentProduct.category.toUpperCase()}
+                  {currentProduct?.category.toUpperCase()}
                 </p>
               </div>
             </div>
-            <p className="text-gray-300 mb-6">{currentProduct.description}</p>
+            <p className="text-gray-300 mb-6">{currentProduct?.description}</p>
 
             {/* Social Links */}
             <div className="flex gap-3">
@@ -642,7 +639,7 @@ export function SuperFooter({
             <div className="lg:col-span-4">
               <h3 className="font-semibold text-lg mb-4">📬 Stay Updated</h3>
               <p className="text-gray-400 mb-4">
-                Get the latest updates about {currentProduct.name} and BoldMind
+                Get the latest updates about {currentProduct?.name} and BoldMind
                 products
               </p>
               <form onSubmit={handleSubmit} className="space-y-3">

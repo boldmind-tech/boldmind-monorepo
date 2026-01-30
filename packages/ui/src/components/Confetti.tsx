@@ -32,11 +32,11 @@ export function Confetti({
 }: ConfettiProps) {
   const [pieces, setPieces] = useState<ConfettiPiece[]>([]);
   const [isActive, setIsActive] = useState(true);
-  
+
   useEffect(() => {
     // Create confetti pieces
     const newPieces: ConfettiPiece[] = [];
-    
+
     for (let i = 0; i < count; i++) {
       newPieces.push({
         id: i,
@@ -44,27 +44,27 @@ export function Confetti({
         y: -10,
         rotation: Math.random() * 360,
         scale: Math.random() * 0.5 + 0.5,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        shape: shapes[Math.floor(Math.random() * shapes.length)],
+        color: colors[Math.floor(Math.random() * colors.length)] || '#3B82F6',
+        shape: shapes[Math.floor(Math.random() * shapes.length)] || 'circle',
         duration: Math.random() * 1000 + 2000,
       });
     }
-    
+
     setPieces(newPieces);
-    
+
     // Auto-cleanup after duration
     const timer = setTimeout(() => {
       setIsActive(false);
       onComplete?.();
     }, duration);
-    
+
     return () => clearTimeout(timer);
   }, [count, colors, shapes, duration, onComplete]);
-  
+
   // Render shape
   const renderShape = (shape: ConfettiPiece['shape'], color: string) => {
     const size = 12;
-    
+
     switch (shape) {
       case 'circle':
         return (
@@ -94,8 +94,8 @@ export function Confetti({
             style={{
               width: 0,
               height: 0,
-              borderLeft: `${size/2}px solid transparent`,
-              borderRight: `${size/2}px solid transparent`,
+              borderLeft: `${size / 2}px solid transparent`,
+              borderRight: `${size / 2}px solid transparent`,
               borderBottom: `${size}px solid ${color}`,
             }}
           />
@@ -110,7 +110,7 @@ export function Confetti({
         return null;
     }
   };
-  
+
   return (
     <AnimatePresence>
       {isActive && (

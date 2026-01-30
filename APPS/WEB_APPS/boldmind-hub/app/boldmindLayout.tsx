@@ -6,7 +6,7 @@ import { BOLDMIND_PRODUCTS, productThemes } from '@boldmind/utils';
 
 export function BoldMindLayout({ children }: { children: React.ReactNode }) {
   const forceProduct = 'boldmind-hub';
-  
+
   // Get BoldMind Hub product from your data or create it
   const boldmindProduct = BOLDMIND_PRODUCTS.find(p => p.slug === forceProduct) || {
     id: 'prod_000',
@@ -45,10 +45,10 @@ export function BoldMindLayout({ children }: { children: React.ReactNode }) {
     icon: boldmindProduct.icon,
     status: boldmindProduct.status,
     colors: {
-      primary: theme.primary,
-      secondary: theme.secondary,
-      accent: theme.primary,
-      background: theme.background,
+      primary: theme?.primary,
+      secondary: theme?.secondary,
+      accent: theme?.primary,
+      background: theme?.background,
     },
     product: boldmindProduct
   };

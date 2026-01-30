@@ -1,0 +1,410 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ==================== PAYMENT PROVIDERS ====================
+enum PaymentProvider {
+  PAYSTACK
+  FLUTTERWAVE
+  STRIPE
+  MANUAL
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  SUCCESS
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CARD
+  BANK_TRANSFER
+  USSD
+  QR_CODE
+  MOBILE_MONEY
+  CRYPTO
+}
+
+enum Currency {
+  NGN
+  USD
+  GBP
+  EUR
+}
+
+// ==================== PLANS & SUBSCRIPTIONS ====================
+model Plan {
+  id          String  @id @default(uuid()) @db.Uuid
+  productSlug String  @db.VarChar(50)
+  name        String  @db.VarChar(100)
+  description String? @db.Text
+
+  // Pricing
+  priceMonthly Decimal? @db.Decimal(10, 2)
+  priceYearly  Decimal? @db.Decimal(10, 2)
+  currency     Currency @default(NGN)
+
+  // Features (JSON)
+  features Json @db.JsonB
+
+  // Settings
+  isActive  Boolean @default(true)
+  trialDays Int     @default(0)
+
+  // Metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  subscriptions Subscription[]
+
+  @@unique([productSlug, name])
+  @@index([productSlug])
+  @@index([isActive])
+  @@map("plans")
+}
+
+model Subscription {
+  id     String @id @default(uuid()) @db.Uuid
+  userId String @db.Uuid
+  planId String @db.Uuid
+
+  // Status
+  status SubscriptionStatus @default(ACTIVE)
+
+  // Billing Period
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  cancelAtPeriodEnd  Boolean   @default(false)
+  canceledAt         DateTime?
+
+  // Trial
+  trialStart DateTime?
+  trialEnd   DateTime?
+
+  // Metadata
+  metadata  Json     @default("{}") @db.JsonB
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  plan     Plan      @relation(fields: [planId], references: [id])
+  invoices Invoice[]
+  payments Payment[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([currentPeriodEnd])
+  @@map("subscriptions")
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  PAST_DUE
+  TRIALING
+  INCOMPLETE
+  PAUSED
+}
+
+// ==================== INVOICES ====================
+model Invoice {
+  id             String  @id @default(uuid()) @db.Uuid
+  subscriptionId String? @db.Uuid
+  userId         String  @db.Uuid
+
+  // Invoice Details
+  invoiceNumber String   @unique @db.VarChar(100)
+  amount        Decimal  @db.Decimal(10, 2)
+  currency      Currency @default(NGN)
+
+  // Tax & Discounts
+  taxAmount      Decimal? @db.Decimal(10, 2)
+  discountAmount Decimal? @db.Decimal(10, 2)
+  totalAmount    Decimal  @db.Decimal(10, 2)
+
+  // Status
+  status InvoiceStatus @default(DRAFT)
+
+  // Dates
+  dueDate DateTime?
+  paidAt  DateTime?
+
+  // Payment
+  paymentMethod String? @db.VarChar(100)
+
+  // Line Items (JSON)
+  items Json @db.JsonB
+
+  // Notes
+  notes String? @db.Text
+
+  // Metadata
+  metadata  Json     @default("{}") @db.JsonB
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  subscription Subscription? @relation(fields: [subscriptionId], references: [id])
+  payments     Payment[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([dueDate])
+  @@map("invoices")
+}
+
+enum InvoiceStatus {
+  DRAFT
+  OPEN
+  PAID
+  VOID
+  UNCOLLECTIBLE
+}
+
+// ==================== PAYMENTS ====================
+model Payment {
+  id             String  @id @default(uuid()) @db.Uuid
+  userId         String  @db.Uuid
+  subscriptionId String? @db.Uuid
+  invoiceId      String? @db.Uuid
+
+  // Payment Details
+  amount   Decimal         @db.Decimal(10, 2)
+  currency Currency        @default(NGN)
+  provider PaymentProvider
+  method   PaymentMethod
+  status   PaymentStatus   @default(PENDING)
+
+  // Provider Details
+  providerRef  String? @db.VarChar(255)
+  providerData Json?   @db.JsonB
+
+  // Customer Info
+  customerEmail String? @db.VarChar(255)
+  customerPhone String? @db.VarChar(50)
+
+  // Transaction Details
+  description String? @db.Text
+
+  // Fees
+  platformFee Decimal? @db.Decimal(10, 2)
+  providerFee Decimal? @db.Decimal(10, 2)
+  netAmount   Decimal? @db.Decimal(10, 2)
+
+  // Verification
+  verifiedAt DateTime?
+
+  // Refund
+  refundedAmount Decimal?  @db.Decimal(10, 2)
+  refundedAt     DateTime?
+  refundReason   String?   @db.Text
+
+  // Metadata
+  metadata  Json     @default("{}") @db.JsonB
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  subscription Subscription?    @relation(fields: [subscriptionId], references: [id])
+  invoice      Invoice?         @relation(fields: [invoiceId], references: [id])
+  webhooks     PaymentWebhook[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([provider])
+  @@index([providerRef])
+  @@index([createdAt])
+  @@map("payments")
+}
+
+// ==================== PAYMENT METHODS (Saved Cards/Accounts) ====================
+model PaymentMethodStored {
+  id     String @id @default(uuid()) @db.Uuid
+  userId String @db.Uuid
+
+  // Method Details
+  provider PaymentProvider
+  type     PaymentMethod
+
+  // Card/Bank Details (Masked)
+  last4       String? @db.VarChar(4)
+  brand       String? @db.VarChar(50)
+  expiryMonth Int?
+  expiryYear  Int?
+  bankName    String? @db.VarChar(100)
+
+  // Provider Token
+  providerToken String @db.VarChar(255)
+
+  // Settings
+  isDefault Boolean @default(false)
+  isActive  Boolean @default(true)
+
+  // Metadata
+  metadata  Json     @default("{}") @db.JsonB
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("payment_methods_stored")
+}
+
+// ==================== WEBHOOKS ====================
+model PaymentWebhook {
+  id        String  @id @default(uuid()) @db.Uuid
+  paymentId String? @db.Uuid
+
+  // Webhook Details
+  provider PaymentProvider
+  event    String          @db.VarChar(100)
+
+  // Payload
+  payload   Json    @db.JsonB
+  signature String? @db.Text
+
+  // Processing
+  processed   Boolean   @default(false)
+  processedAt DateTime?
+  retryCount  Int       @default(0)
+
+  // Error Handling
+  error String? @db.Text
+
+  // Metadata
+  createdAt DateTime @default(now())
+
+  // Relations
+  payment Payment? @relation(fields: [paymentId], references: [id])
+
+  @@index([provider])
+  @@index([processed])
+  @@index([createdAt])
+  @@map("payment_webhooks")
+}
+
+// ==================== TRANSACTIONS (Ledger) ====================
+model Transaction {
+  id     String @id @default(uuid()) @db.Uuid
+  userId String @db.Uuid
+
+  // Transaction Details
+  type     TransactionType
+  amount   Decimal         @db.Decimal(10, 2)
+  currency Currency        @default(NGN)
+
+  // Balance Tracking
+  balanceBefore Decimal @db.Decimal(10, 2)
+  balanceAfter  Decimal @db.Decimal(10, 2)
+
+  // Reference
+  referenceType String? @db.VarChar(50) // payment, refund, withdrawal
+  referenceId   String? @db.Uuid
+
+  // Description
+  description String @db.Text
+
+  // Metadata
+  metadata  Json     @default("{}") @db.JsonB
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([type])
+  @@index([createdAt])
+  @@map("transactions")
+}
+
+enum TransactionType {
+  CREDIT
+  DEBIT
+  REFUND
+  FEE
+  WITHDRAWAL
+  ADJUSTMENT
+}
+
+// ==================== WALLETS ====================
+model Wallet {
+  id     String @id @default(uuid()) @db.Uuid
+  userId String @unique @db.Uuid
+
+  // Balance
+  balance  Decimal  @default(0) @db.Decimal(10, 2)
+  currency Currency @default(NGN)
+
+  // Limits
+  dailyLimit   Decimal? @db.Decimal(10, 2)
+  monthlyLimit Decimal? @db.Decimal(10, 2)
+
+  // Status
+  isActive     Boolean @default(true)
+  isFrozen     Boolean @default(false)
+  frozenReason String? @db.Text
+
+  // Metadata
+  metadata  Json     @default("{}") @db.JsonB
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("wallets")
+}
+
+// ==================== PAYOUTS (for creators/vendors) ====================
+model Payout {
+  id     String @id @default(uuid()) @db.Uuid
+  userId String @db.Uuid
+
+  // Amount
+  amount   Decimal  @db.Decimal(10, 2)
+  currency Currency @default(NGN)
+
+  // Bank Details
+  bankName      String @db.VarChar(100)
+  accountNumber String @db.VarChar(50)
+  accountName   String @db.VarChar(255)
+
+  // Status
+  status PayoutStatus @default(PENDING)
+
+  // Processing
+  provider    PaymentProvider
+  providerRef String?         @db.VarChar(255)
+
+  // Dates
+  requestedAt DateTime  @default(now())
+  processedAt DateTime?
+  completedAt DateTime?
+
+  // Fees
+  fee       Decimal? @db.Decimal(10, 2)
+  netAmount Decimal  @db.Decimal(10, 2)
+
+  // Notes
+  notes         String? @db.Text
+  failureReason String? @db.Text
+
+  // Metadata
+  metadata  Json     @default("{}") @db.JsonB
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@map("payouts")
+}
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}

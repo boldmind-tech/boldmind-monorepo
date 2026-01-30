@@ -1,12 +1,16 @@
-import { supabase } from '../../infrastructure/supabase/client';
+// PACKAGES/auth/src/application/session/getSession.ts
+import { SupabaseAuthProvider } from '../../providers/supabase/auth';
+import { Session } from '../../domain/models/Session';
 
-export async function getSession() {
-  const { data, error } = await supabase.auth.getSession();
+let authProvider: SupabaseAuthProvider | null = null;
 
-  if (error) {
-    console.error('[auth:getSession]', error.message);
-    return null;
+function getAuthProvider() {
+  if (!authProvider) {
+    authProvider = new SupabaseAuthProvider();
   }
+  return authProvider;
+}
 
-  return data.session;
+export async function getSession(): Promise<Session | null> {
+  return getAuthProvider().getSession();
 }

@@ -24,10 +24,7 @@ Content-Type: application/json
   "password": "password123"
 }
 
-Using the Token
-http
-GET /api/users/me
-Authorization: Bearer <your-jwt-token>
+
 API Gateway Endpoints
 Auth Service
 POST /api/auth/register - Register new user

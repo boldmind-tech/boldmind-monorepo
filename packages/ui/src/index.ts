@@ -1,4 +1,4 @@
-// packages/ui/src/index.ts
+// PACKAGES/ui/src/index.ts
 'use client';
 
 // ============================================
@@ -37,13 +37,13 @@ export { default as ProductLayout } from './components/ProductLayout';
 // ============================================
 // PROVIDERS & CONTEXT
 // ============================================
-export { 
-  ThemeProvider, 
-  useTheme, 
-  ThemeToggle, 
-  DyslexiaModeToggle, 
+export {
+  ThemeProvider,
+  useTheme,
+  ThemeToggle,
+  DyslexiaModeToggle,
   useProductTheme,
-  type ThemeContextType 
+  type ThemeContextType
 } from './providers/theme-provider';
 
 // ============================================
@@ -56,15 +56,15 @@ export { useDebounce } from './hooks/useDebounce';
 // ============================================
 // UTILITIES
 // ============================================
-export { 
-  cn, 
-  getProductFromPath, 
-  detectCurrentProduct, 
+export {
+  cn,
+  getProductFromPath,
+  detectCurrentProduct,
   getProductThemeColors,
   getProductThemeClass,
-  formatCurrency, 
-  formatDate, 
-  truncateText 
+  formatCurrency,
+  formatDate,
+  truncateText
 } from './lib/utils';
 
 // ============================================

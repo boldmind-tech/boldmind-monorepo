@@ -1,2 +1,4 @@
-// Export your package here
-export const version = '1.0.0';
+export * from './service';
+export { WelcomeEmail } from './templates/WelcomeEmail';
+export { VerifyEmail } from './templates/VerifyEmail';
+export { ResetPasswordEmail } from './templates/ResetPasswordEmail';

@@ -8,21 +8,24 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
-    "react-email": "^2.0.0",
-    "resend": "^2.0.0",
+    "cookie": "^1.1.1",
+    "next": "^14.2.35",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "next": "^14.2.35"
+    "react-email": "^2.0.0",
+    "resend": "^2.0.0"
   },
   "devDependencies": {
+    "@types/cookie": "^1.0.0",
+    "@types/node": "20.19.30",
     "@types/react": "^18.3.27",
-    "typescript": "^5.4.5",
-    "@types/node": "^20.11.3",
     "@types/react-dom": "^18.3.7",
-    "tailwindcss": "^3.4.1",
     "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.38",
+    "dotenv": "^17.2.3",
     "eslint": "^8",
-    "eslint-config-next": "14.2.0"
+    "eslint-config-next": "14.2.0",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.4.5"
   }
 }

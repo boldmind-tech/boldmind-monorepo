@@ -1,40 +1,23 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../tsconfig.backend.json",
   "compilerOptions": {
-    "module": "commonjs",
-    "declaration": true,
-    "removeComments": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "lib": [
+      "ES2022"
+    ],
+    "noPropertyAccessFromIndexSignature": false,
+    "skipLibCheck": true,
+    "types": [
+      "node",
+      "express"
+    ],
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "ES2021",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
-    "incremental": true,
-    "skipLibCheck": true,
-    "noEmit": false,
-    // Strictness: Inherit strict: true from base, or explicitly set true.
-    // I will comment out the false overrides to try enabling strictness.
-    // "strictNullChecks": false,
-    // "noImplicitAny": false,
-    // "strictBindCallApply": false, 
-    // "forceConsistentCasingInFileNames": false,
-    // "noFallthroughCasesInSwitch": false,
-    "paths": {
-      "@boldmind/auth": [
-        "../../packages/auth/src"
-      ],
-      "@boldmind/database": [
-        "../../packages/database/src"
-      ],
-      "@boldmind/types": [
-        "../../packages/types/src"
-      ],
-      "@boldmind/utils": [
-        "../../packages/utils/src"
-      ]
-    }
+    // CRITICAL: Remove baseUrl and paths - rely on node_modules resolution
+    // This forces TS to use the BUILT package from node_modules
   },
   "include": [
     "src/**/*"
@@ -42,7 +25,6 @@
   "exclude": [
     "node_modules",
     "dist",
-    "test",
-    "**/*.spec.ts"
+    "test"
   ]
 }

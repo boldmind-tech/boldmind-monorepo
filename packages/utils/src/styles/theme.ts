@@ -2,7 +2,7 @@
 // SIMPLE THEME SYSTEM - USING THE SINGLE SOURCE OF TRUTH FROM constants/colors.ts
 
 // Import from constants
-import { 
+import {
   BOLDMIND_COLOR_SCHEMES,
   type ColorScheme,
   type ProductColorScheme,
@@ -118,10 +118,14 @@ export type { ColorScheme, ProductColorScheme };
 export type ProductThemeValue = ProductTheme;
 
 // Helper functions for common theme operations
-export function getProductTheme(slug: string): ProductTheme {
-  return productThemes[slug] || productThemes['boldmind-hub'];
-}
 
+export function getProductTheme(slug: string): ProductTheme {
+  const theme = productThemes[slug];
+  if (!theme) {
+    return productThemes['boldmind-hub']!; // Non-null assertion since we know it exists
+  }
+  return theme;
+}
 export function getProductColors(slug: string) {
   const theme = getProductTheme(slug);
   return {

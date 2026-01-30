@@ -1,5 +1,5 @@
 {
-  "extends": "../../../tsconfig.base.json",
+  "extends": "../../../tsconfig.frontend.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
@@ -7,7 +7,7 @@
         "./*"
       ],
       "@boldmind/*": [
-        "../../../PACKAGES/*/src"
+        "../../PACKAGES/*/src"
       ]
     },
     "incremental": true,
@@ -15,7 +15,10 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "allowJs": true,
+    "noEmit": true,
+    "jsx": "preserve"
   },
   "include": [
     "next-env.d.ts",

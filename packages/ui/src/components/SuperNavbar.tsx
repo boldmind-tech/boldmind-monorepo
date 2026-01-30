@@ -6,13 +6,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Menu,
   X,
-  ChevronDown,
+  // ChevronDown,
   Sparkles,
   Zap,
   Rocket,
-  Moon,
-  Sun,
-  Eye,
+  // Moon,
+  // Sun,
+  // Eye,
   ExternalLink,
 } from "lucide-react";
 import {
@@ -24,7 +24,7 @@ import { cn } from "../lib/utils";
 import {
   BOLDMIND_PRODUCTS,
   getProductBySlug,
-  getProductsByStatus
+  // getProductsByStatus
 } from "@boldmind/utils";
 
 export interface NavLink {
@@ -37,7 +37,7 @@ export interface NavLink {
 
 export interface SuperNavbarProps {
   logoSrc?: string;
-  links: NavLink[];
+  links?: NavLink[];
   cta?: {
     href: string;
     label: string;
@@ -67,7 +67,7 @@ export function SuperNavbar({
   showParticles = false,
   showThemeControls = true,
   className = "",
-  user,
+  // user,
   onLinkClick,
 }: SuperNavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -84,11 +84,11 @@ export function SuperNavbar({
 
   const currentProduct =
     getProductBySlug(productTheme.slug) || BOLDMIND_PRODUCTS[0];
-  const productInitial = currentProduct.name.charAt(0);
+  const productInitial = currentProduct?.name.charAt(0);
   const productColor = productTheme.colors.primary;
 
   // Default links if none provided
-  const defaultLinks = [
+  const defaultLinks: NavLink[] = [
     { href: "/", label: "Home", icon: "🏠" },
     { href: "/features", label: "Features", icon: "✨" },
     { href: "/pricing", label: "Pricing", icon: "💰" },
@@ -100,11 +100,11 @@ export function SuperNavbar({
   // Get product-specific CTA
   const getDefaultCTA = () => {
     if (
-      currentProduct.status === ("LIVE") &&
-      currentProduct.links?.website
+      currentProduct?.status === ("LIVE") &&
+      currentProduct?.links?.website
     ) {
       return {
-        href: currentProduct.links.website,
+        href: currentProduct?.links.website,
         label: "Visit Website",
         variant: "primary" as const,
         icon: <ExternalLink className="w-4 h-4" />,
@@ -129,9 +129,9 @@ export function SuperNavbar({
     );
 
     if (rgbMatch) {
-      const r = parseInt(rgbMatch[1], 16);
-      const g = parseInt(rgbMatch[2], 16);
-      const b = parseInt(rgbMatch[3], 16);
+      const r = parseInt(rgbMatch[1]!, 16);
+      const g = parseInt(rgbMatch[2]!, 16);
+      const b = parseInt(rgbMatch[3]!, 16);
 
       switch (theme) {
         case "light":
@@ -333,7 +333,7 @@ export function SuperNavbar({
                   <div className="relative w-12 h-12">
                     <Image
                       src={logoSrc}
-                      alt={`${currentProduct.name} Logo`}
+                      alt={`${currentProduct?.name} Logo`}
                       fill
                       className="object-contain"
                       onError={() => setImageError(true)}
@@ -364,7 +364,7 @@ export function SuperNavbar({
 
                 <div>
                   <span className="text-2xl font-black">
-                    {currentProduct.name}
+                    {currentProduct?.name}
                   </span>
                   <motion.p
                     initial={{ opacity: 0, y: -10 }}
@@ -398,7 +398,7 @@ export function SuperNavbar({
                         href={link.href}
                         target={isExternal ? "_blank" : undefined}
                         rel={isExternal ? "noopener noreferrer" : undefined}
-                        onClick={(e) => {
+                        onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                           if (isHashLink) {
                             e.preventDefault();
                             handleNavClick(link.href, isExternal);

@@ -104,7 +104,7 @@ function QuickStat({ icon: Icon, label, value, color }: { icon: any; label: stri
     );
 }
 
-function StatusCard({ title, count, total, color = 'blue' }: { title: string; count: number; total?: number; color?: string }) {
+function StatusCard({ title, count, total }: { title: string; count: number; total?: number; color?: string }) {
     return (
         <div className="bg-white dark:bg-gray-900 rounded-xl border shadow-sm p-6">
             <h3 className="font-medium text-muted-foreground mb-2">{title}</h3>

@@ -20,6 +20,9 @@
       "cache": true
     },
     "dev": {
+      "dependsOn": [
+        "^build"
+      ],
       "cache": false,
       "persistent": true
     },
@@ -29,11 +32,11 @@
     "test": {
       "outputs": []
     },
-    "clean": {
-      "cache": false
-    },
     "type-check": {
       "outputs": []
+    },
+    "clean": {
+      "cache": false
     }
   }
 }

@@ -4,59 +4,58 @@
   "private": true,
   "type": "module",
   "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/index.d.mts",
-        "default": "./dist/index.mjs"
-      },
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
     },
     "./social": {
-      "import": {
-        "types": "./dist/social/index.d.mts",
-        "default": "./dist/social/index.mjs"
-      },
-      "require": {
-        "types": "./dist/social/index.d.cts",
-        "default": "./dist/social/index.cjs"
-      }
+      "import": "./dist/social.mjs",
+      "require": "./dist/social.cjs",
+      "types": "./dist/social.d.ts"
     },
     "./constants": {
-      "import": {
-        "types": "./dist/constants/index.d.mts",
-        "default": "./dist/constants/index.mjs"
-      },
-      "require": {
-        "types": "./dist/constants/index.d.cts",
-        "default": "./dist/constants/index.cjs"
-      }
+      "import": "./dist/constants.mjs",
+      "require": "./dist/constants.cjs",
+      "types": "./dist/constants.d.ts"
+    },
+    "./styles": {
+      "import": "./dist/styles/theme.mjs",
+      "require": "./dist/styles/theme.cjs",
+      "types": "./dist/styles/theme.d.ts"
+    },
+    "./domains": {
+      "import": "./dist/domains.mjs",
+      "require": "./dist/domains.cjs",
+      "types": "./dist/domains.d.ts"
+    },
+    "./database-config": {
+      "import": "./dist/database-config.mjs",
+      "require": "./dist/database-config.cjs",
+      "types": "./dist/database-config.d.ts"
     }
   },
   "files": [
     "dist/**"
   ],
   "scripts": {
-    "build": "tsup",
-    "build:types": "tsc --emitDeclarationOnly --declaration --outDir dist",
-    "build:all": "pnpm build && pnpm build:types",
-    "dev": "tsup --watch",
-    "lint": "eslint . --ext ts,tsx",
-    "clean": "rm -rf .turbo dist node_modules"
+    "build": "rm -rf dist && tsdown",
+    "dev": "tsdown --watch",
+    "clean": "rm -rf dist node_modules",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "date-fns": "^3.0.0",
-    "axios": "^1.6.0"
+    "axios": "^1.6.0",
+    "cookie": "^1.1.1",
+    "date-fns": "^3.0.0"
   },
   "devDependencies": {
-    "@types/node": "20.19.29",
-    "typescript": "^5.4.5",
     "@types/axios": "^0.14.0",
-    "tsup": "^7.2.0"
+    "@types/node": "20.19.30",
+    "tsdown": "^0.20.1",
+    "typescript": "^5.4.5"
   }
 }

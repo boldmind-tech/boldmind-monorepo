@@ -19,6 +19,10 @@ import {
   calculateTotalMonthlyRevenue,
   calculateProjectedRevenue,
   getProductStatusSummary,
+  type Product,
+  type ProductStatus,
+  type ProductCategory,
+  type DatabaseType,
 } from './constants/products';
 
 export {
@@ -36,6 +40,25 @@ export {
   calculateTotalMonthlyRevenue,
   calculateProjectedRevenue,
   getProductStatusSummary,
+  type Product,
+  type ProductStatus,
+  type ProductCategory,
+  type DatabaseType,
+};
+
+// ===================================
+// PRICING
+// ===================================
+import {
+  BOLDMIND_PRICING,
+  getProductPricing,
+  calculateYearlySavings,
+} from './constants/pricing';
+
+export {
+  BOLDMIND_PRICING,
+  getProductPricing,
+  calculateYearlySavings,
 };
 
 // ===================================
@@ -43,18 +66,42 @@ export {
 // ===================================
 import {
   DATABASE_CONFIG,
-  DB_CONNECTIONS,
-  getProductDatabase,
+  getServiceDatabase,
+  getServiceForProduct,
+  getDatabaseName,
+  getDatabaseEnvVar,
+  getConnectionString,
+  getServiceUrl,
   usesPostgres,
   usesMongoDB,
+  getServicesByDatabase,
+  getProductsForService,
+  validateDatabaseEnvVars,
+  SERVICE_DB_CONFIG,
+  type PostgresService,
+  type MongoService,
+  type ServiceName,
+  type ProductSlug,
 } from './constants/database-config';
 
 export {
   DATABASE_CONFIG,
-  DB_CONNECTIONS,
-  getProductDatabase,
+  getServiceDatabase,
+  getServiceForProduct,
+  getDatabaseName,
+  getDatabaseEnvVar,
+  getConnectionString,
+  getServiceUrl,
   usesPostgres,
   usesMongoDB,
+  getServicesByDatabase,
+  getProductsForService,
+  validateDatabaseEnvVars,
+  SERVICE_DB_CONFIG,
+  type PostgresService,
+  type MongoService,
+  type ServiceName,
+  type ProductSlug,
 };
 
 // ===================================
@@ -88,6 +135,7 @@ import {
   generateCSSVariables,
   getContrastColor,
   generateThemeClasses,
+  type ProductTheme,
 } from './styles/theme';
 
 export {
@@ -97,6 +145,7 @@ export {
   generateCSSVariables,
   getContrastColor,
   generateThemeClasses,
+  type ProductTheme,
 };
 
 // Re-export common theme assets
@@ -121,6 +170,7 @@ export {
   socialAccounts,
   SocialIntegration,
 };
+
 
 // ===================================
 // UTILITY FUNCTIONS
@@ -246,16 +296,16 @@ export function sleep(ms: number): Promise<void> {
 /**
  * Debounce function
  */
-export function debounce<T extends (...args: any[]) => any>(
-  func: T,
-  wait: number
-): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout;
-  return (...args: Parameters<T>) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), wait);
-  };
-}
+// export function debounce<T extends (...args: any[]) => any>(
+//   func: T,
+//   wait: number
+// ): (...args: Parameters<T>) => void {
+//   let timeout: NodeJS.Timeout;
+//   return (...args: Parameters<T>) => {
+//     clearTimeout(timeout);
+//     timeout = setTimeout(() => func(...args), wait);
+//   };
+// }
 
 /**
  * Throttle function
@@ -444,7 +494,7 @@ export default {
     truncateText,
     cn,
     sleep,
-    debounce,
+    // debounce,
     throttle,
     generateId,
     isNigerianUser,

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "../../infrastructure/supabase/client";
+import { getSupabaseClient } from "../../infrastructure/supabase/client";
 
 export async function middleware(req: NextRequest) {
-  const { data } = await supabase.auth.getUser();
+  const { data } = await getSupabaseClient().auth.getUser();
 
   if (!data.user) {
     return NextResponse.redirect(new URL("/login", req.url));

@@ -12,7 +12,6 @@ const nextConfig = {
     '@boldmind/ui',
     '@boldmind/utils',
     '@boldmind/auth',
-    '@boldmind/database',
   ],
 
   experimental: {

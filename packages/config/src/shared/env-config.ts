@@ -1,0 +1,422 @@
+//PACKAGES/config/src/shared/env-config.ts
+// Define all possible app domain keys as a union type
+export type AppDomainKey =
+  | 'HUB' | 'AMEBOGIST' | 'EDUCENTER' | 'BOLDMIND_OS' | 'RECEPTIONIST_AI'
+  | 'SOCIAL_FACTORY' | 'CREDIBILITY_HUB' | 'DIGITAL_STOREFRONT' | 'BUSSINESS_PLAN_AI'
+  | 'PLANAI' | 'ANALYTICS_AI' | 'MARKETING_AUTOMATION_AI' | 'BRAND_DESIGN_AI'
+  | 'FINANCIAL_FORCASTING_AI' | 'INVESTOR_READINESS_AI' | 'NAIJA_FITHER'
+  | 'EMAILSCRAPER_PRO' | 'SAFE_NAIJA' | 'AFROHUSTLE_OS' | 'NAIJAGIG_MATCHER'
+  | 'KOLO_AI' | 'BORDERLESS_REMIT' | 'RECEIPT_GENIUS' | 'POWER_ALERT'
+  | 'FARMGATE_DIRECT' | 'AFROCOPY_AI' | 'SKILL2CASH' | 'ANONTRUTH_MIC';
+
+// Database service types
+export type PostgresServiceName =
+  | 'boldmind-os-service'
+  | 'user-service'
+  | 'payment-service'
+  | 'analytics-service'
+  | 'educenter-service'
+  | 'fither-service'
+  | 'planai-service'
+  | 'hub-service'
+  | 'receptionist-service'
+  | 'credibility-service'
+  | 'business-planning-service'
+  | 'financial-service'
+  | 'investor-service'
+  | 'storefronts-service'
+  | 'digital-storefronts'
+  | 'marketing-service'
+  | 'analytics-dashboard-service'
+  | 'safeai-service'
+  | 'koloai-service'
+  | 'receipt-service';
+
+export type MongoServiceName =
+  | 'amebogist-service'
+  | 'social-factory-service'
+  | 'emailscraper-pro-service'
+  | 'safeai-service'
+  | 'afrohustle-service'
+  | 'naijagig-matcher-service'
+  | 'borderless-remit-service'
+  | 'power-alert-service'
+  | 'farmgate-direct-service'
+  | 'afrocopy-ai-service'
+  | 'skill2cash-service'
+  | 'anontruth-mic-service';
+
+export type ServiceName = PostgresServiceName | MongoServiceName;
+
+// Define the ENV_CONFIG object with proper typing
+export const ENV_CONFIG = {
+  // ==================== ENVIRONMENT ====================
+  NODE_ENV: process.env['NODE_ENV'] || 'development',
+  PORT: parseInt(process.env['PORT'] || '4000', 10),
+
+  // ==================== CORS ====================
+  CORS: {
+    ORIGIN: process.env['CORS_ORIGIN']?.split(',') || ['http://localhost:3001'],
+    CREDENTIALS: true,
+  },
+
+  // ==================== DOMAINS ====================
+  DOMAINS: {
+    HUB: process.env['NEXT_PUBLIC_HUB_DOMAIN'] || 'boldmind.ng',
+    AMEBOGIST: process.env['NEXT_PUBLIC_AMEBO_DOMAIN'] || 'amebogist.ng',
+    EDUCENTER: process.env['NEXT_PUBLIC_EDUCENTER_DOMAIN'] || 'educenter.com.ng',
+    BOLDMIND_OS: process.env['NEXT_PUBLIC_OS_DOMAIN'] || 'os.boldmind.ng',
+    PLANAI: process.env['NEXT_PUBLIC_PLANAI_DOMAIN'] || 'planai.boldmind.ng',
+    RECEPTIONIST_AI: process.env['NEXT_PUBLIC_RECEPTIONIST_AI_DOMAIN'] || 'planai.boldmind.ng/receptionist',
+    SOCIAL_FACTORY: process.env['NEXT_PUBLIC_SOCIAL_FACTORY_DOMAIN'] || 'social.boldmind.ng',
+    CREDIBILITY_HUB: process.env['NEXT_PUBLIC_CREDIBILITY_HUB_DOMAIN'] || 'planai.boldmind.ng/credibility',
+    DIGITAL_STOREFRONT: process.env['NEXT_PUBLIC_DIGITAL_STOREFRONT_DOMAIN'] || 'planai.boldmind.ng/store',
+    BUSSINESS_PLAN_AI: process.env['NEXT_PUBLIC_BUSSINESS_PLAN_AI_DOMAIN'] || 'planai.boldmind.ng/planning',
+    ANALYTICS_AI: process.env['NEXT_PUBLIC_ANALYTICS_AI_DOMAIN'] || 'planai.boldmind.ng/analytics',
+    MARKETING_AUTOMATION_AI: process.env['NEXT_PUBLIC_MARKETING_AUTOMATION_AI_DOMAIN'] || 'planai.boldmind.ng/marketing',
+    BRAND_DESIGN_AI: process.env['NEXT_PUBLIC_BRAND_DESIGN_AI_DOMAIN'] || 'planai.boldmind.ng/design',
+    FINANCIAL_FORCASTING_AI: process.env['NEXT_PUBLIC_FINANCIAL_ANALYST_AI_DOMAIN'] || 'planai.boldmind.ng/finance',
+    INVESTOR_READINESS_AI: process.env['NEXT_PUBLIC_INVESTOR_READINESS_AI_DOMAIN'] || 'planai.boldmind.ng/investor',
+    NAIJA_FITHER: process.env['NEXT_PUBLIC_NAIJA_FITHER_DOMAIN'] || 'fit.boldmind.ng',
+    EMAILSCRAPER_PRO: process.env['NEXT_PUBLIC_EMAILSCRAPER_PRO_DOMAIN'] || 'email.boldmind.ng',
+    SAFE_NAIJA: process.env['NEXT_PUBLIC_SAFE_NAIJA_DOMAIN'] || 'safe.boldmind.ng',
+    AFROHUSTLE_OS: process.env['NEXT_PUBLIC_AFROHUSTLE_OS_DOMAIN'] || 'hustle.boldmind.ng',
+    NAIJAGIG_MATCHER: process.env['NEXT_PUBLIC_NAIJAGIG_MATCHER_DOMAIN'] || 'gig.educenter.com.ng',
+    KOLO_AI: process.env['NEXT_PUBLIC_KOLO_AI_DOMAIN'] || 'kolo.boldmind.ng',
+    BORDERLESS_REMIT: process.env['NEXT_PUBLIC_BORDERLESS_REMIT_DOMAIN'] || 'border.boldmind.ng',
+    RECEIPT_GENIUS: process.env['NEXT_PUBLIC_RECEIPT_GENIUS_DOMAIN'] || 'receipt.boldmind.ng',
+    POWER_ALERT: process.env['NEXT_PUBLIC_POWER_ALERT_DOMAIN'] || 'power.boldmind.ng',
+    FARMGATE_DIRECT: process.env['NEXT_PUBLIC_FARMGATE_DIRECT_DOMAIN'] || 'farm.boldmind.ng',
+    AFROCOPY_AI: process.env['NEXT_PUBLIC_AFROCOPY_AI_DOMAIN'] || 'copy.amebogist.ng',
+    SKILL2CASH: process.env['NEXT_PUBLIC_SKILL2CASH_DOMAIN'] || 'skills.educenter.com.ng',
+    ANONTRUTH_MIC: process.env['NEXT_PUBLIC_ANONTRUTH_MIC_DOMAIN'] || 'anon.amebogist.ng',
+  } as Record<AppDomainKey, string>,
+
+  // ==================== NEON POSTGRESQL DATABASES ====================
+  // Main Database (Neon) - Shared data
+  DATABASE_URL: process.env['DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=verify-full&channel_binding=require',
+
+  // Service-Specific PostgreSQL Databases (Neon)
+  POSTGRES_SERVICES: {
+    // Replace YOUR_NEON_PASSWORD with actual passworD
+    USER_SERVICE_DATABASE_URL: process.env['USER_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/user_service?sslmode=verify-full',
+    PAYMENT_SERVICE_DATABASE_URL: process.env['PAYMENT_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/payment_service?sslmode=verify-full',
+    ANALYTICS_SERVICE_DATABASE_URL: process.env['ANALYTICS_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/analytics_service?sslmode=verify-full',
+    EDUCENTER_SERVICE_DATABASE_URL: process.env['EDUCENTER_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/educenter_service?sslmode=verify-full',
+    FITHER_SERVICE_DATABASE_URL: process.env['FITHER_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/fither_service?sslmode=verify-full',
+    PLANAI_SERVICE_DATABASE_URL: process.env['PLANAI_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/planai_service?sslmode=verify-full',
+    HUB_SERVICE_DATABASE_URL: process.env['HUB_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/hub_service?sslmode=verify-full',
+    RECEPTIONIST_SERVICE_DATABASE_URL: process.env['RECEPTIONIST_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/receptionist_service?sslmode=verify-full',
+    CREDIBILITY_SERVICE_DATABASE_URL: process.env['CREDIBILITY_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/credibility_service?sslmode=verify-full',
+    BUSINESS_PLANNING_SERVICE_DATABASE_URL: process.env['BUSINESS_PLANNING_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/business_planning_service?sslmode=verify-full',
+    FINANCIAL_SERVICE_DATABASE_URL: process.env['FINANCIAL_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/financial_service?sslmode=verify-full',
+    INVESTOR_SERVICE_DATABASE_URL: process.env['INVESTOR_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/investor_service?sslmode=verify-full',
+    STOREFRONTS_SERVICE_DATABASE_URL: process.env['STOREFRONTS_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/storefronts_service?sslmode=verify-full',
+    DIGITAL_STOREFRONTS_DATABASE_URL: process.env['DIGITAL_STOREFRONTS_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/digital_storefronts_service?sslmode=verify-full',
+    MARKETING_SERVICE_DATABASE_URL: process.env['MARKETING_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/marketing_service?sslmode=verify-full',
+    ANALYTICS_DASHBOARD_SERVICE_DATABASE_URL: process.env['ANALYTICS_DASHBOARD_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/analytics_dashboard_service?sslmode=verify-full',
+    SAFEAI_SERVICE_DATABASE_URL: process.env['SAFEAI_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/safeai_service?sslmode=verify-full',
+    KOLOAI_SERVICE_DATABASE_URL: process.env['KOLOAI_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/koloai_service?sslmode=verify-full',
+    RECEIPT_SERVICE_DATABASE_URL: process.env['RECEIPT_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/receipt_service?sslmode=verify-full',
+    BOLDMIND_OS_SERVICE_DATABASE_URL: process.env['BOLDMIND_OS_SERVICE_DATABASE_URL'] || 'postgresql://neondb_owner:npg_B4NSjTJ8DMrI@ep-mute-violet-abmnytnq-pooler.eu-west-2.aws.neon.tech/boldmind_main?sslmode=verify-full&channel_binding=require',
+  },
+
+  // ==================== MONGODB ATLAS DATABASES ====================
+  // Main MongoDB (Atlas) - Development
+  MONGODB_URL: process.env['MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/boldmind_main_dev?retryWrites=true&w=majority',
+
+  // Service-Specific MongoDB Databases (Atlas)
+  MONGODB_SERVICES: {
+    // Development databases
+    AMEBOGIST_SERVICE_MONGODB_URL: process.env['AMEBOGIST_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/amebogist_dev?retryWrites=true&w=majority',
+    SOCIAL_FACTORY_SERVICE_MONGODB_URL: process.env['SOCIAL_FACTORY_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/social_factory_dev?retryWrites=true&w=majority',
+    EMAILSCRAPER_PRO_SERVICE_MONGODB_URL: process.env['EMAILSCRAPER_PRO_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/emailscraper_pro_dev?retryWrites=true&w=majority',
+    SAFEAI_SERVICE_MONGODB_URL: process.env['SAFEAI_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/safeai_dev?retryWrites=true&w=majority',
+    AFROHUSTLE_SERVICE_MONGODB_URL: process.env['AFROHUSTLE_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/afrohustle_dev?retryWrites=true&w=majority',
+    NAIJAGIG_MATCHER_SERVICE_MONGODB_URL: process.env['NAIJAGIG_MATCHER_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/naijagig_matcher_dev?retryWrites=true&w=majority',
+    BORDERLESS_REMIT_SERVICE_MONGODB_URL: process.env['BORDERLESS_REMIT_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/borderless_remit_dev?retryWrites=true&w=majority',
+    POWER_ALERT_SERVICE_MONGODB_URL: process.env['POWER_ALERT_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/power_alert_dev?retryWrites=true&w=majority',
+    FARMGATE_DIRECT_SERVICE_MONGODB_URL: process.env['FARMGATE_DIRECT_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/farmgate_direct_dev?retryWrites=true&w=majority',
+    AFROCOPY_AI_SERVICE_MONGODB_URL: process.env['AFROCOPY_AI_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/afrocopy_ai_dev?retryWrites=true&w=majority',
+    SKILL2CASH_SERVICE_MONGODB_URL: process.env['SKILL2CASH_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/skill2cash_dev?retryWrites=true&w=majority',
+    ANONTRUTH_MIC_SERVICE_MONGODB_URL: process.env['ANONTRUTH_MIC_SERVICE_MONGODB_URL'] || 'mongodb+srv://boldmind_dev:HLeHp8YB4Y4m7Ii6@cluster0.ljn81gx.mongodb.net/anontruth_mic_dev?retryWrites=true&w=majority',
+  },
+
+  // ==================== DATABASE HELPERS ====================
+  getPostgresConnection(service: PostgresServiceName): string {
+    const envMap: Record<PostgresServiceName, string> = {
+      'boldmind-os-service': 'BOLDMIND_OS_SERVICE_DATABASE_URL',
+      'user-service': 'USER_SERVICE_DATABASE_URL',
+      'payment-service': 'PAYMENT_SERVICE_DATABASE_URL',
+      'analytics-service': 'ANALYTICS_SERVICE_DATABASE_URL',
+      'educenter-service': 'EDUCENTER_SERVICE_DATABASE_URL',
+      'fither-service': 'FITHER_SERVICE_DATABASE_URL',
+      'planai-service': 'PLANAI_SERVICE_DATABASE_URL',
+      'hub-service': 'HUB_SERVICE_DATABASE_URL',
+      'receptionist-service': 'RECEPTIONIST_SERVICE_DATABASE_URL',
+      'credibility-service': 'CREDIBILITY_SERVICE_DATABASE_URL',
+      'business-planning-service': 'BUSINESS_PLANNING_SERVICE_DATABASE_URL',
+      'financial-service': 'FINANCIAL_SERVICE_DATABASE_URL',
+      'investor-service': 'INVESTOR_SERVICE_DATABASE_URL',
+      'storefronts-service': 'STOREFRONTS_SERVICE_DATABASE_URL',
+      'digital-storefronts': 'DIGITAL_STOREFRONTS_DATABASE_URL',
+      'marketing-service': 'MARKETING_SERVICE_DATABASE_URL',
+      'analytics-dashboard-service': 'ANALYTICS_DASHBOARD_SERVICE_DATABASE_URL',
+      'safeai-service': 'SAFEAI_SERVICE_DATABASE_URL',
+      'koloai-service': 'KOLOAI_SERVICE_DATABASE_URL',
+      'receipt-service': 'RECEIPT_SERVICE_DATABASE_URL',
+    };
+
+    const envVar = envMap[service];
+    const url = process.env[envVar] || this.POSTGRES_SERVICES[envVar as keyof typeof this.POSTGRES_SERVICES];
+
+    if (!url) {
+      throw new Error(`PostgreSQL URL not found for service: ${service}`);
+    }
+
+    return url;
+  },
+
+  getMongoConnection(service: MongoServiceName): string {
+    const envMap: Record<MongoServiceName, string> = {
+      'amebogist-service': 'AMEBOGIST_SERVICE_MONGODB_URL',
+      'social-factory-service': 'SOCIAL_FACTORY_SERVICE_MONGODB_URL',
+      'emailscraper-pro-service': 'EMAILSCRAPER_PRO_SERVICE_MONGODB_URL',
+      'safeai-service': 'SAFEAI_SERVICE_MONGODB_URL',
+      'afrohustle-service': 'AFROHUSTLE_SERVICE_MONGODB_URL',
+      'naijagig-matcher-service': 'NAIJAGIG_MATCHER_SERVICE_MONGODB_URL',
+      'borderless-remit-service': 'BORDERLESS_REMIT_SERVICE_MONGODB_URL',
+      'power-alert-service': 'POWER_ALERT_SERVICE_MONGODB_URL',
+      'farmgate-direct-service': 'FARMGATE_DIRECT_SERVICE_MONGODB_URL',
+      'afrocopy-ai-service': 'AFROCOPY_AI_SERVICE_MONGODB_URL',
+      'skill2cash-service': 'SKILL2CASH_SERVICE_MONGODB_URL',
+      'anontruth-mic-service': 'ANONTRUTH_MIC_SERVICE_MONGODB_URL',
+    };
+
+    const envVar = envMap[service];
+    const url = process.env[envVar] || this.MONGODB_SERVICES[envVar as keyof typeof this.MONGODB_SERVICES];
+
+    if (!url) {
+      throw new Error(`MongoDB URL not found for service: ${service}`);
+    }
+
+    return url;
+  },
+
+  // ==================== ANALYTICS ====================
+  ANALYTICS: {
+    GA4_ID: process.env['NEXT_PUBLIC_GA4_ID'] || 'G-XXXXXXXXXX',
+    MIXPANEL_TOKEN: process.env['NEXT_PUBLIC_MIXPANEL_TOKEN'],
+    POSTHOG_KEY: process.env['NEXT_PUBLIC_POSTHOG_KEY'],
+    POSTHOG_HOST: process.env['NEXT_PUBLIC_POSTHOG_HOST'] || 'https://app.posthog.com',
+  },
+
+  // ==================== SOCIAL MEDIA ====================
+  SOCIAL: {
+    youtube: [
+      { id: 'channel1', name: 'Boldmind Technology Solution Enterprise', url: 'https://youtube.com/@BoldMindTech', platform: 'youtube' },
+      { id: 'channel2', name: 'Code Fires', url: 'https://youtube.com/@Codefires', platform: 'youtube' },
+      { id: 'channel3', name: 'Chains to Coins', url: 'https://youtube.com/@ChainstoCoins', platform: 'youtube' },
+      { id: 'channel4', name: 'Echoes of the Elders', url: 'https://youtube.com/@EchoesoftheElders-d68', platform: 'youtube' },
+    ],
+    facebook: [
+      { id: 'fb1', name: 'BoldMind Technology Solution Enterprise', url: 'https://facebook.com/BoldMindTech', platform: 'facebook' },
+      { id: 'fb2', name: 'Amebo Gist', url: 'https://facebook.com/amebogistng', platform: 'facebook' },
+      { id: 'fb3', name: 'Educenter', url: 'https://facebook.com/DevConectPage', platform: 'facebook' },
+      { id: 'fb4', name: 'Charles Uche Chijuka', url: 'https://facebook.com/cuche3', platform: 'facebook' },
+    ],
+    instagram: [
+      { id: 'ig1', name: '@boldmindtech', url: 'https://instagram.com/boldmindtech', platform: 'instagram' },
+      { id: 'ig2', name: '@amebogist10', url: 'https://instagram.com/amebogist10', platform: 'instagram' },
+      { id: 'ig3', name: '@educenterc', url: 'https://instagram.com/educenterc', platform: 'instagram' },
+      { id: 'ig4', name: '@charleschijuka', url: 'https://instagram.com/charleschijuka', platform: 'instagram' },
+      { id: 'ig5', name: '@villagecircl', url: 'https://instagram.com/villagecircl', platform: 'instagram' },
+    ],
+    twitter: [
+      { id: 'tw1', name: 'VillageCircle', url: 'https://x.com/bobbycuc2025', platform: 'twitter' },
+      { id: 'tw2', name: 'AmeboGist', url: 'https://x.com/Amebo__Gist', platform: 'twitter' },
+      { id: 'tw3', name: 'ChainsToCoins', url: 'https://x.com/ChainsToCoins', platform: 'twitter' },
+      { id: 'tw4', name: 'CodeFiresAfrica', url: 'https://x.com/mediaman9ja', platform: 'twitter' },
+      { id: 'tw5', name: 'Charles Uche Chijuka', url: 'https://x.com/CharlesUcheCh', platform: 'twitter' },
+    ],
+    tiktok: [
+      { id: 'tt1', name: 'CodeFiresAfrica', url: 'https://tiktok.com/@codesfiresafrica', platform: 'tiktok' },
+      { id: 'tt2', name: 'VillageCircle', url: 'https://tiktok.com/@viilagecircle', platform: 'tiktok' },
+    ],
+    whatsapp: [
+      { id: 'wa1', name: 'Charles', phone: '+2348136705908', platform: 'whatsapp' },
+      { id: 'wa2', name: 'BoldMind Technology Solution Enterprises', phone: '+2349138349271', platform: 'whatsapp' },
+    ],
+    linkedin: [
+      { id: 'li1', name: 'BoldMind Technology Solutions', url: 'https://linkedin.com/company/boldmindtech', platform: 'linkedin' },
+      { id: 'li2', name: 'Charles Uche Chijuka', url: 'https://linkedin.com/in/charleschijuka', platform: 'linkedin' },
+    ]
+  },
+
+  // ==================== EMAIL ====================
+  EMAIL: {
+    SUPPORT: process.env['SUPPORT_EMAIL'] || 'support@boldmind.ng',
+    CONTACT: process.env['CONTACT_EMAIL'] || 'contact@boldmind.ng',
+    NO_REPLY: process.env['NO_REPLY_EMAIL'] || 'noreply@boldmind.ng',
+    RESEND_API_KEY: process.env['RESEND_API_KEY'],
+  },
+
+  // ==================== PAYMENT ====================
+  PAYMENT: {
+    PAYSTACK_PUBLIC_KEY: process.env['NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY'],
+    PAYSTACK_SECRET_KEY: process.env['PAYSTACK_SECRET_KEY'],
+    FLUTTERWAVE_PUBLIC_KEY: process.env['FLUTTERWAVE_PUBLIC_KEY'],
+    FLUTTERWAVE_SECRET_KEY: process.env['FLUTTERWAVE_SECRET_KEY'],
+    CURRENCY: 'NGN',
+  },
+
+  // ==================== AUTHENTICATION ====================
+  AUTH: {
+    NEXTAUTH_SECRET: process.env['NEXTAUTH_SECRET'],
+    NEXTAUTH_URL: process.env['NEXTAUTH_URL'] || 'http://localhost:3000',
+    SUPABASE_URL: process.env['NEXT_PUBLIC_SUPABASE_URL'],
+    SUPABASE_KEY: process.env['NEXT_PUBLIC_SUPABASE_KEY'],
+    JWT_SECRET: process.env['JWT_SECRET'] || 'your-super-secret-jwt-key-change-this-in-production',
+    JWT_EXPIRES_IN: process.env['JWT_EXPIRES_IN'] || '1d',
+  },
+
+  // ==================== AI SERVICES ====================
+  AI: {
+    OPENAI_API_KEY: process.env['OPENAI_API_KEY'],
+    OPENAI_ORG_ID: process.env['OPENAI_ORG_ID'],
+    ANTHROPIC_API_KEY: process.env['ANTHROPIC_API_KEY'],
+    HUGGINGFACE_TOKEN: process.env['HUGGINGFACE_TOKEN'],
+  },
+
+  // ==================== STORAGE ====================
+  STORAGE: {
+    CLOUDINARY_CLOUD_NAME: process.env['CLOUDINARY_CLOUD_NAME'],
+    CLOUDINARY_API_KEY: process.env['CLOUDINARY_API_KEY'],
+    CLOUDINARY_API_SECRET: process.env['CLOUDINARY_API_SECRET'],
+    AWS_ACCESS_KEY_ID: process.env['AWS_ACCESS_KEY_ID'],
+    AWS_SECRET_ACCESS_KEY: process.env['AWS_SECRET_ACCESS_KEY'],
+    AWS_REGION: process.env['AWS_REGION'] || 'af-south-1',
+  },
+
+  // ==================== EXTERNAL APIS ====================
+  APIS: {
+    TERMII_API_KEY: process.env['TERMII_API_KEY'],
+    HUNTER_API_KEY: process.env['HUNTER_API_KEY'],
+    META_ACCESS_TOKEN: process.env['META_ACCESS_TOKEN'],
+  },
+
+  // ==================== FEATURE FLAGS ====================
+  FEATURES: {
+    ENABLE_CROSS_APP_TRACKING: process.env['NEXT_PUBLIC_ENABLE_CROSS_APP_TRACKING'] === 'true',
+    ENABLE_SOCIAL_SHARING: process.env['NEXT_PUBLIC_ENABLE_SOCIAL_SHARING'] === 'true',
+    ENABLE_PAYMENTS: process.env['NEXT_PUBLIC_ENABLE_PAYMENTS'] === 'true',
+    ENABLE_AI_FEATURES: process.env['NEXT_PUBLIC_ENABLE_AI_FEATURES'] === 'true',
+  },
+};
+
+// Helper function to convert app name to domain key
+function getDomainKey(appName: string): AppDomainKey | null {
+  const keyMap: Record<string, AppDomainKey> = {
+    'boldmind-hub': 'HUB',
+    'amebogist': 'AMEBOGIST',
+    'educenter': 'EDUCENTER',
+    'boldmind-os': 'BOLDMIND_OS',
+    'planai': 'PLANAI',
+    'naija-fither': 'NAIJA_FITHER',
+    'emailscraper-pro': 'EMAILSCRAPER_PRO',
+    'safe-naija': 'SAFE_NAIJA',
+    'receptionist': 'RECEPTIONIST_AI',
+    'social-factory': 'SOCIAL_FACTORY',
+    'credibility-hubs': 'CREDIBILITY_HUB',
+    'business-planning': 'BUSSINESS_PLAN_AI',
+    'financial-forecasting': 'FINANCIAL_FORCASTING_AI',
+    'investor-readiness': 'INVESTOR_READINESS_AI',
+    'branding-design': 'BRAND_DESIGN_AI',
+    'digital-storefronts': 'DIGITAL_STOREFRONT',
+    'marketing-automation': 'MARKETING_AUTOMATION_AI',
+    'analytics-dashboard': 'ANALYTICS_AI',
+    'afrohustle-os': 'AFROHUSTLE_OS',
+    'naijagig-matcher': 'NAIJAGIG_MATCHER',
+    'kolo-ai': 'KOLO_AI',
+    'borderless-remit': 'BORDERLESS_REMIT',
+    'receipt-genius': 'RECEIPT_GENIUS',
+    'power-alert': 'POWER_ALERT',
+    'farmgate-direct': 'FARMGATE_DIRECT',
+    'afrocopy-ai': 'AFROCOPY_AI',
+    'skill2cash': 'SKILL2CASH',
+    'anontruth-mic': 'ANONTRUTH_MIC',
+  };
+
+  return keyMap[appName] || null;
+}
+
+// Validate required environment variables
+export function validateEnv() {
+  const required = [
+    'NEXTAUTH_SECRET',
+    'JWT_SECRET',
+    'DATABASE_URL',
+    'MONGODB_URL',
+  ];
+
+  const missing = required.filter(key => !process.env[key]);
+
+  if (missing.length > 0) {
+    console.error('Missing required environment variables:', missing);
+    if (process.env['NODE_ENV'] === 'production') {
+      throw new Error(`Missing environment variables: ${missing.join(', ')}`);
+    }
+  }
+
+  return true;
+}
+
+// Get app-specific configuration
+export function getAppConfig(appName: string) {
+  const domainKey = getDomainKey(appName);
+  const domain = domainKey ? ENV_CONFIG.DOMAINS[domainKey] : 'boldmind.ng';
+  const baseUrl = `https://${domain}`;
+
+  return {
+    ...ENV_CONFIG,
+    APP: {
+      NAME: appName,
+      BASE_URL: baseUrl,
+      API_URL: `${baseUrl}/api`,
+      CDN_URL: `https://cdn.boldmind.ng/${appName}`,
+    },
+  };
+}
+
+// Alternative: Type-safe domain getter
+export function getAppDomain(appName: string): string {
+  const domainKey = getDomainKey(appName);
+  return domainKey ? ENV_CONFIG.DOMAINS[domainKey] : 'boldmind.ng';
+}
+
+// Database connection helpers
+export function getDatabaseUrl(serviceName: ServiceName): string {
+  if (isMongoService(serviceName)) {
+    return ENV_CONFIG.getMongoConnection(serviceName as MongoServiceName);
+  } else {
+    return ENV_CONFIG.getPostgresConnection(serviceName as PostgresServiceName);
+  }
+}
+
+function isMongoService(serviceName: ServiceName): serviceName is MongoServiceName {
+  const mongoServices: MongoServiceName[] = [
+    'amebogist-service',
+    'social-factory-service',
+    'emailscraper-pro-service',
+    'safeai-service',
+    'afrohustle-service',
+    'naijagig-matcher-service',
+    'borderless-remit-service',
+    'power-alert-service',
+    'farmgate-direct-service',
+    'afrocopy-ai-service',
+    'skill2cash-service',
+    'anontruth-mic-service',
+  ];
+  return mongoServices.includes(serviceName as MongoServiceName);
+}

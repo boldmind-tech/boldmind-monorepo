@@ -1,52 +1,119 @@
-// services/api-gateway/src/main.ts
+// SERVICES/api-gateway/src/main.ts
+import 'reflect-metadata';
 
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { Logger } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { ConfigService } from '@nestjs/config'; // ← added for safe env access
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+    // Create app instance
+    const app = await NestFactory.create(AppModule, {
+        // Enable detailed error logging in development
+        logger: ['error', 'warn', 'debug', 'log', 'verbose'],
+    });
 
-  // CORS
-  app.enableCors({
-    origin: process.env.CORS_ORIGIN?.split(',') || ['http://localhost:3001'],
-    credentials: true,
-  });
+    const configService = app.get(ConfigService);
+    const logger = new Logger('Bootstrap');
 
-  // Global validation pipe
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }),
-  );
+    // 1. CORS – safer defaults + env fallback
+    const corsOrigins = configService.get<string>('CORS_ORIGIN')?.split(',')?.map(o => o.trim()) || [
+        'http://localhost:3000',
+        'http://localhost:3001',
+        'https://boldmind.ng',
+        'https://*.boldmind.ng',
+    ];
 
-  // Swagger API documentation
-  const config = new DocumentBuilder()
-    .setTitle('BoldMind API Gateway')
-    .setDescription('Unified API for all BoldMind products')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .addTag('auth', 'Authentication endpoints')
-    .addTag('educenter', 'EduCenter endpoints')
-    .addTag('users', 'User management')
-    .addTag('payments', 'Payment processing')
-    .addTag('webhooks', 'Webhook handlers')
-    .build();
+    app.enableCors({
+        origin: corsOrigins,
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+        credentials: true,
+        allowedHeaders: 'Content-Type, Authorization, Accept, X-Requested-With',
+        exposedHeaders: ['Authorization'],
+        maxAge: 86400, // 24 hours cache for preflight
+    });
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
+    app.useGlobalPipes(
+        new ValidationPipe({
+            whitelist: true,
+            forbidNonWhitelisted: true,
+            transform: true,
+            transformOptions: { enableImplicitConversion: true },
+            forbidUnknownValues: true,
+            // Optional: custom error factory for cleaner API responses
+            exceptionFactory: (errors) => {
+                const messages = errors.map(e => ({
+                    field: e.property,
+                    constraints: e.constraints,
+                }));
+                return new BadRequestException(messages);
+            },
+        }),
+    );
 
-  // Global prefix
-  app.setGlobalPrefix('api');
+    // 3. Global prefix (only for API routes – swagger stays at /api/docs)
+    app.setGlobalPrefix('api', {
+        exclude: ['api/docs(.*)'], // keep swagger accessible without prefix
+    });
 
-  const port = process.env.PORT || 4000;
-  await app.listen(port);
+    // 4. Swagger setup – improved metadata
+    const swaggerConfig = new DocumentBuilder()
+        .setTitle('BoldMind API Gateway')
+        .setDescription('Unified backend API for all BoldMind products and services')
+        .setVersion('1.0.0')
+        .setContact('BoldMind Team', 'https://boldmind.ng', 'support@boldmind.ng')
+        .setLicense('Proprietary', 'https://boldmind.ng/license')
+        .addBearerAuth(
+            {
+                type: 'http',
+                scheme: 'bearer',
+                bearerFormat: 'JWT',
+                name: 'Authorization',
+                description: 'Enter JWT token (without "Bearer " prefix)',
+                in: 'header',
+            },
+            'access-token',
+        )
+        .addTag('auth', 'Authentication & sessions')
+        .addTag('users', 'User profiles & management')
+        .addTag('products', 'Product catalog & access')
+        .addTag('payments', 'Subscriptions & payment processing')
+        .addTag('educenter', 'EduCenter learning features')
+        .addTag('hub', 'BoldMind Hub features')
+        .addTag('webhooks', 'Webhook receivers (Stripe, Supabase, etc)')
+        .build();
 
-  console.log(`🚀 API Gateway running on: http://localhost:${port}`);
-  console.log(`📚 Swagger docs: http://localhost:${port}/api/docs`);
+    const document = SwaggerModule.createDocument(app, swaggerConfig, {
+        // Optional: ignore circular refs if you have them
+        ignoreGlobalPrefix: false,
+    });
+
+    SwaggerModule.setup('api/docs', app, document, {
+        swaggerOptions: {
+            persistAuthorization: true, // keep token between refreshes
+            tagsSorter: 'alpha',
+            operationsSorter: 'alpha',
+            docExpansion: 'none',
+        },
+        customCss: '.swagger-ui .topbar { display: none }', // hide top bar if desired
+    });
+
+    // 5. Start server
+    const port = configService.get<number>('PORT', 4000);
+    const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
+
+    await app.listen(port, host);
+
+    const url = `http${host === '0.0.0.0' ? 's' : ''}://${host === '0.0.0.0' ? 'your-domain' : 'localhost'}:${port}`;
+
+    logger.log(`🚀 API Gateway is running on: ${url}`);
+    logger.log(`📚 Swagger documentation: ${url}/api/docs`);
+    logger.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
 }
 
-bootstrap();
+bootstrap().catch((err) => {
+    console.error('Bootstrap failed:', err);
+    process.exit(1);
+});

@@ -1,12 +1,21 @@
-import { Controller, Post, Body, Headers, HttpException, HttpStatus } from '@nestjs/common';
+// SERVICES/api-gateway/src/webhooks/webhooks.controller.ts - FIXED
+
+import {
+  Controller,
+  Post,
+  Body,
+  Headers,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { ProxyService } from '../proxy/proxy.service';
 import * as crypto from 'crypto';
 
 @ApiTags('webhooks')
 @Controller('webhooks')
-export class PaystackWebhookController {
-  constructor(private proxyService: ProxyService) {}
+export class WebhooksController {
+  constructor(private proxyService: ProxyService) { }
 
   @Post('paystack')
   @ApiOperation({ summary: 'Handle Paystack webhooks' })
@@ -16,7 +25,7 @@ export class PaystackWebhookController {
   ) {
     // Verify Paystack signature
     const hash = crypto
-      .createHmac('sha512', process.env.PAYSTACK_SECRET_KEY!)
+      .createHmac('sha512', process.env['PAYSTACK_SECRET_KEY'] || '')
       .update(JSON.stringify(payload))
       .digest('hex');
 
@@ -29,6 +38,33 @@ export class PaystackWebhookController {
       const result = await this.proxyService.paymentRequest(
         'POST',
         '/webhooks/paystack',
+        payload,
+        {},
+      );
+
+      return { status: 'success', message: 'Webhook processed', result };
+    } catch (error) {
+      throw new HttpException(
+        'Webhook processing failed',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Post('flutterwave')
+  @ApiOperation({ summary: 'Handle Flutterwave webhooks' })
+  async handleFlutterwaveWebhook(
+    @Body() payload: any,
+    @Headers('verif-hash') signature: string,
+  ) {
+    if (signature !== process.env['FLUTTERWAVE_SECRET_HASH']) {
+      throw new HttpException('Invalid signature', HttpStatus.UNAUTHORIZED);
+    }
+
+    try {
+      const result = await this.proxyService.paymentRequest(
+        'POST',
+        '/webhooks/flutterwave',
         payload,
         {},
       );

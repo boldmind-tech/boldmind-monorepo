@@ -1,18 +1,13 @@
-import { supabase } from "../../infrastructure/supabase/client";
+// PACKAGES/auth/src/application/register/registerWithEmail.ts
+import { getSupabaseAuthProvider } from '../../providers/supabase/singleton';
+import { AuthResponse } from '../../domain/models/Session';
+
+function getAuthProvider() {
+  return getSupabaseAuthProvider();
+}
 
 export async function registerWithEmail(
-  email: string,
-  password: string,
-  metadata?: Record<string, any>
-) {
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: metadata,
-    },
-  });
-
-  if (error) throw error;
-  return data;
+  data: { email: string; password: string; metadata?: Record<string, any> }
+): Promise<AuthResponse> {
+  return getAuthProvider().signUpWithEmail(data.email, data.password, data.metadata);
 }

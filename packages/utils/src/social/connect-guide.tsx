@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExternalLink, CheckCircle, AlertCircle } from 'lucide-react';
+import { CheckCircle, AlertCircle } from 'lucide-react';
 
 export const SocialPlatformGuide = {
   facebook: {
@@ -34,7 +34,7 @@ export const SocialPlatformGuide = {
     ],
     requiredPermissions: [
       'pages_manage_engagement',
-      'pages_read_engagement', 
+      'pages_read_engagement',
       'pages_messaging',
       'pages_show_list'
     ],
@@ -214,25 +214,24 @@ export function SocialConnectionWizard() {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-8">Connect Your Social Accounts</h1>
-      
+
       {/* Platform Selector */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
         {Object.keys(SocialPlatformGuide).map((platform) => (
           <button
             key={platform}
             onClick={() => setSelectedPlatform(platform)}
-            className={`p-4 rounded-xl border-2 transition-all capitalize ${
-              selectedPlatform === platform
+            className={`p-4 rounded-xl border-2 transition-all capitalize ${selectedPlatform === platform
                 ? 'border-blue-500 bg-blue-500/10'
                 : 'border-gray-200 hover:border-gray-300'
-            }`}
+              }`}
           >
             <div className="text-2xl mb-2">
               {platform === 'facebook' ? '📘' :
-               platform === 'instagram' ? '📸' :
-               platform === 'whatsapp' ? '💬' :
-               platform === 'twitter' ? '🐦' :
-               platform === 'tiktok' ? '🎵' : '📺'}
+                platform === 'instagram' ? '📸' :
+                  platform === 'whatsapp' ? '💬' :
+                    platform === 'twitter' ? '🐦' :
+                      platform === 'tiktok' ? '🎵' : '📺'}
             </div>
             <div>{platform}</div>
           </button>
@@ -244,7 +243,7 @@ export function SocialConnectionWizard() {
         <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
           <span className="capitalize">{selectedPlatform}</span> Setup Guide
         </h2>
-        
+
         <div className="space-y-6">
           {guide.steps.map((step, index) => (
             <div key={index} className="flex items-start gap-4">

@@ -1,10 +1,6 @@
-import { supabase } from '../../infrastructure/supabase/client';
+// PACKAGES/auth/src/application/session/logout.ts
+import { getSupabaseAuthProvider } from '../../providers/supabase/singleton';
 
-export async function logout() {
-  const { error } = await supabase.auth.signOut();
-
-  if (error) {
-    console.error('[auth:logout]', error.message);
-    throw error;
-  }
+export async function logout(): Promise<void> {
+  return getSupabaseAuthProvider().signOut();
 }

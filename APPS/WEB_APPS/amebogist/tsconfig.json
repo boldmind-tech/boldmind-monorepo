@@ -27,22 +27,19 @@
         "./*"
       ],
       "@boldmind/ui": [
-        "../../../PACKAGES/ui/src"
+        "../../PACKAGES/ui/src"
       ],
       "@boldmind/auth": [
-        "../../../PACKAGES/auth/src"
-      ],
-      "@boldmind/database": [
-        "../../../PACKAGES/database/src"
+        "../../PACKAGES/auth/src"
       ],
       "@boldmind/utils": [
-        "../../../PACKAGES/utils/src"
+        "../../PACKAGES/utils/src"
       ],
       "@boldmind/api-client": [
-        "../../../PACKAGES/api-client/src"
+        "../../PACKAGES/api-client/src"
       ],
       "@boldmind/payments": [
-        "../../../PACKAGES/payments/src"
+        "../../PACKAGES/payments/src"
       ]
     }
   },

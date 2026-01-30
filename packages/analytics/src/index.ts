@@ -14,7 +14,7 @@ export const analytics = {
   // Send pageview
   pageview: (url: string) => {
     if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('config', process.env.NEXT_PUBLIC_GA_ID, {
+      (window as any).gtag('config', process.env['NEXT_PUBLIC_GA_ID'], {
         page_path: url,
       });
     }
@@ -87,9 +87,9 @@ export function trackEvent({ eventName, properties, userId }: TrackEventOptions)
   // Track in all platforms
   analytics.event({
     action: eventName,
-    category: properties?.category || 'General',
-    label: properties?.label,
-    value: properties?.value,
+    category: properties?.['category'] || 'General',
+    label: properties?.['label'],
+    value: properties?.['value'],
   });
 
   mixpanel.track(eventName, properties);

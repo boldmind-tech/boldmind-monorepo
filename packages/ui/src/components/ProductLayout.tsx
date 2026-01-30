@@ -26,13 +26,12 @@ interface ProductLayoutProps {
 interface ProductConfig {
   name: string;
   theme: 'dark' | 'light';
-  footerSections: Array<{
+  footerSections?: Array<{
     title: string;
     links: Array<{
       href: string;
       label: string;
       isExternal?: boolean;
-      badge?: string;
     }>;
   }>;
 }
@@ -48,7 +47,7 @@ const productConfigs: Record<string, ProductConfig> = {
           { href: 'https://amebogist.ng', label: 'AmeboGist', isExternal: true },
           { href: 'https://educenter.com.ng', label: 'EduCenter', isExternal: true },
           { href: '/boldmind-os', label: 'BoldMind OS' },
-          { href: '/products', label: 'All 31+ Products', badge: '31+' },
+          { href: '/products', label: 'All 31+ Products' },
         ],
       },
       {
@@ -57,7 +56,7 @@ const productConfigs: Record<string, ProductConfig> = {
           { href: '/about', label: 'About BoldMind' },
           { href: '/mission', label: 'Our Mission' },
           { href: '/team', label: 'Team' },
-          { href: '/careers', label: 'Careers', badge: 'Hiring' },
+          { href: '/careers', label: 'Careers' },
         ],
       },
     ],
@@ -106,7 +105,7 @@ const productConfigs: Record<string, ProductConfig> = {
           { href: '/about', label: 'About Us' },
           { href: '/mission', label: 'Our Mission' },
           { href: '/team', label: 'Team' },
-          { href: '/careers', label: 'Careers', badge: 'Hiring' },
+          { href: '/careers', label: 'Careers' },
         ],
       },
     ],
@@ -172,30 +171,30 @@ export function ProductLayout({
   theme,
 }: ProductLayoutProps) {
   const config = productConfigs[product] || productConfigs['default'];
-  const currentTheme = theme || config.theme;
-  const footerSections = config.footerSections;
+  const currentTheme = theme || config?.theme;
+  const footerSections = config?.footerSections;
 
   return (
-    <div className={`min-h-screen ${
-      currentTheme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'
-    }`}>
+    <div className={`min-h-screen ${currentTheme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'
+      }`}>
       <SuperNavbar
+
         logoSrc="/logo.png"
         links={navLinks.map(link => ({
           ...link,
           icon: link.icon ? <span>{link.icon}</span> : undefined
         }))}
         cta={cta}
-        theme={currentTheme}
+        theme={currentTheme || 'dark'}
         sticky={true}
         animated={true}
         showParticles={showParticles}
       />
-      
+
       <main className="pt-20">
         {children}
       </main>
-      
+
       <SuperFooter
         logoSrc="/logo.png"
         sections={footerSections}
@@ -204,10 +203,11 @@ export function ProductLayout({
           phone: '+234 913 834 9271',
           address: 'Lagos, Nigeria',
         }}
+
         newsletter={true}
         showStats={true}
         animated={true}
-        copyright={`© ${new Date().getFullYear()} ${config.name}. A BoldMind Technology Solution.`}
+        copyright={`© ${new Date().getFullYear()} ${config?.name}. A BoldMind Technology Solution.`}
       />
     </div>
   );

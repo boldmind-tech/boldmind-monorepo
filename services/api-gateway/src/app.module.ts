@@ -1,25 +1,26 @@
+// SERVICES/api-gateway/src/app.module.ts - UPDATED
+
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { ProxyModule } from './proxy/proxy.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
 import { HealthModule } from './health/health.module';
-import configuration from './config/configuration';
+import { UsersModule } from './users/users.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
-    // Configuration
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [configuration],
-      envFilePath: ['.env.local', '.env'],
+      envFilePath: ['.env.local', '.env.development', '.env'],
     }),
-
-    // Core modules
     AuthModule,
     ProxyModule,
     WebhooksModule,
     HealthModule,
+    UsersModule,
+    NotificationsModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }

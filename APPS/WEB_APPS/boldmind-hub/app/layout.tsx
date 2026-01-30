@@ -13,7 +13,7 @@ const inter = Inter({
 
 // Generate canonical URL
 const getCanonicalUrl = () => {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://boldmind.ng";
+  const baseUrl = process.env['NEXT_PUBLIC_APP_URL'] || "https://boldmind.ng";
   return baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
 };
 
@@ -134,7 +134,7 @@ export const metadata: Metadata = {
     images: [`${canonicalUrl}/og-image.png`],
   },
   verification: {
-    google: "your-google-search-console-code", // Add your Google Search Console code
+    google: "wN3-VE6VlAJbq9B0KWqG0lysVUdAa5UNi4uApClq0Ws", // Add your Google Search Console code
     yandex: "your-yandex-verification", // Optional
     other: {
       me: [

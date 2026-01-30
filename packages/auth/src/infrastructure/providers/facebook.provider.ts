@@ -1,8 +1,8 @@
-import { supabase } from "../supabase/client";
+import { getSupabaseClient } from "../supabase/client";
 
 export const FacebookProvider = {
   async login() {
-    return supabase.auth.signInWithOAuth({
+    return getSupabaseClient().auth.signInWithOAuth({
       provider: "facebook"
     });
   }
