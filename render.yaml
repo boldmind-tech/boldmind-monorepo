@@ -1,0 +1,130 @@
+# Render.com Configuration for BoldMind Services
+# This file defines all backend services deployment
+
+services:
+  # API Gateway
+  - type: web
+    name: boldmind-api-gateway
+    runtime: node
+    region: oregon
+    plan: free
+    branch: main
+    rootDir: SERVICES/api-gateway
+    buildCommand: pnpm install && pnpm build
+    startCommand: pnpm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: USER_SERVICE_URL
+        fromService:
+          type: web
+          name: boldmind-user-service
+          property: host
+      - key: NOTIFICATION_SERVICE_URL
+        fromService:
+          type: web
+          name: boldmind-notification-service
+          property: host
+      - key: PAYMENT_SERVICE_URL
+        fromService:
+          type: web
+          name: boldmind-payment-service
+          property: host
+
+  # User Service
+  - type: web
+    name: boldmind-user-service
+    runtime: node
+    region: oregon
+    plan: free
+    branch: main
+    rootDir: SERVICES/user-service
+    buildCommand: pnpm install && pnpm prisma:generate && pnpm build
+    startCommand: pnpm prisma:migrate && pnpm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4001
+      - key: DATABASE_URL
+        sync: false  # Add this in Render dashboard
+      - key: USER_SERVICE_DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+
+  # Notification Service
+  - type: web
+    name: boldmind-notification-service
+    runtime: node
+    region: oregon
+    plan: free
+    branch: main
+    rootDir: SERVICES/notification-service
+    buildCommand: pnpm install && pnpm build
+    startCommand: pnpm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4006
+      - key: MONGODB_URL
+        sync: false  # Add this in Render dashboard
+      - key: RESEND_API_KEY
+        sync: false
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://boldmind.ng
+
+  # Payment Service
+  - type: web
+    name: boldmind-payment-service
+    runtime: node
+    region: oregon
+    plan: free
+    branch: main
+    rootDir: SERVICES/payment-service
+    buildCommand: pnpm install && pnpm prisma:generate && pnpm build
+    startCommand: pnpm prisma:migrate && pnpm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4003
+      - key: DATABASE_URL
+        sync: false
+      - key: PAYMENT_SERVICE_DATABASE_URL
+        sync: false
+      - key: PAYSTACK_SECRET_KEY
+        sync: false
+      - key: PAYSTACK_PUBLIC_KEY
+        sync: false
+      - key: FLUTTERWAVE_SECRET_KEY
+        sync: false
+      - key: FLUTTERWAVE_PUBLIC_KEY
+        sync: false
+
+  # Hub Services
+  - type: web
+    name: boldmind-hub-services
+    runtime: node
+    region: oregon
+    plan: free
+    branch: main
+    rootDir: SERVICES/hub-services
+    buildCommand: pnpm install && pnpm prisma:generate && pnpm build
+    startCommand: pnpm prisma:migrate && pnpm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4002
+      - key: DATABASE_URL
+        sync: false
+      - key: HUB_SERVICE_DATABASE_URL
+        sync: false
