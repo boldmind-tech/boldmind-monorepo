@@ -17,6 +17,7 @@
     "@boldmind/seo": "workspace:*",
     "@boldmind/ui": "workspace:*",
     "@boldmind/utils": "workspace:*",
+    "@boldmind/config": "workspace:*",
     "autoprefixer": "^10.4.16",
     "clsx": "^2.0.0",
     "cookie": "^1.1.1",
