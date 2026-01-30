@@ -1,7 +1,7 @@
 {
     "buildCommand": "cd APPS/WEB_APPS/boldmind-hub && pnpm install && pnpm build",
     "devCommand": "cd APPS/WEB_APPS/boldmind-hub && pnpm dev",
-    "installCommand": "pnpm install",
+    "installCommand": "pnpm install --no-frozen-lockfile",
     "framework": "nextjs",
     "outputDirectory": "APPS/WEB_APPS/boldmind-hub/.next",
     "regions": [
