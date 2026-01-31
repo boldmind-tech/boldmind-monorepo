@@ -1,5 +1,5 @@
 {
-    "buildCommand": "cd ../../../../ && pnpm install --no-frozen-lockfile && cd APPS/WEB_APPS/PLANAI_SUITE/receptionist && pnpm deploy",
+    "buildCommand": "cd ../../../../ && pnpm install --no-frozen-lockfile && cd APPS/WEB_APPS/PLANAI_SUITE/receptionist && pnpm run deploy",
     "devCommand": "cd APPS/WEB_APPS/PLANAI_SUITE/receptionist && pnpm dev",
     "installCommand": "pnpm install --no-frozen-lockfile",
     "framework": "nextjs",

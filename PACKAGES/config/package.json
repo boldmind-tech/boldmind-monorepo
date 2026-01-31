@@ -30,10 +30,10 @@
   },
   "dependencies": {
     "@types/node": "20.19.30",
-    "cookie": "^1.1.1"
+    "cookie": "^1.1.1",
+    "tsdown": "^0.20.1"
   },
   "devDependencies": {
-    "tsdown": "^0.20.1",
     "typescript": "^5.4.5"
   }
 }

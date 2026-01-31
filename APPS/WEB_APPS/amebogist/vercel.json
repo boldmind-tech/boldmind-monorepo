@@ -1,5 +1,5 @@
 {
-    "buildCommand": "cd ../../../ && pnpm install --no-frozen-lockfile && cd APPS/WEB_APPS/amebogist && pnpm deploy",
+    "buildCommand": "cd ../../../ && pnpm install --no-frozen-lockfile && cd APPS/WEB_APPS/amebogist && pnpm run deploy",
     "devCommand": "cd APPS/WEB_APPS/amebogist && pnpm dev",
     "installCommand": "pnpm install --no-frozen-lockfile",
     "framework": "nextjs",
