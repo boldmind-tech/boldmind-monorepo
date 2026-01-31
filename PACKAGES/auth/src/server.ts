@@ -11,7 +11,7 @@ export { getSupabaseAuthProvider, resetSupabaseAuthProvider } from './providers/
 
 // domain models & types
 export type { User, Session, AuthState, AuthError, AuthResponse } from './domain/models/index';
-export type { UserAPI } from './delivery/react/AuthProvider';
+export type { UserAPI } from './domain/models/UserAPI';
 export {
     canAccessFeature,
     canAccessProduct,

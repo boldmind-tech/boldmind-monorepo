@@ -19,10 +19,7 @@ export interface AuthContextValue extends AuthState {
   hasPermission: (permission: string) => boolean;
 }
 
-export interface UserAPI {
-  getMe: () => Promise<User | null>;
-  createUser: (userData: any) => Promise<void>;
-}
+import { UserAPI } from '../../domain/models/UserAPI';
 
 interface AuthProviderProps {
   children: React.ReactNode;

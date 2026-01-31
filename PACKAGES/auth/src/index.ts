@@ -35,5 +35,6 @@ export { getSupabaseAuthProvider, resetSupabaseAuthProvider } from './providers/
 // domain models
 export type { User, Session, AuthState, AuthError, AuthResponse } from './domain/models/index';
 
-export type { AuthContextValue, UserAPI } from './delivery/react/AuthProvider';
+export type { AuthContextValue } from './delivery/react/AuthProvider';
+export type { UserAPI } from './domain/models/UserAPI';
 export * from './middleware'
