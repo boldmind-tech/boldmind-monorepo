@@ -6,14 +6,5 @@
     "outputDirectory": "APPS/WEB_APPS/PLANAI_SUITE/receptionist/.next",
     "regions": [
         "iad1"
-    ],
-    "env": {
-        "NEXT_PUBLIC_APP_NAME": "planai-receptionist",
-        "NEXT_PUBLIC_APP_URL": "https://receptionist.planai.boldmind.ng",
-        "NEXT_PUBLIC_SITE_NAME": "PlanAI Receptionist - AI-Powered Scheduling",
-        "NEXT_PUBLIC_SUPABASE_URL": "@supabase_url",
-        "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase_anon_key",
-        "NEXT_PUBLIC_API_URL": "@api_gateway_url",
-        "NODE_ENV": "production"
-    }
+    ]
 }
