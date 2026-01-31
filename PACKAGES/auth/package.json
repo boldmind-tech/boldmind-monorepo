@@ -43,11 +43,11 @@
     "@supabase/supabase-js": "^2.91.1",
     "@types/cookie": "^1.0.0",
     "@types/react": "18.3.27",
-    "cookie": "^1.1.1"
+    "cookie": "^1.1.1",
+    "tsdown": "^0.20.1"
   },
   "devDependencies": {
     "@types/node": "20.19.30",
-    "tsdown": "^0.20.1",
     "typescript": "5.9.3"
   },
   "peerDependencies": {

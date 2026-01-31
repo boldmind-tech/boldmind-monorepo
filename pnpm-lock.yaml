@@ -1714,6 +1714,9 @@ importers:
       react-dom:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
+      tsdown:
+        specifier: ^0.20.1
+        version: 0.20.1(typescript@5.9.3)
     devDependencies:
       '@types/node':
         specifier: 20.19.30
@@ -1733,9 +1736,6 @@ importers:
       eslint:
         specifier: ^8
         version: 8.57.1
-      tsdown:
-        specifier: ^0.20.1
-        version: 0.20.1(typescript@5.9.3)
       tsup:
         specifier: ^7.2.0
         version: 7.3.0(typescript@5.9.3)
@@ -1757,13 +1757,13 @@ importers:
       posthog-js:
         specifier: ^1.0.0
         version: 1.335.5
+      tsdown:
+        specifier: ^0.20.1
+        version: 0.20.1(typescript@5.9.3)
     devDependencies:
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
-      tsdown:
-        specifier: ^0.20.1
-        version: 0.20.1(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -1791,13 +1791,13 @@ importers:
       react:
         specifier: 18.3.1
         version: 18.3.1
+      tsdown:
+        specifier: ^0.20.1
+        version: 0.20.1(typescript@5.9.3)
     devDependencies:
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
-      tsdown:
-        specifier: ^0.20.1
-        version: 0.20.1(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -1828,13 +1828,13 @@ importers:
       react:
         specifier: 18.3.1
         version: 18.3.1
+      tsdown:
+        specifier: ^0.20.1
+        version: 0.20.1(typescript@5.9.3)
     devDependencies:
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
-      tsdown:
-        specifier: ^0.20.1
-        version: 0.20.1(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -1927,6 +1927,9 @@ importers:
       react-dom:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
+      tsdown:
+        specifier: ^0.20.1
+        version: 0.20.1(typescript@5.9.3)
     devDependencies:
       '@types/node':
         specifier: 20.19.30
@@ -1946,9 +1949,6 @@ importers:
       eslint:
         specifier: ^8
         version: 8.57.1
-      tsdown:
-        specifier: ^0.20.1
-        version: 0.20.1(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -1958,15 +1958,9 @@ importers:
       '@types/cookie':
         specifier: ^1.0.0
         version: 1.0.0
-      next:
-        specifier: 14.2.35
-        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
+      tsdown:
+        specifier: ^0.20.1
+        version: 0.20.1(typescript@5.9.3)
     devDependencies:
       '@types/node':
         specifier: 20.19.30
@@ -1977,9 +1971,6 @@ importers:
       '@types/react-dom':
         specifier: 18.3.7
         version: 18.3.7(@types/react@18.3.27)
-      tsdown:
-        specifier: ^0.20.1
-        version: 0.20.1(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -2013,6 +2004,9 @@ importers:
       tailwind-merge:
         specifier: ^2.6.0
         version: 2.6.0
+      tsdown:
+        specifier: ^0.20.1
+        version: 0.20.1(typescript@5.9.3)
       tw-animate-css:
         specifier: ^1.2.8
         version: 1.4.0
@@ -2035,9 +2029,6 @@ importers:
       tailwindcss:
         specifier: ^3.4.1
         version: 3.4.19
-      tsdown:
-        specifier: ^0.20.1
-        version: 0.20.1(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -2121,9 +2112,15 @@ importers:
 
   SERVICES/amebogist-service:
     dependencies:
+      '@types/cors':
+        specifier: ^2.8.17
+        version: 2.8.19
       '@types/express':
         specifier: ^4.17.21
         version: 4.17.25
+      '@types/morgan':
+        specifier: ^1.9.9
+        version: 1.9.10
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
@@ -2134,12 +2131,6 @@ importers:
         specifier: 5.9.3
         version: 5.9.3
     devDependencies:
-      '@types/cors':
-        specifier: ^2.8.17
-        version: 2.8.19
-      '@types/morgan':
-        specifier: ^1.9.9
-        version: 1.9.10
       tsx:
         specifier: ^4.7.0
         version: 4.21.0
@@ -2287,12 +2278,21 @@ importers:
       '@prisma/config':
         specifier: ^7.3.0
         version: 7.3.0
+      '@types/cors':
+        specifier: ^2.8.17
+        version: 2.8.19
       '@types/express':
         specifier: ^4.17.21
         version: 4.17.25
+      '@types/morgan':
+        specifier: ^1.9.9
+        version: 1.9.10
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
+      '@types/pg':
+        specifier: ^8.16.0
+        version: 8.16.0
       axios:
         specifier: ^1.6.2
         version: 1.13.4
@@ -2324,15 +2324,6 @@ importers:
         specifier: 5.9.3
         version: 5.9.3
     devDependencies:
-      '@types/cors':
-        specifier: ^2.8.17
-        version: 2.8.19
-      '@types/morgan':
-        specifier: ^1.9.9
-        version: 1.9.10
-      '@types/pg':
-        specifier: ^8.16.0
-        version: 8.16.0
       tsx:
         specifier: ^4.7.0
         version: 4.21.0
@@ -2412,6 +2403,9 @@ importers:
       pg:
         specifier: ^8.17.2
         version: 8.17.2
+      prisma:
+        specifier: 7.3.0
+        version: 7.3.0(typescript@5.9.3)
       reflect-metadata:
         specifier: ^0.1.13
         version: 0.1.14
@@ -2464,9 +2458,6 @@ importers:
       prettier:
         specifier: ^3.2.5
         version: 3.8.1
-      prisma:
-        specifier: 7.3.0
-        version: 7.3.0(typescript@5.9.3)
       source-map-support:
         specifier: ^0.5.21
         version: 0.5.21
@@ -2517,9 +2508,15 @@ importers:
       '@supabase/supabase-js':
         specifier: ^2.93.3
         version: 2.93.3
+      '@types/cors':
+        specifier: ^2.8.17
+        version: 2.8.19
       '@types/express':
         specifier: ^5.0.0
         version: 5.0.6
+      '@types/morgan':
+        specifier: ^1.9.9
+        version: 1.9.10
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
@@ -2560,12 +2557,6 @@ importers:
       '@types/cookie':
         specifier: ^1.0.0
         version: 1.0.0
-      '@types/cors':
-        specifier: ^2.8.17
-        version: 2.8.19
-      '@types/morgan':
-        specifier: ^1.9.9
-        version: 1.9.10
       tsx:
         specifier: ^4.19.2
         version: 4.21.0
@@ -2581,12 +2572,21 @@ importers:
       '@prisma/config':
         specifier: ^7.3.0
         version: 7.3.0
+      '@types/cors':
+        specifier: ^2.8.17
+        version: 2.8.19
       '@types/express':
         specifier: ^4.17.21
         version: 4.17.25
+      '@types/morgan':
+        specifier: ^1.9.9
+        version: 1.9.10
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
+      '@types/pg':
+        specifier: ^8.16.0
+        version: 8.16.0
       axios:
         specifier: ^1.6.2
         version: 1.13.4
@@ -2618,15 +2618,6 @@ importers:
         specifier: 5.9.3
         version: 5.9.3
     devDependencies:
-      '@types/cors':
-        specifier: ^2.8.17
-        version: 2.8.19
-      '@types/morgan':
-        specifier: ^1.9.9
-        version: 1.9.10
-      '@types/pg':
-        specifier: ^8.16.0
-        version: 8.16.0
       tsx:
         specifier: ^4.7.0
         version: 4.21.0
@@ -2691,12 +2682,18 @@ importers:
       '@prisma/config':
         specifier: ^7.3.0
         version: 7.3.0
+      '@types/bcrypt':
+        specifier: ^6.0.0
+        version: 6.0.0
       '@types/express':
         specifier: ^5.0.6
         version: 5.0.6
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
+      '@types/pg':
+        specifier: ^8.16.0
+        version: 8.16.0
       bcrypt:
         specifier: ^6.0.0
         version: 6.0.0
@@ -2737,15 +2734,9 @@ importers:
         specifier: ^13.0.0
         version: 13.0.0
     devDependencies:
-      '@types/bcrypt':
-        specifier: ^6.0.0
-        version: 6.0.0
       '@types/cookie':
         specifier: ^1.0.0
         version: 1.0.0
-      '@types/pg':
-        specifier: ^8.16.0
-        version: 8.16.0
 
 packages:
 
@@ -8286,7 +8277,7 @@ packages:
     resolution: {integrity: sha512-/oJGukuH3D2+D+3H4JWLaAsJ/ji86dhRidzZ/Od7H/i8g+aCmvkeCc6Ni/f9uxGLSQVCRZkX2/lqEFG2BvWtlQ==}
     dependencies:
       '@types/node': 20.19.30
-    dev: true
+    dev: false
 
   /@types/body-parser@1.19.6:
     resolution: {integrity: sha512-HLFeCYgz89uk22N5Qg3dvGvsv46B8GLvKKo1zKG4NybA8U2DiEO3w9lqGg29t/tfLRJpJ6iQxnVw4OnB7MoM9g==}
@@ -8507,7 +8498,6 @@ packages:
     resolution: {integrity: sha512-sS4A1zheMvsADRVfT0lYbJ4S9lmsey8Zo2F7cnbYjWHP67Q0AwMYuuzLlkIM2N8gAbb9cubhIVFwcIN2XyYCkA==}
     dependencies:
       '@types/node': 20.19.30
-    dev: true
 
   /@types/ms@2.1.0:
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
@@ -8557,7 +8547,6 @@ packages:
       '@types/node': 20.19.30
       pg-protocol: 1.11.0
       pg-types: 2.2.0
-    dev: true
 
   /@types/phoenix@1.6.7:
     resolution: {integrity: sha512-oN9ive//QSBkf19rfDv45M7eZPi0eEXylht2OLEXicu5b4KoQ1OzXIw+xDSGWxSxe1JmepRR/ZH283vsu518/Q==}

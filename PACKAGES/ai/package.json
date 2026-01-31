@@ -29,7 +29,8 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "openai": "^4.104.0"
+    "openai": "^4.104.0",
+    "tsdown": "^0.20.1"
   },
   "devDependencies": {
     "@types/node": "^20.11.3",
@@ -38,7 +39,6 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8",
-    "tsdown": "^0.20.1",
     "tsup": "^7.2.0",
     "typescript": "^5.4.5"
   },
