@@ -1,7 +1,7 @@
 {
-    "buildCommand": "cd APPS/WEB_APPS/educenter && pnpm install && pnpm build",
+    "buildCommand": "cd ../../../ && pnpm install --no-frozen-lockfile && cd APPS/WEB_APPS/educenter && pnpm deploy",
     "devCommand": "cd APPS/WEB_APPS/educenter && pnpm dev",
-    "installCommand": "pnpm install",
+    "installCommand": "pnpm install --no-frozen-lockfile",
     "framework": "nextjs",
     "outputDirectory": "APPS/WEB_APPS/educenter/.next",
     "regions": [

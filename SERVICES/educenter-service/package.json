@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node dist/main.js",
     "dev": "dotenv -e .env -- ts-node-dev --respawn --transpile-only src/main.ts",
+    "deploy": "pnpm prisma:generate && pnpm build",
     "build": "tsc",
     "clean": "rm -rf dist",
     "prisma:generate": "dotenv -e .env -- prisma generate",

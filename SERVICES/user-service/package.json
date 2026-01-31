@@ -5,6 +5,8 @@
   "scripts": {
     "start": "nest start",
     "dev": "nest start --watch --preserveWatchOutput",
+    "prebuild": "pnpm --filter '@boldmind/config' --filter '@boldmind/utils' build",
+    "deploy": "pnpm prebuild && pnpm prisma:generate && pnpm build",
     "start:dev": "nest start --watch --preserveWatchOutput",
     "start:prod": "node dist/main",
     "build": "nest build --tsc",
@@ -19,8 +21,8 @@
     "prisma:seed": "dotenv -e .env -- prisma db seed"
   },
   "dependencies": {
-    "@boldmind/utils": "workspace:*",
     "@boldmind/config": "workspace:*",
+    "@boldmind/utils": "workspace:*",
     "@nestjs/axios": "^4.0.1",
     "@nestjs/common": "^10.4.22",
     "@nestjs/config": "^3.3.0",
@@ -36,8 +38,11 @@
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "dotenv": "^17.2.3",
+    "dotenv-cli": "^11.0.0",
     "mongoose": "^7.4.0",
     "pg": "^8.17.2",
+    "prisma": "7.3.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "swagger-ui-express": "^5.0.0",
@@ -48,11 +53,9 @@
     "@prisma/config": "^7.3.0",
     "@types/bcrypt": "^6.0.0",
     "@types/cookie": "^1.0.0",
+    "@types/express": "^5.0.6",
     "@types/node": "20.19.30",
     "@types/pg": "^8.16.0",
-    "dotenv": "^17.2.3",
-    "dotenv-cli": "^11.0.0",
-    "prisma": "7.3.0",
     "typescript": "^5.1.3"
   }
 }

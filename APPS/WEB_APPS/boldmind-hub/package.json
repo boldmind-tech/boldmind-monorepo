@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
+    "prebuild": "pnpm --filter '@boldmind/ui' --filter '@boldmind/utils' --filter '@boldmind/auth' --filter '@boldmind/analytics' --filter '@boldmind/api-client' --filter '@boldmind/seo' --filter '@boldmind/config' build",
     "build": "next build",
+    "deploy": "pnpm prebuild && pnpm build",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit"

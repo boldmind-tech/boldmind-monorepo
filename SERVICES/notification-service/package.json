@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "tsx watch src/main.ts",
+    "prebuild": "pnpm --filter '@boldmind/email' build",
+    "deploy": "pnpm prebuild && pnpm build",
     "build": "tsc",
     "start": "node dist/main.js"
   },

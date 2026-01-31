@@ -7,7 +7,7 @@ services:
     plan: free
     branch: main
     rootDir: SERVICES/api-gateway
-    buildCommand: pnpm install && pnpm build
+    buildCommand: pnpm deploy
     startCommand: pnpm start
     envVars:
       - key: NODE_ENV
@@ -57,7 +57,7 @@ services:
     plan: free
     branch: main
     rootDir: SERVICES/user-service
-    buildCommand: pnpm install && pnpm prisma:generate && pnpm build
+    buildCommand: pnpm deploy
     startCommand: pnpm prisma:migrate && pnpm start
     envVars:
       - key: NODE_ENV
@@ -83,7 +83,7 @@ services:
     plan: free
     branch: main
     rootDir: SERVICES/notification-service
-    buildCommand: pnpm install && pnpm build
+    buildCommand: pnpm deploy
     startCommand: pnpm start
     envVars:
       - key: NODE_ENV
@@ -105,7 +105,7 @@ services:
     plan: free
     branch: main
     rootDir: SERVICES/payment-service
-    buildCommand: pnpm install && pnpm prisma:generate && pnpm build
+    buildCommand: pnpm deploy
     startCommand: pnpm prisma:migrate && pnpm start
     envVars:
       - key: NODE_ENV
@@ -133,7 +133,7 @@ services:
     plan: free
     branch: main
     rootDir: SERVICES/hub-services
-    buildCommand: pnpm install && pnpm prisma:generate && pnpm build
+    buildCommand: pnpm deploy
     startCommand: pnpm prisma:migrate && pnpm start
     envVars:
       - key: NODE_ENV
@@ -153,7 +153,7 @@ services:
     plan: free
     branch: main
     rootDir: SERVICES/amebogist-services
-    buildCommand: pnpm install && pnpm prisma:generate && pnpm build
+    buildCommand: pnpm deploy
     startCommand: pnpm prisma:migrate && pnpm start
     envVars:
       - key: NODE_ENV
@@ -173,7 +173,7 @@ services:
     plan: free
     branch: main
     rootDir: SERVICES/educenter-services
-    buildCommand: pnpm install && pnpm prisma:generate && pnpm build
+    buildCommand: pnpm deploy
     startCommand: pnpm prisma:migrate && pnpm start
     envVars:
       - key: NODE_ENV

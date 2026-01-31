@@ -5,6 +5,8 @@
     "scripts": {
         "start": "nest start",
         "dev": "nest start --watch --preserveWatchOutput",
+        "prebuild": "pnpm --filter '@boldmind/utils' build",
+        "deploy": "pnpm prebuild && pnpm prisma:generate && pnpm build",
         "start:dev": "nest start --watch --preserveWatchOutput",
         "start:prod": "node dist/main",
         "build": "nest build --tsc",
