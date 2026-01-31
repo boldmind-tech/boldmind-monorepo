@@ -296,9 +296,16 @@ export function composeMiddleware(...middlewares: Array<(request: NextRequest) =
     for (const middleware of middlewares) {
       const response = await middleware(request);
 
-      // Merge headers
+      // Merge cookies correctly using the Cookies API
+      response.cookies.getAll().forEach(cookie => {
+        finalResponse.cookies.set(cookie);
+      });
+
+      // Merge other headers
       response.headers.forEach((value, key) => {
-        finalResponse.headers.set(key, value);
+        if (key.toLowerCase() !== 'set-cookie') {
+          finalResponse.headers.set(key, value);
+        }
       });
 
       if (response.status !== 200 && response.status !== 304) {

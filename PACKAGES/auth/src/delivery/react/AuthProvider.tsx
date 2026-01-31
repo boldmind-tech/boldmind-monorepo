@@ -14,6 +14,8 @@ export interface AuthContextValue extends AuthState {
   signInWithOAuth: (provider: 'google' | 'github' | 'twitter' | 'facebook') => Promise<void>;
   signOut: () => Promise<void>;
   refreshUser: () => Promise<void>;
+  verifyEmailCode: (email: string, code: string) => Promise<void>;
+  resendVerification: (email: string) => Promise<{ success: boolean; error?: string }>;
   hasPermission: (permission: string) => boolean;
 }
 
@@ -235,6 +237,40 @@ export function AuthProvider({ children, userAPI }: AuthProviderProps) {
     }
   };
 
+  const verifyEmailCode = async (email: string, code: string) => {
+    setState(prev => ({ ...prev, isLoading: true, error: null }));
+
+    try {
+      const response = await supabaseAuthProvider.verifyOtp(email, code, 'signup');
+
+      if (response.error) {
+        throw new Error(response.error.message);
+      }
+
+      if (response.session) {
+        const user = await fetchUser(response.session.user.id);
+        setState({
+          user,
+          session: response.session,
+          isLoading: false,
+          isAuthenticated: true,
+          error: null,
+        });
+      }
+    } catch (error: any) {
+      setState(prev => ({
+        ...prev,
+        isLoading: false,
+        error: { message: error.message },
+      }));
+      throw error;
+    }
+  };
+
+  const resendVerification = async (email: string) => {
+    return await supabaseAuthProvider.resendVerification(email);
+  };
+
   const hasPermission = (permission: string): boolean => {
     if (state.user?.isSuperAdmin) return true;
     return state.user?.permissions?.includes(permission) || false;
@@ -250,6 +286,8 @@ export function AuthProvider({ children, userAPI }: AuthProviderProps) {
         signInWithOAuth,
         signOut,
         refreshUser,
+        verifyEmailCode,
+        resendVerification,
         hasPermission,
       }}
     >

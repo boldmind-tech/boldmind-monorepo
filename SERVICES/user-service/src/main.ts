@@ -16,6 +16,8 @@ async function bootstrap() {
         }),
     );
 
+    app.setGlobalPrefix('api'); // Standard API prefix
+
     const port = configService.get<number>('PORT', 4001);
     await app.listen(port);
     console.log(`🚀 User Service running on: http://localhost:${port}`);

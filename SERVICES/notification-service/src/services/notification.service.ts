@@ -42,11 +42,10 @@ export class NotificationService {
      * Send email verification to user
      */
     async sendVerificationEmail(userId: string, email: string, confirmationUrl: string) {
-        // Extract verification code from URL if present, otherwise use last 6 chars of userId
-        const tokenPart = confirmationUrl.split('token=')[1];
-        const verificationCode = tokenPart
-            ? tokenPart.substring(0, 6).toUpperCase()
-            : userId.substring(0, 6).toUpperCase();
+        // Extract verification code from URL if present
+        const tokenMatch = confirmationUrl.match(/token=([^&]+)/);
+        const token = tokenMatch ? tokenMatch[1] : null;
+        const verificationCode = (token || userId).substring(0, 6).toUpperCase();
 
         return this.sendEmailNotification(userId, {
             to: email,
@@ -55,6 +54,7 @@ export class NotificationService {
             data: {
                 fullName: email.split('@')[0],
                 verificationCode,
+                verificationLink: confirmationUrl,
             }
         });
     }

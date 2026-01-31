@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@boldmind/auth": "workspace:*",
+    "@boldmind/config": "workspace:*",
     "@nestjs/axios": "^4.0.1",
     "@nestjs/common": "^10.4.22",
     "@nestjs/config": "^3.3.0",

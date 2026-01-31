@@ -47,6 +47,28 @@ router.post('/', async (req: Request, res: Response) => {
             console.log('[Auth Webhook] Request from:', origin);
         }
 
+        // Initialize Supabase Admin Client
+        const supabaseUrl = process.env['SUPABASE_URL'] || process.env['NEXT_PUBLIC_SUPABASE_URL'];
+        const supabaseServiceKey = process.env['SUPABASE_SERVICE_ROLE_KEY'] || process.env['SUPABASE_SERVICE_KEY'];
+        let supabaseAdmin: any = null;
+
+        if (supabaseUrl && supabaseServiceKey) {
+            try {
+                const { createClient } = require('@supabase/supabase-js');
+                supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
+                    auth: {
+                        autoRefreshToken: false,
+                        persistSession: false
+                    }
+                });
+                console.log('[Auth Webhook] Supabase Admin client initialized successfully');
+            } catch (err) {
+                console.error('[Auth Webhook] Error creating Supabase client:', err);
+            }
+        } else {
+            console.warn('[Auth Webhook] Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY. Cannot generate verification links.');
+        }
+
         const { type, record } = req.body;
         const appUrl = process.env['NEXT_PUBLIC_APP_URL'] || 'https://boldmind.ng';
 
@@ -58,16 +80,77 @@ router.post('/', async (req: Request, res: Response) => {
 
         switch (type) {
             case 'INSERT': {
-                // New user signup - send verification email
-                const { id, email, confirmation_token } = record;
+                // New user signup
+                const { id, email, raw_user_meta_data, email_confirmed_at } = record;
 
-                if (email && confirmation_token) {
-                    const confirmationUrl = `${appUrl}/auth/callback?token=${confirmation_token}&type=signup`;
+                if (email) {
+                    // Check if user is already confirmed (e.g. Social Login or Email configured to auto-confirm)
+                    // Note: checking if email_confirmed_at is truthy ("2026-..." string) or null
+                    const isConfirmed = !!email_confirmed_at;
 
-                    await notificationService.sendVerificationEmail(id, email, confirmationUrl);
-                    console.log(`[Auth Webhook] Sent verification email to ${email}`);
+                    if (!isConfirmed) {
+                        // User needs verification.
+                        // Since we don't have the raw confirmation_token, we must generate a new link via Admin API.
+                        let verificationLink = `${appUrl}/auth/callback?token=MISSING&type=signup`; // Fallback
+
+                        if (supabaseAdmin) {
+                            try {
+                                console.log(`[Auth Webhook] Generating verification link for ${email}...`);
+                                // "signup" type returns a link to confirm the user signup
+                                const { data, error } = await supabaseAdmin.auth.admin.generateLink({
+                                    type: 'signup',
+                                    email: email,
+                                    options: {
+                                        redirectTo: `${appUrl}/auth/callback`
+                                    }
+                                });
+
+                                if (error) {
+                                    console.error('[Auth Webhook] signup link generation error details:', {
+                                        message: error.message,
+                                        status: error.status,
+                                        name: error.name
+                                    });
+                                    // Handle case where user already exists (common on INSERT webhook)
+                                    if (error.message?.includes('already been registered') || error.status === 422) {
+                                        console.log('[Auth Webhook] User exists, falling back to magiclink generation...');
+                                        const { data: magicData, error: magicError } = await supabaseAdmin.auth.admin.generateLink({
+                                            type: 'magiclink',
+                                            email: email,
+                                            options: {
+                                                redirectTo: `${appUrl}/auth/callback`
+                                            }
+                                        });
+
+                                        if (magicError) {
+                                            console.error('[Auth Webhook] Failed to generate magiclink:', magicError);
+                                        } else if (magicData?.properties?.action_link) {
+                                            verificationLink = magicData.properties.action_link;
+                                            console.log('[Auth Webhook] Generated magiclink successfully');
+                                        }
+                                    } else {
+                                        console.error('[Auth Webhook] Failed to generate link:', error);
+                                    }
+                                } else if (data?.properties?.action_link) {
+                                    verificationLink = data.properties.action_link;
+                                    console.log('[Auth Webhook] Generated verification link successfully');
+                                }
+                            } catch (e) {
+                                console.error('[Auth Webhook] Exception generating link:', e);
+                            }
+                        }
+
+                        // Send the email with the (hopefully generated) link
+                        await notificationService.sendVerificationEmail(id, email, verificationLink);
+                        console.log(`[Auth Webhook] Sent verification email to ${email} with link: ${verificationLink}`);
+
+                    } else {
+                        // User is already confirmed (e.g. Google Auth) -> Send Welcome Email
+                        const userName = raw_user_meta_data?.name || raw_user_meta_data?.full_name || raw_user_meta_data?.fullName;
+                        await notificationService.sendWelcomeEmail(id, email, userName);
+                        console.log(`[Auth Webhook] Sent welcome email to ${email}`);
+                    }
                 }
-
                 break;
             }
 
@@ -81,20 +164,16 @@ router.post('/', async (req: Request, res: Response) => {
                     await notificationService.sendPasswordResetEmail(id, email, resetUrl);
                     console.log(`[Auth Webhook] Sent password reset email to ${email}`);
                 }
-
                 break;
             }
 
             case 'user.created': {
-                // New user created (alternative event for signup)
+                // Redundant fall-back
                 const { id, email, raw_user_meta_data } = record;
-
                 if (email) {
-                    const userName = raw_user_meta_data?.name || raw_user_meta_data?.full_name;
+                    const userName = raw_user_meta_data?.name || raw_user_meta_data?.full_name || raw_user_meta_data?.fullName;
                     await notificationService.sendWelcomeEmail(id, email, userName);
-                    console.log(`[Auth Webhook] Sent welcome email to ${email}`);
                 }
-
                 break;
             }
 

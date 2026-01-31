@@ -19,9 +19,9 @@ export async function GET(request: Request) {
     }
 
     if (!code) {
-        return NextResponse.redirect(
-            `${origin}/login?error=missing-code&message=${encodeURIComponent('No authorization code received')}`
-        );
+        // Fallback to client-side page for checking fragments (#access_token=...)
+        // This is necessary for magic links and some OAuth providers.
+        return NextResponse.redirect(`${origin}/auth/callback`);
     }
 
     try {

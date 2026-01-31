@@ -21,7 +21,8 @@ export class EmailProvider {
             case 'verify':
                 template = React.createElement(VerifyEmail, {
                     fullName: data.fullName,
-                    verificationCode: data.verificationCode
+                    verificationCode: data.verificationCode,
+                    verificationLink: data.verificationLink
                 });
                 break;
             case 'reset_password':

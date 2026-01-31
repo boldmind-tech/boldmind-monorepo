@@ -3,9 +3,10 @@ import * as React from 'react';
 interface VerifyEmailProps {
     fullName: string;
     verificationCode: string;
+    verificationLink?: string;
 }
 
-export const VerifyEmail: React.FC<VerifyEmailProps> = ({ fullName, verificationCode }) => (
+export const VerifyEmail: React.FC<VerifyEmailProps> = ({ fullName, verificationCode, verificationLink }) => (
     <div style={{
         fontFamily: 'system-ui, -apple-system, sans-serif',
         backgroundColor: '#f9fafb',
@@ -34,20 +35,44 @@ export const VerifyEmail: React.FC<VerifyEmailProps> = ({ fullName, verification
             </h2>
 
             <p style={{ fontSize: '16px', lineHeight: '24px', color: '#4b5563', marginBottom: '24px' }}>
-                Thanks for starting your journey with BoldMind! Please use the following code to verify your email address and complete your registration:
+                Thanks for starting your journey with BoldMind! Please click the button below to verify your email address and complete your registration:
+            </p>
+
+            {verificationLink && (
+                <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+                    <a
+                        href={verificationLink}
+                        style={{
+                            backgroundColor: '#00143C',
+                            color: '#ffffff',
+                            padding: '12px 32px',
+                            borderRadius: '8px',
+                            textDecoration: 'none',
+                            fontWeight: '600',
+                            display: 'inline-block',
+                            boxShadow: '0 4px 6px -1px rgba(0, 20, 60, 0.2)'
+                        }}
+                    >
+                        Verify Account
+                    </a>
+                </div>
+            )}
+
+            <p style={{ fontSize: '14px', lineHeight: '20px', color: '#6b7280', marginBottom: '16px', textAlign: 'center' }}>
+                Or use the following code if the button doesn't work:
             </p>
 
             <div style={{
                 backgroundColor: '#f3f4f6',
                 borderRadius: '12px',
-                padding: '24px',
+                padding: '16px',
                 textAlign: 'center',
                 marginBottom: '24px'
             }}>
                 <span style={{
-                    fontSize: '32px',
+                    fontSize: '24px',
                     fontWeight: '800',
-                    letterSpacing: '8px',
+                    letterSpacing: '4px',
                     color: '#00143C'
                 }}>
                     {verificationCode}

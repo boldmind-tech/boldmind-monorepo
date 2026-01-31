@@ -433,7 +433,22 @@ export function ThemeProvider({
   // Don't render children until initialized to avoid hydration mismatch
   if (theme === undefined || dyslexiaMode === undefined || !productTheme) {
     console.log('Theme: Not rendering children, waiting for initialization');
-    return null;
+    return (
+      <div
+        className="fixed inset-0 flex items-center justify-center bg-white dark:bg-gray-950 z-[9999]"
+        style={{
+          backgroundColor: productTheme?.colors?.background || undefined,
+          color: productTheme?.colors?.primary || undefined
+        }}
+      >
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-[#00143C]/10 border-t-[#00143C] rounded-full animate-spin" />
+          <span className="font-bold tracking-widest text-[#00143C] dark:text-white uppercase text-xs animate-pulse">
+            BoldMind Technology
+          </span>
+        </div>
+      </div>
+    );
   }
 
   // Context value

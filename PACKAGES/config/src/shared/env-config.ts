@@ -312,6 +312,49 @@ export const ENV_CONFIG = {
     ENABLE_PAYMENTS: process.env['NEXT_PUBLIC_ENABLE_PAYMENTS'] === 'true',
     ENABLE_AI_FEATURES: process.env['NEXT_PUBLIC_ENABLE_AI_FEATURES'] === 'true',
   },
+
+  // ==================== SERVICE PORTS ====================
+  // Single source of truth for all service ports
+  SERVICE_PORTS: {
+    // Shared services
+    GATEWAY: 4000,
+    USER: 4001,
+    PAYMENT: 4002,
+    NOTIFICATION: 4006,
+    MEDIA: 4004,
+    ANALYTICS: 4005,
+    AI: 4007, // Use 4007 to avoid conflict with Notification (4006)
+
+    // Product-specific services
+    EDUCENTER: 4010,
+    AMEBOGIST: 4011,
+    BOLDMIND_OS: 4012,
+    NAIJA_FITHER: 4013,
+    EMAILSCRAPER_PRO: 4014,
+    SOCIAL_FACTORY: 4015,
+    SAFE_AI: 4016,
+    AI_RECEPTIONIST: 4017,
+    PLANAI_SUITE: 4018,
+    BOLDMIND_HUB: 4019,
+    CREDIBILITY_HUBS: 4020,
+    BUSINESS_PLANNING: 4021,
+    FINANCIAL_FORECASTING: 4022,
+    INVESTOR_READINESS: 4023,
+    BRANDING_DESIGN: 4024,
+    DIGITAL_STOREFRONTS: 4025,
+    MARKETING_AUTOMATION: 4026,
+    ANALYTICS_DASHBOARD: 4027,
+    NAIJAGIG_MATCHER: 4028,
+    KOLO_AI: 4029,
+    BORDERLESS_REMIT: 4030,
+    RECEIPT_GENIUS: 4031,
+    POWER_ALERT: 4032,
+    FARMGATE_DIRECT: 4033,
+    AFROCOPY_AI: 4034,
+    SKILL2CASH: 4035,
+    ANONTRUTH_MIC: 4036,
+    AFROHUSTLE_OS: 4037,
+  },
 };
 
 // Helper function to convert app name to domain key

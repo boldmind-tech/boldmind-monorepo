@@ -1,13 +1,74 @@
+//APPS/WEB_APPS/boldmind-hub/app/(auth)/verify-email/page.tsx
 'use client';
 
 import { motion } from 'framer-motion';
-import { Mail, ArrowRight, CheckCircle2, Inbox } from 'lucide-react';
+import { Mail, ArrowRight, Inbox, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@boldmind/auth';
+import { toast } from 'sonner';
 
 export default function VerifyEmailPage() {
     const searchParams = useSearchParams();
-    const email = searchParams.get('email') || 'your email';
+    const router = useRouter();
+    const { verifyEmailCode, resendVerification, isAuthenticated, isLoading: authLoading } = useAuth();
+
+    const email = searchParams.get('email') || '';
+    const [code, setCode] = useState('');
+    const [isVerifying, setIsVerifying] = useState(false);
+    const [isResending, setIsResending] = useState(false);
+
+    // If suddenly authenticated (e.g. from clicking the link in another tab)
+    useEffect(() => {
+        if (isAuthenticated) {
+            router.push('/dashboard');
+        }
+    }, [isAuthenticated, router]);
+
+    const handleVerify = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!email) {
+            toast.error('Email is missing. please try to register again.');
+            return;
+        }
+        if (code.length < 6) {
+            toast.error('Please enter the 6-digit code');
+            return;
+        }
+
+        setIsVerifying(true);
+        try {
+            await verifyEmailCode(email, code);
+            toast.success('Email verified successfully!');
+            router.push('/dashboard');
+        } catch (error: any) {
+            toast.error(error.message || 'Verification failed. Please check the code.');
+        } finally {
+            setIsVerifying(false);
+        }
+    };
+
+    const handleResend = async () => {
+        if (!email) {
+            toast.error('Email is missing.');
+            return;
+        }
+
+        setIsResending(true);
+        try {
+            const result = await resendVerification(email);
+            if (result.success) {
+                toast.success('Verification email resent successfully!');
+            } else {
+                toast.error(result.error || 'Failed to resend email');
+            }
+        } catch (error: any) {
+            toast.error('Failed to resend email');
+        } finally {
+            setIsResending(false);
+        }
+    };
 
     return (
         <div className="w-full max-w-md mx-auto">
@@ -25,28 +86,53 @@ export default function VerifyEmailPage() {
                     Check Your Email
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400 text-lg">
-                    We've sent a confirmation link to <span className="font-bold text-gray-900 dark:text-white">{email}</span>
+                    We've sent a verification code to <span className="font-bold text-gray-900 dark:text-white">{email || 'your email'}</span>
                 </p>
             </div>
 
             <div className="bg-white dark:bg-gray-900 rounded-3xl p-8 border border-gray-100 dark:border-gray-800 shadow-xl shadow-blue-900/5 mb-8">
-                <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-6">Next Steps</h2>
+                <form onSubmit={handleVerify} className="mb-8">
+                    <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                        Verification Code
+                    </label>
+                    <div className="flex gap-4 mb-4">
+                        <input
+                            type="text"
+                            maxLength={6}
+                            value={code}
+                            onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
+                            placeholder="123456"
+                            className="w-full py-4 px-6 bg-gray-50 dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-2xl text-center text-2xl font-black tracking-[0.5em] focus:border-[#00143C] dark:focus:border-[#FFC800] outline-none transition-all placeholder:tracking-normal placeholder:font-normal placeholder:text-gray-300"
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        disabled={isVerifying || code.length < 6}
+                        className="w-full py-4 px-6 bg-[#00143C] text-white font-bold rounded-2xl hover:bg-[#00256B] disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+                    >
+                        {isVerifying ? (
+                            <>
+                                <Loader2 size={20} className="animate-spin" />
+                                Verifying...
+                            </>
+                        ) : (
+                            'Verify Account'
+                        )}
+                    </button>
+                </form>
+
+                <h2 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-6">Alternatively</h2>
 
                 <div className="space-y-6">
                     <Step
                         icon={<Inbox className="text-blue-500" />}
-                        title="Open your inbox"
-                        description="Look for an email from BoldMind with the subject 'Confirm your email'."
-                    />
-                    <Step
-                        icon={<CheckCircle2 className="text-green-500" />}
-                        title="Click the link"
-                        description="Hit the confirmation button in the email to verify your account."
+                        title="Click the magic link"
+                        description="You can also click the button in the email to verify instantly."
                     />
                     <Step
                         icon={<ArrowRight className="text-purple-500" />}
                         title="Start building"
-                        description="You'll be redirected to your dashboard to start your entrepreneurial journey."
+                        description="Once verified, you'll be redirected to your dashboard automatically."
                     />
                 </div>
             </div>
@@ -57,19 +143,20 @@ export default function VerifyEmailPage() {
                 </p>
 
                 <div className="flex flex-col gap-3">
+                    <button
+                        onClick={handleResend}
+                        disabled={isResending}
+                        className="text-[#00143C] dark:text-[#FFC800] font-bold hover:underline disabled:opacity-50"
+                    >
+                        {isResending ? 'Sending...' : 'Resend Verification Email'}
+                    </button>
+
                     <Link
                         href="/login"
-                        className="w-full py-4 px-6 bg-[#00143C] text-white font-bold rounded-2xl hover:bg-[#00256B] transition-all flex items-center justify-center gap-2"
+                        className="text-gray-500 dark:text-gray-400 text-sm hover:underline"
                     >
                         Back to Login
                     </Link>
-
-                    <button
-                        onClick={() => window.location.reload()}
-                        className="text-[#00143C] dark:text-[#FFC800] font-bold hover:underline"
-                    >
-                        Resend Email
-                    </button>
                 </div>
             </div>
         </div>

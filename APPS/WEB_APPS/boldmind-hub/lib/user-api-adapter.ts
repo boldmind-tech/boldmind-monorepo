@@ -22,9 +22,9 @@ export const userAPIAdapter: UserAPI = {
      */
     async getMe() {
         try {
-            console.log('[userAPIAdapter] Fetching current user...');
+            console.log('[userAPIAdapter] Fetching current user via Gateway...');
 
-            const response = await api.user.get('/users/me');
+            const response = await api.gateway.get('/users/me');
 
             console.log('[userAPIAdapter] User fetched successfully:', response);
 

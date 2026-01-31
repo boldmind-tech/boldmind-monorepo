@@ -1,6 +1,3 @@
-# Render.com Configuration for BoldMind Services
-# This file defines all backend services deployment
-
 services:
   # API Gateway
   - type: web
@@ -32,8 +29,27 @@ services:
           type: web
           name: boldmind-payment-service
           property: host
-
-  # User Service
+      - key: HUB_SERVICE_URL
+        fromService:
+          type: web
+          name: boldmind-hub-services
+          property: host
+      - key: EDUCENTER_SERVICE_URL
+        fromService:
+          type: web
+          name: boldmind-educenter-service
+          property: host
+      - key: AMEBOGIST_SERVICE_URL
+        fromService:
+          type: web
+          name: boldmind-amebogist-service
+          property: host
+      - key: BOLDMIND_OS_SERVICE
+        fromService:
+          type: web  
+          name: boldmind-os-service
+          property: host
+  
   - type: web
     name: boldmind-user-service
     runtime: node
@@ -127,4 +143,44 @@ services:
       - key: DATABASE_URL
         sync: false
       - key: HUB_SERVICE_DATABASE_URL
+        sync: false
+
+  # Amebogist Services
+  - type: web
+    name: boldmind-amebogist-services
+    runtime: node
+    region: oregon
+    plan: free
+    branch: main
+    rootDir: SERVICES/amebogist-services
+    buildCommand: pnpm install && pnpm prisma:generate && pnpm build
+    startCommand: pnpm prisma:migrate && pnpm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4004
+      - key: DATABASE_URL
+        sync: false
+      - key: AMEBOGIST_SERVICE_DATABASE_URL
+        sync: false
+
+  # Educenter Services
+  - type: web
+    name: boldmind-educenter-services
+    runtime: node
+    region: oregon
+    plan: free
+    branch: main
+    rootDir: SERVICES/educenter-services
+    buildCommand: pnpm install && pnpm prisma:generate && pnpm build
+    startCommand: pnpm prisma:migrate && pnpm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4004
+      - key: DATABASE_URL
+        sync: false
+      - key: AMEBOGIST_SERVICE_DATABASE_URL
         sync: false
