@@ -3,10 +3,10 @@
 
 import { Router } from 'express';
 import { prisma } from '../index';
-import { PaystackProvider } from '../providers/paystack.provider';
+// import { PaystackProvider } from '../providers/paystack.provider';
 
-const router = Router();
-const paystackProvider = new PaystackProvider();
+const router: Router = Router();
+// const paystackProvider = new PaystackProvider();
 
 // Request payout
 router.post('/', async (req, res, next) => {

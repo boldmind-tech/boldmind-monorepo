@@ -1,7 +1,7 @@
 
 // SERVICES/payment-service/src/services/payment.service.ts
 
-import { PrismaClient, PaymentStatus, PaymentProvider } from '@prisma/client';
+import { PrismaClient, PaymentStatus, PaymentProvider } from '../generated/client';
 import { PaystackProvider } from '../providers/paystack.provider';
 import { FlutterwaveProvider } from '../providers/flutterwave.provider';
 
@@ -31,8 +31,7 @@ export class PaymentService {
         const payment = await this.prisma.payment.create({
             data: {
                 userId: params.userId,
-                subscriptionId: params.subscriptionId,
-                invoiceId: params.invoiceId,
+
                 amount: params.amount,
                 currency: params.currency,
                 provider,
@@ -40,8 +39,10 @@ export class PaymentService {
                 status: PaymentStatus.PENDING,
                 providerRef: reference,
                 customerEmail: params.email,
-                customerPhone: params.phone,
-                description: params.description,
+                ...(params.subscriptionId ? { subscriptionId: params.subscriptionId } : {}),
+                ...(params.invoiceId ? { invoiceId: params.invoiceId } : {}),
+                ...(params.phone ? { customerPhone: params.phone } : {}),
+                ...(params.description ? { description: params.description } : {}),
                 metadata: params.metadata || {},
             },
         });
@@ -59,7 +60,7 @@ export class PaymentService {
                     userId: params.userId,
                     ...params.metadata,
                 },
-                callbackUrl: process.env.PAYMENT_CALLBACK_URL,
+                callbackUrl: process.env.PAYMENT_CALLBACK_URL || '',
             });
         } else {
             providerResponse = await this.flutterwaveProvider.initializePayment({
@@ -69,7 +70,7 @@ export class PaymentService {
                 redirectUrl: process.env.PAYMENT_CALLBACK_URL!,
                 customer: {
                     email: params.email,
-                    phonenumber: params.phone,
+                    ...(params.phone ? { phonenumber: params.phone } : {}),
                 },
                 meta: {
                     paymentId: payment.id,

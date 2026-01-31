@@ -6,7 +6,7 @@ import { PaymentService } from '../services/payment.service';
 import { PaystackProvider } from '../providers/paystack.provider';
 import { FlutterwaveProvider } from '../providers/flutterwave.provider';
 
-const router = Router();
+const router: Router = Router();
 const paymentService = new PaymentService(
     prisma,
     new PaystackProvider(),

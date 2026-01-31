@@ -7,7 +7,7 @@ import { PaystackProvider } from '../providers/paystack.provider';
 import { FlutterwaveProvider } from '../providers/flutterwave.provider';
 import { PaymentService } from '../services/payment.service';
 
-const router = Router();
+const router: Router = Router();
 const paystackProvider = new PaystackProvider();
 const flutterwaveProvider = new FlutterwaveProvider();
 const paymentService = new PaymentService(
@@ -23,7 +23,8 @@ router.post('/paystack', async (req, res, next) => {
         const body = JSON.stringify(req.body);
 
         if (!paystackProvider.verifyWebhookSignature(signature, body)) {
-            return res.status(400).json({ error: 'Invalid signature' });
+            res.status(400).json({ error: 'Invalid signature' });
+            return;
         }
 
         const event = req.body;
@@ -57,8 +58,8 @@ router.post('/paystack', async (req, res, next) => {
                             where: { id: payoutId },
                             data: {
                                 status,
-                                completedAt: status === 'COMPLETED' ? new Date() : undefined,
-                                failureReason: status === 'FAILED' ? event.data.reason : undefined,
+                                completedAt: status === 'COMPLETED' ? new Date() : null,
+                                failureReason: status === 'FAILED' ? event.data.reason : null,
                             },
                         });
                     }
@@ -88,12 +89,13 @@ router.post('/flutterwave', async (req, res, next) => {
         const signature = req.headers['verif-hash'] as string;
 
         if (signature !== process.env.FLUTTERWAVE_SECRET_HASH) {
-            return res.status(400).json({ error: 'Invalid signature' });
+            res.status(400).json({ error: 'Invalid signature' });
+            return;
         }
 
         const event = req.body;
 
-        const webhook = await prisma.paymentWebhook.create({
+        await prisma.paymentWebhook.create({
             data: {
                 provider: 'FLUTTERWAVE',
                 event: event.event,

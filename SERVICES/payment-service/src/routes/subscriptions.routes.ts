@@ -4,7 +4,7 @@
 import { Router } from 'express';
 import { prisma } from '../index';
 
-const router = Router();
+const router: Router = Router();
 
 // Create subscription
 router.post('/', async (req, res, next) => {
