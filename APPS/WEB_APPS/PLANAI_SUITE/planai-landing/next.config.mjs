@@ -13,11 +13,12 @@ const nextConfig = {
     '@boldmind/ui',
     '@boldmind/utils',
     '@boldmind/auth',
+    '@boldmind/config',
   ],
 
   experimental: {
     serverComponentsExternalPackages: ['mongoose', 'mongodb'],
-    outputFileTracingRoot: path.join(__dirname, '../../')
+    outputFileTracingRoot: path.join(__dirname, '../../../../')
   },
 
   images: {

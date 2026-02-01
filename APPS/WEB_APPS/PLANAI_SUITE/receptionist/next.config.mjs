@@ -1,4 +1,8 @@
-const path = require('path');
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -8,12 +12,15 @@ const nextConfig = {
     '@boldmind/ui',
     '@boldmind/utils',
     '@boldmind/auth',
+    '@boldmind/api-client',
+    '@boldmind/ai',
+    '@boldmind/payments',
+    '@boldmind/config',
   ],
-
 
   experimental: {
     serverComponentsExternalPackages: ['mongoose', 'mongodb'],
-    outputFileTracingRoot: path.join(__dirname, '../../')
+    outputFileTracingRoot: path.join(__dirname, '../../../../')
   },
 
   images: {
@@ -28,4 +35,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;

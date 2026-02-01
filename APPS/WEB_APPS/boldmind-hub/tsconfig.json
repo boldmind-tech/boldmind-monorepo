@@ -7,7 +7,7 @@
         "./src/*"
       ],
       "@boldmind/*": [
-        "../../../PACKAGES/*/dist"
+        "../../../PACKAGES/*/src"
       ]
     },
     "incremental": true,
