@@ -7,7 +7,7 @@
     "dev": "next dev",
     "prebuild": "pnpm --filter '@boldmind/ui' --filter '@boldmind/utils' --filter '@boldmind/auth' --filter '@boldmind/api-client' build",
     "build": "next build",
-    "deploy": "pnpm prebuild && pnpm build",
+    "deploy": "cd ../../.. && pnpm turbo build --filter=@boldmind/amebogist",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit"

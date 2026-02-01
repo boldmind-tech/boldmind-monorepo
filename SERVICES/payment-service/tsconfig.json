@@ -15,6 +15,12 @@
     ],
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "sourceMap": true,
+    "paths": {
+      "@boldmind/prisma-payment": [
+        "./node_modules/.prisma/client/payment-service"
+      ]
+    }
   },
   "include": [
     "src/**/*"

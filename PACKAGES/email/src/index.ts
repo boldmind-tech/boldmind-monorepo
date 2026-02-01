@@ -1,4 +1,4 @@
-export * from './service';
-export { WelcomeEmail } from './templates/WelcomeEmail';
-export { VerifyEmail } from './templates/VerifyEmail';
-export { ResetPasswordEmail } from './templates/ResetPasswordEmail';
+export * from './service.js';
+export { WelcomeEmail } from './templates/WelcomeEmail.js';
+export { VerifyEmail } from './templates/VerifyEmail.js';
+export { ResetPasswordEmail } from './templates/ResetPasswordEmail.js';

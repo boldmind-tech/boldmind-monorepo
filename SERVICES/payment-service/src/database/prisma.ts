@@ -1,4 +1,4 @@
-// SERVICES/educenter-service/src/database/prisma.ts
+// SERVICES/payment-service/src/database/prisma.ts
 import dotenv from 'dotenv';
 
 // Load env vars BEFORE importing PrismaClient

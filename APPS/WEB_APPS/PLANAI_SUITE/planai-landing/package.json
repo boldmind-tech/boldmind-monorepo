@@ -6,7 +6,7 @@
     "dev": "next dev",
     "prebuild": "pnpm --filter '@boldmind/ui' --filter '@boldmind/utils' build",
     "build": "next build",
-    "deploy": "pnpm prebuild && pnpm build",
+    "deploy": "cd ../../../../ && pnpm turbo build --filter=@boldmind/planai-landing",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit"
@@ -15,22 +15,22 @@
     "@boldmind/ui": "workspace:*",
     "@boldmind/utils": "workspace:*",
     "autoprefixer": "10.4.16",
+    "cookie": "^1.1.1",
     "framer-motion": "^10.16.4",
     "lucide-react": "^0.309.0",
     "next": "14.2.35",
     "postcss": "8.4.31",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "tailwindcss": "3.3.6",
-    "cookie": "^1.1.1"
+    "tailwindcss": "3.3.6"
   },
   "devDependencies": {
-    "@types/node": "20.10.5",
     "@types/cookie": "^0.6.0",
-    "@types/react": "18.2.45",
+    "@types/node": "20.19.30",
+    "@types/react": "18.3.27",
     "@types/react-dom": "18.2.18",
     "eslint": "8.55.0",
     "eslint-config-next": "14.0.4",
-    "typescript": "5.3.3"
+    "typescript": "5.9.3"
   }
 }
