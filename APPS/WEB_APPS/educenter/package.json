@@ -35,14 +35,14 @@
     "recharts": "^2.10.3",
     "tailwind-merge": "^2.1.0",
     "tailwindcss": "^3.4.1",
-    "framer-motion": "^12.29.2"
-  },
-  "devDependencies": {
+    "framer-motion": "^12.29.2",
     "@types/node": "^20.11.3",
     "@types/react": "^18.3.27",
     "@types/react-dom": "^18.3.7",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.35",
     "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "eslint": "^8",
+    "eslint-config-next": "14.2.35"
   }
 }
