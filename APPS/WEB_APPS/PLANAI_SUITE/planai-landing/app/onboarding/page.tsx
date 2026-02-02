@@ -2,11 +2,10 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  CheckCircle, 
-  MessageSquare, 
-  Users, 
-  Target, 
+import {
+  CheckCircle,
+  MessageSquare,
+  Target,
   Zap,
   ArrowRight
 } from 'lucide-react';
@@ -60,7 +59,7 @@ export default function PlanAIOnboarding() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),
     });
-    
+
     if (response.ok) {
       setStep(6); // Success step
     }
@@ -119,7 +118,7 @@ export default function PlanAIOnboarding() {
             className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
           >
             <h2 className="text-2xl font-bold mb-6">Tell us about your business</h2>
-            
+
             <div className="space-y-6">
               <div>
                 <label className="block mb-2">Business Name *</label>
@@ -128,7 +127,7 @@ export default function PlanAIOnboarding() {
                   className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3"
                   placeholder="e.g., Naija Fashion House"
                   value={formData.businessName}
-                  onChange={(e) => setFormData({...formData, businessName: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
                 />
               </div>
 
@@ -138,12 +137,11 @@ export default function PlanAIOnboarding() {
                   {industries.map((industry) => (
                     <button
                       key={industry}
-                      className={`p-4 rounded-lg border-2 transition-all ${
-                        formData.industry === industry
+                      className={`p-4 rounded-lg border-2 transition-all ${formData.industry === industry
                           ? 'border-blue-500 bg-blue-500/20'
                           : 'border-white/10 hover:border-white/30'
-                      }`}
-                      onClick={() => setFormData({...formData, industry})}
+                        }`}
+                      onClick={() => setFormData({ ...formData, industry })}
                     >
                       {industry}
                     </button>
@@ -178,21 +176,20 @@ export default function PlanAIOnboarding() {
             className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
           >
             <h2 className="text-2xl font-bold mb-6">Where do you connect with customers?</h2>
-            
+
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
               {platforms.map((platform) => (
                 <button
                   key={platform.id}
-                  className={`p-6 rounded-xl border-2 transition-all flex flex-col items-center ${
-                    formData.platforms.includes(platform.id)
+                  className={`p-6 rounded-xl border-2 transition-all flex flex-col items-center ${formData.platforms.includes(platform.id)
                       ? 'border-blue-500 bg-blue-500/20'
                       : 'border-white/10 hover:border-white/30'
-                  }`}
+                    }`}
                   onClick={() => {
                     const newPlatforms = formData.platforms.includes(platform.id)
                       ? formData.platforms.filter(p => p !== platform.id)
                       : [...formData.platforms, platform.id];
-                    setFormData({...formData, platforms: newPlatforms});
+                    setFormData({ ...formData, platforms: newPlatforms });
                   }}
                 >
                   <span className="text-3xl mb-2">{platform.icon}</span>
@@ -227,21 +224,20 @@ export default function PlanAIOnboarding() {
             className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
           >
             <h2 className="text-2xl font-bold mb-6">What do you want to achieve?</h2>
-            
+
             <div className="grid grid-cols-2 gap-4 mb-8">
               {goals.map((goal) => (
                 <button
                   key={goal}
-                  className={`p-4 rounded-lg border-2 transition-all text-left ${
-                    formData.goals.includes(goal)
+                  className={`p-4 rounded-lg border-2 transition-all text-left ${formData.goals.includes(goal)
                       ? 'border-green-500 bg-green-500/20'
                       : 'border-white/10 hover:border-white/30'
-                  }`}
+                    }`}
                   onClick={() => {
                     const newGoals = formData.goals.includes(goal)
                       ? formData.goals.filter(g => g !== goal)
                       : [...formData.goals, goal];
-                    setFormData({...formData, goals: newGoals});
+                    setFormData({ ...formData, goals: newGoals });
                   }}
                 >
                   <div className="flex items-center gap-3">
@@ -277,7 +273,7 @@ export default function PlanAIOnboarding() {
             className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
           >
             <h2 className="text-2xl font-bold mb-6">What's your budget?</h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
               {[
                 { range: '₦10k-₦30k', label: 'Starter', features: ['1 Platform', 'Basic AI'] },
@@ -286,12 +282,11 @@ export default function PlanAIOnboarding() {
               ].map((plan) => (
                 <button
                   key={plan.range}
-                  className={`p-6 rounded-xl border-2 transition-all ${
-                    formData.budget === plan.range
+                  className={`p-6 rounded-xl border-2 transition-all ${formData.budget === plan.range
                       ? 'border-purple-500 bg-purple-500/20'
                       : 'border-white/10 hover:border-white/30'
-                  }`}
-                  onClick={() => setFormData({...formData, budget: plan.range})}
+                    }`}
+                  onClick={() => setFormData({ ...formData, budget: plan.range })}
                 >
                   <div className="text-center mb-4">
                     <div className="text-2xl font-bold">{plan.range}</div>
@@ -335,7 +330,7 @@ export default function PlanAIOnboarding() {
             className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
           >
             <h2 className="text-2xl font-bold mb-6">Review your setup</h2>
-            
+
             <div className="space-y-6 mb-8">
               <div className="grid grid-cols-2 gap-6">
                 <div className="bg-white/5 p-4 rounded-lg">
@@ -343,12 +338,12 @@ export default function PlanAIOnboarding() {
                   <div className="font-bold">{formData.businessName}</div>
                   <div className="text-sm">{formData.industry}</div>
                 </div>
-                
+
                 <div className="bg-white/5 p-4 rounded-lg">
                   <div className="text-gray-400 text-sm">Platforms</div>
                   <div className="font-bold">{formData.platforms.length} platforms</div>
                   <div className="text-sm">
-                    {formData.platforms.map(p => 
+                    {formData.platforms.map(p =>
                       platforms.find(pl => pl.id === p)?.name
                     ).join(', ')}
                   </div>
@@ -402,7 +397,7 @@ export default function PlanAIOnboarding() {
             <p className="text-xl text-gray-300 mb-8">
               Your AI assistant is now being configured for {formData.businessName}
             </p>
-            
+
             <div className="max-w-md mx-auto space-y-4 mb-8">
               <div className="bg-white/5 p-4 rounded-lg">
                 <div className="flex items-center gap-3">

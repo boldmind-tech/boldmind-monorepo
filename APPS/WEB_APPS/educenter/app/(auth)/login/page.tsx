@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { loginWithEmail, loginWithOAuth, GoogleProvider } from "@boldmind/auth";
+import { loginWithEmail, loginWithOAuth } from "@boldmind/auth";
 import toast from 'react-hot-toast';
 import { Mail, Lock, Eye, EyeOff, School } from 'lucide-react';
 
@@ -15,37 +15,37 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!email || !password) {
-    toast.error("Please fill in all fields");
-    return;
-  }
+    if (!email || !password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
 
-  setLoading(true);
-  try {
-    await loginWithEmail(email, password);
-    toast.success("Welcome back!");
-    router.push("/dashboard");
-  } catch (error: any) {
-    toast.error(error.message || "Login failed");
-  } finally {
-    setLoading(false);
-  }
-};
+    setLoading(true);
+    try {
+      await loginWithEmail(email, password);
+      toast.success("Welcome back!");
+      router.push("/dashboard");
+    } catch (error: any) {
+      toast.error(error.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-const handleGoogleLogin = async () => {
-  setLoading(true);
-  try {
-    await loginWithOAuth(GoogleProvider);
-    toast.success("Welcome back!");
-    router.push("/dashboard");
-  } catch (error: any) {
-    toast.error("Google login failed");
-  } finally {
-    setLoading(false);
-  }
-};
+  const handleGoogleLogin = async () => {
+    setLoading(true);
+    try {
+      await loginWithOAuth("google");
+      toast.success("Welcome back!");
+      router.push("/dashboard");
+    } catch (error: any) {
+      toast.error("Google login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   return (

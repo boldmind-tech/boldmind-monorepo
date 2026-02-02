@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 export default function VerifyEmailPage() {
     const searchParams = useSearchParams();
     const router = useRouter();
-    const { verifyEmailCode, resendVerification, isAuthenticated, isLoading: authLoading } = useAuth();
+    const { verifyEmailCode, resendVerification, isAuthenticated } = useAuth();
 
     const email = searchParams.get('email') || '';
     const [code, setCode] = useState('');

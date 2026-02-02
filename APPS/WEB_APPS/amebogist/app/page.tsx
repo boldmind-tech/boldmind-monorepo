@@ -341,7 +341,7 @@ export default async function Home({
   return (
     <>
       {/* Schema Markup */}
-      <Script
+      <script
         id="homepage-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
