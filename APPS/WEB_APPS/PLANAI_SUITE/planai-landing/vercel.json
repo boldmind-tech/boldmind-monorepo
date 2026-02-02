@@ -1,6 +1,4 @@
 {
-    "buildCommand": "pnpm turbo build --filter=@boldmind/planai-landing",
-    "outputDirectory": "APPS/WEB_APPS/PLANAI_SUITE/planai-landing/.next",
     "installCommand": "pnpm install --no-frozen-lockfile",
     "framework": "nextjs"
 }

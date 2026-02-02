@@ -1,6 +1,4 @@
 {
-    "buildCommand": "pnpm turbo build --filter=@boldmind/receptionist",
-    "outputDirectory": "APPS/WEB_APPS/PLANAI_SUITE/receptionist/.next",
     "installCommand": "pnpm install --no-frozen-lockfile",
     "framework": "nextjs"
 }

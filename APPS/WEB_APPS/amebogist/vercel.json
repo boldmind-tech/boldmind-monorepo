@@ -1,6 +1,4 @@
 {
-    "buildCommand": "pnpm turbo build --filter=@boldmind/amebogist",
-    "outputDirectory": "APPS/WEB_APPS/amebogist/.next",
     "installCommand": "pnpm install --no-frozen-lockfile",
     "framework": "nextjs"
 }
