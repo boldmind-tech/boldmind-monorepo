@@ -4,7 +4,7 @@ import { Providers } from './providers';
 import '@boldmind/ui/dist/index.css';
 import './globals.css';
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
@@ -13,7 +13,7 @@ const inter = Inter({
 
 // Generate canonical URL
 const getCanonicalUrl = () => {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://educenter.com.ng';
+  const baseUrl = process.env['NEXT_PUBLIC_APP_URL'] || 'https://educenter.com.ng';
   return baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
 };
 
@@ -91,9 +91,9 @@ export const metadata: Metadata = {
     images: [`${canonicalUrl}/og-image.png`],
   },
   verification: {
-    google: 'your-google-verification-code', 
-    yandex: 'your-yandex-verification-code', 
-    yahoo: 'your-yahoo-verification-code', 
+    google: 'lO8fyY68j1O89e_KL8MWdT2qkHzhOuR4yCAnirzDmS8',
+    yandex: 'f85df7dc30f788c9',
+    yahoo: 'your-yahoo-verification-code',
     other: {
       me: ['https://twitter.com/charlesuchech', 'https://linkedin.com/in/charliedotcom', 'https://facebook.com/cuche3', 'https://instagram.com/charleschijuka', 'https://youtube.com/Codefires'],
     },
@@ -191,25 +191,19 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://questions.aloc.com.ng" />
-        
+
         {/* DNS Prefetch */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
         <link rel="dns-prefetch" href="//questions.aloc.com.ng" />
-        
+        <meta name="yandex-verification" content="f85df7dc30f788c9" />
         {/* Structured Data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        
-        {/* Preload critical assets */}
-        <link
-          rel="preload"
-          href="/_next/static/css/app/layout.css"
-          as="style"
-        />
-        
+
+
         {/* Preload hero image if exists */}
         <link
           rel="preload"
@@ -220,7 +214,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} antialiased bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100`}>
         <Providers>{children}</Providers>
-        
+
         {/* Performance monitoring script (optional) */}
         {process.env.NODE_ENV === 'production' && (
           <script

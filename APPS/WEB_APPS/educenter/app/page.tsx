@@ -19,10 +19,7 @@ import {
   BarChart3,
   Target,
   Shield,
-  Globe,
-  Smartphone,
   Clock,
-  Bookmark,
   FileText,
   Rocket,
   GraduationCap,
@@ -30,9 +27,7 @@ import {
   Bot,
   Palette,
   Store,
-  Mail,
   Users2,
-  HelpCircle,
   TrendingUp as TrendingUpIcon,
   Sparkles,
   Twitter,
@@ -55,7 +50,7 @@ export default function EduCenterHomePage() {
   }, []);
 
   const navLinks = [
-    { href: "/", label: "Home",  },
+    { href: "/", label: "Home", },
     { href: "/courses", label: "Courses", },
     {
       href: "/jamb",
@@ -64,11 +59,11 @@ export default function EduCenterHomePage() {
       icon: "🎯",
       description: "2026 Syllabus",
     },
-    { href: "/waec-neco", label: "WAEC/NECO",  },
+    { href: "/waec-neco", label: "WAEC/NECO", },
     { href: "/business", label: "Business", },
-    { href: "/ai-tools", label: "AI Tools",  },
-    { href: "/pricing", label: "Pricing",  },
-    { href: "/community", label: "Community",  },
+    { href: "/ai-tools", label: "AI Tools", },
+    { href: "/pricing", label: "Pricing", },
+    { href: "/community", label: "Community", },
   ];
 
   const footerSections = [
@@ -304,7 +299,6 @@ export default function EduCenterHomePage() {
 
   const techStack = [
     { name: "Next.js 14", icon: "⚡", purpose: "Blazing Fast Performance" },
-    { name: "MongoDB", icon: "🗄️", purpose: "Real-time Analytics" },
     { name: "Paystack", icon: "💳", purpose: "Secure Payments" },
     { name: "PWA", icon: "📱", purpose: "Mobile App Experience" },
     { name: "WhatsApp API", icon: "💬", purpose: "Instant Support" },
@@ -324,11 +318,11 @@ export default function EduCenterHomePage() {
       />
 
       {/* Hero Section - Redesigned */}
-      <section className="relative bg-gradient-to-br from-[#1E3A5F] via-[#2A4A6E] to-[#0F2744] text-white overflow-hidden pt-24 pb-32">
+      <section className="relative bg-gradient-to-br from-[#1E3A5F] via-[#2A4A6E] to-[#0F2744] text-white overflow-hidden pt-20 pb-20 md:pt-24 md:pb-32">
         {/* Animated background elements */}
         <div className="absolute inset-0">
-          <div className="absolute top-10 left-1/4 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 right-1/4 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute top-10 left-1/4 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-20 right-1/4 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-3xl animate-pulse" />
           <div className="absolute top-1/2 left-10 w-[300px] h-[300px] bg-cyan-500/5 rounded-full blur-2xl" />
         </div>
 
@@ -352,28 +346,28 @@ export default function EduCenterHomePage() {
               transition={{ duration: 0.8 }}
             >
               {/* Trust badge */}
-              <div className="inline-flex items-center gap-3 px-4 py-3 bg-white/10 backdrop-blur-lg rounded-2xl mb-8 border border-white/20">
+              <div className="flex flex-wrap items-center gap-3 px-4 py-3 bg-white/10 backdrop-blur-lg rounded-2xl mb-8 border border-white/20">
                 <div className="flex items-center gap-2">
                   <Shield className="w-5 h-5 text-green-400" />
-                  <span className="font-bold">LIVE Platform</span>
+                  <span className="font-bold text-sm sm:text-base">LIVE Platform</span>
                 </div>
-                <div className="h-6 w-px bg-white/30" />
+                <div className="hidden sm:block h-6 w-px bg-white/30" />
                 <div className="flex items-center gap-2">
                   <Users className="w-5 h-5 text-blue-400" />
-                  <span className="font-bold">50K+ Students</span>
+                  <span className="font-bold text-sm sm:text-base">50K+ Students</span>
                 </div>
-                <div className="h-6 w-px bg-white/30" />
+                <div className="hidden sm:block h-6 w-px bg-white/30" />
                 <div className="flex items-center gap-2">
                   <TrendingUp className="w-5 h-5 text-purple-400" />
-                  <span className="font-bold">₦60M+ Revenue</span>
+                  <span className="font-bold text-sm sm:text-base">₦60M+ Revenue</span>
                 </div>
               </div>
 
               {/* Main headline */}
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
                 Ace Exams.
                 <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400 animate-gradient">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-cyan-300 to-purple-400 animate-gradient">
                   Build Business.
                 </span>
                 <br />
@@ -449,12 +443,12 @@ export default function EduCenterHomePage() {
 
             {/* Right side - Interactive dashboard preview */}
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative"
+              className="relative lg:mt-0"
             >
-              <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-3xl border border-white/20 p-8 shadow-2xl">
+              <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-3xl border border-white/20 p-5 sm:p-8 shadow-2xl">
                 <div className="flex items-center justify-between mb-8">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
@@ -556,10 +550,10 @@ export default function EduCenterHomePage() {
       </section>
 
       {/* All Features Section */}
-      <section className="py-24 bg-white">
+      <section className="py-16 md:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black text-[#2A4A6E] mb-6">
+          <div className="text-center mb-12 md:mb-16">
+            <h2 className="text-3xl md:text-5xl font-black text-[#2A4A6E] mb-6">
               Everything You Need in One Platform
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -623,10 +617,10 @@ export default function EduCenterHomePage() {
       </section>
 
       {/* Learning Paths */}
-      <section className="py-24 bg-gradient-to-br from-gray-50 to-blue-50">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black text-[#2A4A6E] mb-6">
+          <div className="text-center mb-12 md:mb-16">
+            <h2 className="text-3xl md:text-5xl font-black text-[#2A4A6E] mb-6">
               Choose Your Success Path
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -687,10 +681,10 @@ export default function EduCenterHomePage() {
       </section>
 
       {/* Testimonials Grid */}
-      <section className="py-24 bg-white">
+      <section className="py-16 md:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black text-[#2A4A6E] mb-6">
+          <div className="text-center mb-12 md:mb-16">
+            <h2 className="text-3xl md:text-5xl font-black text-[#2A4A6E] mb-6">
               Real Students, Real Results
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -785,7 +779,7 @@ export default function EduCenterHomePage() {
       </section>
 
       {/* Final CTA */}
-      <section className="relative py-24 overflow-hidden">
+      <section className="relative py-16 md:py-24 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-90" />
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-pulse" />
@@ -798,7 +792,7 @@ export default function EduCenterHomePage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
+            <h2 className="text-3xl md:text-5xl font-black text-white mb-6">
               Start Your Journey Today
             </h2>
             <p className="text-xl text-blue-100 mb-12 max-w-3xl mx-auto">
@@ -885,11 +879,11 @@ export default function EduCenterHomePage() {
         ]}
         newsletter={true}
         copyright={`© ${new Date().getFullYear()} EduCenter.com.ng - A BoldMind Ecosystem Product`}
-        // additionalLinks={[
-        //   { href: "/terms", label: "Terms of Service" },
-        //   { href: "/privacy", label: "Privacy Policy" },
-        //   { href: "/refund", label: "Refund Policy" },
-        // ]}
+      // additionalLinks={[
+      //   { href: "/terms", label: "Terms of Service" },
+      //   { href: "/privacy", label: "Privacy Policy" },
+      //   { href: "/refund", label: "Refund Policy" },
+      // ]}
       />
 
       {/* Floating WhatsApp Button */}
@@ -901,46 +895,6 @@ export default function EduCenterHomePage() {
       >
         <MessageSquare className="w-6 h-6 text-white" />
       </a>
-
-      <style jsx global>{`
-        @keyframes float {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-20px);
-          }
-        }
-        @keyframes float-delayed {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-15px);
-          }
-        }
-        @keyframes gradient {
-          0%,
-          100% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-        }
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-        .animate-float-delayed {
-          animation: float-delayed 7s ease-in-out infinite;
-        }
-        .animate-gradient {
-          background-size: 200% auto;
-          animation: gradient 3s ease infinite;
-        }
-      `}</style>
     </div>
   );
 }
