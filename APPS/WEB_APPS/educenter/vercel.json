@@ -1,10 +1,6 @@
 {
-    "buildCommand": "cd ../../../ && pnpm install --no-frozen-lockfile && cd APPS/WEB_APPS/educenter && pnpm run deploy",
-    "devCommand": "cd APPS/WEB_APPS/educenter && pnpm dev",
-    "installCommand": "pnpm install --no-frozen-lockfile",
-    "framework": "nextjs",
+    "buildCommand": "pnpm turbo build --filter=@boldmind/educenter",
     "outputDirectory": "APPS/WEB_APPS/educenter/.next",
-    "regions": [
-        "iad1"
-    ]
+    "installCommand": "pnpm install --no-frozen-lockfile",
+    "framework": "nextjs"
 }

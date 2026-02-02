@@ -1,10 +1,6 @@
 {
-    "buildCommand": "cd ../../../../ && pnpm install --no-frozen-lockfile && cd APPS/WEB_APPS/PLANAI_SUITE/receptionist && pnpm run deploy",
-    "devCommand": "cd APPS/WEB_APPS/PLANAI_SUITE/receptionist && pnpm dev",
-    "installCommand": "pnpm install --no-frozen-lockfile",
-    "framework": "nextjs",
+    "buildCommand": "pnpm turbo build --filter=@boldmind/receptionist",
     "outputDirectory": "APPS/WEB_APPS/PLANAI_SUITE/receptionist/.next",
-    "regions": [
-        "iad1"
-    ]
+    "installCommand": "pnpm install --no-frozen-lockfile",
+    "framework": "nextjs"
 }

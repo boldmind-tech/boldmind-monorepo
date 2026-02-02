@@ -1,10 +1,6 @@
 {
-    "buildCommand": "cd ../../../ && pnpm install --no-frozen-lockfile && cd APPS/WEB_APPS/boldmind-hub && pnpm run deploy",
-    "devCommand": "cd APPS/WEB_APPS/boldmind-hub && pnpm dev",
-    "installCommand": "pnpm install --no-frozen-lockfile",
-    "framework": "nextjs",
+    "buildCommand": "pnpm turbo build --filter=@boldmind/boldmind-hub",
     "outputDirectory": "APPS/WEB_APPS/boldmind-hub/.next",
-    "regions": [
-        "iad1"
-    ]
+    "installCommand": "pnpm install --no-frozen-lockfile",
+    "framework": "nextjs"
 }

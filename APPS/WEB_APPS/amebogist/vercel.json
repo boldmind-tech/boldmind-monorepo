@@ -1,10 +1,6 @@
 {
-    "buildCommand": "cd ../../../ && pnpm install --no-frozen-lockfile && cd APPS/WEB_APPS/amebogist && pnpm run deploy",
-    "devCommand": "cd APPS/WEB_APPS/amebogist && pnpm dev",
-    "installCommand": "pnpm install --no-frozen-lockfile",
-    "framework": "nextjs",
+    "buildCommand": "pnpm turbo build --filter=@boldmind/amebogist",
     "outputDirectory": "APPS/WEB_APPS/amebogist/.next",
-    "regions": [
-        "iad1"
-    ]
+    "installCommand": "pnpm install --no-frozen-lockfile",
+    "framework": "nextjs"
 }

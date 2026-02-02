@@ -1,10 +1,6 @@
 {
-    "buildCommand": "cd ../../../../ && pnpm install --no-frozen-lockfile && cd APPS/WEB_APPS/PLANAI_SUITE/planai-landing && pnpm run deploy",
-    "devCommand": "cd APPS/WEB_APPS/PLANAI_SUITE/planai-landing && pnpm dev",
-    "installCommand": "pnpm install --no-frozen-lockfile",
-    "framework": "nextjs",
+    "buildCommand": "pnpm turbo build --filter=@boldmind/planai-landing",
     "outputDirectory": "APPS/WEB_APPS/PLANAI_SUITE/planai-landing/.next",
-    "regions": [
-        "iad1"
-    ]
+    "installCommand": "pnpm install --no-frozen-lockfile",
+    "framework": "nextjs"
 }
