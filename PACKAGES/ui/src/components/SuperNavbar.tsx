@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+// import Image from "next/image"; // Removed to avoid conflict if we use standard img or specific handling, but let's see. 
+// Actually, standard Image is good but we need to handle public folder paths correctly.
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -70,6 +72,7 @@ export function SuperNavbar({
   // user,
   onLinkClick,
 }: SuperNavbarProps) {
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [imageError, setImageError] = useState(false);
@@ -136,8 +139,8 @@ export function SuperNavbar({
       switch (theme) {
         case "light":
           return {
-            bg: scrolled ? baseColor : `rgba(${r}, ${g}, ${b}, 0.95)`,
-            text: "#FFFFFF",
+            bg: scrolled ? "#FFFFFF" : `rgba(255, 255, 255, 0.95)`,
+            text: "#00143C", // Dark blue text for light mode
             border: "#E5E7EB",
           };
         case "transparent":
@@ -322,15 +325,15 @@ export function SuperNavbar({
             {/* Logo */}
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="flex items-center space-x-3"
+              className="flex items-center"
             >
               <Link
                 href="/"
-                className="flex items-center space-x-3 no-underline"
+                className="flex items-center gap-3 no-underline group" // Changed space-x-3 to gap-3
                 onClick={() => handleNavClick("/")}
               >
                 {!imageError ? (
-                  <div className="relative w-12 h-12">
+                  <div className="relative w-10 h-10 flex-shrink-0">
                     <Image
                       src={logoSrc}
                       alt={`${currentProduct?.name} Logo`}
@@ -339,43 +342,25 @@ export function SuperNavbar({
                       onError={() => setImageError(true)}
                       priority
                     />
-                    {animated && (
-                      <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{
-                          duration: 20,
-                          repeat: Infinity,
-                          ease: "linear",
-                        }}
-                        className="absolute inset-0 border-2 border-transparent border-t-blue-500 border-r-purple-500 rounded-full"
-                      />
-                    )}
                   </div>
                 ) : (
                   <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center"
+                    className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
                     style={{ backgroundColor: productColor }}
                   >
-                    <span className="text-white font-black text-xl">
+                    <span className="text-white font-bold text-lg">
                       {productInitial}
                     </span>
                   </div>
                 )}
 
-                <div>
-                  <span className="text-2xl font-black">
+                <div className="flex flex-col justify-center h-10">
+                  <span className="text-xl font-bold leading-none text-white tracking-tight">
                     {currentProduct?.name}
                   </span>
-                  <motion.p
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-xs text-gray-400 -mt-1"
-                  >
-
-                    {/* {currentProduct.status === ('LIVE' as ProductStatus) ? '🚀 LIVE' : 
-                     currentProduct.status === ('BUILDING' as ProductStatus) ? '🔨 BUILDING' :
-                     currentProduct.status === ('PLANNED' as ProductStatus) ? '📅 PLANNED' : '💡 CONCEPT'} */}
-                  </motion.p>
+                  {/* Optional status or tagline if needed, kept hidden for cleaner look as requested 
+                  <motion.p ... /> 
+                  */}
                 </div>
               </Link>
             </motion.div>
@@ -407,10 +392,10 @@ export function SuperNavbar({
                         onMouseEnter={() => setHoveredLink(link.href)}
                         onMouseLeave={() => setHoveredLink(null)}
                         className={cn(
-                          "flex items-center gap-2 px-4 py-3 rounded-lg transition-all",
+                          "flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-sm", // Reduced padding and font size
                           isActive
-                            ? "bg-blue-500/20 text-blue-400"
-                            : "hover:bg-white/10",
+                            ? "bg-blue-500/10 text-blue-600"
+                            : "hover:bg-white/10 hover:text-current",
                         )}
                       >
                         {getIconComponent(link.icon)}
@@ -432,10 +417,10 @@ export function SuperNavbar({
                           onMouseEnter={() => setHoveredLink(link.href)}
                           onMouseLeave={() => setHoveredLink(null)}
                           className={cn(
-                            "flex items-center gap-2 px-4 py-3 rounded-lg transition-all cursor-pointer",
+                            "flex items-center gap-2 px-3 py-2 rounded-lg transition-all cursor-pointer text-sm", // Reduced padding and font size
                             isActive
-                              ? "bg-blue-500/20 text-blue-400"
-                              : "hover:bg-white/10",
+                              ? "bg-blue-500/10 text-blue-600"
+                              : "hover:bg-white/10 hover:text-current",
                           )}
                         >
                           {getIconComponent(link.icon)}

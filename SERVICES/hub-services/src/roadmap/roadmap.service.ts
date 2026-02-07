@@ -1,11 +1,9 @@
 // SERVICES/hub-service/src/roadmap/roadmap.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { Prisma } from '../generated/client';
-
+import { Prisma, PrismaClient } from '../generated/client';
 @Injectable()
 export class RoadmapService {
-    constructor(private prisma: PrismaService) { }
+    constructor(private prisma: PrismaClient) { }
 
     async getRoadmapItems(
         productId?: string,

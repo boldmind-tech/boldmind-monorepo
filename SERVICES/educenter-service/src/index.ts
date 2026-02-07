@@ -37,6 +37,10 @@ app.get('/health', (_req: Request, res: Response) => {
   res.json({ status: 'ok', service: 'educenter-service' });
 });
 
+app.get('/health/ping', (_req: Request, res: Response) => {
+  res.json({ message: 'pong', timestamp: new Date().toISOString() });
+});
+
 app.use((err: any, _req: Request, res: Response, _next: any) => {
   console.error(err.stack);
   res.status(err.status || 500).json({
@@ -47,8 +51,11 @@ app.use((err: any, _req: Request, res: Response, _next: any) => {
   });
 });
 
+import { startKeepAlive } from './keep-alive';
+
 app.listen(PORT, () => {
   console.log(`🚀 EduCenter Service running on: http://localhost:${PORT}`);
+  startKeepAlive(PORT);
 });
 
 process.on('SIGTERM', async () => {

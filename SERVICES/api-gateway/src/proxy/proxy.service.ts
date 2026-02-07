@@ -42,11 +42,11 @@ export class ProxyService {
     // Initialize all service URLs from environment variables
     this.serviceUrls = {
       // PostgreSQL Services
-      'educenter': process.env['EDUCENTER_SERVICE_URL'] || 'http://localhost:4001',
-      'users': process.env['USER_SERVICE_URL'] || 'http://localhost:4002',
-      'payments': process.env['PAYMENT_SERVICE_URL'] || 'http://localhost:4003',
-      'analytics': process.env['ANALYTICS_SERVICE_URL'] || 'http://localhost:4004',
-      'hub': process.env['HUB_SERVICE_URL'] || 'http://localhost:4005',
+      'educenter': process.env['EDUCENTER_SERVICE_URL'] || 'http://127.0.0.1:4010/api',
+      'users': process.env['USER_SERVICE_URL'] || 'http://127.0.0.1:4001/api',
+      'payments': process.env['PAYMENT_SERVICE_URL'] || 'http://127.0.0.1:4002',
+      'analytics': process.env['ANALYTICS_SERVICE_URL'] || 'http://127.0.0.1:4005/api',
+      'hub': process.env['HUB_SERVICE_URL'] || 'http://127.0.0.1:4019/api',
       'receptionist': process.env['RECEPTIONIST_SERVICE_URL'] || 'http://localhost:4006',
       'credibility': process.env['CREDIBILITY_SERVICE_URL'] || 'http://localhost:4007',
       'business-planning': process.env['BUSINESS_PLANNING_SERVICE_URL'] || 'http://localhost:4008',
@@ -90,7 +90,10 @@ export class ProxyService {
     return this.makeRequest(baseUrl, method, path, data, headers);
   }
 
-  // Individual service methods for backward compatibility
+  // ==================== INDIVIDUAL SERVICE METHODS ====================
+
+  // PostgreSQL Services
+
   async educenterRequest(
     method: string,
     path: string,
@@ -98,15 +101,6 @@ export class ProxyService {
     headers?: any,
   ): Promise<any> {
     return this.serviceRequest('educenter', method, path, data, headers);
-  }
-
-  async hub(
-    method: string,
-    path: string,
-    data?: any,
-    headers?: any,
-  ): Promise<any> {
-    return this.serviceRequest('hub', method, path, data, headers);
   }
 
   async userRequest(
@@ -127,7 +121,134 @@ export class ProxyService {
     return this.serviceRequest('payments', method, path, data, headers);
   }
 
-  // MongoDB services
+  async analyticsRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('analytics', method, path, data, headers);
+  }
+
+  async hubRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('hub', method, path, data, headers);
+  }
+
+  async receptionistRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('receptionist', method, path, data, headers);
+  }
+
+  async credibilityRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('credibility', method, path, data, headers);
+  }
+
+  async businessPlanningRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('business-planning', method, path, data, headers);
+  }
+
+  async financialRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('financial', method, path, data, headers);
+  }
+
+  async investorRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('investor', method, path, data, headers);
+  }
+
+  async storefrontsRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('storefronts', method, path, data, headers);
+  }
+
+  async digitalStorefrontsRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('digital-storefronts', method, path, data, headers);
+  }
+
+  async marketingRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('marketing', method, path, data, headers);
+  }
+
+  async analyticsDashboardRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('analytics-dashboard', method, path, data, headers);
+  }
+
+  async safeaiRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('safeai', method, path, data, headers);
+  }
+
+  async koloaiRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('koloai', method, path, data, headers);
+  }
+
+  async receiptRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('receipt', method, path, data, headers);
+  }
+
+  // MongoDB Services
+
   async amebogistRequest(
     method: string,
     path: string,
@@ -146,7 +267,88 @@ export class ProxyService {
     return this.serviceRequest('social-factory', method, path, data, headers);
   }
 
-  // Add more individual methods as needed...
+  async emailscraperProRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('emailscraper-pro', method, path, data, headers);
+  }
+
+  async afrohustleRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('afrohustle', method, path, data, headers);
+  }
+
+  async naijagigMatcherRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('naijagig-matcher', method, path, data, headers);
+  }
+
+  async borderlessRemitRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('borderless-remit', method, path, data, headers);
+  }
+
+  async powerAlertRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('power-alert', method, path, data, headers);
+  }
+
+  async farmgateDirectRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('farmgate-direct', method, path, data, headers);
+  }
+
+  async afrocopyAiRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('afrocopy-ai', method, path, data, headers);
+  }
+
+  async skill2cashRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('skill2cash', method, path, data, headers);
+  }
+
+  async anontruthMicRequest(
+    method: string,
+    path: string,
+    data?: any,
+    headers?: any,
+  ): Promise<any> {
+    return this.serviceRequest('anontruth-mic', method, path, data, headers);
+  }
+
+  // ==================== HELPER METHODS ====================
 
   private async makeRequest(
     baseUrl: string,

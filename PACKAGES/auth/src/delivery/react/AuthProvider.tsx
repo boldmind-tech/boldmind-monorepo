@@ -16,6 +16,8 @@ export interface AuthContextValue extends AuthState {
   refreshUser: () => Promise<void>;
   verifyEmailCode: (email: string, code: string) => Promise<void>;
   resendVerification: (email: string) => Promise<{ success: boolean; error?: string }>;
+  resetPassword: (email: string) => Promise<void>;
+  updatePassword: (password: string) => Promise<void>;
   hasPermission: (permission: string) => boolean;
 }
 
@@ -268,6 +270,38 @@ export function AuthProvider({ children, userAPI }: AuthProviderProps) {
     return await supabaseAuthProvider.resendVerification(email);
   };
 
+  const resetPassword = async (email: string) => {
+    setState(prev => ({ ...prev, isLoading: true, error: null }));
+
+    try {
+      await supabaseAuthProvider.resetPasswordForEmail(email);
+      setState(prev => ({ ...prev, isLoading: false }));
+    } catch (error: any) {
+      setState(prev => ({
+        ...prev,
+        isLoading: false,
+        error: { message: error.message },
+      }));
+      throw error;
+    }
+  };
+
+  const updatePassword = async (password: string) => {
+    setState(prev => ({ ...prev, isLoading: true, error: null }));
+
+    try {
+      await supabaseAuthProvider.updatePassword(password);
+      setState(prev => ({ ...prev, isLoading: false }));
+    } catch (error: any) {
+      setState(prev => ({
+        ...prev,
+        isLoading: false,
+        error: { message: error.message },
+      }));
+      throw error;
+    }
+  };
+
   const hasPermission = (permission: string): boolean => {
     if (state.user?.isSuperAdmin) return true;
     return state.user?.permissions?.includes(permission) || false;
@@ -285,6 +319,8 @@ export function AuthProvider({ children, userAPI }: AuthProviderProps) {
         refreshUser,
         verifyEmailCode,
         resendVerification,
+        resetPassword,
+        updatePassword,
         hasPermission,
       }}
     >

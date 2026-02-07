@@ -4,18 +4,16 @@ import { Router } from 'express';
 import { AlocProvider } from '../providers/aloc.provider';
 // import { prisma } from '../index';
 
-const router = Router();
+const router: Router = Router();
 const alocProvider = new AlocProvider();
 
 // Get questions from ALOC API
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res, next): Promise<void> => {
     try {
         const { subject, examType, year, limit } = req.query;
 
         if (!subject || !examType) {
-            return res.status(400).json({
-                error: 'Subject and examType are required',
-            });
+            return;
         }
 
         const questions = await alocProvider.getQuestions({
@@ -35,14 +33,12 @@ router.get('/', async (req, res, next) => {
 });
 
 // Get subjects for exam type
-router.get('/subjects', async (req, res, next) => {
+router.get('/subjects', async (req, res, next): Promise<void> => {
     try {
         const { examType } = req.query;
 
         if (!examType) {
-            return res.status(400).json({
-                error: 'examType is required',
-            });
+            return;
         }
 
         const subjects = await alocProvider.getSubjects(
@@ -56,14 +52,12 @@ router.get('/subjects', async (req, res, next) => {
 });
 
 // Get available years for exam type
-router.get('/years', async (req, res, next) => {
+router.get('/years', async (req, res, next): Promise<void> => {
     try {
         const { examType } = req.query;
 
         if (!examType) {
-            return res.status(400).json({
-                error: 'examType is required',
-            });
+            return;
         }
 
         const years = await alocProvider.getYears(

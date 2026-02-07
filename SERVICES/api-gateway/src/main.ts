@@ -6,12 +6,12 @@ import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { Logger } from '@nestjs/common';
 import { AppModule } from './app.module';
-import { ConfigService } from '@nestjs/config'; // ← added for safe env access
+import { ConfigService } from '@nestjs/config';
+
 
 async function bootstrap() {
     // Create app instance
     const app = await NestFactory.create(AppModule, {
-        // Enable detailed error logging in development
         logger: ['error', 'warn', 'debug', 'log', 'verbose'],
     });
 
@@ -42,7 +42,6 @@ async function bootstrap() {
             transform: true,
             transformOptions: { enableImplicitConversion: true },
             forbidUnknownValues: true,
-            // Optional: custom error factory for cleaner API responses
             exceptionFactory: (errors) => {
                 const messages = errors.map(e => ({
                     field: e.property,
@@ -53,12 +52,10 @@ async function bootstrap() {
         }),
     );
 
-    // 3. Global prefix (only for API routes – swagger stays at /api/docs)
     app.setGlobalPrefix('api', {
-        exclude: ['api/docs(.*)'], // keep swagger accessible without prefix
+        exclude: ['api/docs(.*)'],
     });
 
-    // 4. Swagger setup – improved metadata
     const swaggerConfig = new DocumentBuilder()
         .setTitle('BoldMind API Gateway')
         .setDescription('Unified backend API for all BoldMind products and services')
@@ -83,6 +80,29 @@ async function bootstrap() {
         .addTag('educenter', 'EduCenter learning features')
         .addTag('hub', 'BoldMind Hub features')
         .addTag('webhooks', 'Webhook receivers (Stripe, Supabase, etc)')
+        .addTag('health', 'Health check endpoints')
+        .addTag('notifications', 'Notification endpoints')
+        .addTag('amebogist', 'Amebogist: News and gossip service')
+        .addTag('social-factory', 'Social Factory: Content generation')
+        .addTag('emailscraper', 'Email Scraper Pro tools')
+        .addTag('naija-fither', 'Naija Fither: Fitness & diet')
+        .addTag('boldmind-os', 'BoldMind OS system endpoints')
+        .addTag('safeai', 'SafeAI: Content filtering & moderation')
+        .addTag('analytics', 'System-wide analytics')
+        .addTag('ai', 'Core AI services')
+        .addTag('media', 'Media upload and management')
+        .addTag('borderless-remit', 'Borderless Remit: Cross-border payments')
+        .addTag('receipt-genius', 'Receipt Genius: Expense tracking')
+        .addTag('planai-suite', 'PlanAI Suite features')
+        .addTag('power-alert', 'Power Alert: Energy monitoring')
+        .addTag('farmgate-direct', 'Farmgate Direct: Agri-tech')
+        .addTag('afrocopy-ai', 'Afrocopy AI: Marketing copy gen')
+        .addTag('skill2cash', 'Skill2Cash: Freelance marketplace')
+        .addTag('anontruth-mic', 'Anontruth Mic: Social audio')
+        .addTag('afrohustle-os', 'Afrohustle OS: Business tools')
+        .addTag('ai-receptionist', 'AI Receptionist: Call management')
+        .addTag('kolo-ai', 'Kolo AI: Savings & wealth')
+        .addTag('naijagig-matcher', 'NaijaGig Matcher: Freelance jobs')
         .build();
 
     const document = SwaggerModule.createDocument(app, swaggerConfig, {

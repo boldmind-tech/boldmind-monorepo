@@ -111,27 +111,27 @@ export default class APIClient {
     });
   }
 
-  async get<T>(url: string, config?: AxiosRequestConfig) {
+  async get<T = any>(url: string, config?: AxiosRequestConfig) {
     const response = await this.client.get<T>(url, config);
     return response.data;
   }
 
-  async post<T>(url: string, data?: any, config?: AxiosRequestConfig) {
+  async post<T = any>(url: string, data?: any, config?: AxiosRequestConfig) {
     const response = await this.client.post<T>(url, data, config);
     return response.data;
   }
 
-  async put<T>(url: string, data?: any, config?: AxiosRequestConfig) {
+  async put<T = any>(url: string, data?: any, config?: AxiosRequestConfig) {
     const response = await this.client.put<T>(url, data, config);
     return response.data;
   }
 
-  async patch<T>(url: string, data?: any, config?: AxiosRequestConfig) {
+  async patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig) {
     const response = await this.client.patch<T>(url, data, config);
     return response.data;
   }
 
-  async delete<T>(url: string, config?: AxiosRequestConfig) {
+  async delete<T = any>(url: string, config?: AxiosRequestConfig) {
     const response = await this.client.delete<T>(url, config);
     return response.data;
   }

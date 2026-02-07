@@ -1,12 +1,11 @@
 
-// SERVICES/api-gateway/src/notifications/notifications.module.ts
-
 import { Module, Global } from '@nestjs/common';
-import { NotificationServiceClient } from '../clients/notification-service.client';
+import { NotificationsController } from './notifications.controller';
+import { AuthModule } from '../auth/auth.module';
 
 @Global()
 @Module({
-    providers: [NotificationServiceClient],
-    exports: [NotificationServiceClient],
+    imports: [AuthModule],
+    controllers: [NotificationsController],
 })
 export class NotificationsModule { }

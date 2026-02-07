@@ -1,18 +1,43 @@
-// app/dashboard/revenue/page.tsx
-'use client';
-
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { DollarSign, TrendingUp, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { DollarSign, TrendingUp, ArrowUpRight } from 'lucide-react';
 import { Sidebar } from '../Sidebar';
 import { SuperNavbar } from '@boldmind/ui';
-import { BOLDMIND_PRODUCTS, calculateTotalMonthlyRevenue } from '@boldmind/utils';
+import { hubAPIAdapter } from '../../../lib/hub-api-adapter';
 import { StatCard } from '../StatCard';
 
 export default function RevenueDashboard() {
-    const revenue = calculateTotalMonthlyRevenue();
-    const topProducts = [...BOLDMIND_PRODUCTS]
-        .sort((a, b) => (b.monthlyRevenue ?? 0) - (a.monthlyRevenue ?? 0))
-        .slice(0, 5);
+    const [revenueData, setRevenueData] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        loadRevenueData();
+    }, []);
+
+    const loadRevenueData = async () => {
+        try {
+            setLoading(true);
+            const data = await hubAPIAdapter.getRevenueAnalytics();
+            setRevenueData(data);
+        } catch (error) {
+            console.error('Failed to load revenue data:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
+                <div className="w-16 h-16 border-4 border-[#FFC800] border-t-transparent rounded-full animate-spin" />
+            </div>
+        );
+    }
+
+    const totalRevenue = revenueData?.totalRevenue || 0;
+    const growth = revenueData?.growthMoM || '0%';
+    const arr = totalRevenue * 12;
+    const topProducts = revenueData?.topProducts || [];
 
     return (
         <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
@@ -35,26 +60,31 @@ export default function RevenueDashboard() {
                         </motion.div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <StatCard icon={DollarSign} label="Monthly Revenue" value={`₦${revenue.toLocaleString()}`} color="green" />
-                            <StatCard icon={TrendingUp} label="MoM Growth" value="+18.2%" color="emerald" />
-                            <StatCard icon={ArrowUpRight} label="ARR" value={`₦${(revenue * 12).toLocaleString()}`} color="blue" />
+                            <StatCard icon={DollarSign} label="Monthly Revenue" value={`₦${totalRevenue.toLocaleString()}`} color="green" />
+                            <StatCard icon={TrendingUp} label="MoM Growth" value={growth} color="emerald" />
+                            <StatCard icon={ArrowUpRight} label="ARR" value={`₦${arr.toLocaleString()}`} color="blue" />
                         </div>
 
                         <div className="bg-white dark:bg-gray-900 rounded-2xl border shadow-lg p-6">
                             <h2 className="text-xl font-semibold mb-6">Top Performing Products</h2>
                             <div className="space-y-4">
-                                {topProducts.map(product => (
+                                {topProducts.map((product: any) => (
                                     <div key={product.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
                                         <div>
                                             <p className="font-medium">{product.name}</p>
                                             <p className="text-sm text-gray-500">{product.status}</p>
                                         </div>
                                         <div className="text-right">
-                                            <p className="font-bold">₦{(product.monthlyRevenue ?? 0).toLocaleString()}</p>
-                                            <p className="text-xs text-gray-500">{(((product.monthlyRevenue ?? 0) / revenue) * 100).toFixed(1)}%</p>
+                                            <p className="font-bold">₦{(product.revenue || 0).toLocaleString()}</p>
+                                            <p className="text-xs text-gray-500">
+                                                {totalRevenue > 0 ? (((product.revenue || 0) / totalRevenue) * 100).toFixed(1) : 0}%
+                                            </p>
                                         </div>
                                     </div>
                                 ))}
+                                {topProducts.length === 0 && (
+                                    <p className="text-center text-gray-500 py-4">No revenue data available for products.</p>
+                                )}
                             </div>
                         </div>
                     </div>

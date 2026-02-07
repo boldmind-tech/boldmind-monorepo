@@ -120,7 +120,7 @@ export default function RegisterPage() {
     <div className="w-full">
       {/* Header */}
       <div className="text-center mb-6">
-        <h1 className="text-3xl font-black text-[#00143C] dark:text-white mb-2">
+        <h1 className="text-4xl font-white text-white mb-6 leading-tight">
           Create Account
         </h1>
         <p className="text-gray-600 dark:text-gray-400">

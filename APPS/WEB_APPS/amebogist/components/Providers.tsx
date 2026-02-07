@@ -1,37 +1,27 @@
-"use client";
+// apps/web/amebogist/components/Providers.tsx
 
-import { AuthProvider } from "@boldmind/auth";
-import { ThemeProvider } from "@boldmind/ui";
-import { Toaster } from "sonner";
-import { BOLDMIND_PRODUCTS, productThemes } from "@boldmind/utils";
+import { AuthProvider } from '@boldmind/auth';
+import { userAPIAdapter } from '../lib/user-api-adapter';
+import { ThemeProvider, type ProductThemeType } from '@boldmind/ui';
 
-export function Providers({ children }: { children: React.ReactNode }) {
-  const forceProduct = "amebogist";
-  
-  // Get product theme
-  const theme = productThemes[forceProduct] || productThemes['boldmind-hub'];
-  
-  const productTheme = {
-    slug: forceProduct,
-    name: "AmeboGist",
-    description: "Nigeria\'s #1 Pidgin English platform led by AI/Tech education 🤖 and Creator entrepreneurship ✍️, plus Sports ⚽, Politics 🏛️, Entertainment 🎭, and Trending Gist 🔥.",
-    icon: "🔥",
-    status: "LIVE" as const,
-    colors: {
-      primary: theme.primary,
-      secondary: theme.secondary,
-      accent: theme.primary,
-      background: theme.background,
-    },
-    // Mock product if not found in BOLDMIND_PRODUCTS
-    product: BOLDMIND_PRODUCTS.find(p => p.slug === forceProduct) || ({} as any)
+interface ProvidersProps {
+  children: React.ReactNode;
+  defaultProductTheme?: ProductThemeType;
+}
+
+export function Providers({ children, defaultProductTheme }: ProvidersProps) {
+  // Only pass props if they have actual values (not undefined)
+  const themeProviderProps = {
+    defaultTheme: "dark" as const,
+    defaultDyslexia: false,
+    ...(defaultProductTheme && { defaultProduct: defaultProductTheme }),
+    ...(defaultProductTheme?.slug && { forceProductSlug: defaultProductTheme.slug }),
   };
 
   return (
-    <ThemeProvider defaultProduct={productTheme}>
-      <AuthProvider>
+    <ThemeProvider {...themeProviderProps}>
+      <AuthProvider userAPI={userAPIAdapter}>
         {children}
-        <Toaster position="top-right" richColors />
       </AuthProvider>
     </ThemeProvider>
   );

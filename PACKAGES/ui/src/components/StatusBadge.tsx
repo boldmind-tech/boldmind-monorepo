@@ -6,7 +6,7 @@ import { cn } from '../lib/utils';
 
 export type BadgeVariant = 'live' | 'building' | 'planned' | 'concept' | 'hiring' | 'new' | 'premium';
 
-interface StatusBadgeProps {
+export interface StatusBadgeProps {
   variant: BadgeVariant;
   children: React.ReactNode;
   className?: string;
@@ -33,5 +33,3 @@ export function StatusBadge({ variant, children, className }: StatusBadgeProps) 
     </span>
   );
 }
-
-export default StatusBadge;

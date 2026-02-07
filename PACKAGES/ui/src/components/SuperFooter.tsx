@@ -3,7 +3,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-// import Image from "next/image";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   Mail,
@@ -48,14 +48,14 @@ import {
   BOLDMIND_PRODUCTS,
   getProductBySlug,
   getLiveProducts,
-  // getProductsByCategory,
+  // getProductsByCategory,w
 } from "@boldmind/utils";
 
 export interface FooterLink {
   href: string;
   label: string;
   icon?: React.ReactNode;
-  isExternal?: boolean;
+  isExternal?: boolean
   badge?: string;
 }
 
@@ -88,7 +88,7 @@ export interface SuperFooterProps {
 }
 
 export function SuperFooter({
-  // logoSrc = "/logo.png",
+  logoSrc = "/logo.png",
   sections = [],
   // contactInfo,
   socialLinks = [],
@@ -99,9 +99,11 @@ export function SuperFooter({
   copyright,
   variant = "default",
 }: SuperFooterProps) {
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const { productTheme } = useTheme();
 
   const currentYear = new Date().getFullYear();
@@ -364,21 +366,28 @@ export function SuperFooter({
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             {/* Dynamic Logo */}
             <div className="flex items-center gap-3">
-              <div
-                className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform hover:scale-110"
-                style={{ backgroundColor: productColor }}
-              >
-                <span className="text-white font-bold text-lg">
-                  {productInitial}
-                </span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-lg font-bold">{currentProduct?.name}</span>
-                <span className="text-xs text-gray-400">
-                  {currentProduct?.status === ("LIVE" as any)
-                    ? "🚀 LIVE"
-                    : "🔨 BUILDING"}
-                </span>
+              {!imageError && logoSrc ? (
+                <div className="relative w-8 h-8 flex-shrink-0">
+                  <Image
+                    src={logoSrc}
+                    alt={`${currentProduct?.name} Logo`}
+                    fill
+                    className="object-contain"
+                    onError={() => setImageError(true)}
+                  />
+                </div>
+              ) : (
+                <div
+                  className="w-8 h-8 rounded-lg flex items-center justify-center transition-transform hover:scale-110 flex-shrink-0"
+                  style={{ backgroundColor: productColor }}
+                >
+                  <span className="text-white font-bold text-sm">
+                    {productInitial}
+                  </span>
+                </div>
+              )}
+              <div className="flex flex-col justify-center">
+                <span className="text-lg font-bold leading-tight">{currentProduct?.name}</span>
               </div>
             </div>
 
@@ -417,19 +426,28 @@ export function SuperFooter({
             {/* Logo and description */}
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: productColor }}
-                >
-                  <span className="text-white font-black text-xl">
-                    {productInitial}
-                  </span>
-                </div>
+                {!imageError && logoSrc ? (
+                  <div className="relative w-10 h-10 flex-shrink-0">
+                    <Image
+                      src={logoSrc}
+                      alt={`${currentProduct?.name} Logo`}
+                      fill
+                      className="object-contain"
+                      onError={() => setImageError(true)}
+                    />
+                  </div>
+                ) : (
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center text-black"
+                    style={{ backgroundColor: productColor }}
+                  >
+                    <span className="text-white font-black text-lg">
+                      {productInitial}
+                    </span>
+                  </div>
+                )}
                 <div>
                   <h3 className="text-xl font-bold">{currentProduct?.name}</h3>
-                  <p className="text-sm text-gray-400 mt-1">
-                    {currentProduct?.category}
-                  </p>
                 </div>
               </div>
               <p className="text-gray-300 text-sm">
@@ -567,19 +585,29 @@ export function SuperFooter({
           {/* Brand Section */}
           <div className="lg:col-span-4">
             <div className="flex items-center gap-3 mb-6">
-              <div
-                className="w-14 h-14 rounded-xl flex items-center justify-center transition-transform hover:scale-105"
-                style={{ backgroundColor: productColor }}
-              >
-                <span className="text-white font-black text-2xl">
-                  {productInitial}
-                </span>
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold">{currentProduct?.name}</h2>
-                <p className="text-gray-400">
-                  {currentProduct?.category.toUpperCase()}
-                </p>
+              {!imageError && logoSrc ? (
+                <div className="relative w-12 h-12 flex-shrink-0">
+                  <Image
+                    src={logoSrc}
+                    alt={`${currentProduct?.name} Logo`}
+                    fill
+                    className="object-contain"
+                    onError={() => setImageError(true)}
+                  />
+                </div>
+              ) : (
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center transition-transform hover:scale-105 flex-shrink-0"
+                  style={{ backgroundColor: productColor }}
+                >
+                  <span className="text-white font-bold text-xl">
+                    {productInitial}
+                  </span>
+                </div>
+              )}
+
+              <div className="flex flex-col justify-center">
+                <h2 className="text-xl font-bold leading-tight text-white">{currentProduct?.name}</h2>
               </div>
             </div>
             <p className="text-gray-300 mb-6">{currentProduct?.description}</p>

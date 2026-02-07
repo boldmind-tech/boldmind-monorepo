@@ -3,17 +3,17 @@
 
 import React, { useState } from 'react';
 
-interface SocialLink {
+export interface SocialLink {
   href: string;
   icon: React.ReactNode;
   ariaLabel: string;
 }
 
-interface SocialLinksProps {
+export interface SocialLinksProps {
   links: SocialLink[];
 }
 
-const SocialLinks: React.FC<SocialLinksProps> = ({ links }) => {
+export const SocialLinks: React.FC<SocialLinksProps> = ({ links }) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const containerStyle: React.CSSProperties = {
@@ -51,5 +51,3 @@ const SocialLinks: React.FC<SocialLinksProps> = ({ links }) => {
     </div>
   );
 };
-
-export default SocialLinks;

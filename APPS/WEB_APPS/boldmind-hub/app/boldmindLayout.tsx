@@ -1,56 +1,38 @@
-// apps/web/boldmind-hub/components/BoldMindLayout.tsx - UPDATED
+// apps/web/boldmind-hub/app/boldmindLayout.tsx - FIXED VERSION
 'use client';
 
 import { Providers } from '../components/Providers';
-import { BOLDMIND_PRODUCTS, productThemes } from '@boldmind/utils';
+import { BOLDMIND_PRODUCTS, getProductBySlug, productThemes, getProductColors } from '@boldmind/utils';
+import type { ProductThemeType } from '@boldmind/ui';
+import { ReactNode } from 'react';
 
-export function BoldMindLayout({ children }: { children: React.ReactNode }) {
+interface BoldMindLayoutProps {
+  children: ReactNode;
+}
+
+export function BoldMindLayout({ children }: BoldMindLayoutProps) {
   const forceProduct = 'boldmind-hub';
 
-  // Get BoldMind Hub product from your data or create it
-  const boldmindProduct = BOLDMIND_PRODUCTS.find(p => p.slug === forceProduct) || {
-    id: 'prod_000',
-    name: 'BoldMind Technology Ecosystem',
-    description: 'Empowering 1 million Nigerian Entrepreneurs by 2030',
-    category: 'ai',
-    status: 'LIVE',
-    version: '1.0.0',
-    slug: forceProduct,
-    icon: '🚀',
-    revenueModel: 'Portfolio management',
-    monthlyRevenue: 0,
-    users: '10,000+',
-    techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
-    teamSize: 3,
-    timeline: 'Launched Q4 2025',
-    priority: 0,
-    dependencies: [],
-    integrations: [],
-    tags: ['ecosystem', 'hub', 'portfolio', 'showcase'],
-    links: { website: 'https://boldmind.ng' },
-    features: [],
-    challenges: [],
-    opportunities: [],
-    createdAt: '2025-01-01',
-    updatedAt: '2025-12-28',
-  };
+  // Get the product from the database
+  const boldmindProduct = getProductBySlug(forceProduct) || BOLDMIND_PRODUCTS[0];
 
-  // Get the theme colors
+  // Get theme colors
+  const colors = getProductColors(forceProduct);
   const theme = productThemes[forceProduct] || productThemes['boldmind-hub'];
 
-  const productTheme = {
-    slug: forceProduct,
-    name: boldmindProduct.name,
-    description: boldmindProduct.description,
-    icon: boldmindProduct.icon,
-    status: boldmindProduct.status,
+  // Create ProductThemeType object with correct structure
+  const productTheme: ProductThemeType = {
+    slug: boldmindProduct?.slug || '',
+    name: boldmindProduct?.name || '',
+    description: boldmindProduct?.description || '',
+    icon: boldmindProduct?.icon || '',
+    status: boldmindProduct?.status || '',
     colors: {
-      primary: theme?.primary,
-      secondary: theme?.secondary,
-      accent: theme?.primary,
-      background: theme?.background,
+      primary: colors?.primary || '',
+      secondary: colors?.secondary || '',
+      accent: colors?.accent || '',
+      background: theme?.background || '',
     },
-    product: boldmindProduct
   };
 
   return (

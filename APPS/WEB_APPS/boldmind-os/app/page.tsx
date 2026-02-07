@@ -2,13 +2,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   SuperNavbar,
   SuperFooter,
   ParticleBackground,
-  TypewriterEffect,
 } from "@boldmind/ui";
 import {
   Brain,
@@ -36,8 +34,6 @@ import {
   // Cpu,
   // Database,
 } from "lucide-react";
-
-const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://os.boldmind.ng";
 
 export default function BoldMindOSPage() {
   const [activeFeature, setActiveFeature] = useState(0);
@@ -301,24 +297,16 @@ export default function BoldMindOSPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-950 text-white">
-      {/* Particle Background */}
-      {/* <ParticleBackground 
-        particleCount={80}
-        particleColor="#8B5CF6"
-        mouseInteraction={true}
-      /> */}
-
-      {/* SuperNavbar */}
       <SuperNavbar
         logoSrc="/logo.png"
         links={navLinks}
         cta={{
-          href: "/waitlist",
-          label: "Join Waitlist",
+          href: "/login",
+          label: "Get Started",
           variant: "glow",
           icon: <Rocket className="w-4 h-4" />,
         }}
-        // sticky={true}
+        sticky={true}
         // animated={true}
         // showParticles={true}
         onLinkClick={handleNavClick}
@@ -326,6 +314,10 @@ export default function BoldMindOSPage() {
 
       {/* Hero Section */}
       <section id="hero" className="relative pt-32 pb-24 px-4">
+        <ParticleBackground
+          particleColor="#8B5CF6"
+          className="opacity-50"
+        />
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
             <motion.div
@@ -340,13 +332,7 @@ export default function BoldMindOSPage() {
             </motion.div>
 
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8">
-              <span className="block">Your Personal</span>
-              {/* <TypewriterEffect
-                texts={['Operating System', 'Productivity Engine', 'Success Machine', 'Brain Extension'] as string[]}
-                // className="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 bg-clip-text text-transparent"
-                // speed={100}
-                // delay={2000}
-              /> */}
+
 
               <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8">
                 <span className="block">Your Personal</span>
@@ -500,9 +486,8 @@ export default function BoldMindOSPage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className={`flex flex-col lg:flex-row gap-8 items-center ${
-                  index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
-                }`}
+                className={`flex flex-col lg:flex-row gap-8 items-center ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
+                  }`}
               >
                 <div className="lg:w-1/3">
                   <div
@@ -569,11 +554,10 @@ export default function BoldMindOSPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.2 }}
-                className={`relative rounded-3xl p-8 border-2 ${
-                  plan.popular
-                    ? "border-purple-500 bg-gradient-to-b from-purple-500/10 to-pink-500/10"
-                    : "border-white/10 bg-white/5"
-                } backdrop-blur-sm`}
+                className={`relative rounded-3xl p-8 border-2 ${plan.popular
+                  ? "border-purple-500 bg-gradient-to-b from-purple-500/10 to-pink-500/10"
+                  : "border-white/10 bg-white/5"
+                  } backdrop-blur-sm`}
               >
                 {plan.popular && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
@@ -605,11 +589,10 @@ export default function BoldMindOSPage() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`w-full py-4 font-bold rounded-xl transition-all ${
-                    plan.popular
-                      ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:shadow-xl"
-                      : "bg-white text-gray-900 hover:bg-gray-100"
-                  }`}
+                  className={`w-full py-4 font-bold rounded-xl transition-all ${plan.popular
+                    ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:shadow-xl"
+                    : "bg-white text-gray-900 hover:bg-gray-100"
+                    }`}
                 >
                   {plan.cta}
                 </motion.button>

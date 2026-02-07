@@ -11,20 +11,20 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   isLoading?: boolean;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ 
-    className, 
-    variant = 'primary', 
-    size = 'md', 
-    fullWidth = false, 
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({
+    className,
+    variant = 'primary',
+    size = 'md',
+    fullWidth = false,
     isLoading = false,
-    children, 
+    children,
     disabled,
-    ...props 
+    ...props
   }, ref) => {
     const [isHovered, setIsHovered] = useState(false);
     const [isActive, setIsActive] = useState(false);
-    
+
     const baseStyles: React.CSSProperties = {
       display: 'inline-flex',
       alignItems: 'center',
@@ -44,8 +44,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         backgroundColor: isHovered ? '#FFD700' : '#FFC800',
         color: '#00143C',
         border: 'none',
-        boxShadow: isHovered 
-          ? '0 4px 12px rgba(255, 200, 0, 0.3)' 
+        boxShadow: isHovered
+          ? '0 4px 12px rgba(255, 200, 0, 0.3)'
           : 'none',
         transform: isHovered ? 'translateY(-1px)' : 'translateY(0)',
       },
@@ -130,5 +130,3 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 
 Button.displayName = 'Button';
-
-export default Button;

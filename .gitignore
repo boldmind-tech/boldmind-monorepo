@@ -77,7 +77,7 @@ temp/
 
 # Uploads
 uploads/
-media/
+# media/
 
 # Backup files
 *.bak

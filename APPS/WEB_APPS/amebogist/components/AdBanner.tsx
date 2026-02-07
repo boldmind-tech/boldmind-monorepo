@@ -1,28 +1,51 @@
 "use client";
 
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Sparkles } from 'lucide-react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
-export default function AdBanner() {
+interface AdBannerProps {
+  slot?: string;
+}
+
+export default function AdBanner({ slot }: AdBannerProps) {
   return (
-    <div className="w-full h-32 my-8 rounded-xl bg-gradient-to-r from-orange-400 to-red-500 overflow-hidden relative group shadow-lg">
-      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] opacity-20" />
-      <div className="absolute inset-0 flex items-center justify-between px-8 text-white z-10">
-        <div>
-          <span className="bg-white/20 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-widest border border-white/30 mb-2 inline-block">
-            Sponsored
-          </span>
-          <h3 className="text-2xl font-black italic tracking-tighter">BOOST YOUR APP IN NIGERIA!</h3>
-          <p className="text-sm opacity-90 font-medium">Join 5,000+ creators using BoldMind OS.</p>
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="w-full my-16 rounded-[2.5rem] bg-slate-900 border border-white/10 overflow-hidden relative group shadow-2xl p-1"
+    >
+      <div className="relative overflow-hidden rounded-[2.3rem] p-8 md:p-12">
+        {/* Background Effects */}
+        <div className="absolute inset-0 bg-gradient-to-r from-amebogreen-600/20 via-ecosystem-gold/10 to-transparent opacity-50" />
+        <div className="absolute -right-24 -top-24 w-96 h-96 bg-amebogreen-500/10 rounded-full blur-[100px] group-hover:bg-amebogreen-500/20 transition-all duration-700" />
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
+
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="text-center md:text-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amebogreen-500/10 border border-amebogreen-500/20 text-amebogreen-400 text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+              <Sparkles className="h-3 w-3" /> BoldMind Ecosystem Spotlight
+            </div>
+            <h3 className="text-3xl md:text-4xl font-black text-white italic tracking-tighter mb-4 leading-none">
+              BOOST YOUR <span className="text-amebogreen-400">APP IN NIGERIA</span>!
+            </h3>
+            <p className="text-white/60 text-lg font-serif">
+              Join 12,000+ creators and businesses scaling with <span className="text-white font-bold italic">BoldMind OS</span>.
+            </p>
+          </div>
+
+          <Link
+            href="https://os.boldmind.ng"
+            className="group/btn relative px-8 py-4 bg-amebogreen-600 hover:bg-amebogreen-500 text-white rounded-2xl font-black uppercase tracking-widest text-xs transition-all shadow-xl shadow-amebogreen-900/40 hover:-translate-y-1 active:scale-95 overflow-hidden"
+          >
+            <span className="relative z-10 flex items-center gap-2">
+              Get Started Now <ExternalLink className="h-4 w-4" />
+            </span>
+            <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000" />
+          </Link>
         </div>
-        <Link 
-          href="https://os.boldmind.ng" 
-          className="bg-white text-orange-600 px-6 py-3 rounded-full font-bold shadow-xl hover:scale-105 transition-transform flex items-center gap-2"
-        >
-          Get Started <ExternalLink className="h-4 w-4" />
-        </Link>
       </div>
-      <div className="absolute -right-4 -bottom-4 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
-    </div>
+    </motion.div>
   );
 }

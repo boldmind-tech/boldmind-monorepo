@@ -23,6 +23,9 @@ app.use('/webhooks/auth', express.json(), authWebhookRouter);
 app.get('/health', (_req: Request, res: Response) => {
     res.json({ status: 'ok', service: 'notification-service' });
 });
+app.get('/health/ping', (_req: Request, res: Response) => {
+    res.json({ message: 'pong', timestamp: new Date().toISOString() });
+});
 
 // Basic Error Handler
 app.use((err: any, _req: Request, res: Response, _next: any) => {
@@ -35,6 +38,8 @@ app.use((err: any, _req: Request, res: Response, _next: any) => {
     });
 });
 
+import { startKeepAlive } from './keep-alive';
+
 // Start Server & Connect Database
 const start = async () => {
     try {
@@ -43,6 +48,7 @@ const start = async () => {
 
         app.listen(PORT, () => {
             console.log(`🚀 Notification Service running on: http://localhost:${PORT}`);
+            startKeepAlive(PORT);
         });
     } catch (error) {
         console.error('❌ Failed to start service:', error);

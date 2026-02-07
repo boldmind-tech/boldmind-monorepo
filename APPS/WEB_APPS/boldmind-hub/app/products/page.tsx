@@ -13,13 +13,9 @@ import {
   TypewriterEffect
 } from '@boldmind/ui';
 import {
-  ExternalLink,
   CheckCircle,
-  Clock,
-  Lightbulb,
   Rocket,
   Search,
-  Filter,
   ArrowRight,
   TrendingUp,
   Globe,
@@ -195,8 +191,8 @@ export default function ProductsPage() {
                 key={cat}
                 onClick={() => setFilter(cat)}
                 className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${filter === cat
-                    ? 'bg-[#00143C] text-white shadow-lg dark:bg-[#FFC800] dark:text-[#00143C]'
-                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-white/5 dark:text-gray-300'
+                  ? 'bg-[#00143C] text-white shadow-lg dark:bg-[#FFC800] dark:text-[#00143C]'
+                  : 'bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-white/5 dark:text-gray-300'
                   }`}
               >
                 {cat}

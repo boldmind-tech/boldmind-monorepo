@@ -13,9 +13,13 @@
     "@boldmind/ui": "workspace:*",
     "@boldmind/utils": "workspace:*",
     "@boldmind/ai": "workspace:*",
+    "@boldmind/auth": "workspace:*",
+    "@boldmind/api-client": "workspace:*",
+    "sonner": "^2.0.7",
     "next": "^14.2.35",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "cookie": "^1.1.1"
   },
   "devDependencies": {
     "@types/node": "^20.11.3",

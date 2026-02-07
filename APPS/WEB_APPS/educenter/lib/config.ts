@@ -3,7 +3,7 @@
 // Past Questions API Configuration
 export const PAST_QUESTIONS_CONFIG = {
   baseUrl: 'https://questions.aloc.com.ng/api/v2',
-  accessToken: process.env.NEXT_PUBLIC_ALOC_ACCESS_TOKEN || '',
+  accessToken: process.env['NEXT_PUBLIC_ALOC_ACCESS_TOKEN'] || '',
   endpoints: {
     getQuestions: '/q',
     getSubjects: '/subjects',
@@ -102,58 +102,5 @@ export const SUBSCRIPTION_PLANS = {
         'AI automation templates',
       ],
     },
-  },
-};
-
-// API Endpoints
-export const API_CONFIG = {
-  baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api',
-  endpoints: {
-    // Auth
-    login: '/auth/login',
-    register: '/auth/register',
-    logout: '/auth/logout',
-    
-    // Users
-    getUser: '/users/:uid',
-    updateUser: '/users/:uid',
-    
-    // Study Hub
-    getProgress: '/study-hub/progress/:uid',
-    saveProgress: '/study-hub/progress',
-    getLeaderboard: '/study-hub/leaderboard',
-    
-    // Business School
-    getCourses: '/business-school/courses',
-    getCourse: '/business-school/courses/:id',
-    enrollCourse: '/business-school/enroll',
-    
-    // AI Lab
-    getTools: '/ai-lab/tools',
-    generateVideo: '/ai-lab/video-generate',
-    automateWhatsApp: '/ai-lab/whatsapp-automation',
-    
-    // Subscriptions
-    subscribe: '/subscriptions/subscribe',
-    verifyPayment: '/subscriptions/verify',
-    getSubscriptions: '/subscriptions/:uid',
-  },
-};
-
-// Feature Flags
-export const FEATURES = {
-  studyHub: {
-    cbtMode: true,
-    offlineMode: true,
-    aiExplanations: false, // Coming soon
-  },
-  businessSchool: {
-    liveClasses: false, // Coming soon
-    certifications: true,
-  },
-  aiLab: {
-    videoGeneration: true,
-    promptEngineering: true,
-    whatsappAutomation: true,
   },
 };

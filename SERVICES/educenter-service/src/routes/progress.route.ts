@@ -3,7 +3,7 @@
 import { Router } from 'express';
 import { prisma } from '../index';
 
-const router = Router();
+const router: Router = Router();
 
 // Get user progress
 router.get('/user/:userId', async (req, res, next) => {
@@ -39,7 +39,7 @@ router.get('/user/:userId/:examType/:subject', async (req, res, next) => {
 });
 
 // Update streak
-router.post('/user/:userId/streak', async (req, res, next) => {
+router.post('/user/:userId/streak', async (req, res, next): Promise<void> => {
     try {
         const { userId } = req.params;
         const { examType, subject } = req.body;
@@ -55,7 +55,8 @@ router.post('/user/:userId/streak', async (req, res, next) => {
         });
 
         if (!progress) {
-            return res.status(404).json({ error: 'Progress not found' });
+            res.status(404).json({ error: 'Progress not found' });
+            return;
         }
 
         const lastPractice = new Date(progress.lastPractice);

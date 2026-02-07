@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@boldmind/auth';
-import { boldMindAPI } from '@boldmind/api-client';
+import { hubAPI } from '../../lib/api-adapters';
 import {
   Users,
   Package,
@@ -101,7 +101,7 @@ export default function AdminDashboard() {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      const data = await boldMindAPI.dashboard.getDashboard();
+      const data = await hubAPI.getDashboardStats();
       setStats(data);
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);

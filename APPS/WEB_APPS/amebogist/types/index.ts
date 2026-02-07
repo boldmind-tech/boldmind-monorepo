@@ -1,66 +1,55 @@
-export interface User {
-    _id: string;
-    name: string;
-    email: string;
-    avatar?: string;
-    role?: string;
-    bio?: string;
-}
-
-export interface Category {
+export interface AmebogistCategory {
     _id: string;
     name: string;
     slug: string;
     metaTitle?: string;
     metaDescription?: string;
     description?: string;
-    createdAt: string;
-    updatedAt: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
-export interface Post {
+export interface AmebogistArticle {
     _id: string;
     title: string;
-    content: string;
-    excerpt?: string;
+    content: string | { pidgin: string; english?: string; yoruba?: string, igbo?: string; hausa?: string };
+    excerpt: string;
     slug: string;
+    category: AmebogistCategory | string;
+    author: {
+        id: string;
+        name: string;
+        avatar?: string;
+    };
     imageUrl?: string;
-    videoUrl?: string;
+    tags?: string[];
+    views: number;
+    engagement?: {
+        views: number;
+        likes: number;
+        shares: number;
+        commentsCount: number;
+    };
+    createdAt: string;
     status: 'draft' | 'published';
-    categoryId: string;
-    authorId: string;
-    views: number;
-    tags: string[];
-    createdAt: string;
-    updatedAt: string;
-    source?: 'manual' | 'newsdata';
-    commentary?: string;
-    author?: User;
-    category?: Category;
 }
 
-export interface ClientRelatedPost {
+// NEW: Add AmebogistComment interface
+export interface AmebogistComment {
     _id: string;
-    title: string;
-    slug: string;
-    excerpt?: string;
-    imageUrl?: string;
+    content: string;
+    articleId: string;
+    parentId?: string | null;
+    user: {
+        id: string;
+        name: string;
+        avatar?: string;
+    };
+    reactions?: {
+        like?: number;
+        love?: number;
+        dislike?: number;
+    };
     createdAt: string;
-    category?: Category;
-    views: number;
-    tags: string[];
+    updatedAt?: string;
 }
-
-
-// export interface TrendingPost {
-//   _id: string
-//   title: string
-//   excerpt: string
-//   imageUrl?: string
-//   category: {
-//     name: string
-//     slug: string
-//   }
-//   views: number
-//   createdAt: string
-// }

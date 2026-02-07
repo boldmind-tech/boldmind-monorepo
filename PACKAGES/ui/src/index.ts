@@ -1,4 +1,4 @@
-// PACKAGES/ui/src/index.ts
+// PACKAGES/ui/src/index.ts - FIXED WITH ProductThemeType EXPORT
 'use client';
 
 // ============================================
@@ -17,14 +17,14 @@ export { TypewriterEffect } from './components/TypewriterEffect';
 // ============================================
 // BASIC UI COMPONENTS
 // ============================================
-export { default as Button, type ButtonProps } from './components/Button';
-export { default as Input, type InputProps } from './components/Input';
+export { Button, type ButtonProps } from './components/Button';
+export { Input, type InputProps } from './components/Input';
 export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from './components/Card';
-export { default as Modal } from './components/Modal';
-export { default as Logo } from './components/Logo';
-export { default as SocialLinks } from './components/SocialLinks';
-export { default as StatusBadge } from './components/StatusBadge';
-export { default as LoadingSpinner } from './components/LoadingSpinner';
+export { Modal } from './components/Modal';
+export { Logo } from './components/Logo';
+export { SocialLinks } from './components/SocialLinks';
+export { StatusBadge } from './components/StatusBadge';
+export { LoadingSpinner } from './components/LoadingSpinner';
 export { ErrorBoundary } from './components/ErrorBoundary';
 
 // ============================================
@@ -43,7 +43,9 @@ export {
   ThemeToggle,
   DyslexiaModeToggle,
   useProductTheme,
-  type ThemeContextType
+  type ThemeContextType,
+  type ProductThemeType,
+  type Theme
 } from './providers/theme-provider';
 
 // ============================================

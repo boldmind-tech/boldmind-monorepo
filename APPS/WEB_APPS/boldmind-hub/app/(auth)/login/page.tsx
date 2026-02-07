@@ -1,3 +1,4 @@
+//APPS/WEB_APPS/boldmind-hub/app/(auth)/login/page.tsx - CLIENT COMPONENT VERSION
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -151,7 +152,7 @@ export default function LoginPage() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
+            placeholder="you@boldmind.com"
             required
             disabled={isLoading}
             className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:border-[#FFC800] focus:ring-2 focus:ring-[#FFC800]/20 outline-none transition-all disabled:opacity-50"
@@ -207,7 +208,7 @@ export default function LoginPage() {
             <span className="text-sm text-gray-600 dark:text-gray-400">Remember me</span>
           </label>
           <Link
-            href="/forgot-password"
+            href="/reset-password"
             className="text-sm font-medium text-[#00143C] dark:text-[#FFC800] hover:underline"
           >
             Forgot password?

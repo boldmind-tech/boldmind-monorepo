@@ -10,13 +10,13 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   icon?: React.ReactNode;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, label, error, icon, ...props }, ref) => {
     return (
       <div style={{ width: '100%' }}>
         {label && (
-          <label style={{ 
-            display: 'block', 
+          <label style={{
+            display: 'block',
             marginBottom: '0.5rem',
             fontWeight: 500,
             color: '#00143C'
@@ -64,7 +64,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           />
         </div>
         {error && (
-          <p style={{ 
+          <p style={{
             color: '#EF4444',
             fontSize: '0.875rem',
             marginTop: '0.25rem'
@@ -78,5 +78,3 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 );
 
 Input.displayName = 'Input';
-
-export default Input;

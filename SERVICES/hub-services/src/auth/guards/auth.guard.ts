@@ -1,13 +1,11 @@
 // SERVICES/hub-service/src/auth/guards/auth.guard.ts
 import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import { AuthService } from '../auth.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
     constructor(
-        private reflector: Reflector,
         private authService: AuthService,
     ) { }
 
@@ -28,11 +26,11 @@ export class AuthGuard implements CanActivate {
         }
     }
 
-    private extractToken(request: Request): string | null {
+    private extractToken(request: Request): string | undefined {  // ← CHANGED: null → undefined
         const authHeader = request.headers.authorization;
-        if (!authHeader) return null;
+        if (!authHeader) return undefined;
 
         const [type, token] = authHeader.split(' ');
-        return type === 'Bearer' ? token : null;
+        return type === 'Bearer' ? token : undefined;
     }
 }

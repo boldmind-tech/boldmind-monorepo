@@ -59,7 +59,6 @@ const isProduction = ENV_CONFIG.NODE_ENV === 'production';
 // ============================================================================
 
 const DEFAULT_PORTS = {
-    // Shared services
     gateway: ENV_CONFIG.SERVICE_PORTS.GATEWAY,
     user: ENV_CONFIG.SERVICE_PORTS.USER,
     payment: ENV_CONFIG.SERVICE_PORTS.PAYMENT,
@@ -67,10 +66,6 @@ const DEFAULT_PORTS = {
     media: ENV_CONFIG.SERVICE_PORTS.MEDIA,
     analytics: ENV_CONFIG.SERVICE_PORTS.ANALYTICS,
     ai: ENV_CONFIG.SERVICE_PORTS.AI,
-
-
-
-    // Product-specific services
     educenter: ENV_CONFIG.SERVICE_PORTS.EDUCENTER,
     amebogist: ENV_CONFIG.SERVICE_PORTS.AMEBOGIST,
     'boldmind-os': ENV_CONFIG.SERVICE_PORTS.BOLDMIND_OS,

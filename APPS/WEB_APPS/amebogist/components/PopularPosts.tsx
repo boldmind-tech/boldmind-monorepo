@@ -31,30 +31,30 @@ export default function PopularPosts() {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {popularPosts.map((post, index) => (
-        <Link 
-          key={post._id} 
-          href={`/posts/${post.slug}`}
-          className="flex gap-4 group hover:bg-white/50 p-2 rounded-lg transition-all"
+        <Link
+          key={post?._id || index}
+          href={`/posts/${post?.slug || '#'}`}
+          className="flex gap-4 group hover:bg-white p-3 rounded-2xl transition-all duration-300 hover:shadow-premium border border-transparent hover:border-gray-100"
         >
-          <div className="relative h-16 w-24 flex-shrink-0 overflow-hidden rounded-md">
+          <div className="relative h-20 w-28 flex-shrink-0 overflow-hidden rounded-xl bg-gray-100">
             <Image
-              src={post.imageUrl}
-              alt={post.title}
+              src={post?.imageUrl || '/placeholder.svg'}
+              alt={post?.title || 'Popular Post'}
               fill
-              className="object-cover group-hover:scale-110 transition-transform duration-300"
+              className="object-cover group-hover:scale-110 transition-transform duration-500"
             />
           </div>
-          <div className="flex-1 min-w-0">
-            <h4 className="text-sm font-bold font-serif line-clamp-2 group-hover:text-green-600 transition-colors leading-tight mb-1">
-              {post.title}
+          <div className="flex-1 min-w-0 flex flex-col justify-center">
+            <h4 className="text-sm font-bold font-serif line-clamp-2 group-hover:text-amebogreen-600 transition-colors leading-snug mb-2">
+              {post?.title || 'Popular Story'}
             </h4>
-            <div className="flex items-center gap-3 text-[10px] text-gray-500 uppercase tracking-wider font-bold">
+            <div className="flex items-center gap-3 text-[9px] text-gray-400 uppercase tracking-widest font-black">
               <span className="flex items-center gap-1">
-                <Eye className="h-3 w-3" /> {post.views.toLocaleString()}
+                <Eye className="h-3 w-3 text-amebogreen-600" /> {(post?.views || 0).toLocaleString()}
               </span>
-              <span className="flex items-center gap-1 text-green-600">
+              <span className="flex items-center gap-1 text-amebogreen-600">
                 <TrendingUp className="h-3 w-3" /> Trending
               </span>
             </div>

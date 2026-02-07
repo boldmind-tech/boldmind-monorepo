@@ -15,15 +15,13 @@ export function LoadingSpinner({ size = 'md', color = 'currentColor', className 
 
   return (
     <div className={cn('inline-block', className)}>
-      <div 
+      <div
         className={cn('animate-spin rounded-full border-2 border-t-transparent', sizes[size])}
-        style={{ 
+        style={{
           borderColor: `${color}20`,
-          borderTopColor: color 
+          borderTopColor: color
         }}
       />
     </div>
   );
 }
-
-export default LoadingSpinner;

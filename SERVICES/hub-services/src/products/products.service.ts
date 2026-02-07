@@ -1,18 +1,17 @@
 // SERVICES/hub-service/src/products/products.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+
 import {
-    ProductStatus,
-    ProductCategory,
-    Prisma,
+    Prisma, PrismaClient, ProductStatus, ProductCategory
 } from '../generated/client';
+
 import {
     BOLDMIND_PRODUCTS,
 } from '@boldmind/utils'; // Import from shared package
 
 @Injectable()
 export class ProductsService {
-    constructor(private prisma: PrismaService) { }
+    constructor(private prisma: PrismaClient) { }
 
     async getAllProducts(
         page: number = 1,

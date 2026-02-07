@@ -2,7 +2,7 @@
     "extends": "../../tsconfig.backend.json",
     "compilerOptions": {
         "outDir": "./dist",
-        "rootDir": "./src",
+        "rootDir": ".",
         "module": "CommonJS",
         "moduleResolution": "node",
         "lib": [
@@ -15,8 +15,12 @@
         ],
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        // CRITICAL: Remove baseUrl and paths - rely on node_modules resolution
-        // This forces TS to use the BUILT package from node_modules
+        "baseUrl": ".",
+        "paths": {
+            "@generated/*": [
+                "src/generated/*"
+            ]
+        }
     },
     "include": [
         "src/**/*"

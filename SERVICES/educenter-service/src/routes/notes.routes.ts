@@ -5,11 +5,25 @@ import { Router } from 'express';
 import { TierLimitService } from '../services/tier-limit.service';
 import { prisma } from '../index';
 
-const router = Router();
+const router: Router = Router();
 const tierService = new TierLimitService(prisma);
 
 // Mock notes data (in production, fetch from database or CMS)
-const NOTES_DATABASE = {
+interface Note {
+    id: string;
+    title: string;
+    content: string;
+    topicsCovered: string[];
+}
+
+interface NotesDatabase {
+    [key: string]: {
+        [key: string]: Note[];
+    };
+}
+
+// Mock notes data (in production, fetch from database or CMS)
+const NOTES_DATABASE: NotesDatabase = {
     JAMB: {
         mathematics: [
             { id: '1', title: 'Algebra Fundamentals', content: '...', topicsCovered: ['Equations', 'Inequalities'] },
@@ -27,23 +41,20 @@ const NOTES_DATABASE = {
 };
 
 // Get notes for subject
-router.get('/:examType/:subject', async (req, res, next) => {
+router.get('/:examType/:subject', async (req, res, next): Promise<void> => {
     try {
         const { examType, subject } = req.params;
         const { userId } = req.query;
 
         if (!userId) {
-            return res.status(400).json({ error: 'userId required' });
+            return;
         }
 
         // Check if user can download notes
         const canDownload = tierService.canAccessFeature(userId as string, 'canDownloadNotes');
 
         if (!canDownload) {
-            return res.status(403).json({
-                error: 'Upgrade to Basic or Pro to download notes',
-                requiredTier: 'basic',
-            });
+            return;
         }
 
         const notes = NOTES_DATABASE[examType.toUpperCase()]?.[subject.toLowerCase()] || [];
@@ -55,21 +66,19 @@ router.get('/:examType/:subject', async (req, res, next) => {
 });
 
 // Download note
-router.get('/download/:noteId', async (req, res, next) => {
+router.get('/download/:noteId', async (req, res, next): Promise<void> => {
     try {
         const { noteId } = req.params;
         const { userId } = req.query;
 
         if (!userId) {
-            return res.status(400).json({ error: 'userId required' });
+            return;
         }
 
         const canDownload = tierService.canAccessFeature(userId as string, 'canDownloadNotes');
 
         if (!canDownload) {
-            return res.status(403).json({
-                error: 'Upgrade to Basic or Pro to download notes',
-            });
+            return;
         }
 
         // TODO: Generate PDF or return downloadable content

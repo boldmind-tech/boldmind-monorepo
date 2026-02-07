@@ -141,6 +141,34 @@ export const BOLDMIND_COLOR_SCHEMES: Record<string, ProductColorScheme> = {
     }
   },
 
+  // === CONCEPT APP SHARED THEME ===
+  'concept-app': {
+    name: 'Concept App',
+    slug: 'concept-app',
+    category: 'concept',
+    primary: '#64748B', // Slate
+    secondary: '#0F172A', // Dark
+    accent: '#38BDF8', // Sky
+    background: '#FFFFFF',
+    foreground: '#1F2937',
+    muted: '#F1F5F9',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
+    gradients: {
+      primary: ['#64748B', '#94A3B8'],
+      secondary: ['#0F172A', '#1E293B'],
+      background: ['#FFFFFF', '#F8FAFC']
+    },
+    shadows: {
+      sm: '0 1px 2px 0 rgba(100, 116, 139, 0.05)',
+      md: '0 4px 6px -1px rgba(100, 116, 139, 0.1)',
+      lg: '0 10px 15px -3px rgba(100, 116, 139, 0.1)',
+      xl: '0 20px 25px -5px rgba(100, 116, 139, 0.1)'
+    }
+  },
+
   'ai-receptionist': {
     name: 'AI Receptionist',
     slug: 'ai-receptionist',
@@ -250,31 +278,31 @@ export const BOLDMIND_COLOR_SCHEMES: Record<string, ProductColorScheme> = {
     }
   },
 
-  // Concept Apps
+  // Concept Apps - Unified Theme
   'safe-ai': {
     name: 'SAFE AI',
     slug: 'safe-ai',
     category: 'security',
-    primary: '#FF5722', // Orange
-    secondary: '#FFFFFF',
-    accent: '#D84315', // Dark Orange
+    primary: '#64748B', // Slate
+    secondary: '#0F172A', // Dark
+    accent: '#38BDF8', // Sky
     background: '#FFFFFF',
     foreground: '#1F2937',
-    muted: '#FFF3E0',
-    success: '#4CAF50',
-    warning: '#FF9800',
-    error: '#F44336',
-    info: '#2196F3',
+    muted: '#F1F5F9',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
     gradients: {
-      primary: ['#FF5722', '#FF7043'],
-      secondary: ['#FFFFFF', '#F5F5F5'],
-      background: ['#FFFFFF', '#F9FAFB']
+      primary: ['#64748B', '#94A3B8'],
+      secondary: ['#0F172A', '#1E293B'],
+      background: ['#FFFFFF', '#F8FAFC']
     },
     shadows: {
-      sm: '0 1px 2px 0 rgba(255, 87, 34, 0.05)',
-      md: '0 4px 6px -1px rgba(255, 87, 34, 0.1)',
-      lg: '0 10px 15px -3px rgba(255, 87, 34, 0.1)',
-      xl: '0 20px 25px -5px rgba(255, 87, 34, 0.1)'
+      sm: '0 1px 2px 0 rgba(100, 116, 139, 0.05)',
+      md: '0 4px 6px -1px rgba(100, 116, 139, 0.1)',
+      lg: '0 10px 15px -3px rgba(100, 116, 139, 0.1)',
+      xl: '0 20px 25px -5px rgba(100, 116, 139, 0.1)'
     }
   },
 
@@ -282,26 +310,26 @@ export const BOLDMIND_COLOR_SCHEMES: Record<string, ProductColorScheme> = {
     name: 'AfroHustle OS',
     slug: 'afrohustle-os',
     category: 'education',
-    primary: '#9C27B0', // Purple
-    secondary: '#FF9800', // Orange
-    accent: '#7B1FA2', // Dark Purple
+    primary: '#64748B', // Slate
+    secondary: '#0F172A', // Dark
+    accent: '#38BDF8', // Sky
     background: '#FFFFFF',
     foreground: '#1F2937',
-    muted: '#F3E5F5',
-    success: '#4CAF50',
-    warning: '#FF9800',
-    error: '#F44336',
-    info: '#2196F3',
+    muted: '#F1F5F9',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
     gradients: {
-      primary: ['#9C27B0', '#AB47BC'],
-      secondary: ['#FF9800', '#FFB74D'],
-      background: ['#FFFFFF', '#F9FAFB']
+      primary: ['#64748B', '#94A3B8'],
+      secondary: ['#0F172A', '#1E293B'],
+      background: ['#FFFFFF', '#F8FAFC']
     },
     shadows: {
-      sm: '0 1px 2px 0 rgba(156, 39, 176, 0.05)',
-      md: '0 4px 6px -1px rgba(156, 39, 176, 0.1)',
-      lg: '0 10px 15px -3px rgba(156, 39, 176, 0.1)',
-      xl: '0 20px 25px -5px rgba(156, 39, 176, 0.1)'
+      sm: '0 1px 2px 0 rgba(100, 116, 139, 0.05)',
+      md: '0 4px 6px -1px rgba(100, 116, 139, 0.1)',
+      lg: '0 10px 15px -3px rgba(100, 116, 139, 0.1)',
+      xl: '0 20px 25px -5px rgba(100, 116, 139, 0.1)'
     }
   },
 
@@ -309,26 +337,26 @@ export const BOLDMIND_COLOR_SCHEMES: Record<string, ProductColorScheme> = {
     name: 'KoloAI',
     slug: 'kolo-ai',
     category: 'fintech',
-    primary: '#009688', // Teal
-    secondary: '#FFC107', // Amber
-    accent: '#00796B', // Dark Teal
+    primary: '#64748B', // Slate
+    secondary: '#0F172A', // Dark
+    accent: '#38BDF8', // Sky
     background: '#FFFFFF',
     foreground: '#1F2937',
-    muted: '#E0F2F1',
-    success: '#4CAF50',
-    warning: '#FF9800',
-    error: '#F44336',
-    info: '#2196F3',
+    muted: '#F1F5F9',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
     gradients: {
-      primary: ['#009688', '#26A69A'],
-      secondary: ['#FFC107', '#FFD54F'],
-      background: ['#FFFFFF', '#F9FAFB']
+      primary: ['#64748B', '#94A3B8'],
+      secondary: ['#0F172A', '#1E293B'],
+      background: ['#FFFFFF', '#F8FAFC']
     },
     shadows: {
-      sm: '0 1px 2px 0 rgba(0, 150, 136, 0.05)',
-      md: '0 4px 6px -1px rgba(0, 150, 136, 0.1)',
-      lg: '0 10px 15px -3px rgba(0, 150, 136, 0.1)',
-      xl: '0 20px 25px -5px rgba(0, 150, 136, 0.1)'
+      sm: '0 1px 2px 0 rgba(100, 116, 139, 0.05)',
+      md: '0 4px 6px -1px rgba(100, 116, 139, 0.1)',
+      lg: '0 10px 15px -3px rgba(100, 116, 139, 0.1)',
+      xl: '0 20px 25px -5px rgba(100, 116, 139, 0.1)'
     }
   },
 
@@ -336,26 +364,26 @@ export const BOLDMIND_COLOR_SCHEMES: Record<string, ProductColorScheme> = {
     name: 'AfroCopy AI',
     slug: 'afrocopy-ai',
     category: 'ai',
-    primary: '#FF9800', // Orange
-    secondary: '#4CAF50', // Green
-    accent: '#F57C00', // Dark Orange
+    primary: '#64748B', // Slate
+    secondary: '#0F172A', // Dark
+    accent: '#38BDF8', // Sky
     background: '#FFFFFF',
     foreground: '#1F2937',
-    muted: '#FFF3E0',
-    success: '#4CAF50',
-    warning: '#FF9800',
-    error: '#F44336',
-    info: '#2196F3',
+    muted: '#F1F5F9',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
     gradients: {
-      primary: ['#FF9800', '#FFB74D'],
-      secondary: ['#4CAF50', '#66BB6A'],
-      background: ['#FFFFFF', '#F9FAFB']
+      primary: ['#64748B', '#94A3B8'],
+      secondary: ['#0F172A', '#1E293B'],
+      background: ['#FFFFFF', '#F8FAFC']
     },
     shadows: {
-      sm: '0 1px 2px 0 rgba(255, 152, 0, 0.05)',
-      md: '0 4px 6px -1px rgba(255, 152, 0, 0.1)',
-      lg: '0 10px 15px -3px rgba(255, 152, 0, 0.1)',
-      xl: '0 20px 25px -5px rgba(255, 152, 0, 0.1)'
+      sm: '0 1px 2px 0 rgba(100, 116, 139, 0.05)',
+      md: '0 4px 6px -1px rgba(100, 116, 139, 0.1)',
+      lg: '0 10px 15px -3px rgba(100, 116, 139, 0.1)',
+      xl: '0 20px 25px -5px rgba(100, 116, 139, 0.1)'
     }
   },
 
@@ -363,26 +391,26 @@ export const BOLDMIND_COLOR_SCHEMES: Record<string, ProductColorScheme> = {
     name: 'Skill2Cash Board',
     slug: 'skill2cash-board',
     category: 'marketplace',
-    primary: '#673AB7', // Deep Purple
-    secondary: '#00BCD4', // Cyan
-    accent: '#512DA8', // Dark Purple
+    primary: '#64748B', // Slate
+    secondary: '#0F172A', // Dark
+    accent: '#38BDF8', // Sky
     background: '#FFFFFF',
     foreground: '#1F2937',
-    muted: '#EDE7F6',
-    success: '#4CAF50',
-    warning: '#FF9800',
-    error: '#F44336',
-    info: '#2196F3',
+    muted: '#F1F5F9',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
     gradients: {
-      primary: ['#673AB7', '#7E57C2'],
-      secondary: ['#00BCD4', '#26C6DA'],
-      background: ['#FFFFFF', '#F9FAFB']
+      primary: ['#64748B', '#94A3B8'],
+      secondary: ['#0F172A', '#1E293B'],
+      background: ['#FFFFFF', '#F8FAFC']
     },
     shadows: {
-      sm: '0 1px 2px 0 rgba(103, 58, 183, 0.05)',
-      md: '0 4px 6px -1px rgba(103, 58, 183, 0.1)',
-      lg: '0 10px 15px -3px rgba(103, 58, 183, 0.1)',
-      xl: '0 20px 25px -5px rgba(103, 58, 183, 0.1)'
+      sm: '0 1px 2px 0 rgba(100, 116, 139, 0.05)',
+      md: '0 4px 6px -1px rgba(100, 116, 139, 0.1)',
+      lg: '0 10px 15px -3px rgba(100, 116, 139, 0.1)',
+      xl: '0 20px 25px -5px rgba(100, 116, 139, 0.1)'
     }
   },
 
@@ -390,26 +418,26 @@ export const BOLDMIND_COLOR_SCHEMES: Record<string, ProductColorScheme> = {
     name: 'AnonTruth Mic',
     slug: 'anontruth-mic',
     category: 'social',
-    primary: '#607D8B', // Blue Grey
-    secondary: '#CFD8DC',
-    accent: '#455A64', // Dark Blue Grey
+    primary: '#64748B', // Slate
+    secondary: '#0F172A', // Dark
+    accent: '#38BDF8', // Sky
     background: '#FFFFFF',
     foreground: '#1F2937',
-    muted: '#ECEFF1',
-    success: '#4CAF50',
-    warning: '#FF9800',
-    error: '#F44336',
-    info: '#2196F3',
+    muted: '#F1F5F9',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
     gradients: {
-      primary: ['#607D8B', '#78909C'],
-      secondary: ['#CFD8DC', '#E0E0E0'],
-      background: ['#FFFFFF', '#F9FAFB']
+      primary: ['#64748B', '#94A3B8'],
+      secondary: ['#0F172A', '#1E293B'],
+      background: ['#FFFFFF', '#F8FAFC']
     },
     shadows: {
-      sm: '0 1px 2px 0 rgba(96, 125, 139, 0.05)',
-      md: '0 4px 6px -1px rgba(96, 125, 139, 0.1)',
-      lg: '0 10px 15px -3px rgba(96, 125, 139, 0.1)',
-      xl: '0 20px 25px -5px rgba(96, 125, 139, 0.1)'
+      sm: '0 1px 2px 0 rgba(100, 116, 139, 0.05)',
+      md: '0 4px 6px -1px rgba(100, 116, 139, 0.1)',
+      lg: '0 10px 15px -3px rgba(100, 116, 139, 0.1)',
+      xl: '0 20px 25px -5px rgba(100, 116, 139, 0.1)'
     }
   },
 
@@ -663,26 +691,26 @@ export const BOLDMIND_COLOR_SCHEMES: Record<string, ProductColorScheme> = {
     name: 'NaijaGig Matcher',
     slug: 'naijagig-matcher',
     category: 'marketplace',
-    primary: '#795548', // Brown
-    secondary: '#FF9800', // Orange
-    accent: '#5D4037', // Dark Brown
+    primary: '#64748B', // Slate
+    secondary: '#0F172A', // Dark
+    accent: '#38BDF8', // Sky
     background: '#FFFFFF',
     foreground: '#1F2937',
-    muted: '#EFEBE9',
-    success: '#4CAF50',
-    warning: '#FF9800',
-    error: '#F44336',
-    info: '#2196F3',
+    muted: '#F1F5F9',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
     gradients: {
-      primary: ['#795548', '#8D6E63'],
-      secondary: ['#FF9800', '#FFB74D'],
-      background: ['#FFFFFF', '#F9FAFB']
+      primary: ['#64748B', '#94A3B8'],
+      secondary: ['#0F172A', '#1E293B'],
+      background: ['#FFFFFF', '#F8FAFC']
     },
     shadows: {
-      sm: '0 1px 2px 0 rgba(121, 85, 72, 0.05)',
-      md: '0 4px 6px -1px rgba(121, 85, 72, 0.1)',
-      lg: '0 10px 15px -3px rgba(121, 85, 72, 0.1)',
-      xl: '0 20px 25px -5px rgba(121, 85, 72, 0.1)'
+      sm: '0 1px 2px 0 rgba(100, 116, 139, 0.05)',
+      md: '0 4px 6px -1px rgba(100, 116, 139, 0.1)',
+      lg: '0 10px 15px -3px rgba(100, 116, 139, 0.1)',
+      xl: '0 20px 25px -5px rgba(100, 116, 139, 0.1)'
     }
   },
 
@@ -691,26 +719,26 @@ export const BOLDMIND_COLOR_SCHEMES: Record<string, ProductColorScheme> = {
     name: 'BorderlessRemit Tracker',
     slug: 'borderless-remit',
     category: 'fintech',
-    primary: '#1565C0', // Blue
-    secondary: '#4CAF50', // Green
-    accent: '#0D47A1', // Dark Blue
+    primary: '#64748B', // Slate
+    secondary: '#0F172A', // Dark
+    accent: '#38BDF8', // Sky
     background: '#FFFFFF',
     foreground: '#1F2937',
-    muted: '#E3F2FD',
-    success: '#4CAF50',
-    warning: '#FF9800',
-    error: '#F44336',
-    info: '#2196F3',
+    muted: '#F1F5F9',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
     gradients: {
-      primary: ['#1565C0', '#1976D2'],
-      secondary: ['#4CAF50', '#66BB6A'],
-      background: ['#FFFFFF', '#F9FAFB']
+      primary: ['#64748B', '#94A3B8'],
+      secondary: ['#0F172A', '#1E293B'],
+      background: ['#FFFFFF', '#F8FAFC']
     },
     shadows: {
-      sm: '0 1px 2px 0 rgba(21, 101, 192, 0.05)',
-      md: '0 4px 6px -1px rgba(21, 101, 192, 0.1)',
-      lg: '0 10px 15px -3px rgba(21, 101, 192, 0.1)',
-      xl: '0 20px 25px -5px rgba(21, 101, 192, 0.1)'
+      sm: '0 1px 2px 0 rgba(100, 116, 139, 0.05)',
+      md: '0 4px 6px -1px rgba(100, 116, 139, 0.1)',
+      lg: '0 10px 15px -3px rgba(100, 116, 139, 0.1)',
+      xl: '0 20px 25px -5px rgba(100, 116, 139, 0.1)'
     }
   },
 
@@ -718,26 +746,26 @@ export const BOLDMIND_COLOR_SCHEMES: Record<string, ProductColorScheme> = {
     name: 'ReceiptGenius NG',
     slug: 'receipt-genius',
     category: 'fintech',
-    primary: '#4CAF50', // Green
-    secondary: '#FF9800', // Orange
-    accent: '#388E3C', // Dark Green
+    primary: '#64748B', // Slate
+    secondary: '#0F172A', // Dark
+    accent: '#38BDF8', // Sky
     background: '#FFFFFF',
     foreground: '#1F2937',
-    muted: '#E8F5E9',
-    success: '#4CAF50',
-    warning: '#FF9800',
-    error: '#F44336',
-    info: '#2196F3',
+    muted: '#F1F5F9',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
     gradients: {
-      primary: ['#4CAF50', '#66BB6A'],
-      secondary: ['#FF9800', '#FFB74D'],
-      background: ['#FFFFFF', '#F9FAFB']
+      primary: ['#64748B', '#94A3B8'],
+      secondary: ['#0F172A', '#1E293B'],
+      background: ['#FFFFFF', '#F8FAFC']
     },
     shadows: {
-      sm: '0 1px 2px 0 rgba(76, 175, 80, 0.05)',
-      md: '0 4px 6px -1px rgba(76, 175, 80, 0.1)',
-      lg: '0 10px 15px -3px rgba(76, 175, 80, 0.1)',
-      xl: '0 20px 25px -5px rgba(76, 175, 80, 0.1)'
+      sm: '0 1px 2px 0 rgba(100, 116, 139, 0.05)',
+      md: '0 4px 6px -1px rgba(100, 116, 139, 0.1)',
+      lg: '0 10px 15px -3px rgba(100, 116, 139, 0.1)',
+      xl: '0 20px 25px -5px rgba(100, 116, 139, 0.1)'
     }
   },
 
@@ -746,26 +774,26 @@ export const BOLDMIND_COLOR_SCHEMES: Record<string, ProductColorScheme> = {
     name: 'PowerAlert NG',
     slug: 'power-alert',
     category: 'utilities',
-    primary: '#FFC107', // Amber (Electric)
-    secondary: '#FF5722', // Orange
-    accent: '#FFA000', // Dark Amber
+    primary: '#64748B', // Slate
+    secondary: '#0F172A', // Dark
+    accent: '#38BDF8', // Sky
     background: '#FFFFFF',
     foreground: '#1F2937',
-    muted: '#FFF8E1',
-    success: '#4CAF50',
-    warning: '#FF9800',
-    error: '#F44336',
-    info: '#2196F3',
+    muted: '#F1F5F9',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
     gradients: {
-      primary: ['#FFC107', '#FFD54F'],
-      secondary: ['#FF5722', '#FF7043'],
-      background: ['#FFFFFF', '#F9FAFB']
+      primary: ['#64748B', '#94A3B8'],
+      secondary: ['#0F172A', '#1E293B'],
+      background: ['#FFFFFF', '#F8FAFC']
     },
     shadows: {
-      sm: '0 1px 2px 0 rgba(255, 193, 7, 0.05)',
-      md: '0 4px 6px -1px rgba(255, 193, 7, 0.1)',
-      lg: '0 10px 15px -3px rgba(255, 193, 7, 0.1)',
-      xl: '0 20px 25px -5px rgba(255, 193, 7, 0.1)'
+      sm: '0 1px 2px 0 rgba(100, 116, 139, 0.05)',
+      md: '0 4px 6px -1px rgba(100, 116, 139, 0.1)',
+      lg: '0 10px 15px -3px rgba(100, 116, 139, 0.1)',
+      xl: '0 20px 25px -5px rgba(100, 116, 139, 0.1)'
     }
   },
 
@@ -773,33 +801,33 @@ export const BOLDMIND_COLOR_SCHEMES: Record<string, ProductColorScheme> = {
     name: 'FarmGate Direct',
     slug: 'farmgate-direct',
     category: 'marketplace',
-    primary: '#8BC34A', // Light Green (Agriculture)
-    secondary: '#795548', // Brown
-    accent: '#689F38', // Dark Light Green
+    primary: '#64748B', // Slate
+    secondary: '#0F172A', // Dark
+    accent: '#38BDF8', // Sky
     background: '#FFFFFF',
     foreground: '#1F2937',
-    muted: '#DCEDC8',
-    success: '#4CAF50',
-    warning: '#FF9800',
-    error: '#F44336',
-    info: '#2196F3',
+    muted: '#F1F5F9',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#3B82F6',
     gradients: {
-      primary: ['#8BC34A', '#9CCC65'],
-      secondary: ['#795548', '#8D6E63'],
-      background: ['#FFFFFF', '#F9FAFB']
+      primary: ['#64748B', '#94A3B8'],
+      secondary: ['#0F172A', '#1E293B'],
+      background: ['#FFFFFF', '#F8FAFC']
     },
     shadows: {
-      sm: '0 1px 2px 0 rgba(139, 195, 74, 0.05)',
-      md: '0 4px 6px -1px rgba(139, 195, 74, 0.1)',
-      lg: '0 10px 15px -3px rgba(139, 195, 74, 0.1)',
-      xl: '0 20px 25px -5px rgba(139, 195, 74, 0.1)'
+      sm: '0 1px 2px 0 rgba(100, 116, 139, 0.05)',
+      md: '0 4px 6px -1px rgba(100, 116, 139, 0.1)',
+      lg: '0 10px 15px -3px rgba(100, 116, 139, 0.1)',
+      xl: '0 20px 25px -5px rgba(100, 116, 139, 0.1)'
     }
   }
 };
 
 // Utility Functions
 export function getColorScheme(slug: string): ProductColorScheme {
-  return BOLDMIND_COLOR_SCHEMES[slug] || BOLDMIND_COLOR_SCHEMES['boldmind-hub'];
+  return BOLDMIND_COLOR_SCHEMES[slug] || BOLDMIND_COLOR_SCHEMES['boldmind-hub']!;
 }
 
 export function getCategoryColorSchemes(category: string): ProductColorScheme[] {

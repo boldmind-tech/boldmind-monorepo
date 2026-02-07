@@ -41,6 +41,10 @@ app.get('/health', (_req: Request, res: Response) => {
   res.json({ status: 'ok', service: 'payment-service' });
 });
 
+app.get('/health/ping', (_req: Request, res: Response) => {
+  res.json({ message: 'pong', timestamp: new Date().toISOString() });
+});
+
 // Error handling
 app.use((err: any, _req: Request, res: Response, _next: any) => {
   console.error(err.stack);
@@ -52,9 +56,12 @@ app.use((err: any, _req: Request, res: Response, _next: any) => {
   });
 });
 
+import { startKeepAlive } from './keep-alive';
+
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Payment Service running on: http://localhost:${PORT}`);
+  startKeepAlive(PORT);
 });
 
 // Graceful shutdown

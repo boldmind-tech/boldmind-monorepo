@@ -233,7 +233,7 @@ export const ENV_CONFIG = {
       { id: 'ig5', name: '@villagecircl', url: 'https://instagram.com/villagecircl', platform: 'instagram' },
     ],
     twitter: [
-      { id: 'tw1', name: 'VillageCircle', url: 'https://x.com/bobbycuc2025', platform: 'twitter' },
+      { id: 'tw1', name: 'VillageCircle', url: 'https://x.com/villagecircl', platform: 'twitter' },
       { id: 'tw2', name: 'AmeboGist', url: 'https://x.com/Amebo__Gist', platform: 'twitter' },
       { id: 'tw3', name: 'ChainsToCoins', url: 'https://x.com/ChainsToCoins', platform: 'twitter' },
       { id: 'tw4', name: 'CodeFiresAfrica', url: 'https://x.com/mediaman9ja', platform: 'twitter' },

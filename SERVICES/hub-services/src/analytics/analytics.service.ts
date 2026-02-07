@@ -1,11 +1,11 @@
 // SERVICES/hub-service/src/analytics/analytics.service.ts
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
 import { BOLDMIND_PRODUCTS } from '@boldmind/utils';
+import { PrismaClient } from '../generated/client';
 
 @Injectable()
 export class AnalyticsService {
-    constructor(private prisma: PrismaService) { }
+    constructor(private prisma: PrismaClient) { }
 
     async getEcosystemAnalytics() {
         const [

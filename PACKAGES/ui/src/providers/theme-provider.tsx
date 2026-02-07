@@ -67,11 +67,11 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="theme-toggle"
+      className="p-2 rounded-lg hover:bg-white/10 transition-colors"
       aria-label={`Switch theme. Current theme: ${theme}`}
+      title={`Switch theme (${theme})`}
     >
-      <span className="theme-icon">{getThemeIcon()}</span>
-      <span className="theme-label sr-only">Theme: {theme}</span>
+      <span className="text-xl">{getThemeIcon()}</span>
     </button>
   );
 }
@@ -192,8 +192,8 @@ export interface ThemeProviderProps {
 // Component: ThemeProvider
 export function ThemeProvider({
   children,
-  defaultTheme = "light",
-  defaultDyslexia = false,
+  defaultTheme = "dark",
+  defaultDyslexia = true,
   defaultProduct,
   forceProductSlug,
 }: ThemeProviderProps) {
@@ -210,9 +210,11 @@ export function ThemeProvider({
     setThemeState(initialTheme);
     console.log('Theme: Initializing theme to:', initialTheme);
 
-    // Initialize dyslexia mode - FORCE DISABLE FOR NON-BOLDMIND-OS PRODUCTS
+    // Initialize dyslexia mode - ENABLED BY DEFAULT FOR ALL APPS
+    // User requested dyslexia styling to be the default global standard
     const savedDyslexia = localStorage.getItem('dyslexia-mode');
-    const initialDyslexia = savedDyslexia === 'true' || defaultDyslexia;
+    // Default to true if not set, as this is now the standard style
+    const initialDyslexia = savedDyslexia !== 'false';
 
     // Check if current product is BoldMind OS
     let finalProductTheme: ProductThemeType;
@@ -250,12 +252,9 @@ export function ThemeProvider({
 
     setProductTheme(finalProductTheme);
 
-    // Only enable dyslexia mode for BoldMind OS
-    const isBoldMindOS = finalProductTheme.slug.includes('boldmind-os');
-    const finalDyslexiaMode = isBoldMindOS ? initialDyslexia : false;
-
-    setDyslexiaMode(finalDyslexiaMode);
-    console.log('Theme: Initializing dyslexia mode to:', finalDyslexiaMode, '(BoldMind OS:', isBoldMindOS, ')');
+    // Set dyslexia mode globally
+    setDyslexiaMode(initialDyslexia);
+    console.log('Theme: Initializing dyslexia mode to:', initialDyslexia);
 
   }, [defaultProduct, defaultTheme, defaultDyslexia, forceProductSlug]);
 
@@ -358,9 +357,8 @@ export function ThemeProvider({
       root.classList.add(theme);
     }
 
-    // Handle dyslexia mode - only for BoldMind OS
-    const isBoldMindProduct = productTheme.slug.includes('boldmind-os');
-    if (isBoldMindProduct && dyslexiaMode) {
+    // Handle dyslexia mode - GLOBAL
+    if (dyslexiaMode) {
       root.classList.add("dyslexia-mode");
       document.body.classList.add("dyslexia-friendly");
     } else {

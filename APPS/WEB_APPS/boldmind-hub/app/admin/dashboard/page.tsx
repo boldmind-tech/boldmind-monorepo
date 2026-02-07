@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@boldmind/auth';
-import { boldMindAPI } from '@boldmind/api-client';
+import { hubAPI } from '../../../lib/api-adapters';
 import {
   Search,
   // Filter,
@@ -52,11 +52,9 @@ export default function AdminUsersPage() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const response = await boldMindAPI.admin.getUsers({
-        role: filters.role,
-        isAdmin: filters.status === 'true',
-      });
-      setUsers(response.users as any);
+      // Switching to hubAPI.team.list() which maps to /hub/team
+      const response = await hubAPI.team.list();
+      setUsers(response);
     } catch (error) {
       console.error('Failed to fetch users:', error);
     } finally {
@@ -66,7 +64,7 @@ export default function AdminUsersPage() {
 
   const handleCreateUser = async (data: any) => {
     try {
-      await boldMindAPI.admin.createUser(data);
+      await hubAPI.team.invite(data);
       fetchUsers();
       setShowCreateModal(false);
     } catch (error) {
@@ -78,7 +76,7 @@ export default function AdminUsersPage() {
     if (!confirm('Are you sure you want to delete this user?')) return;
 
     try {
-      await boldMindAPI.admin.deleteUser(userId);
+      await hubAPI.team.remove(userId);
       fetchUsers();
     } catch (error) {
       console.error('Failed to delete user:', error);

@@ -2,100 +2,71 @@
 
 import APIClient from '../client';
 
-export interface StartQuizRequest {
-  userId: string;
-  examType: 'jamb' | 'waec' | 'neco';
-  subject: string;
-  numberOfQuestions?: number;
-}
-
-export interface SubmitQuizRequest {
-  answers: Record<string, string>; // questionId: answer
-}
 
 export class EducenterEndpoints {
   constructor(private client: APIClient) { }
 
-  // Questions
-  async getQuestions(params: {
-    subject: string;
-    examType: 'jamb' | 'waec' | 'neco';
-    year?: string;
-    limit?: number;
-  }) {
-    return this.client.get('/questions', { params });
-  }
-
-  async getSubjects(examType: 'jamb' | 'waec' | 'neco') {
-    return this.client.get('/questions/subjects', {
-      params: { examType },
-    });
-  }
-
-  async getYears(examType: 'jamb' | 'waec' | 'neco') {
-    return this.client.get('/questions/years', {
-      params: { examType },
-    });
-  }
-
-  // Quizzes
-  async startQuiz(data: StartQuizRequest) {
-    return this.client.post('/quizzes/start', data);
-  }
-
-  async submitQuiz(quizId: string, data: SubmitQuizRequest) {
-    return this.client.post(`/quizzes/${quizId}/submit`, data);
-  }
-
-  async getQuiz(quizId: string) {
-    return this.client.get(`/quizzes/${quizId}`);
-  }
-
-  async getUserQuizzes(userId: string) {
-    return this.client.get(`/quizzes/user/${userId}`);
-  }
-
-  // Progress
-  async getUserProgress(userId: string) {
-    return this.client.get(`/progress/user/${userId}`);
-  }
-
-  async getProgressBySubject(
-    userId: string,
-    examType: string,
-    subject: string
-  ) {
-    return this.client.get(`/progress/user/${userId}/${examType}/${subject}`);
-  }
-
-  async updateStreak(userId: string, data: {
-    examType: string;
-    subject: string;
-  }) {
-    return this.client.post(`/progress/user/${userId}/streak`, data);
-  }
-
   // Courses
-  async getCourses(params?: {
-    category?: string;
-    level?: string;
-    isPublished?: boolean;
+  async getCourses(params?: { category?: string; status?: string }) {
+    return this.client.get('/educenter/courses', { params });
+  }
+
+  async getCourse(id: string) {
+    return this.client.get(`/educenter/courses/${id}`);
+  }
+
+  async createCourse(data: any) {
+    return this.client.post('/educenter/courses', data);
+  }
+
+  async updateCourse(id: string, data: any) {
+    return this.client.patch(`/educenter/courses/${id}`, data);
+  }
+
+  async deleteCourse(id: string) {
+    return this.client.delete(`/educenter/courses/${id}`);
+  }
+
+  // Exam Prep
+  async getQuestions(params: {
+    examType: string;
+    subject?: string;
+    year?: number;
   }) {
-    return this.client.get('/courses', { params });
+    return this.client.get('/educenter/exams/questions', { params });
   }
 
-  async getCourse(courseId: string) {
-    return this.client.get(`/courses/${courseId}`);
+  async submitAttempt(data: any) {
+    return this.client.post('/educenter/exams/attempt', data);
   }
 
+  async getMyProgress() {
+    return this.client.get('/educenter/me/progress');
+  }
+
+  // Leaderboard
+  async getLeaderboard(limit?: number) {
+    return this.client.get('/educenter/leaderboard', { params: { limit } });
+  }
+
+  // Subscription
+  async getMySubscription() {
+    return this.client.get('/educenter/me/subscription');
+  }
+
+  async updateSubscription(plan: string) {
+    return this.client.patch('/educenter/me/subscription', { plan });
+  }
+
+  // Legacy / To be migrated or verified
   async enrollCourse(userId: string, courseId: string) {
-    return this.client.post('/enrollments', {
+    return this.client.post('/educenter/enrollments', {
       userId,
       courseId,
     });
   }
 
   async getUserEnrollments(userId: string) {
-    return this.client.get(`/enrollments/user/${userId}`);
+    return this.client.get(`/educenter/enrollments/user/${userId}`);
   }
 }

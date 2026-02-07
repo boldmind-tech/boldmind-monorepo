@@ -1,4 +1,4 @@
-// app/lib/user-api-adapter.ts
+// APPS/WEB_APPS/boldmind-hub/lib/user-api-adapter.ts
 /**
  * User API Adapter
  * Connects AuthProvider with the user-service backend
@@ -28,7 +28,7 @@ export const userAPIAdapter: UserAPI = {
 
             console.log('[userAPIAdapter] User fetched successfully:', response);
 
-            return response as any;
+            return response;
         } catch (error) {
             console.error('[userAPIAdapter] Failed to fetch user:', error);
             return null;
@@ -57,7 +57,9 @@ export const userAPIAdapter: UserAPI = {
 
             console.log('[userAPIAdapter] Sending creation payload:', payload);
 
-            await api.user.post('/users', payload);
+            // Call through the gateway to ensure SupabaseAuthGuard sync logic is triggered
+            // Use the proxy route for users
+            await api.gateway.post('/users', payload);
 
             console.log('[userAPIAdapter] User created successfully in database');
         } catch (error: any) {

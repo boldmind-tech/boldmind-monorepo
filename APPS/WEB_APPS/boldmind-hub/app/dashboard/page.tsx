@@ -7,22 +7,49 @@ import {
     LayoutDashboard, DollarSign, Users, Target, Globe, TrendingUp, AlertCircle
 } from 'lucide-react';
 import { SuperNavbar } from '@boldmind/ui';
-import { BOLDMIND_PRODUCTS, calculateTotalMonthlyRevenue } from '@boldmind/utils';
+import { hubAPIAdapter } from '../../lib/hub-api-adapter';
 import { Sidebar } from './Sidebar';
 
 export default function Dashboard() {
     const [greeting, setGreeting] = useState('Welcome back');
+    const [stats, setStats] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const hour = new Date().getHours();
         if (hour < 12) setGreeting('Good morning');
         else if (hour < 18) setGreeting('Good afternoon');
         else setGreeting('Good evening');
+
+        loadStats();
     }, []);
 
-    const totalProducts = BOLDMIND_PRODUCTS.length;
-    const liveCount = BOLDMIND_PRODUCTS.filter(p => p.status === 'LIVE').length;
-    const revenue = calculateTotalMonthlyRevenue();
+    const loadStats = async () => {
+        try {
+            setLoading(true);
+            const data = await hubAPIAdapter.getDashboardStats();
+            setStats(data);
+        } catch (error) {
+            console.error('Failed to load dashboard stats:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-50/40 dark:bg-gray-950">
+                <div className="w-16 h-16 border-4 border-[#FFC800] border-t-transparent rounded-full animate-spin" />
+            </div>
+        );
+    }
+
+    const totalProducts = stats?.totalProducts || 0;
+    const liveCount = stats?.liveProducts || 0;
+    const buildingCount = stats?.buildingProducts || 0;
+    const plannedCount = stats?.plannedProducts || 0;
+    const revenue = stats?.monthlyRevenue || 0;
+    const teamSize = stats?.teamSize || 0;
 
     return (
         <div className="flex min-h-screen bg-gray-50/40 dark:bg-gray-950">
@@ -56,7 +83,7 @@ export default function Dashboard() {
                             <div className="flex gap-4 flex-wrap">
                                 <QuickStat icon={Globe} label="Products" value={totalProducts.toString()} color="blue" />
                                 <QuickStat icon={DollarSign} label="Monthly Revenue" value={`₦${revenue.toLocaleString()}`} color="green" />
-                                <QuickStat icon={Users} label="Team Size" value="47" color="purple" />
+                                <QuickStat icon={Users} label="Team Size" value={teamSize.toString()} color="purple" />
                                 <QuickStat icon={Target} label="Target Progress" value="83%" color="orange" />
                             </div>
                         </div>
@@ -64,8 +91,8 @@ export default function Dashboard() {
                         {/* Status Overview Cards */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <StatusCard title="Live Products" count={liveCount} total={totalProducts} color="emerald" />
-                            <StatusCard title="Building" count={BOLDMIND_PRODUCTS.filter(p => p.status === 'BUILDING').length} color="amber" />
-                            <StatusCard title="Planned / Concept" count={BOLDMIND_PRODUCTS.filter(p => ['PLANNED', 'CONCEPT'].includes(p.status)).length} color="violet" />
+                            <StatusCard title="Building" count={buildingCount} color="amber" />
+                            <StatusCard title="Planned / Concept" count={plannedCount} color="violet" />
                         </div>
 
                         {/* Alerts / Quick Actions */}

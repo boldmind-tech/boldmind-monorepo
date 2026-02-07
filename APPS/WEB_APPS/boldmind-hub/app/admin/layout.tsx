@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@boldmind/auth';
+import { ThemeToggle } from '@boldmind/ui';
 import {
     LayoutDashboard,
     Users,
@@ -137,6 +138,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     </div>
 
                     <div className="flex items-center pr-4 space-x-4">
+                        {/* Theme Toggle */}
+                        <ThemeToggle />
+
                         <button className="relative text-gray-400 hover:text-gray-500">
                             <Bell className="h-6 w-6" />
                             <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400"></span>

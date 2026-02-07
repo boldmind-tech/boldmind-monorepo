@@ -1,7 +1,7 @@
 
 // SERVICES/educenter-service/src/services/tier-limit.service.ts
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../generated/client';
 
 export type FeatureTier = 'free' | 'basic' | 'pro';
 

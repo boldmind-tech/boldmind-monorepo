@@ -38,14 +38,26 @@
       "@boldmind/ui": [
         "PACKAGES/ui/src"
       ],
+      "@boldmind/ui/*": [
+        "PACKAGES/ui/src/*"
+      ],
       "@boldmind/utils": [
         "PACKAGES/utils/src"
+      ],
+      "@boldmind/utils/*": [
+        "PACKAGES/utils/src/*"
       ],
       "@boldmind/api-client": [
         "PACKAGES/api-client/src"
       ],
+      "@boldmind/api-client/*": [
+        "PACKAGES/api-client/src/*"
+      ],
       "@boldmind/auth": [
         "PACKAGES/auth/src"
+      ],
+      "@boldmind/auth/*": [
+        "PACKAGES/auth/src/*"
       ],
       "@boldmind/config": [
         "PACKAGES/config/src"
@@ -56,20 +68,26 @@
       "@boldmind/payments": [
         "PACKAGES/payments/src"
       ],
-      "@boldmind/types": [
-        "PACKAGES/types/src"
+      "@boldmind/payments/*": [
+        "PACKAGES/payments/src/*"
       ],
       "@boldmind/analytics": [
         "PACKAGES/analytics/src"
       ],
+      "@boldmind/analytics/*": [
+        "PACKAGES/analytics/src/*"
+      ],
       "@boldmind/ai": [
         "PACKAGES/ai/src"
       ],
-      "@boldmind/seo": [
-        "PACKAGES/seo/src"
+      "@boldmind/ai/*": [
+        "PACKAGES/ai/src/*"
       ],
       "@boldmind/email": [
         "PACKAGES/email/src"
+      ],
+      "@boldmind/email/*": [
+        "PACKAGES/email/src/*"
       ]
     }
   },

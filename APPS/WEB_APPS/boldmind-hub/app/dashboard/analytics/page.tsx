@@ -4,7 +4,7 @@
 import { motion } from 'framer-motion';
 import {
     BarChart3, LineChart, PieChart, TrendingUp, ArrowUpRight,
-    Download, Filter, CalendarDays, ArrowDownRight
+    Download, CalendarDays, ArrowDownRight
 } from 'lucide-react';
 import { Sidebar } from '../Sidebar';
 import { SuperNavbar } from '@boldmind/ui';

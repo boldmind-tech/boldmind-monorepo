@@ -157,6 +157,16 @@ export class SupabaseService implements OnModuleInit {
         if (error) throw error;
     }
 
+    async updateUserMetadata(userId: string, metadata: Record<string, any>) {
+        const client = this.getClient();
+        const { data, error } = await client.auth.admin.updateUserById(userId, {
+            app_metadata: metadata,
+        });
+
+        if (error) throw error;
+        return data.user;
+    }
+
     // ────────────────────────────────────────────────
     // Helper: Get client with type narrowing
     // ────────────────────────────────────────────────

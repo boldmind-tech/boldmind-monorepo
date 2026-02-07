@@ -4,7 +4,7 @@ import { Share2, Facebook, Twitter, Link as LinkIcon, MessageCircle } from 'luci
 import { Button } from '@boldmind/ui';
 import { toast } from 'sonner';
 
-export default function ShareButtons({ url, title }: { url: string; title: string }) {
+export default function ShareButtons({ url, vertical = false }: { url: string; title: string, vertical?: boolean }) {
   const shareLinks = [
     { name: 'Facebook', icon: Facebook, color: 'text-blue-600', hover: 'hover:bg-blue-50' },
     { name: 'Twitter', icon: Twitter, iconAlt: 'X', color: 'text-sky-500', hover: 'hover:bg-sky-50' },
@@ -17,10 +17,12 @@ export default function ShareButtons({ url, title }: { url: string; title: strin
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      <span className="text-sm font-medium text-gray-500 flex items-center gap-1">
-        <Share2 className="h-4 w-4" /> Share:
-      </span>
+    <div className={`flex items-center gap-2 ${vertical ? 'flex-col' : 'flex-wrap'}`}>
+      {!vertical && (
+        <span className="text-sm font-medium text-gray-500 flex items-center gap-1">
+          <Share2 className="h-4 w-4" /> Share:
+        </span>
+      )}
       {shareLinks.map((link) => (
         <Button
           key={link.name}

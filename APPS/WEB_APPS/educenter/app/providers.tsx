@@ -1,6 +1,6 @@
 // apps/web/educenter/app/providers.tsx
 "use client";
-import { EducenterLayout  } from '../components/EducenterLayout'
+import { EducenterLayout } from './educenterLayout'
 import { AuthProvider } from "@boldmind/auth";
 import { Toaster } from "react-hot-toast";
 

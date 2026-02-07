@@ -9,9 +9,13 @@ import { AnnouncementsModule } from './announcements/announcements.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { HttpModule } from '@nestjs/axios';
+import { ScheduleModule } from '@nestjs/schedule';
+import { HealthModule } from './health/health.module';
+import { KeepAliveModule } from './keep-alive/keep-alive.module';
 
 @Module({
     imports: [
+        ScheduleModule.forRoot(),
         ConfigModule.forRoot({
             isGlobal: true,
             envFilePath: '.env',
@@ -29,6 +33,8 @@ import { HttpModule } from '@nestjs/axios';
         RoadmapModule,
         FeedbackModule,
         AnnouncementsModule,
+        HealthModule,
+        KeepAliveModule,
     ],
 })
 export class AppModule { }

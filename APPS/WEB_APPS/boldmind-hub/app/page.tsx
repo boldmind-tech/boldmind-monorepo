@@ -52,9 +52,24 @@ export default function HomePage() {
   const plannedProducts = getPlannedProducts();
   const conceptProducts = getConceptProducts();
 
-  // Get PlanAI products (from ai category)
-  const planAIProducts = plannedProducts.filter(p =>
-    p.category === 'ai' || p.dependencies?.includes('PlanAI Suite')
+  // Get standalone building products (not part of PlanAI suite)
+  const standaloneBuildingProducts = buildingProducts.filter(p =>
+    !p.dependencies?.includes('planai-suite')
+  );
+
+  // Get PlanAI building products
+  const planAIBuildingProducts = buildingProducts.filter(p =>
+    p.dependencies?.includes('planai-suite')
+  );
+
+  // Get PlanAI planned products
+  const planAIPlannedProducts = plannedProducts.filter(p =>
+    p.dependencies?.includes('planai-suite') || p.category === 'ai'
+  );
+
+  // Get other planned products (not PlanAI)
+  const otherPlannedProducts = plannedProducts.filter(p =>
+    !p.dependencies?.includes('planai-suite') && p.category !== 'ai'
   );
 
   // Helper function to get product color
@@ -183,7 +198,7 @@ export default function HomePage() {
 
   const handleNavClick = (href: string) => {
     // Log navigation for analytics
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env['NODE_ENV'] === 'development') {
       console.log("Navigating to:", href);
     }
   };
@@ -194,12 +209,12 @@ export default function HomePage() {
       <SuperNavbar
         links={navLinks}
         cta={{
-          href: "/login",
+          href: "/register",
           label: "Get Started",
-          variant: "glow",
-          icon: "🚀",
+          variant: "secondary",
+
         }}
-        logoSrc="/icon-180x180.png"
+        logoSrc="/logo.png"
         sticky={true}
         animated={true}
         showThemeControls={true}
@@ -413,7 +428,6 @@ export default function HomePage() {
           {/* Live Products */}
           <div className="mb-12 sm:mb-16">
             <div className="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
-              <div className="w-2 sm:w-3 h-6 sm:h-8 bg-green-500 rounded" />
               <h3 className="text-xl sm:text-2xl font-bold text-[#00143C]">✅ LIVE PRODUCTS</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -424,7 +438,7 @@ export default function HomePage() {
                   className="group hover:border-[#FFC800] transition-all duration-500 cursor-pointer"
                   onClick={() => window.open(product.links?.website || `/products/${product.slug}`, '_blank')}
                 >
-                  <CardHeader className="flex-row items-center gap-4">
+                  <CardHeader className="flex-row gap-4">
                     <div
                       className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-[#00143C]/10 transition-transform group-hover:scale-110"
                       style={{ backgroundColor: getProductColor(product) }}
@@ -453,109 +467,208 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Building & New Products */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 mb-12 sm:mb-16">
-            <div>
+          {/* Standalone Building Products */}
+          {standaloneBuildingProducts.length > 0 && (
+            <div className="mb-12 sm:mb-16">
               <div className="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
-                <div className="w-2 sm:w-3 h-6 sm:h-8 bg-yellow-500 rounded" />
                 <h3 className="text-xl sm:text-2xl font-bold text-[#00143C]">🔨 BUILDING & 🆕 NEW</h3>
               </div>
-              <div className="space-y-3 sm:space-y-4">
-                {buildingProducts.map((product, index) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {standaloneBuildingProducts.map((product, index) => (
                   <motion.div
                     key={product.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-white rounded-lg sm:rounded-xl border border-gray-200 hover:border-[#FFC800] transition-colors"
+                    className="group"
                   >
-                    <div
-                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center text-lg sm:text-xl"
-                      style={{ backgroundColor: getProductColor(product) }}
+                    <Card
+                      variant="elevated"
+                      className="h-full hover:border-yellow-500 hover:shadow-xl transition-all duration-300 cursor-pointer"
+                      onClick={() => window.open(product.links?.website || `/products/${product.slug}`, '_blank')}
                     >
-                      {product.icon}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-1 sm:gap-2 mb-1">
-                        <h4 className="font-bold text-[#00143C] text-sm sm:text-base">{product.name}</h4>
-                        <span className="text-xs font-bold px-1.5 sm:px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded">
-                          🔨 BUILDING
+                      <CardHeader className="flex-row items-start gap-4">
+                        <div
+                          className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-lg transition-transform group-hover:scale-110"
+                          style={{ backgroundColor: getProductColor(product) }}
+                        >
+                          {product.icon}
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <CardTitle className="group-hover:text-yellow-600 transition-colors">
+                              {product.name}
+                            </CardTitle>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            <StatusBadge variant="building">🔨 BUILDING</StatusBadge>
+                            <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded-full font-medium">
+                              {product.category.toUpperCase()}
+                            </span>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <CardDescription className="text-base line-clamp-3">
+                          {product.description}
+                        </CardDescription>
+                      </CardContent>
+                      <CardFooter>
+                        <span className="text-[#00143C] dark:text-[#FFC800] font-bold inline-flex items-center gap-2 group-hover:gap-3 transition-all">
+                          View Details →
                         </span>
-                      </div>
-                      <p className="text-xs sm:text-sm text-gray-600 line-clamp-2">
-                        {product.description}
-                      </p>
-                    </div>
+                      </CardFooter>
+                    </Card>
                   </motion.div>
                 ))}
               </div>
             </div>
+          )}
 
-            {/* Planned Products (PlanAI Suite) */}
-            <div>
-              <div className="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
-                <div className="w-2 sm:w-3 h-6 sm:h-8 bg-blue-500 rounded" />
-                <h3 className="text-xl sm:text-2xl font-bold text-[#00143C]">📋 PLANAI SUITE (PLANNED)</h3>
+          {/* PlanAI Suite Section */}
+          <div className="mb-12 sm:mb-16">
+            <div className="bg-gradient-to-r from-[#FFC800]/10 to-[#FFD700]/10 rounded-3xl p-6 sm:p-8 border-2 border-[#FFC800]/20">
+              {/* PlanAI Suite Header */}
+              <div className="flex items-center  gap-3 mb-8">
+                <div className="w-12 h-12 bg-[#FFC800] rounded-2xl flex items-center justify-center text-2xl shadow-lg">
+                  🤖
+                </div>
+                <div>
+                  <h3 className="text-2xl sm:text-3xl font-black text-[#00143C]">
+                    PlanAI Suite
+                  </h3>
+                  <p className="text-gray-600 text-sm sm:text-base">
+                    AI-powered business tools for Nigerian entrepreneurs
+                  </p>
+                </div>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-                {planAIProducts.length > 0 ? (
-                  planAIProducts.slice(0, 8).map((product, index) => (
-                    <motion.div
-                      key={product.id}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.05 }}
-                      className="bg-white p-3 sm:p-4 rounded-lg sm:rounded-xl border border-gray-200 hover:border-blue-300 transition-colors"
-                    >
-                      <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-                        <div
-                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-base sm:text-lg"
-                          style={{ backgroundColor: getProductColor(product) }}
+
+              {/* PlanAI Building Products */}
+              {planAIBuildingProducts.length > 0 && (
+                <div className="mb-8">
+                  <div className="flex items-center gap-2 mb-4">
+                    <h4 className="text-lg font-bold text-[#00143C]">🔨 Currently Building</h4>
+                  </div>
+                  <div className="overflow-x-auto pb-4 -mx-2 px-2">
+                    <div className="flex gap-4 min-w-max">
+                      {planAIBuildingProducts.map((product, index) => (
+                        <motion.div
+                          key={product.id}
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: index * 0.1 }}
+                          className="w-80 flex-shrink-0"
                         >
-                          {product.icon}
+                          <div className="bg-white rounded-xl border-2 border-[#FFC800]/30 p-4 hover:border-[#FFC800] hover:shadow-lg transition-all h-full">
+                            <div className="flex items-start gap-3 mb-3">
+                              <div
+                                className="w-12 h-12 rounded-lg flex items-center justify-center text-xl"
+                                style={{ backgroundColor: getProductColor(product) }}
+                              >
+                                {product.icon}
+                              </div>
+                              <div className="flex-1">
+                                <h5 className="font-bold text-[#00143C] mb-1">{product.name}</h5>
+                                <div className="flex gap-1">
+                                  <span className="text-xs px-2 py-0.5 bg-[#FFC800]/20 text-[#00143C] rounded-full font-bold">
+                                    PlanAI
+                                  </span>
+                                  <span className="text-xs px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded-full font-bold">
+                                    🔨 Building
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <p className="text-sm text-gray-600 line-clamp-3">
+                              {product.description}
+                            </p>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* PlanAI Planned Products */}
+              {planAIPlannedProducts.length > 0 && (
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <h4 className="text-lg font-bold text-[#00143C]">📋 Coming Soon</h4>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
+                    {planAIPlannedProducts.slice(0, 10).map((product, index) => (
+                      <motion.div
+                        key={product.id}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: index * 0.05 }}
+                        className="bg-white p-3 sm:p-4 rounded-xl border border-[#FFC800]/20 hover:border-[#FFC800] hover:shadow-md transition-all"
+                      >
+                        <div className="flex flex-col items-center text-center gap-2">
+                          <div
+                            className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center text-xl sm:text-2xl"
+                            style={{ backgroundColor: getProductColor(product) }}
+                          >
+                            {product.icon}
+                          </div>
+                          <div>
+                            <h5 className="font-bold text-[#00143C] text-xs sm:text-sm mb-1">
+                              {product.name}
+                            </h5>
+                            <span className="text-xs px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full font-medium">
+                              Planned
+                            </span>
+                          </div>
                         </div>
-                        <h5 className="font-semibold text-[#00143C] text-xs sm:text-sm">{product.name}</h5>
-                      </div>
-                      <p className="text-xs text-gray-600 line-clamp-2">
-                        {product.description}
-                      </p>
-                    </motion.div>
-                  ))
-                ) : (
-                  plannedProducts.slice(0, 8).map((product, index) => (
-                    <motion.div
-                      key={product.id}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.05 }}
-                      className="bg-white p-3 sm:p-4 rounded-lg sm:rounded-xl border border-gray-200 hover:border-blue-300 transition-colors"
-                    >
-                      <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-                        <div
-                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-base sm:text-lg"
-                          style={{ backgroundColor: getProductColor(product) }}
-                        >
-                          {product.icon}
-                        </div>
-                        <h5 className="font-semibold text-[#00143C] text-xs sm:text-sm">{product.name}</h5>
-                      </div>
-                      <p className="text-xs text-gray-600 line-clamp-2">
-                        {product.description}
-                      </p>
-                    </motion.div>
-                  ))
-                )}
-              </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
+
+          {/* Other Planned Products (if any) */}
+          {otherPlannedProducts.length > 0 && (
+            <div className="mb-12 sm:mb-16">
+              <div className="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
+                <h3 className="text-xl sm:text-2xl font-bold text-[#00143C]">📋 OTHER PLANNED PRODUCTS</h3>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                {otherPlannedProducts.map((product, index) => (
+                  <motion.div
+                    key={product.id}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.05 }}
+                    className="bg-white p-4 rounded-xl border border-gray-200 hover:border-indigo-300 transition-colors"
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <div
+                        className="w-10 h-10 rounded-lg flex items-center justify-center text-xl"
+                        style={{ backgroundColor: getProductColor(product) }}
+                      >
+                        {product.icon}
+                      </div>
+                      <h5 className="font-semibold text-[#00143C] text-sm flex-1">{product.name}</h5>
+                    </div>
+                    <p className="text-xs text-gray-600 line-clamp-2">
+                      {product.description}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Concept Products */}
           <div>
             <div className="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
-              <div className="w-2 sm:w-3 h-6 sm:h-8 bg-purple-500 rounded" />
               <h3 className="text-xl sm:text-2xl font-bold text-[#00143C]">💡 CONCEPT PRODUCTS</h3>
             </div>
             <div className="flex flex-wrap gap-2 sm:gap-3">
@@ -662,7 +775,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <SuperFooter
-        logoSrc="/icon-180x180.png"
+        logoSrc="/logo.png"
         sections={footerSections}
         contactInfo={{
           email: 'hello@boldmind.ng',

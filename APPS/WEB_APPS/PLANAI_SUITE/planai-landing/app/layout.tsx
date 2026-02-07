@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { ThemeProvider } from '@boldmind/ui'
+import { ThemeProvider, ErrorBoundary } from '@boldmind/ui'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -17,10 +17,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <meta name="yandex-verification" content="c0693f1167b9c72e" />
       <body className={inter.className}>
-        <ThemeProvider forceProductSlug="planai">
-          {children}
-        </ThemeProvider>
+        <ErrorBoundary>
+          <ThemeProvider forceProductSlug="planai">
+            {children}
+          </ThemeProvider>
+        </ErrorBoundary>
       </body>
     </html>
   )

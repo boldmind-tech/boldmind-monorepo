@@ -129,15 +129,6 @@ boldmind-monorepo/
 │   ├── ai/                                    # AI utilities
 │   ├── email/                                 # Email templates
 │   ├── analytics/                             # Analytics utilities
-│   ├── seo/                                   # SEO utilities
-│   └── database/                              # Database clients
-│         └── src/
-│             ├── mongodb/                      # Database models
-│             │   ├── client.ts/                    #           client connectiom
-│             ├── postgres/                   # Database repositories
-│             │   ├── client.ts/                    # Database models                 
-│             └── index.ts/                    # Database services
-│
 ├── SERVICES/                               # Backend services
 │   ├── api-gateway/                           # NestJS API gateway
 │   ├── payment-service/                       # Paystack & Flutterwave
@@ -146,25 +137,25 @@ boldmind-monorepo/
 │   ├── analytics-service/                     # Data aggregation
 │   ├── ai-service/                            # AI model serving
 │   ├── user-service/                          # Central user management
-│   └── product-specific-services/
-│       ├── educenter-service/                 # EduCenter backend
-│       └── naija-fither-service/              # Naija FitHer backend
-│       └── amebogist-service/                 # AmeboGist backend
-│       └── boldmind-os-service/               # BoldMind OS backend
-│       └── emailscraper-pro-service/          # EmailScraper Pro backend
-│       └── hub-service/                       # Hub backend
-│       └── safeai-service/                    # SafeAI backend
-│       └── plannai-service/                   # PlannAI backend
-│       └── afrohustle-service/                # AfroHustle backend
-│       └── naijagigmatcher-service/           # Naija Gig Matcher backend
-│       └── receiptgenius-service/             # Receipt Genius backend
-│       └── poweralert-service/                # Power Alert backend
-│       └── farmgatedirect-service/            # FarmGate Direct backend
-│       └── afrocopyai-service/                # AfroCopy AI backend
-│       └── anontruthmic-service/              # AnonTruth Mic backend
-│       └── borderlessremit-service/           # Borderless Remit backend
-│       └── skill2cash-service/                # Skill2Cash backend
-│       └── social-factory-service/            # Social Factory backend
+│   ├── hub-service/ 
+│   ├── educenter-service/                 # EduCenter backend
+│   └── naija-fither-service/              # Naija FitHer backend
+│   └── amebogist-service/                 # AmeboGist backend
+│   └── boldmind-os-service/               # BoldMind OS backend
+│   └── emailscraper-pro-service/          # EmailScraper Pro backend
+│   └── hub-service/                       # Hub backend
+│   └── safeai-service/                    # SafeAI backend
+│   └── plannai-service/                   # PlannAI backend
+│   └── afrohustle-service/                # AfroHustle backend
+│   └── naijagigmatcher-service/           # Naija Gig Matcher backend
+│   └── receiptgenius-service/             # Receipt Genius backend
+│   └── poweralert-service/                # Power Alert backend
+│   └── farmgatedirect-service/            # FarmGate Direct backend
+│   └── afrocopyai-service/                # AfroCopy AI backend
+│   └── anontruthmic-service/              # AnonTruth Mic backend
+│   └── borderlessremit-service/           # Borderless Remit backend
+│   └── skill2cash-service/                # Skill2Cash backend
+│   └── social-factory-service/            # Social Factory backend
 │       
 │
 ├── INFRASTRUCTURE/                         # DevOps configuration

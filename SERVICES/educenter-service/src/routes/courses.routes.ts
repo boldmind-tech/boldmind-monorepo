@@ -3,7 +3,7 @@
 import { Router } from 'express';
 import { prisma } from '../index';
 
-const router = Router();
+const router: Router = Router();
 
 // Get all courses
 router.get('/', async (req, res, next) => {
@@ -51,7 +51,8 @@ router.get('/:id', async (req, res, next) => {
         });
 
         if (!course) {
-            return res.status(404).json({ error: 'Course not found' });
+            res.status(404).json({ error: 'Course not found' });
+            return;
         }
 
         res.json({ data: course });
@@ -112,7 +113,7 @@ router.patch('/enrollments/:id/progress', async (req, res, next) => {
             where: { id: req.params.id },
             data: {
                 progressPercentage,
-                completedAt: completedAt ? new Date(completedAt) : undefined,
+                ...(completedAt && { completedAt: new Date(completedAt) }),
                 lastAccessed: new Date(),
             },
         });

@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { getSupabaseServer } from '@boldmind/auth/server';
 import { cookies } from 'next/headers';
 
+
 export async function GET(request: Request) {
     const { searchParams, origin } = new URL(request.url);
     const code = searchParams.get('code');
@@ -47,9 +48,6 @@ export async function GET(request: Request) {
             userId: data.user?.id,
             email: data.user?.email,
         });
-
-        // SYNC USER TO BACKEND DB
-        // This ensures OAuth users are created in our primary database
         try {
             const { userAPIAdapter } = await import('../../../lib/user-api-adapter');
             await userAPIAdapter.createUser(data.user);

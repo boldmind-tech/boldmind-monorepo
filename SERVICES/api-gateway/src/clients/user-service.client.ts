@@ -28,7 +28,7 @@ export class UserServiceClient {
 
     constructor() {
         this.client = axios.create({
-            baseURL: process.env['USER_SERVICE_URL'] || 'http://localhost:4001',
+            baseURL: process.env['USER_SERVICE_URL'] || 'http://127.0.0.1:4001/api',
             headers: {
                 'Content-Type': 'application/json',
             },

@@ -55,9 +55,6 @@ export default function EduCenterHomePage() {
     {
       href: "/jamb",
       label: "JAMB Prep",
-      badge: " Hot",
-      icon: "🎯",
-      description: "2026 Syllabus",
     },
     { href: "/waec-neco", label: "WAEC/NECO", },
     { href: "/business", label: "Business", },
@@ -305,16 +302,25 @@ export default function EduCenterHomePage() {
     { name: "AI APIs", icon: "🧠", purpose: "Smart Learning" },
   ];
 
+  const handleNavClick = (href: string) => {
+    // Log navigation for analytics
+    if (process.env.NODE_ENV === 'development') {
+      console.log("Navigating to:", href);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white overflow-hidden">
       <SuperNavbar
         links={navLinks}
         cta={{
           href: "/register",
-          label: "Start Free Trial",
-          variant: "primary",
+          label: "Sign Up",
+          variant: "secondary",
         }}
         logoSrc="/logo.png"
+        showThemeControls={true}
+        onLinkClick={handleNavClick}
       />
 
       {/* Hero Section - Redesigned */}
@@ -847,18 +853,13 @@ export default function EduCenterHomePage() {
       <SuperFooter
         logoSrc="/logo.png"
         sections={footerSections}
+        variant="compact"
         contactInfo={{
           email: "support@educenter.com.ng",
           phone: "+2349138349271",
           whatsapp: "+2349138349271",
           address: "Lagos, Nigeria",
         }}
-        // newsletter={{
-        //   title: "📚 Get Study Tips",
-        //   description: "Weekly exam strategies & business insights",
-        //   placeholder: "Enter your email",
-        //   buttonText: "Subscribe",
-        // }}
         socialLinks={[
           {
             platform: "Twitter",
@@ -875,15 +876,9 @@ export default function EduCenterHomePage() {
             url: "https://instagram.com/educenter_ng",
             icon: <Instagram className="w-5 h-5" />,
           },
-          // { platform: 'LinkedIn', url: 'https://linkedin.com/company/educenter-ng', icon: <LinkedIn className="w-5 h-5" /> },
         ]}
         newsletter={true}
         copyright={`© ${new Date().getFullYear()} EduCenter.com.ng - A BoldMind Ecosystem Product`}
-      // additionalLinks={[
-      //   { href: "/terms", label: "Terms of Service" },
-      //   { href: "/privacy", label: "Privacy Policy" },
-      //   { href: "/refund", label: "Refund Policy" },
-      // ]}
       />
 
       {/* Floating WhatsApp Button */}

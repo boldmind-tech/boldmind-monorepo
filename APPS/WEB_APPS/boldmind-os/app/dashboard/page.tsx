@@ -17,7 +17,7 @@ import {
   Activity,
   Award,
   Settings,
-  LogOut,
+  // LogOut,
 } from "lucide-react";
 
 export default function BoldMindOSDashboard() {
@@ -258,15 +258,14 @@ export default function BoldMindOSDashboard() {
               >
                 <div className="flex items-center justify-between mb-4">
                   <div
-                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${
-                      stat.color === "text-green-600"
+                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color === "text-green-600"
                         ? "from-green-500 to-emerald-500"
                         : stat.color === "text-blue-600"
                           ? "from-blue-500 to-cyan-500"
                           : stat.color === "text-purple-600"
                             ? "from-purple-500 to-pink-500"
                             : "from-orange-500 to-red-500"
-                    } flex items-center justify-center`}
+                      } flex items-center justify-center`}
                   >
                     <stat.icon className="w-6 h-6 text-white" />
                   </div>
@@ -299,11 +298,10 @@ export default function BoldMindOSDashboard() {
                 whileHover={{ y: -10, scale: 1.02 }}
                 onMouseEnter={() => setSelectedBrain(brain.id)}
                 onMouseLeave={() => setSelectedBrain(null)}
-                className={`${brain.bgColor} p-8 rounded-3xl border-2 ${
-                  selectedBrain === brain.id
+                className={`${brain.bgColor} p-8 rounded-3xl border-2 ${selectedBrain === brain.id
                     ? "border-blue-500 shadow-2xl"
                     : "border-gray-200"
-                } transition-all cursor-pointer group`}
+                  } transition-all cursor-pointer group`}
               >
                 <div
                   className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${brain.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}
@@ -357,18 +355,16 @@ export default function BoldMindOSDashboard() {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className={`flex items-center gap-4 p-4 rounded-xl ${
-                    task.completed
+                  className={`flex items-center gap-4 p-4 rounded-xl ${task.completed
                       ? "bg-gray-50 opacity-60"
                       : "bg-white border-2 border-gray-200"
-                  }`}
+                    }`}
                 >
                   <div
-                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center cursor-pointer ${
-                      task.completed
+                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center cursor-pointer ${task.completed
                         ? "bg-green-500 border-green-500"
                         : "border-gray-300 hover:border-blue-500"
-                    }`}
+                      }`}
                   >
                     {task.completed && (
                       <CheckCircle className="w-5 h-5 text-white" />
@@ -383,13 +379,12 @@ export default function BoldMindOSDashboard() {
                     </div>
                     <div className="flex items-center gap-2 mt-1">
                       <span
-                        className={`text-xs px-2 py-1 rounded-full ${
-                          task.priority === "high"
+                        className={`text-xs px-2 py-1 rounded-full ${task.priority === "high"
                             ? "bg-red-100 text-red-700"
                             : task.priority === "medium"
                               ? "bg-yellow-100 text-yellow-700"
                               : "bg-gray-100 text-gray-700"
-                        }`}
+                          }`}
                       >
                         {task.priority}
                       </span>

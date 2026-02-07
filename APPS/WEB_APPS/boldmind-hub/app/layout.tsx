@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { BoldMindLayout } from "./boldmindLayout";
+import { ErrorBoundary } from "@boldmind/ui";
 import "@boldmind/ui/dist/index.css";
 import "./globals.css";
 
@@ -135,7 +136,7 @@ export const metadata: Metadata = {
   },
   verification: {
     google: "wN3-VE6VlAJbq9B0KWqG0lysVUdAa5UNi4uApClq0Ws", // Add your Google Search Console code
-    yandex: "your-yandex-verification", // Optional
+    yandex: "c0693f1167b9c72e", // Optional
     other: {
       me: [
         "https://facebook.com/BoldMindTech",
@@ -198,10 +199,6 @@ export const metadata: Metadata = {
     ],
   },
 };
-// console.log("Theme initialized with:", {
-//   slug: "boldmind-hub",
-//   shouldMatch: BOLDMIND_PRODUCTS[0].slug,
-// });
 
 export const viewport: Viewport = {
   themeColor: "#00143C",
@@ -231,7 +228,10 @@ const organizationSchema = {
       url: [
         "https://facebook.com/cuche3",
         "https://linkedin.com/in/charliedotcom",
-        "https://twitter.com/charlesuchech",
+        "https://x.com/charlesuchech",
+        "https://instagram.com/charleschijuka",
+        "https://medium.com/@uchecharles223",
+        "https://threads.com/@charleschijuka"
       ],
     },
   ],
@@ -248,10 +248,13 @@ const organizationSchema = {
     availableLanguage: ["English"],
   },
   sameAs: [
-    "https://twitter.com/boldmindtech",
+    "https://x.com/villagecircl",
+    "https://facebook.com/boldmindtech",
     "https://linkedin.com/company/boldmind-technology-solution-enterprise",
     "https://github.com/boldmind-tech",
     "https://instagram.com/boldmindtech",
+    "https://tiktok.com/@villagecircle",
+    "https://youtube.com/@BoldMindTech",
   ],
   brand: [
     "AmeboGist",
@@ -422,15 +425,18 @@ export default function RootLayout({
           name="facebook-domain-verification"
           content="your-facebook-verification-code"
         />
+        <meta name="yandex-verification" content="c0693f1167b9c72e" />
       </head>
       <body
-        className={`${inter.className} antialiased bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100`}
+        className={`${inter.variable} antialiased bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 font-sans`}
       >
-        <BoldMindLayout
+        <ErrorBoundary>
+          <BoldMindLayout
 
-        >
-          {children}
-        </BoldMindLayout>
+          >
+            {children}
+          </BoldMindLayout>
+        </ErrorBoundary>
 
         {/* Performance monitoring */}
         {process.env.NODE_ENV === "production" && (

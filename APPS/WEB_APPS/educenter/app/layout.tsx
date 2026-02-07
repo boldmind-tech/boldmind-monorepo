@@ -1,20 +1,20 @@
-import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
-import { Providers } from './providers';
-import '@boldmind/ui/dist/index.css';
-import './globals.css';
+import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
+import { EducenterLayout } from "./educenterLayout";
+import { ErrorBoundary } from "@boldmind/ui";
+import "@boldmind/ui/dist/index.css";
+import "./globals.css";
 
 const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
   preload: true,
 });
 
-// Generate canonical URL
 const getCanonicalUrl = () => {
-  const baseUrl = process.env['NEXT_PUBLIC_APP_URL'] || 'https://educenter.com.ng';
-  return baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+  const baseUrl = process.env['NEXT_PUBLIC_APP_URL'] || "https://educenter.com.ng";
+  return baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
 };
 
 const canonicalUrl = getCanonicalUrl();
@@ -22,17 +22,37 @@ const canonicalUrl = getCanonicalUrl();
 export const metadata: Metadata = {
   metadataBase: new URL(canonicalUrl),
   title: {
-    default: 'EduCenter - Africa\'s Practical Learning Engine',
-    template: '%s | EduCenter',
+    default: "EduCenter - Nigerian Exam Prep (JAMB/WAEC/NECO) + Digital Business & AI Skills Training",
+    template: "%s | EduCenter",
   },
-  description: 'From exam mastery to digital business and AI skills. Turn attention into skills, credentials, and income. Study Hub, Digital Business School & AI Skills Lab all in one platform.',
-  keywords: ['JAMB', 'WAEC', 'NECO', 'Digital Business School', 'AI Skills', 'Nigerian Education', 'Online Learning', 'Exam Preparation', 'Skill Development', 'African EdTech'],
-  authors: [
-    { name: 'BoldMind Technology Solution Enterprise', url: canonicalUrl },
-    { name: 'Charles Uche Chijuka', url: '' }
+  description:
+    "Comprehensive Nigerian ed-tech platform combining exam preparation (JAMB/WAEC/NECO), digital business education, and AI skills training. 10,000+ past questions, CBT simulation, and practical courses for Nigerian students.",
+  keywords: [
+    "JAMB preparation",
+    "WAEC past questions",
+    "NECO exam prep",
+    "Nigerian education",
+    "EduCenter",
+    "CBT practice",
+    "exam preparation Nigeria",
+    "digital skills Nigeria",
+    "AI training Nigeria",
+    "business education",
+    "online learning Nigeria",
+    "Nigerian students",
+    "UTME preparation",
+    "SSCE preparation",
+    "marketing courses Nigeria",
+    "tech education Nigeria",
+    "Nigerian ed-tech",
+    "study platform Nigeria",
   ],
-  creator: 'BoldMind Technology Solution Enterprise',
-  publisher: 'BoldMind Technology Solution Enterprise',
+  authors: [
+    { name: "EduCenter", url: canonicalUrl },
+    { name: "BoldMind Technology Solution Enterprise", url: "https://boldmind.ng" },
+  ],
+  creator: "EduCenter",
+  publisher: "BoldMind Technology Solution Enterprise",
   formatDetection: {
     email: true,
     address: true,
@@ -46,190 +66,199 @@ export const metadata: Metadata = {
       index: true,
       follow: true,
       noimageindex: false,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
   alternates: {
     canonical: canonicalUrl,
     languages: {
-      'en-NG': canonicalUrl,
+      "en-NG": canonicalUrl,
     },
   },
   openGraph: {
-    type: 'website',
-    locale: 'en_NG',
+    type: "website",
+    locale: "en_NG",
     url: canonicalUrl,
-    title: 'EduCenter - Africa\'s Practical Learning Engine',
-    siteName: 'EduCenter',
-    description: 'Study Hub, Digital Business School & AI Skills Lab all in one platform',
+    title: "EduCenter - Master JAMB, WAEC, NECO & Digital Skills",
+    siteName: "EduCenter",
+    description:
+      "10,000+ past questions, CBT simulation, digital business courses, and AI tools training for Nigerian students.",
     images: [
       {
         url: `${canonicalUrl}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: 'EduCenter - Africa\'s Practical Learning Engine',
-        type: 'image/png',
+        alt: "EduCenter - Nigerian Education Platform",
+        type: "image/png",
         secureUrl: `${canonicalUrl}/og-image.png`,
-      },
-      {
-        url: `${canonicalUrl}/og-image-800x600.png`,
-        width: 800,
-        height: 600,
-        alt: 'EduCenter - Africa\'s Practical Learning Engine',
-        type: 'image/png',
       },
     ],
   },
   twitter: {
-    card: 'summary_large_image',
-    site: '@bobbycuc2025',
-    creator: '@bobbycuc2025',
-    title: 'EduCenter - Africa\'s Practical Learning Engine',
-    description: 'Study Hub, Digital Business School & AI Skills Lab',
+    card: "summary_large_image",
+    site: "@educenter_ng",
+    creator: "@educenter_ng",
+    title: "EduCenter - Nigerian Exam Prep & Digital Skills",
+    description:
+      "Master JAMB, WAEC, NECO with 10,000+ questions. Plus digital business & AI skills training.",
     images: [`${canonicalUrl}/og-image.png`],
   },
   verification: {
-    google: 'lO8fyY68j1O89e_KL8MWdT2qkHzhOuR4yCAnirzDmS8',
-    yandex: 'f85df7dc30f788c9',
-    yahoo: 'your-yahoo-verification-code',
-    other: {
-      me: ['https://twitter.com/charlesuchech', 'https://linkedin.com/in/charliedotcom', 'https://facebook.com/cuche3', 'https://instagram.com/charleschijuka', 'https://youtube.com/Codefires'],
-    },
+    google: "your-google-verification-code",
   },
-  category: 'education',
+  category: "education",
   other: {
-    'application-name': 'EduCenter',
-    'msapplication-TileColor': '#00143C',
-    'msapplication-config': '/browserconfig.xml',
-    'apple-mobile-web-app-capable': 'yes',
-    'apple-mobile-web-app-status-bar-style': 'black-translucent',
-    'apple-mobile-web-app-title': 'EduCenter',
+    "application-name": "EduCenter",
+    "msapplication-TileColor": "#4CAF50",
+    "msapplication-config": "/browserconfig.xml",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "black-translucent",
+    "apple-mobile-web-app-title": "EduCenter",
+    "og:email": "hello@educenter.com.ng",
+    "og:locality": "Lagos",
+    "og:region": "NG",
+    "og:country-name": "Nigeria",
   },
   icons: {
     icon: [
-      { url: '/favicon.ico' },
-      { url: '/icon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/icon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/icon-192x192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/icon-512x512.png', sizes: '512x512', type: 'image/png' },
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512x512.png", sizes: "512x512", type: "image/png" },
     ],
-    shortcut: ['/favicon.ico'],
     apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-      { url: '/apple-icon-152x152.png', sizes: '152x152', type: 'image/png' },
-      { url: '/apple-icon-167x167.png', sizes: '167x167', type: 'image/png' },
-    ],
-    other: [
-      {
-        rel: 'mask-icon',
-        url: '/safari-pinned-tab.svg',
-        color: '#00143C',
-      },
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
     ],
   },
-  manifest: '/manifest.webmanifest',
-  appleWebApp: {
-    title: 'EduCenter',
-    statusBarStyle: 'black-translucent',
-    capable: true,
-  },
+  manifest: "/manifest.webmanifest",
 };
 
 export const viewport: Viewport = {
-  themeColor: '#00143C',
-  colorScheme: 'light dark',
-  width: 'device-width',
+  themeColor: "#4CAF50",
+  colorScheme: "light dark",
+  width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  minimumScale: 1,
   userScalable: true,
-  viewportFit: 'cover',
+  viewportFit: "cover",
 };
 
-// Structured data for better SEO
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'EducationalOrganization',
-  name: 'EduCenter',
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  name: "EduCenter",
   url: canonicalUrl,
   logo: `${canonicalUrl}/logo.png`,
-  description: 'Africa\'s Practical Learning Engine',
+  description:
+    "Comprehensive Nigerian ed-tech platform for exam prep and digital skills training",
+  foundingDate: "2025",
   address: {
-    '@type': 'PostalAddress',
-    addressCountry: 'NG',
-    addressRegion: 'Lagos',
+    "@type": "PostalAddress",
+    addressCountry: "NG",
+    addressRegion: "Lagos",
   },
   contactPoint: {
-    '@type': 'ContactPoint',
-    contactType: 'customer service',
-    email: 'support@educenter.com.ng',
+    "@type": "ContactPoint",
+    contactType: "customer service",
+    email: "hello@educenter.com.ng",
+    availableLanguage: ["English"],
   },
-  sameAs: [
-    'https://facebook.com/cuche3',
-    'https://linkedin.com/in/charliedotcom',
-    'https://twitter.com/charlesuchech',
-    'https://youtube.com/Codefires',
-    'https://instagram.com/educenterc',
-    'https://twitter.com/medianman9ja',
-    'https://facebook.com/DevConnectPage',
-    'https://twitter.com/bobbycuc2025',
-    'https://linkedin.com/company/boldmind-technology-solution-enterprise',
+};
+
+const courseSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "EduCenter Courses",
+  description: "Exam preparation and digital skills courses",
+  numberOfItems: 3,
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      item: {
+        "@type": "Course",
+        name: "JAMB/WAEC/NECO Preparation",
+        description: "10,000+ past questions with CBT simulation",
+        provider: {
+          "@type": "Organization",
+          name: "EduCenter",
+        },
+      },
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      item: {
+        "@type": "Course",
+        name: "Digital Business Education",
+        description: "Marketing playbooks and business courses",
+        provider: {
+          "@type": "Organization",
+          name: "EduCenter",
+        },
+      },
+    },
+    {
+      "@type": "ListItem",
+      position: 3,
+      item: {
+        "@type": "Course",
+        name: "AI Tools Training",
+        description: "Learn to use AI tools for productivity",
+        provider: {
+          "@type": "Organization",
+          name: "EduCenter",
+        },
+      },
+    },
   ],
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <html lang="en" suppressHydrationWarning className={inter.variable}>
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
-        {/* Preconnect to critical domains */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://questions.aloc.com.ng" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
 
-        {/* DNS Prefetch */}
-        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="//fonts.gstatic.com" />
-        <link rel="dns-prefetch" href="//questions.aloc.com.ng" />
-        <meta name="yandex-verification" content="f85df7dc30f788c9" />
-        {/* Structured Data */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(courseSchema),
+          }}
         />
 
-
-        {/* Preload hero image if exists */}
-        <link
-          rel="preload"
-          href="/hero-image.png"
-          as="image"
-          type="image/png"
+        <meta name="apple-mobile-web-app-title" content="EduCenter" />
+        <meta name="application-name" content="EduCenter" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta
+          name="theme-color"
+          content="#4CAF50"
+          media="(prefers-color-scheme: light)"
         />
+        <meta name="geo.region" content="NG-LA" />
       </head>
-      <body className={`${inter.className} antialiased bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100`}>
-        <Providers>{children}</Providers>
-
-        {/* Performance monitoring script (optional) */}
-        {process.env.NODE_ENV === 'production' && (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                window.addEventListener('load', function() {
-                  if ('performance' in window) {
-                    const navTiming = performance.getEntriesByType('navigation')[0];
-                    console.log('Page load time:', navTiming.loadEventEnd - navTiming.startTime, 'ms');
-                  }
-                });
-              `,
-            }}
-          />
-        )}
+      <body
+        className={`${inter.variable} antialiased bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 font-sans`}
+      >
+        <ErrorBoundary>
+          <EducenterLayout>{children}</EducenterLayout>
+        </ErrorBoundary>
       </body>
     </html>
   );

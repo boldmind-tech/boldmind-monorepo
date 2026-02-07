@@ -10,7 +10,7 @@ interface ModalProps {
   title?: string;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
+export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -78,7 +78,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
       <div style={modalStyle} onClick={e => e.stopPropagation()}>
         <div style={headerStyle}>
           {title && <h2 style={titleStyle}>{title}</h2>}
-          <button 
+          <button
             onClick={onClose}
             style={closeButtonStyle}
             onMouseEnter={(e) => (e.currentTarget.style.color = '#374151')}
@@ -92,5 +92,3 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
     </div>
   );
 };
-
-export default Modal;

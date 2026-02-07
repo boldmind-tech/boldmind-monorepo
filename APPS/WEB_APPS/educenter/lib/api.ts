@@ -1,7 +1,9 @@
+import { createCurrentProductAPI, EducenterEndpoints } from '@boldmind/api-client';
+import { PAST_QUESTIONS_CONFIG } from './config';
 import axios, { AxiosInstance } from 'axios';
-import { PAST_QUESTIONS_CONFIG, API_CONFIG } from './config';
 
 // Past Questions API Client (External API)
+// We keep this as is because it's an external service not managed by our api-client
 class PastQuestionsAPI {
   private client: AxiosInstance;
 
@@ -40,48 +42,33 @@ class PastQuestionsAPI {
   }
 }
 
-// BoldMind API Client (Backend API)
+/**
+ * BoldMind API Client (Backend API)
+ * Refactored to use the central @boldmind/api-client
+ */
+const api = createCurrentProductAPI();
+const educenterEndpoints = new EducenterEndpoints(api.gateway);
+
 class BoldMindAPI {
-  private client: AxiosInstance;
-
-  constructor() {
-    this.client = axios.create({
-      baseURL: API_CONFIG.baseUrl,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    // Add auth token interceptor
-    this.client.interceptors.request.use((config) => {
-      const token = localStorage.getItem('authToken');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-      return config;
-    });
-  }
-
   // Users
   async getUser(uid: string) {
-    const response = await this.client.get(API_CONFIG.endpoints.getUser.replace(':uid', uid));
-    return response.data;
+    const response = await api.gateway.get(`/users/${uid}`);
+    return response;
   }
 
   async updateUser(uid: string, data: any) {
-    const response = await this.client.put(API_CONFIG.endpoints.updateUser.replace(':uid', uid), data);
-    return response.data;
+    const response = await api.gateway.put(`/users/${uid}`, data);
+    return response;
   }
 
   async createUser(data: any) {
-    const response = await this.client.post('/users', data);
-    return response.data;
+    const response = await api.gateway.post('/users', data);
+    return response;
   }
 
   // Study Hub
-  async getProgress(uid: string) {
-    const response = await this.client.get(API_CONFIG.endpoints.getProgress.replace(':uid', uid));
-    return response.data;
+  async getProgress(_uid: string) {
+    return educenterEndpoints.getMyProgress();
   }
 
   async saveProgress(data: {
@@ -93,53 +80,30 @@ class BoldMindAPI {
     isCorrect: boolean;
     timeSpent: number;
   }) {
-    const response = await this.client.post(API_CONFIG.endpoints.saveProgress, data);
-    return response.data;
+    return educenterEndpoints.submitAttempt(data);
   }
 
   async getLeaderboard() {
-    const response = await this.client.get(API_CONFIG.endpoints.getLeaderboard);
-    return response.data;
+    return educenterEndpoints.getLeaderboard();
   }
 
   // Business School
   async getCourses(filters?: { category?: string; free?: boolean }) {
-    const response = await this.client.get(API_CONFIG.endpoints.getCourses, { params: filters });
-    return response.data;
+    const params: { category?: string; status: string } = {
+      status: 'published'
+    };
+    if (filters?.category) {
+      params.category = filters.category;
+    }
+    return educenterEndpoints.getCourses(params);
   }
 
   async getCourse(id: string) {
-    const response = await this.client.get(API_CONFIG.endpoints.getCourse.replace(':id', id));
-    return response.data;
+    return educenterEndpoints.getCourse(id);
   }
 
-  async enrollCourse(uid: string, courseId: string) {
-    const response = await this.client.post(API_CONFIG.endpoints.enrollCourse, { uid, courseId });
-    return response.data;
-  }
-
-  // AI Lab
-  async getAITools() {
-    const response = await this.client.get(API_CONFIG.endpoints.getTools);
-    return response.data;
-  }
-
-  async generateVideo(data: {
-    script: string;
-    style: string;
-    duration: number;
-  }) {
-    const response = await this.client.post(API_CONFIG.endpoints.generateVideo, data);
-    return response.data;
-  }
-
-  async createWhatsAppAutomation(data: {
-    name: string;
-    trigger: string;
-    response: string;
-  }) {
-    const response = await this.client.post(API_CONFIG.endpoints.automateWhatsApp, data);
-    return response.data;
+  async enrollCourse(_uid: string, courseId: string) {
+    return educenterEndpoints.enrollCourse(_uid, courseId);
   }
 
   // Subscriptions
@@ -149,18 +113,11 @@ class BoldMindAPI {
     email: string;
     amount: number;
   }) {
-    const response = await this.client.post(API_CONFIG.endpoints.subscribe, data);
-    return response.data;
+    return educenterEndpoints.updateSubscription(data.plan);
   }
 
-  async verifyPayment(reference: string) {
-    const response = await this.client.post(API_CONFIG.endpoints.verifyPayment, { reference });
-    return response.data;
-  }
-
-  async getSubscriptions(uid: string) {
-    const response = await this.client.get(API_CONFIG.endpoints.getSubscriptions.replace(':uid', uid));
-    return response.data;
+  async getSubscriptions(_uid: string) {
+    return educenterEndpoints.getMySubscription();
   }
 }
 
