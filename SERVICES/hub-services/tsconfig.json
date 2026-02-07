@@ -17,6 +17,9 @@
         "experimentalDecorators": true,
         "baseUrl": ".",
         "paths": {
+            "@boldmind/utils": [
+                "../../PACKAGES/utils/src/index"
+            ],
             "@generated/*": [
                 "src/generated/*"
             ]

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, ArrowLeft, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
-import { useAuth } from '@PlanAI Landing/auth';
+import { useAuth } from '@boldmind/auth';
 import { toast } from 'sonner';
 
 export default function ResetPasswordPage() {

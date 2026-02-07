@@ -11,9 +11,9 @@ router.get('/user/:userId', async (req, res, next) => {
         const progress = await prisma.userProgress.findMany({
             where: { userId: req.params.userId },
         });
-        res.json(progress);
+        return res.json(progress);
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -32,14 +32,14 @@ router.get('/user/:userId/:examType/:subject', async (req, res, next) => {
             },
         });
 
-        res.json(progress);
+        return res.json(progress);
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
 // Update streak
-router.post('/user/:userId/streak', async (req, res, next): Promise<void> => {
+router.post('/user/:userId/streak', async (req, res, next) => {
     try {
         const { userId } = req.params;
         const { examType, subject } = req.body;
@@ -55,8 +55,7 @@ router.post('/user/:userId/streak', async (req, res, next): Promise<void> => {
         });
 
         if (!progress) {
-            res.status(404).json({ error: 'Progress not found' });
-            return;
+            return res.status(404).json({ error: 'Progress not found' });
         }
 
         const lastPractice = new Date(progress.lastPractice);
@@ -86,9 +85,9 @@ router.post('/user/:userId/streak', async (req, res, next): Promise<void> => {
             },
         });
 
-        res.json(updated);
+        return res.json(updated);
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 

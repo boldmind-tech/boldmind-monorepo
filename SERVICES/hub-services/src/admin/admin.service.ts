@@ -68,17 +68,17 @@ export class AdminService {
     private calculateProductStats() {
         const products = BOLDMIND_PRODUCTS;
 
-        const byStatus = products.reduce((acc: Record<string, number>, product) => {
+        const byStatus = products.reduce((acc: Record<string, number>, product: Product) => {
             acc[product.status] = (acc[product.status] || 0) + 1;
             return acc;
         }, {});
 
-        const byCategory = products.reduce((acc: Record<string, number>, product) => {
+        const byCategory = products.reduce((acc: Record<string, number>, product: Product) => {
             acc[product.category] = (acc[product.category] || 0) + 1;
             return acc;
         }, {});
 
-        const projectedRevenue = products.reduce((total, product) => {
+        const projectedRevenue = products.reduce((total: number, product: Product) => {
             const baseRevenue = product.monthlyRevenue || 0;
 
             // Add projected growth based on status
@@ -98,7 +98,7 @@ export class AdminService {
             byStatus,
             byCategory,
             projectedRevenue,
-            upcomingReleases: products.filter(p =>
+            upcomingReleases: products.filter((p: Product) =>
                 p.status === 'BUILDING' || p.status === 'PLANNED'
             ).length,
         };
@@ -154,18 +154,18 @@ export class AdminService {
     private getEcosystemOverview() {
         const products = BOLDMIND_PRODUCTS;
 
-        const totalTeamSize = products.reduce((total, product) =>
+        const totalTeamSize = products.reduce((total: number, product: Product) =>
             total + (product.teamSize || 1), 0
         );
 
-        const totalDevelopmentCost = products.reduce((total, product) => {
+        const totalDevelopmentCost = products.reduce((total: number, product: Product) => {
             // Rough estimation
             const months = product.timeline?.includes('week') ? 1 : 3;
             const teamSize = product.teamSize || 1;
             return total + (months * teamSize * 500000); // ₦500k per dev per month
         }, 0);
 
-        const totalMonthlyRevenue = products.reduce((total, product) =>
+        const totalMonthlyRevenue = products.reduce((total: number, product: Product) =>
             total + (product.monthlyRevenue || 0), 0
         );
 
@@ -173,12 +173,12 @@ export class AdminService {
             totalTeamSize,
             totalDevelopmentCost,
             totalMonthlyRevenue,
-            avgProductPriority: products.reduce((sum, p) => sum + p.priority, 0) / products.length,
+            avgProductPriority: products.reduce((sum: number, p: Product) => sum + p.priority, 0) / products.length,
             topPriorityProducts: products
-                .filter(p => p.priority <= 10)
-                .sort((a, b) => a.priority - b.priority)
+                .filter((p: Product) => p.priority <= 10)
+                .sort((a: Product, b: Product) => a.priority - b.priority)
                 .slice(0, 5)
-                .map(p => ({
+                .map((p: Product) => ({
                     name: p.name,
                     priority: p.priority,
                     status: p.status,
@@ -203,7 +203,7 @@ export class AdminService {
             conversionRate: number;
         };
     }> {
-        const product = BOLDMIND_PRODUCTS.find(p => p.slug === productSlug);
+        const product = BOLDMIND_PRODUCTS.find((p: Product) => p.slug === productSlug);
 
         if (!product) {
             throw new Error(`Product ${productSlug} not found`);
@@ -249,7 +249,7 @@ export class AdminService {
         try {
             const products = BOLDMIND_PRODUCTS;
 
-            const totalRevenue = products.reduce((total, product) =>
+            const totalRevenue = products.reduce((total: number, product: Product) =>
                 total + (product.monthlyRevenue || 0), 0
             );
 
@@ -263,19 +263,19 @@ export class AdminService {
                 currentRevenue: totalRevenue,
                 projectedAnnual,
                 revenueByProduct: products
-                    .filter(p => p.monthlyRevenue && p.monthlyRevenue > 0)
-                    .map(p => ({
+                    .filter((p: Product) => p.monthlyRevenue && p.monthlyRevenue > 0)
+                    .map((p: Product) => ({
                         name: p.name,
                         slug: p.slug,
                         monthlyRevenue: p.monthlyRevenue,
                         annualProjection: (p.monthlyRevenue || 0) * 12,
                         status: p.status,
                     }))
-                    .sort((a, b) => (b.monthlyRevenue || 0) - (a.monthlyRevenue || 0)),
+                    .sort((a: any, b: any) => (b.monthlyRevenue || 0) - (a.monthlyRevenue || 0)),
                 topProducts: userStats.topProducts || [],
                 metrics: {
                     totalProducts: products.length,
-                    liveProducts: products.filter(p => p.status === 'LIVE').length,
+                    liveProducts: products.filter((p: Product) => p.status === 'LIVE').length,
                     avgRevenuePerProduct: products.length > 0 ? totalRevenue / products.length : 0,
                 },
             };

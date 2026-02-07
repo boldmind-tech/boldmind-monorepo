@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { DollarSign, TrendingUp, ArrowUpRight } from 'lucide-react';

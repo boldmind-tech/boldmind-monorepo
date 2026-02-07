@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   LayoutDashboard, TrendingUp, Users, Calendar, BookOpen,
-  Globe, PieChart, Target, Clock, DollarSign
+  Globe, Target, DollarSign
 } from 'lucide-react';
 import { SuperNavbar } from '@boldmind/ui';
 import { BOLDMIND_PRODUCTS, calculateTotalMonthlyRevenue } from '@boldmind/utils';

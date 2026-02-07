@@ -25,9 +25,9 @@ router.get('/', async (req, res, next) => {
             orderBy: { createdAt: 'desc' },
         });
 
-        res.json({ data: courses });
+        return res.json({ data: courses });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -55,9 +55,9 @@ router.get('/:id', async (req, res, next) => {
             return;
         }
 
-        res.json({ data: course });
+        return res.json({ data: course });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -67,9 +67,9 @@ router.post('/', async (req, res, next) => {
         const course = await prisma.course.create({
             data: req.body,
         });
-        res.json({ data: course });
+        return res.json({ data: course });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -80,9 +80,9 @@ router.patch('/:id', async (req, res, next) => {
             where: { id: req.params.id },
             data: req.body,
         });
-        res.json({ data: course });
+        return res.json({ data: course });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -98,9 +98,9 @@ router.post('/:id/enroll', async (req, res, next) => {
             },
         });
 
-        res.json({ data: enrollment });
+        return res.json({ data: enrollment });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -118,9 +118,9 @@ router.patch('/enrollments/:id/progress', async (req, res, next) => {
             },
         });
 
-        res.json({ data: enrollment });
+        return res.json({ data: enrollment });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -139,9 +139,9 @@ router.get('/user/:userId/enrollments', async (req, res, next) => {
             orderBy: { enrolledAt: 'desc' },
         });
 
-        res.json({ data: enrollments });
+        return res.json({ data: enrollments });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 

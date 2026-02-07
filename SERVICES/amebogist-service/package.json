@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "pnpm prebuild && tsc",
     "prebuild": "pnpm --filter '@boldmind/auth' --filter '@boldmind/ai' build",
     "deploy": "pnpm prebuild && pnpm build",
     "start": "node dist/index.js"

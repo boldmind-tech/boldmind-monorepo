@@ -1,6 +1,6 @@
 // SERVICES/hub-service/src/analytics/analytics.service.ts
 import { Injectable } from '@nestjs/common';
-import { BOLDMIND_PRODUCTS } from '@boldmind/utils';
+import { BOLDMIND_PRODUCTS, Product } from '@boldmind/utils';
 import { PrismaClient } from '../generated/client';
 
 @Injectable()
@@ -49,8 +49,8 @@ export class AnalyticsService {
                 totalUsers: totalUsers._sum.totalUsers || 0,
                 liveProducts,
                 buildingProducts,
-                plannedProducts: BOLDMIND_PRODUCTS.filter(p => p.status === 'PLANNED').length,
-                conceptProducts: BOLDMIND_PRODUCTS.filter(p => p.status === 'CONCEPT').length,
+                plannedProducts: BOLDMIND_PRODUCTS.filter((p: Product) => p.status === 'PLANNED').length,
+                conceptProducts: BOLDMIND_PRODUCTS.filter((p: Product) => p.status === 'CONCEPT').length,
             },
             trends: {
                 revenue: revenueTrend,

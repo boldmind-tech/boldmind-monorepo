@@ -8,12 +8,12 @@ const router: Router = Router();
 const alocProvider = new AlocProvider();
 
 // Get questions from ALOC API
-router.get('/', async (req, res, next): Promise<void> => {
+router.get('/', async (req, res, next) => {
     try {
         const { subject, examType, year, limit } = req.query;
 
         if (!subject || !examType) {
-            return;
+            return res.status(400).json({ error: 'subject and examType are required' });
         }
 
         const questions = await alocProvider.getQuestions({
@@ -23,50 +23,50 @@ router.get('/', async (req, res, next): Promise<void> => {
             limit: limit ? parseInt(limit as string) : 50,
         });
 
-        res.json({
+        return res.json({
             data: questions,
             count: questions.length,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
 // Get subjects for exam type
-router.get('/subjects', async (req, res, next): Promise<void> => {
+router.get('/subjects', async (req, res, next) => {
     try {
         const { examType } = req.query;
 
         if (!examType) {
-            return;
+            return res.status(400).json({ error: 'examType is required' });
         }
 
         const subjects = await alocProvider.getSubjects(
             examType as 'jamb' | 'waec' | 'neco'
         );
 
-        res.json({ data: subjects });
+        return res.json({ data: subjects });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
 // Get available years for exam type
-router.get('/years', async (req, res, next): Promise<void> => {
+router.get('/years', async (req, res, next) => {
     try {
         const { examType } = req.query;
 
         if (!examType) {
-            return;
+            return res.status(400).json({ error: 'examType is required' });
         }
 
         const years = await alocProvider.getYears(
             examType as 'jamb' | 'waec' | 'neco'
         );
 
-        res.json({ data: years });
+        return res.json({ data: years });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 

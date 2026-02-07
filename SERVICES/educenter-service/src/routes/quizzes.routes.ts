@@ -5,7 +5,7 @@ import { Router } from 'express';
 import { prisma } from '../index';
 import { AlocProvider } from '../providers/aloc.provider';
 
-const router = Router();
+const router: Router = Router();
 const alocProvider = new AlocProvider();
 
 // Start a quiz
@@ -34,7 +34,7 @@ router.post('/start', async (req, res, next) => {
             },
         });
 
-        res.json({
+        return res.json({
             quiz,
             questions: questions.map(q => ({
                 id: q.id,
@@ -44,7 +44,7 @@ router.post('/start', async (req, res, next) => {
             })),
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -122,7 +122,7 @@ router.post('/:id/submit', async (req, res, next) => {
             },
         });
 
-        res.json({
+        return res.json({
             quiz: updatedQuiz,
             results,
             score: correctCount,
@@ -130,7 +130,7 @@ router.post('/:id/submit', async (req, res, next) => {
             percentage: (correctCount / quiz.totalQuestions) * 100,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -140,9 +140,9 @@ router.get('/:id', async (req, res, next) => {
         const quiz = await prisma.quiz.findUnique({
             where: { id: req.params.id },
         });
-        res.json(quiz);
+        return res.json(quiz);
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -153,9 +153,9 @@ router.get('/user/:userId', async (req, res, next) => {
             where: { userId: req.params.userId },
             orderBy: { startedAt: 'desc' },
         });
-        res.json(quizzes);
+        return res.json(quizzes);
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 

@@ -3,12 +3,12 @@
 import { Router } from 'express';
 import { prisma } from '../index';
 
-const router = Router();
+const router: Router = Router();
 
 // Get global leaderboard
 router.get('/global', async (req, res, next) => {
     try {
-        const { examType, subject, period = 'all' } = req.query;
+        const { examType, subject = 'all' } = req.query;
 
         const where: any = {};
 
@@ -41,9 +41,9 @@ router.get('/global', async (req, res, next) => {
             streakDays: entry.streakDays,
         }));
 
-        res.json({ data: leaderboard });
+        return res.json({ data: leaderboard });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -74,7 +74,7 @@ router.get('/user/:userId/rank', async (req, res, next) => {
         const userRank = allProgress.findIndex(p => p.userId === userId) + 1;
         const userProgress = allProgress.find(p => p.userId === userId);
 
-        res.json({
+        return res.json({
             data: {
                 rank: userRank || null,
                 total: allProgress.length,
@@ -82,7 +82,7 @@ router.get('/user/:userId/rank', async (req, res, next) => {
             },
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 

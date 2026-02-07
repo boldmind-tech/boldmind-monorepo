@@ -41,53 +41,53 @@ const NOTES_DATABASE: NotesDatabase = {
 };
 
 // Get notes for subject
-router.get('/:examType/:subject', async (req, res, next): Promise<void> => {
+router.get('/:examType/:subject', async (req, res, next) => {
     try {
         const { examType, subject } = req.params;
         const { userId } = req.query;
 
         if (!userId) {
-            return;
+            return res.status(400).json({ error: 'userId is required' });
         }
 
         // Check if user can download notes
         const canDownload = tierService.canAccessFeature(userId as string, 'canDownloadNotes');
 
         if (!canDownload) {
-            return;
+            return res.status(403).json({ error: 'Access denied' });
         }
 
         const notes = NOTES_DATABASE[examType.toUpperCase()]?.[subject.toLowerCase()] || [];
 
-        res.json({ data: notes });
+        return res.json({ data: notes });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
 // Download note
-router.get('/download/:noteId', async (req, res, next): Promise<void> => {
+router.get('/download/:noteId', async (req, res, next) => {
     try {
         const { noteId } = req.params;
         const { userId } = req.query;
 
         if (!userId) {
-            return;
+            return res.status(400).json({ error: 'userId is required' });
         }
 
         const canDownload = tierService.canAccessFeature(userId as string, 'canDownloadNotes');
 
         if (!canDownload) {
-            return;
+            return res.status(403).json({ error: 'Access denied' });
         }
 
         // TODO: Generate PDF or return downloadable content
-        res.json({
+        return res.json({
             downloadUrl: `/notes/files/${noteId}.pdf`,
             expiresIn: 3600,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 

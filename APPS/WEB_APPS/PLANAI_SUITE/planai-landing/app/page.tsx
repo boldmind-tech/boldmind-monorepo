@@ -23,8 +23,6 @@ import {
   Target,
   Users,
   BarChart,
-  CreditCard,
-  Globe,
   Lock,
 } from "lucide-react";
 import { SuperFooter, SuperNavbar } from '@boldmind/ui';
@@ -254,9 +252,9 @@ export default function PlanAIPage() {
     document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const scrollToPricing = () => {
-    document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
-  };
+  // const scrollToPricing = () => {
+  //   document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
+  // };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-black">
@@ -387,21 +385,19 @@ export default function PlanAIPage() {
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -10, scale: 1.02 }}
                 onMouseEnter={() => setActiveProduct(product.id)}
-                className={`relative group cursor-pointer ${
-                  activeProduct === product.id ? "ring-2 ring-blue-500/50" : ""
-                }`}
+                className={`relative group cursor-pointer ${activeProduct === product.id ? "ring-2 ring-blue-500/50" : ""
+                  }`}
               >
                 <div className="relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700 hover:border-blue-500/30 transition-all h-full">
                   {/* Status Badge */}
                   <div className="absolute -top-3 left-6">
                     <span
-                      className={`px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 ${
-                        product.status.includes("LIVE")
-                          ? "bg-green-500/20 text-green-400 border border-green-500/30"
-                          : product.status.includes("BUILDING")
-                            ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30"
-                            : "bg-blue-500/20 text-blue-400 border border-blue-500/30"
-                      }`}
+                      className={`px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 ${product.status.includes("LIVE")
+                        ? "bg-green-500/20 text-green-400 border border-green-500/30"
+                        : product.status.includes("BUILDING")
+                          ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30"
+                          : "bg-blue-500/20 text-blue-400 border border-blue-500/30"
+                        }`}
                     >
                       {product.status.includes("LIVE") && "🚀"}
                       {product.status.includes("BUILDING") && "🔨"}
@@ -459,11 +455,10 @@ export default function PlanAIPage() {
                     </div>
                     <Link
                       href={product.link}
-                      className={`px-6 py-2.5 rounded-lg font-bold transition-all ${
-                        product.status.includes("LIVE")
-                          ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg"
-                          : "bg-gray-800 text-gray-400 hover:bg-gray-700"
-                      }`}
+                      className={`px-6 py-2.5 rounded-lg font-bold transition-all ${product.status.includes("LIVE")
+                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg"
+                        : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                        }`}
                     >
                       {product.status.includes("LIVE")
                         ? "Try Now"
@@ -504,11 +499,10 @@ export default function PlanAIPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.2 }}
-                className={`relative rounded-3xl p-8 ${
-                  plan.popular
-                    ? "bg-gradient-to-b from-gray-800 to-gray-900 border-2 border-purple-500/50 shadow-2xl shadow-purple-500/20"
-                    : "bg-gray-800/50 border border-gray-700"
-                }`}
+                className={`relative rounded-3xl p-8 ${plan.popular
+                  ? "bg-gradient-to-b from-gray-800 to-gray-900 border-2 border-purple-500/50 shadow-2xl shadow-purple-500/20"
+                  : "bg-gray-800/50 border border-gray-700"
+                  }`}
               >
                 {plan.popular && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
@@ -545,11 +539,10 @@ export default function PlanAIPage() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`w-full py-4 font-bold rounded-xl transition-all ${
-                    plan.popular
-                      ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:shadow-xl"
-                      : "bg-gray-700 text-white hover:bg-gray-600"
-                  }`}
+                  className={`w-full py-4 font-bold rounded-xl transition-all ${plan.popular
+                    ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:shadow-xl"
+                    : "bg-gray-700 text-white hover:bg-gray-600"
+                    }`}
                 >
                   {plan.cta}
                 </motion.button>
@@ -672,15 +665,15 @@ export default function PlanAIPage() {
         showStats={true}
         animated={true}
         copyright={`© ${new Date().getFullYear()} PlanAI by BoldMind. All rights reserved.`}
-        // socialLinks={[
-        //   { platform: "twitter", url: "https://twitter.com/boldmindtech" },
-        //   {
-        //     platform: "linkedin",
-        //     url: "https://linkedin.com/company/boldmind",
-        //   },
-        //   { platform: "instagram", url: "https://instagram.com/boldmindtech" },
-        //   { platform: "youtube", url: "https://youtube.com/@boldmindtech" },
-        // ]}
+      // socialLinks={[
+      //   { platform: "twitter", url: "https://twitter.com/boldmindtech" },
+      //   {
+      //     platform: "linkedin",
+      //     url: "https://linkedin.com/company/boldmind",
+      //   },
+      //   { platform: "instagram", url: "https://instagram.com/boldmindtech" },
+      //   { platform: "youtube", url: "https://youtube.com/@boldmindtech" },
+      // ]}
       />
     </div>
   );
