@@ -278,7 +278,7 @@ export default function EduCenterHomePage() {
     },
     {
       name: "Fatima Abubakar",
-      score: "285/400",
+      score: "210/400",
       image: "👩‍⚖️",
       text: "The WhatsApp AI automation course helped me start a digital business while preparing for Law school.",
       subject: "Law, ABU",

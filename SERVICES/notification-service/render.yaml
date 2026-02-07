@@ -1,4 +1,4 @@
-name: boldmind-user-service
+name: boldmind-notification-service
 type: web
 runtime: node
 plan: free
@@ -9,6 +9,6 @@ envVars:
   - key: PORT
     value: 4001
   - key: SERVICE_NAME
-    value: user-service
+    value: notification-service
 domains:
-  - users.api.boldmind.ng
+  - notification.boldmind.ng
