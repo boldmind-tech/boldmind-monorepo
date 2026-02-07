@@ -2,7 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
-import { BOLDMIND_PRODUCTS, Product } from '@boldmind/utils';
+import { BOLDMIND_PRODUCTS, type Product } from '@boldmind/utils';
 
 @Injectable()
 export class AdminService {

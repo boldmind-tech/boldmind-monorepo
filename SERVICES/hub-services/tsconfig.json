@@ -11,15 +11,14 @@
         "noPropertyAccessFromIndexSignature": false,
         "skipLibCheck": true,
         "types": [
-            "node"
+            "node",
+            "passport-jwt",
+            "pg"
         ],
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "baseUrl": ".",
         "paths": {
-            "@boldmind/utils": [
-                "../../PACKAGES/utils/src/index"
-            ],
             "@generated/*": [
                 "src/generated/*"
             ]

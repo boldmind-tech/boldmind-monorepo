@@ -4,8 +4,8 @@
   "description": "EduCenter backend service with ALOC API integration",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node dist/main.js",
-    "dev": "dotenv -e .env -- ts-node-dev --respawn --transpile-only src/main.ts",
+    "start": "node dist/index.js",
+    "dev": "dotenv -e .env -- ts-node-dev --respawn --transpile-only src/index.ts",
     "deploy": "pnpm prisma:generate && pnpm build",
     "build": "tsc",
     "clean": "rm -rf dist",

@@ -42,9 +42,9 @@
     "dist/**"
   ],
   "scripts": {
-    "build": "rm -rf dist && tsdown",
+    "build": "npx rimraf dist && tsdown",
     "dev": "tsdown --watch",
-    "clean": "rm -rf dist node_modules",
+    "clean": "npx rimraf dist node_modules",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {

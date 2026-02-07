@@ -4,7 +4,7 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "module": "CommonJS",
-    "moduleResolution": "nodenext",
+    "moduleResolution": "node",
     "lib": [
       "ES2022"
     ],
