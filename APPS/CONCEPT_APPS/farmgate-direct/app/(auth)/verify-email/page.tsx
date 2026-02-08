@@ -6,7 +6,7 @@ import { Mail, ArrowRight, Inbox, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { useAuth } from '@FarmGate Direct/auth';
+import { useAuth } from '@boldmind/auth';
 import { toast } from 'sonner';
 
 export default function VerifyEmailPage() {

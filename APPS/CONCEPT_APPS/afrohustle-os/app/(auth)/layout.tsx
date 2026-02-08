@@ -2,7 +2,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Logo, SuperNavbar, SuperFooter } from '@AfroHustle OS/ui';
+import { Logo, SuperNavbar, SuperFooter } from '@boldmind/ui';
 import Link from 'next/link';
 
 // Background dots pattern

@@ -18,15 +18,16 @@
     "cookie": "^1.1.1",
     "sonner": "^2.0.3",
     "@boldmind/auth": "workspace:*",
-    "@boldmind/api-client": "workspace:*"
-  },
-  "devDependencies": {
+    "@boldmind/api-client": "workspace:*",
+    "framer-motion": "^10.16.4",
     "@types/node": "^20.11.5",
     "@types/react": "^18.2.61",
     "@types/react-dom": "^18.2.19",
     "typescript": "^5.3.3",
     "tailwindcss": "^3.4.1",
     "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.33"
-  }
+    "postcss": "^8.4.33",
+    "lucide-react": "^0.309.0"
+  },
+  "devDependencies": {}
 }

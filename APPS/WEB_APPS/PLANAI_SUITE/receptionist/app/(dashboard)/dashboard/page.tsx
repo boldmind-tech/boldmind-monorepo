@@ -2,15 +2,27 @@
 'use client';
 
 import { useState } from 'react';
-import { 
-  MessageCircle, Users, TrendingUp, Clock, CheckCircle2,
-  AlertCircle, Phone, Mail, Calendar, Filter, Download,
+import {
+  MessageCircle, Users, Clock, CheckCircle2,
+  Calendar, Filter, Download,
   Search, MoreVertical, Zap, Bot, Settings, Bell
 } from 'lucide-react';
 
+
+interface Conversation {
+  id: number;
+  customer: string;
+  platform: string;
+  message: string;
+  time: string;
+  status: string;
+  avatar: string;
+  unread: number;
+}
+
 export default function ReceptionistDashboard() {
-  const [timeRange, setTimeRange] = useState('7d');
-  const [selectedConversation, setSelectedConversation] = useState(null);
+  // const [timeRange, setTimeRange] = useState('7d');
+  const [_selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
 
   const stats = [
     {
@@ -127,7 +139,7 @@ export default function ReceptionistDashboard() {
     { platform: 'Instagram', messages: 384, color: 'bg-pink-500', percentage: 13 }
   ];
 
-  const getStatusColor = (status) => {
+  const getStatusColor: (status: string) => string = (status) => {
     switch (status) {
       case 'active': return 'bg-green-500';
       case 'responded': return 'bg-blue-500';
@@ -262,7 +274,7 @@ export default function ReceptionistDashboard() {
           {/* Platform Distribution */}
           <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
             <h2 className="text-xl font-bold text-white mb-6">Platform Distribution</h2>
-            
+
             <div className="space-y-6 mb-8">
               {platformStats.map((platform, i) => (
                 <div key={i}>
@@ -318,7 +330,7 @@ export default function ReceptionistDashboard() {
                       <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </label>
                   </div>
-                  
+
                   <div className="space-y-2 mb-3">
                     <div className="flex items-center space-x-2 text-sm">
                       <span className="text-slate-400">Trigger:</span>

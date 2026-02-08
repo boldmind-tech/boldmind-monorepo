@@ -1,8 +1,7 @@
-//APPS/WEB_APPS/Business Planning-hub/app/(auth)/layout.tsx
 'use client';
 
 import { motion } from 'framer-motion';
-import { Logo, SuperNavbar, SuperFooter } from '@Business Planning/ui';
+import { Logo, SuperNavbar, SuperFooter } from '@boldmind/ui';
 import Link from 'next/link';
 
 // Background dots pattern

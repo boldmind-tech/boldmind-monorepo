@@ -51,25 +51,6 @@ importers:
       '@boldmind/utils':
         specifier: workspace:*
         version: link:../../../PACKAGES/utils
-      cookie:
-        specifier: ^1.1.1
-        version: 1.1.1
-      lucide-react:
-        specifier: ^0.309.0
-        version: 0.309.0(react@18.3.1)
-      next:
-        specifier: 14.2.35
-        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
-      sonner:
-        specifier: ^2.0.3
-        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
-    devDependencies:
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
@@ -82,21 +63,43 @@ importers:
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
-      eslint:
-        specifier: ^8
-        version: 8.57.1
-      eslint-config-next:
+      cookie:
+        specifier: ^1.1.1
+        version: 1.1.1
+      framer-motion:
+        specifier: ^10.16.4
+        version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
+      lucide-react:
+        specifier: ^0.309.0
+        version: 0.309.0(react@18.3.1)
+      next:
         specifier: 14.2.35
-        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
+        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
       postcss:
         specifier: ^8.4.38
         version: 8.5.6
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      sonner:
+        specifier: ^2.0.3
+        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
       tailwindcss:
         specifier: ^3.4.1
         version: 3.4.19
       typescript:
         specifier: 5.9.3
         version: 5.9.3
+    devDependencies:
+      eslint:
+        specifier: ^8
+        version: 8.57.1
+      eslint-config-next:
+        specifier: 14.2.35
+        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
 
   APPS/CONCEPT_APPS/afrohustle-os:
     dependencies:
@@ -115,22 +118,6 @@ importers:
       '@boldmind/utils':
         specifier: workspace:*
         version: link:../../../PACKAGES/utils
-      cookie:
-        specifier: ^1.1.1
-        version: 1.1.1
-      next:
-        specifier: 14.2.35
-        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
-      sonner:
-        specifier: ^2.0.3
-        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
-    devDependencies:
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
@@ -143,9 +130,30 @@ importers:
       autoprefixer:
         specifier: ^10.4.16
         version: 10.4.23(postcss@8.5.6)
+      cookie:
+        specifier: ^1.1.1
+        version: 1.1.1
+      framer-motion:
+        specifier: ^10.16.4
+        version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
+      lucide-react:
+        specifier: ^0.309.0
+        version: 0.309.0(react@18.3.1)
+      next:
+        specifier: 14.2.35
+        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
       postcss:
         specifier: ^8.4.33
         version: 8.5.6
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      sonner:
+        specifier: ^2.0.3
+        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
       tailwindcss:
         specifier: ^3.4.1
         version: 3.4.19
@@ -167,25 +175,6 @@ importers:
       '@boldmind/utils':
         specifier: workspace:*
         version: link:../../../PACKAGES/utils
-      cookie:
-        specifier: ^1.1.1
-        version: 1.1.1
-      lucide-react:
-        specifier: ^0.309.0
-        version: 0.309.0(react@18.3.1)
-      next:
-        specifier: 14.2.35
-        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
-      sonner:
-        specifier: ^2.0.7
-        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
-    devDependencies:
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
@@ -196,23 +185,45 @@ importers:
         specifier: 18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
-        specifier: ^10.4.19
+        specifier: ^10.4.16
         version: 10.4.23(postcss@8.5.6)
-      eslint:
-        specifier: ^8
-        version: 8.57.1
-      eslint-config-next:
+      cookie:
+        specifier: ^1.1.1
+        version: 1.1.1
+      framer-motion:
+        specifier: ^10.16.4
+        version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
+      lucide-react:
+        specifier: ^0.309.0
+        version: 0.309.0(react@18.3.1)
+      next:
         specifier: 14.2.35
-        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
+        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
       postcss:
-        specifier: ^8.4.38
+        specifier: ^8.4.33
         version: 8.5.6
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
       tailwindcss:
         specifier: ^3.4.1
         version: 3.4.19
       typescript:
         specifier: 5.9.3
         version: 5.9.3
+    devDependencies:
+      eslint:
+        specifier: ^8
+        version: 8.57.1
+      eslint-config-next:
+        specifier: 14.2.35
+        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
 
   APPS/CONCEPT_APPS/borderless-remit:
     dependencies:
@@ -228,25 +239,6 @@ importers:
       '@boldmind/utils':
         specifier: workspace:*
         version: link:../../../PACKAGES/utils
-      cookie:
-        specifier: ^1.1.1
-        version: 1.1.1
-      lucide-react:
-        specifier: ^0.309.0
-        version: 0.309.0(react@18.3.1)
-      next:
-        specifier: 14.2.35
-        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
-      sonner:
-        specifier: ^2.0.7
-        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
-    devDependencies:
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
@@ -257,23 +249,45 @@ importers:
         specifier: 18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
-        specifier: ^10.4.19
+        specifier: ^10.4.16
         version: 10.4.23(postcss@8.5.6)
-      eslint:
-        specifier: ^8
-        version: 8.57.1
-      eslint-config-next:
+      cookie:
+        specifier: ^1.1.1
+        version: 1.1.1
+      framer-motion:
+        specifier: ^10.16.4
+        version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
+      lucide-react:
+        specifier: ^0.309.0
+        version: 0.309.0(react@18.3.1)
+      next:
         specifier: 14.2.35
-        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
+        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
       postcss:
-        specifier: ^8.4.38
+        specifier: ^8.4.33
         version: 8.5.6
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
       tailwindcss:
         specifier: ^3.4.1
         version: 3.4.19
       typescript:
         specifier: 5.9.3
         version: 5.9.3
+    devDependencies:
+      eslint:
+        specifier: ^8
+        version: 8.57.1
+      eslint-config-next:
+        specifier: 14.2.35
+        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
 
   APPS/CONCEPT_APPS/farmgate-direct:
     dependencies:
@@ -289,25 +303,6 @@ importers:
       '@boldmind/utils':
         specifier: workspace:*
         version: link:../../../PACKAGES/utils
-      cookie:
-        specifier: ^1.1.1
-        version: 1.1.1
-      lucide-react:
-        specifier: ^0.309.0
-        version: 0.309.0(react@18.3.1)
-      next:
-        specifier: 14.2.35
-        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
-      sonner:
-        specifier: ^2.0.7
-        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
-    devDependencies:
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
@@ -318,23 +313,45 @@ importers:
         specifier: 18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
-        specifier: ^10.4.19
+        specifier: ^10.4.16
         version: 10.4.23(postcss@8.5.6)
-      eslint:
-        specifier: ^8
-        version: 8.57.1
-      eslint-config-next:
+      cookie:
+        specifier: ^1.1.1
+        version: 1.1.1
+      framer-motion:
+        specifier: ^10.16.4
+        version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
+      lucide-react:
+        specifier: ^0.309.0
+        version: 0.309.0(react@18.3.1)
+      next:
         specifier: 14.2.35
-        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
+        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
       postcss:
-        specifier: ^8.4.38
+        specifier: ^8.4.33
         version: 8.5.6
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
       tailwindcss:
         specifier: ^3.4.1
         version: 3.4.19
       typescript:
         specifier: 5.9.3
         version: 5.9.3
+    devDependencies:
+      eslint:
+        specifier: ^8
+        version: 8.57.1
+      eslint-config-next:
+        specifier: 14.2.35
+        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
 
   APPS/CONCEPT_APPS/kolo-ai:
     dependencies:
@@ -350,25 +367,6 @@ importers:
       '@boldmind/utils':
         specifier: workspace:*
         version: link:../../../PACKAGES/utils
-      cookie:
-        specifier: ^1.1.1
-        version: 1.1.1
-      lucide-react:
-        specifier: ^0.309.0
-        version: 0.309.0(react@18.3.1)
-      next:
-        specifier: 14.2.35
-        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
-      sonner:
-        specifier: ^2.0.7
-        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
-    devDependencies:
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
@@ -379,23 +377,45 @@ importers:
         specifier: 18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
-        specifier: ^10.4.19
+        specifier: ^10.4.16
         version: 10.4.23(postcss@8.5.6)
-      eslint:
-        specifier: ^8
-        version: 8.57.1
-      eslint-config-next:
+      cookie:
+        specifier: ^1.1.1
+        version: 1.1.1
+      framer-motion:
+        specifier: ^10.16.4
+        version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
+      lucide-react:
+        specifier: ^0.309.0
+        version: 0.309.0(react@18.3.1)
+      next:
         specifier: 14.2.35
-        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
+        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
       postcss:
-        specifier: ^8.4.38
+        specifier: ^8.4.33
         version: 8.5.6
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
       tailwindcss:
         specifier: ^3.4.1
         version: 3.4.19
       typescript:
         specifier: 5.9.3
         version: 5.9.3
+    devDependencies:
+      eslint:
+        specifier: ^8
+        version: 8.57.1
+      eslint-config-next:
+        specifier: 14.2.35
+        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
 
   APPS/CONCEPT_APPS/naijagig-matcher:
     dependencies:
@@ -411,25 +431,6 @@ importers:
       '@boldmind/utils':
         specifier: workspace:*
         version: link:../../../PACKAGES/utils
-      cookie:
-        specifier: ^1.1.1
-        version: 1.1.1
-      lucide-react:
-        specifier: ^0.309.0
-        version: 0.309.0(react@18.3.1)
-      next:
-        specifier: 14.2.35
-        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
-      sonner:
-        specifier: ^2.0.7
-        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
-    devDependencies:
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
@@ -440,23 +441,45 @@ importers:
         specifier: 18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
-        specifier: ^10.4.19
+        specifier: ^10.4.16
         version: 10.4.23(postcss@8.5.6)
-      eslint:
-        specifier: ^8
-        version: 8.57.1
-      eslint-config-next:
+      cookie:
+        specifier: ^1.1.1
+        version: 1.1.1
+      framer-motion:
+        specifier: ^10.16.4
+        version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
+      lucide-react:
+        specifier: ^0.309.0
+        version: 0.309.0(react@18.3.1)
+      next:
         specifier: 14.2.35
-        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
+        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
       postcss:
-        specifier: ^8.4.38
+        specifier: ^8.4.33
         version: 8.5.6
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
       tailwindcss:
         specifier: ^3.4.1
         version: 3.4.19
       typescript:
         specifier: 5.9.3
         version: 5.9.3
+    devDependencies:
+      eslint:
+        specifier: ^8
+        version: 8.57.1
+      eslint-config-next:
+        specifier: 14.2.35
+        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
 
   APPS/CONCEPT_APPS/power-alert:
     dependencies:
@@ -472,25 +495,6 @@ importers:
       '@boldmind/utils':
         specifier: workspace:*
         version: link:../../../PACKAGES/utils
-      cookie:
-        specifier: ^1.1.1
-        version: 1.1.1
-      lucide-react:
-        specifier: ^0.309.0
-        version: 0.309.0(react@18.3.1)
-      next:
-        specifier: 14.2.35
-        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
-      sonner:
-        specifier: ^2.0.7
-        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
-    devDependencies:
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
@@ -501,23 +505,45 @@ importers:
         specifier: 18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
-        specifier: ^10.4.19
+        specifier: ^10.4.16
         version: 10.4.23(postcss@8.5.6)
-      eslint:
-        specifier: ^8
-        version: 8.57.1
-      eslint-config-next:
+      cookie:
+        specifier: ^1.1.1
+        version: 1.1.1
+      framer-motion:
+        specifier: ^10.16.4
+        version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
+      lucide-react:
+        specifier: ^0.309.0
+        version: 0.309.0(react@18.3.1)
+      next:
         specifier: 14.2.35
-        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
+        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
       postcss:
-        specifier: ^8.4.38
+        specifier: ^8.4.33
         version: 8.5.6
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
       tailwindcss:
         specifier: ^3.4.1
         version: 3.4.19
       typescript:
         specifier: 5.9.3
         version: 5.9.3
+    devDependencies:
+      eslint:
+        specifier: ^8
+        version: 8.57.1
+      eslint-config-next:
+        specifier: 14.2.35
+        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
 
   APPS/CONCEPT_APPS/receipt-genius:
     dependencies:
@@ -533,25 +559,6 @@ importers:
       '@boldmind/utils':
         specifier: workspace:*
         version: link:../../../PACKAGES/utils
-      cookie:
-        specifier: ^1.1.1
-        version: 1.1.1
-      lucide-react:
-        specifier: ^0.309.0
-        version: 0.309.0(react@18.3.1)
-      next:
-        specifier: 14.2.35
-        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
-      sonner:
-        specifier: ^2.0.7
-        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
-    devDependencies:
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
@@ -562,23 +569,45 @@ importers:
         specifier: 18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
-        specifier: ^10.4.19
+        specifier: ^10.4.16
         version: 10.4.23(postcss@8.5.6)
-      eslint:
-        specifier: ^8
-        version: 8.57.1
-      eslint-config-next:
+      cookie:
+        specifier: ^1.1.1
+        version: 1.1.1
+      framer-motion:
+        specifier: ^10.16.4
+        version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
+      lucide-react:
+        specifier: ^0.309.0
+        version: 0.309.0(react@18.3.1)
+      next:
         specifier: 14.2.35
-        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
+        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
       postcss:
-        specifier: ^8.4.38
+        specifier: ^8.4.33
         version: 8.5.6
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
       tailwindcss:
         specifier: ^3.4.1
         version: 3.4.19
       typescript:
         specifier: 5.9.3
         version: 5.9.3
+    devDependencies:
+      eslint:
+        specifier: ^8
+        version: 8.57.1
+      eslint-config-next:
+        specifier: 14.2.35
+        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
 
   APPS/CONCEPT_APPS/skill2cash:
     dependencies:
@@ -594,25 +623,6 @@ importers:
       '@boldmind/utils':
         specifier: workspace:*
         version: link:../../../PACKAGES/utils
-      cookie:
-        specifier: ^1.1.1
-        version: 1.1.1
-      lucide-react:
-        specifier: ^0.309.0
-        version: 0.309.0(react@18.3.1)
-      next:
-        specifier: 14.2.35
-        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
-      sonner:
-        specifier: ^2.0.7
-        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
-    devDependencies:
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
@@ -623,23 +633,45 @@ importers:
         specifier: 18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
-        specifier: ^10.4.19
+        specifier: ^10.4.16
         version: 10.4.23(postcss@8.5.6)
-      eslint:
-        specifier: ^8
-        version: 8.57.1
-      eslint-config-next:
+      cookie:
+        specifier: ^1.1.1
+        version: 1.1.1
+      framer-motion:
+        specifier: ^10.16.4
+        version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
+      lucide-react:
+        specifier: ^0.309.0
+        version: 0.309.0(react@18.3.1)
+      next:
         specifier: 14.2.35
-        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
+        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
       postcss:
-        specifier: ^8.4.38
+        specifier: ^8.4.33
         version: 8.5.6
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
       tailwindcss:
         specifier: ^3.4.1
         version: 3.4.19
       typescript:
         specifier: 5.9.3
         version: 5.9.3
+    devDependencies:
+      eslint:
+        specifier: ^8
+        version: 8.57.1
+      eslint-config-next:
+        specifier: 14.2.35
+        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
 
   APPS/WEB_APPS/PLANAI_SUITE/analytics-dashboard:
     dependencies:
@@ -652,28 +684,18 @@ importers:
       '@boldmind/auth':
         specifier: workspace:*
         version: link:../../../../PACKAGES/auth
+      '@boldmind/payments':
+        specifier: workspace:*
+        version: link:../../../../PACKAGES/payments
       '@boldmind/ui':
         specifier: workspace:*
         version: link:../../../../PACKAGES/ui
       '@boldmind/utils':
         specifier: workspace:*
         version: link:../../../../PACKAGES/utils
-      cookie:
-        specifier: ^1.1.1
-        version: 1.1.1
-      next:
-        specifier: 14.2.35
-        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
-      sonner:
-        specifier: ^2.0.7
-        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
-    devDependencies:
+      '@tanstack/react-query':
+        specifier: ^5.90.12
+        version: 5.90.20(react@18.3.1)
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
@@ -684,23 +706,63 @@ importers:
         specifier: 18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
-        specifier: ^10.4.19
+        specifier: ^10.4.0
         version: 10.4.23(postcss@8.5.6)
+      clsx:
+        specifier: ^2.0.0
+        version: 2.1.1
+      cookie:
+        specifier: ^1.1.1
+        version: 1.1.1
+      date-fns:
+        specifier: ^3.6.0
+        version: 3.6.0
+      framer-motion:
+        specifier: ^10.16.4
+        version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
+      lucide-react:
+        specifier: 0.562.0
+        version: 0.562.0(react@18.3.1)
+      next:
+        specifier: 14.2.35
+        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
+      next-auth:
+        specifier: ^4.24.13
+        version: 4.24.13(next@14.2.35)(react-dom@18.3.1)(react@18.3.1)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      react-hook-form:
+        specifier: ^7.69.0
+        version: 7.71.1(react@18.3.1)
+      react-hot-toast:
+        specifier: ^2.6.0
+        version: 2.6.0(react-dom@18.3.1)(react@18.3.1)
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
+      tailwindcss:
+        specifier: ^3.3.0
+        version: 3.4.19
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      zod:
+        specifier: ^3.25.76
+        version: 3.25.76
+    devDependencies:
       eslint:
         specifier: ^8
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
         version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
-      postcss:
-        specifier: ^8.4.38
-        version: 8.5.6
-      tailwindcss:
-        specifier: ^3.4.1
-        version: 3.4.19
-      typescript:
-        specifier: 5.9.3
-        version: 5.9.3
 
   APPS/WEB_APPS/PLANAI_SUITE/branding-design:
     dependencies:
@@ -713,28 +775,18 @@ importers:
       '@boldmind/auth':
         specifier: workspace:*
         version: link:../../../../PACKAGES/auth
+      '@boldmind/payments':
+        specifier: workspace:*
+        version: link:../../../../PACKAGES/payments
       '@boldmind/ui':
         specifier: workspace:*
         version: link:../../../../PACKAGES/ui
       '@boldmind/utils':
         specifier: workspace:*
         version: link:../../../../PACKAGES/utils
-      cookie:
-        specifier: ^1.1.1
-        version: 1.1.1
-      next:
-        specifier: 14.2.35
-        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
-      sonner:
-        specifier: ^2.0.7
-        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
-    devDependencies:
+      '@tanstack/react-query':
+        specifier: ^5.90.12
+        version: 5.90.20(react@18.3.1)
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
@@ -745,23 +797,63 @@ importers:
         specifier: 18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
-        specifier: ^10.4.19
+        specifier: ^10.4.0
         version: 10.4.23(postcss@8.5.6)
+      clsx:
+        specifier: ^2.0.0
+        version: 2.1.1
+      cookie:
+        specifier: ^1.1.1
+        version: 1.1.1
+      date-fns:
+        specifier: ^3.6.0
+        version: 3.6.0
+      framer-motion:
+        specifier: ^10.16.4
+        version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
+      lucide-react:
+        specifier: 0.562.0
+        version: 0.562.0(react@18.3.1)
+      next:
+        specifier: 14.2.35
+        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
+      next-auth:
+        specifier: ^4.24.13
+        version: 4.24.13(next@14.2.35)(react-dom@18.3.1)(react@18.3.1)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      react-hook-form:
+        specifier: ^7.69.0
+        version: 7.71.1(react@18.3.1)
+      react-hot-toast:
+        specifier: ^2.6.0
+        version: 2.6.0(react-dom@18.3.1)(react@18.3.1)
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
+      tailwindcss:
+        specifier: ^3.3.0
+        version: 3.4.19
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      zod:
+        specifier: ^3.25.76
+        version: 3.25.76
+    devDependencies:
       eslint:
         specifier: ^8
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
         version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
-      postcss:
-        specifier: ^8.4.38
-        version: 8.5.6
-      tailwindcss:
-        specifier: ^3.4.1
-        version: 3.4.19
-      typescript:
-        specifier: 5.9.3
-        version: 5.9.3
 
   APPS/WEB_APPS/PLANAI_SUITE/business-planning:
     dependencies:
@@ -774,28 +866,18 @@ importers:
       '@boldmind/auth':
         specifier: workspace:*
         version: link:../../../../PACKAGES/auth
+      '@boldmind/payments':
+        specifier: workspace:*
+        version: link:../../../../PACKAGES/payments
       '@boldmind/ui':
         specifier: workspace:*
         version: link:../../../../PACKAGES/ui
       '@boldmind/utils':
         specifier: workspace:*
         version: link:../../../../PACKAGES/utils
-      cookie:
-        specifier: ^1.1.1
-        version: 1.1.1
-      next:
-        specifier: 14.2.35
-        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
-      sonner:
-        specifier: ^2.0.7
-        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
-    devDependencies:
+      '@tanstack/react-query':
+        specifier: ^5.90.12
+        version: 5.90.20(react@18.3.1)
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
@@ -806,23 +888,63 @@ importers:
         specifier: 18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
-        specifier: ^10.4.19
+        specifier: ^10.4.0
         version: 10.4.23(postcss@8.5.6)
+      clsx:
+        specifier: ^2.0.0
+        version: 2.1.1
+      cookie:
+        specifier: ^1.1.1
+        version: 1.1.1
+      date-fns:
+        specifier: ^3.6.0
+        version: 3.6.0
+      framer-motion:
+        specifier: ^10.16.4
+        version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
+      lucide-react:
+        specifier: 0.562.0
+        version: 0.562.0(react@18.3.1)
+      next:
+        specifier: 14.2.35
+        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
+      next-auth:
+        specifier: ^4.24.13
+        version: 4.24.13(next@14.2.35)(react-dom@18.3.1)(react@18.3.1)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      react-hook-form:
+        specifier: ^7.69.0
+        version: 7.71.1(react@18.3.1)
+      react-hot-toast:
+        specifier: ^2.6.0
+        version: 2.6.0(react-dom@18.3.1)(react@18.3.1)
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
+      tailwindcss:
+        specifier: ^3.3.0
+        version: 3.4.19
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      zod:
+        specifier: ^3.25.76
+        version: 3.25.76
+    devDependencies:
       eslint:
         specifier: ^8
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
         version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
-      postcss:
-        specifier: ^8.4.38
-        version: 8.5.6
-      tailwindcss:
-        specifier: ^3.4.1
-        version: 3.4.19
-      typescript:
-        specifier: 5.9.3
-        version: 5.9.3
 
   APPS/WEB_APPS/PLANAI_SUITE/credibility-hubs:
     dependencies:
@@ -841,22 +963,6 @@ importers:
       '@boldmind/utils':
         specifier: workspace:*
         version: link:../../../../PACKAGES/utils
-      cookie:
-        specifier: ^1.1.1
-        version: 1.1.1
-      next:
-        specifier: 14.2.35
-        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
-      sonner:
-        specifier: ^2.0.7
-        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
-    devDependencies:
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
@@ -869,21 +975,43 @@ importers:
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
-      eslint:
-        specifier: ^8
-        version: 8.57.1
-      eslint-config-next:
+      cookie:
+        specifier: ^1.1.1
+        version: 1.1.1
+      framer-motion:
+        specifier: ^12.29.2
+        version: 12.29.2(@emotion/is-prop-valid@1.4.0)(react-dom@18.3.1)(react@18.3.1)
+      lucide-react:
+        specifier: ^0.563.0
+        version: 0.563.0(react@18.3.1)
+      next:
         specifier: 14.2.35
-        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
+        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
       postcss:
         specifier: ^8.4.38
         version: 8.5.6
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
       tailwindcss:
         specifier: ^3.4.1
         version: 3.4.19
       typescript:
         specifier: 5.9.3
         version: 5.9.3
+    devDependencies:
+      eslint:
+        specifier: ^8
+        version: 8.57.1
+      eslint-config-next:
+        specifier: 14.2.35
+        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
 
   APPS/WEB_APPS/PLANAI_SUITE/digital-storefronts:
     dependencies:
@@ -902,22 +1030,6 @@ importers:
       '@boldmind/utils':
         specifier: workspace:*
         version: link:../../../../PACKAGES/utils
-      cookie:
-        specifier: ^1.1.1
-        version: 1.1.1
-      next:
-        specifier: 14.2.35
-        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
-      sonner:
-        specifier: ^2.0.7
-        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
-    devDependencies:
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
@@ -930,21 +1042,43 @@ importers:
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.23(postcss@8.5.6)
-      eslint:
-        specifier: ^8
-        version: 8.57.1
-      eslint-config-next:
+      cookie:
+        specifier: ^1.1.1
+        version: 1.1.1
+      framer-motion:
+        specifier: ^12.29.2
+        version: 12.29.2(@emotion/is-prop-valid@1.4.0)(react-dom@18.3.1)(react@18.3.1)
+      lucide-react:
+        specifier: ^0.563.0
+        version: 0.563.0(react@18.3.1)
+      next:
         specifier: 14.2.35
-        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
+        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
       postcss:
         specifier: ^8.4.38
         version: 8.5.6
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
       tailwindcss:
         specifier: ^3.4.1
         version: 3.4.19
       typescript:
         specifier: 5.9.3
         version: 5.9.3
+    devDependencies:
+      eslint:
+        specifier: ^8
+        version: 8.57.1
+      eslint-config-next:
+        specifier: 14.2.35
+        version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
 
   APPS/WEB_APPS/PLANAI_SUITE/financial-forecasting:
     dependencies:
@@ -957,28 +1091,18 @@ importers:
       '@boldmind/auth':
         specifier: workspace:*
         version: link:../../../../PACKAGES/auth
+      '@boldmind/payments':
+        specifier: workspace:*
+        version: link:../../../../PACKAGES/payments
       '@boldmind/ui':
         specifier: workspace:*
         version: link:../../../../PACKAGES/ui
       '@boldmind/utils':
         specifier: workspace:*
         version: link:../../../../PACKAGES/utils
-      cookie:
-        specifier: ^1.1.1
-        version: 1.1.1
-      next:
-        specifier: 14.2.35
-        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
-      sonner:
-        specifier: ^2.0.7
-        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
-    devDependencies:
+      '@tanstack/react-query':
+        specifier: ^5.90.12
+        version: 5.90.20(react@18.3.1)
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
@@ -989,23 +1113,63 @@ importers:
         specifier: 18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
-        specifier: ^10.4.19
+        specifier: ^10.4.0
         version: 10.4.23(postcss@8.5.6)
+      clsx:
+        specifier: ^2.0.0
+        version: 2.1.1
+      cookie:
+        specifier: ^1.1.1
+        version: 1.1.1
+      date-fns:
+        specifier: ^3.6.0
+        version: 3.6.0
+      framer-motion:
+        specifier: ^10.16.4
+        version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
+      lucide-react:
+        specifier: 0.562.0
+        version: 0.562.0(react@18.3.1)
+      next:
+        specifier: 14.2.35
+        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
+      next-auth:
+        specifier: ^4.24.13
+        version: 4.24.13(next@14.2.35)(react-dom@18.3.1)(react@18.3.1)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      react-hook-form:
+        specifier: ^7.69.0
+        version: 7.71.1(react@18.3.1)
+      react-hot-toast:
+        specifier: ^2.6.0
+        version: 2.6.0(react-dom@18.3.1)(react@18.3.1)
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
+      tailwindcss:
+        specifier: ^3.3.0
+        version: 3.4.19
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      zod:
+        specifier: ^3.25.76
+        version: 3.25.76
+    devDependencies:
       eslint:
         specifier: ^8
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
         version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
-      postcss:
-        specifier: ^8.4.38
-        version: 8.5.6
-      tailwindcss:
-        specifier: ^3.4.1
-        version: 3.4.19
-      typescript:
-        specifier: 5.9.3
-        version: 5.9.3
 
   APPS/WEB_APPS/PLANAI_SUITE/investor-readiness:
     dependencies:
@@ -1018,28 +1182,18 @@ importers:
       '@boldmind/auth':
         specifier: workspace:*
         version: link:../../../../PACKAGES/auth
+      '@boldmind/payments':
+        specifier: workspace:*
+        version: link:../../../../PACKAGES/payments
       '@boldmind/ui':
         specifier: workspace:*
         version: link:../../../../PACKAGES/ui
       '@boldmind/utils':
         specifier: workspace:*
         version: link:../../../../PACKAGES/utils
-      cookie:
-        specifier: ^1.1.1
-        version: 1.1.1
-      next:
-        specifier: 14.2.35
-        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
-      sonner:
-        specifier: ^2.0.7
-        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
-    devDependencies:
+      '@tanstack/react-query':
+        specifier: ^5.90.12
+        version: 5.90.20(react@18.3.1)
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
@@ -1050,23 +1204,63 @@ importers:
         specifier: 18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
-        specifier: ^10.4.19
+        specifier: ^10.4.0
         version: 10.4.23(postcss@8.5.6)
+      clsx:
+        specifier: ^2.0.0
+        version: 2.1.1
+      cookie:
+        specifier: ^1.1.1
+        version: 1.1.1
+      date-fns:
+        specifier: ^3.6.0
+        version: 3.6.0
+      framer-motion:
+        specifier: ^10.16.4
+        version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
+      lucide-react:
+        specifier: 0.562.0
+        version: 0.562.0(react@18.3.1)
+      next:
+        specifier: 14.2.35
+        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
+      next-auth:
+        specifier: ^4.24.13
+        version: 4.24.13(next@14.2.35)(react-dom@18.3.1)(react@18.3.1)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      react-hook-form:
+        specifier: ^7.69.0
+        version: 7.71.1(react@18.3.1)
+      react-hot-toast:
+        specifier: ^2.6.0
+        version: 2.6.0(react-dom@18.3.1)(react@18.3.1)
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
+      tailwindcss:
+        specifier: ^3.3.0
+        version: 3.4.19
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      zod:
+        specifier: ^3.25.76
+        version: 3.25.76
+    devDependencies:
       eslint:
         specifier: ^8
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
         version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
-      postcss:
-        specifier: ^8.4.38
-        version: 8.5.6
-      tailwindcss:
-        specifier: ^3.4.1
-        version: 3.4.19
-      typescript:
-        specifier: 5.9.3
-        version: 5.9.3
 
   APPS/WEB_APPS/PLANAI_SUITE/marketing-automation:
     dependencies:
@@ -1079,28 +1273,18 @@ importers:
       '@boldmind/auth':
         specifier: workspace:*
         version: link:../../../../PACKAGES/auth
+      '@boldmind/payments':
+        specifier: workspace:*
+        version: link:../../../../PACKAGES/payments
       '@boldmind/ui':
         specifier: workspace:*
         version: link:../../../../PACKAGES/ui
       '@boldmind/utils':
         specifier: workspace:*
         version: link:../../../../PACKAGES/utils
-      cookie:
-        specifier: ^1.1.1
-        version: 1.1.1
-      next:
-        specifier: 14.2.35
-        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
-      sonner:
-        specifier: ^2.0.7
-        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
-    devDependencies:
+      '@tanstack/react-query':
+        specifier: ^5.90.12
+        version: 5.90.20(react@18.3.1)
       '@types/node':
         specifier: 20.19.30
         version: 20.19.30
@@ -1111,23 +1295,63 @@ importers:
         specifier: 18.3.7
         version: 18.3.7(@types/react@18.3.27)
       autoprefixer:
-        specifier: ^10.4.19
+        specifier: ^10.4.0
         version: 10.4.23(postcss@8.5.6)
+      clsx:
+        specifier: ^2.0.0
+        version: 2.1.1
+      cookie:
+        specifier: ^1.1.1
+        version: 1.1.1
+      date-fns:
+        specifier: ^3.6.0
+        version: 3.6.0
+      framer-motion:
+        specifier: ^10.16.4
+        version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
+      lucide-react:
+        specifier: 0.562.0
+        version: 0.562.0(react@18.3.1)
+      next:
+        specifier: 14.2.35
+        version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
+      next-auth:
+        specifier: ^4.24.13
+        version: 4.24.13(next@14.2.35)(react-dom@18.3.1)(react@18.3.1)
+      postcss:
+        specifier: ^8.4.0
+        version: 8.5.6
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      react-hook-form:
+        specifier: ^7.69.0
+        version: 7.71.1(react@18.3.1)
+      react-hot-toast:
+        specifier: ^2.6.0
+        version: 2.6.0(react-dom@18.3.1)(react@18.3.1)
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
+      tailwindcss:
+        specifier: ^3.3.0
+        version: 3.4.19
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      zod:
+        specifier: ^3.25.76
+        version: 3.25.76
+    devDependencies:
       eslint:
         specifier: ^8
         version: 8.57.1
       eslint-config-next:
         specifier: 14.2.35
         version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
-      postcss:
-        specifier: ^8.4.38
-        version: 8.5.6
-      tailwindcss:
-        specifier: ^3.4.1
-        version: 3.4.19
-      typescript:
-        specifier: 5.9.3
-        version: 5.9.3
 
   APPS/WEB_APPS/PLANAI_SUITE/planai-landing:
     dependencies:
@@ -1652,9 +1876,6 @@ importers:
         specifier: 5.9.3
         version: 5.9.3
     devDependencies:
-      '@types/cookie':
-        specifier: ^1.0.0
-        version: 1.0.0
       '@types/next':
         specifier: ^9.0.0
         version: 9.0.0(react-dom@18.3.1)(react@18.3.1)
@@ -16915,7 +17136,7 @@ packages:
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
-      chokidar: 3.5.3
+      chokidar: 3.6.0
       didyoumean: 1.2.2
       dlv: 1.1.3
       fast-glob: 3.3.3

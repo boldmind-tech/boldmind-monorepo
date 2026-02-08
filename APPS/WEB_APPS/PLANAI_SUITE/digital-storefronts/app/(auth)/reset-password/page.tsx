@@ -4,8 +4,9 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, ArrowLeft, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
-import { useAuth } from '@Digital Storefronts/auth';
 import { toast } from 'sonner';
+import { useAuth } from '@boldmind/auth';
+
 
 export default function ResetPasswordPage() {
     const [email, setEmail] = useState('');

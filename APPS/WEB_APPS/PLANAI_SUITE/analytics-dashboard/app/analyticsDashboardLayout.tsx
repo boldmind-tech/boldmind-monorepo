@@ -6,7 +6,7 @@ import { BOLDMIND_PRODUCTS, productThemes } from '@boldmind/utils';
 export function AnalyticsDashboardLayout({ children }: { children: React.ReactNode }) {
   const forceProduct = 'analytics-dashboard';
   const product = BOLDMIND_PRODUCTS.find(p => p.slug === forceProduct);
-  const theme = productThemes[forceProduct] || productThemes['boldmind-hub'];
+  const theme = productThemes[forceProduct] || productThemes['analytics-dashboard'];
 
   const productTheme = {
     slug: forceProduct,

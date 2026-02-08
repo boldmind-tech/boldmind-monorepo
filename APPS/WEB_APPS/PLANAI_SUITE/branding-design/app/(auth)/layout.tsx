@@ -1,8 +1,7 @@
-//APPS/WEB_APPS/Branding & Design-hub/app/(auth)/layout.tsx
 'use client';
 
 import { motion } from 'framer-motion';
-import { Logo, SuperNavbar, SuperFooter } from '@Branding & Design/ui';
+import { Logo, SuperNavbar, SuperFooter } from '@boldmind/ui';
 import Link from 'next/link';
 
 // Background dots pattern

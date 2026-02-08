@@ -1,14 +1,20 @@
 'use client';
 
 import { Providers } from '../components/Providers';
-import { BOLDMIND_PRODUCTS, productThemes } from '@boldmind/utils';
+import { BOLDMIND_PRODUCTS, getProductBySlug, productThemes, getProductColors } from '@boldmind/utils';
+import type { ProductThemeType } from '@boldmind/ui';
+import { ReactNode } from 'react';
 
-export function BoldMindOSLayout({ children }: { children: React.ReactNode }) {
+interface BoldMindOSLayoutProps {
+    children: ReactNode;
+}
+
+export function BoldMindOSLayout({ children }: BoldMindOSLayoutProps) {
     const forceProduct = 'boldmind-os';
-    const product = BOLDMIND_PRODUCTS.find(p => p.slug === forceProduct);
-    const theme = productThemes[forceProduct] || productThemes['boldmind-os'];
+    const product = getProductBySlug(forceProduct) || BOLDMIND_PRODUCTS[5];
+    const theme = getProductColors(forceProduct) || productThemes['boldmind-os'];
 
-    const productTheme = {
+    const productTheme: ProductThemeType = {
         slug: forceProduct,
         name: product?.name || 'BoldMind OS',
         description: product?.description || 'Neurodivergent-friendly productivity OS',
@@ -20,7 +26,6 @@ export function BoldMindOSLayout({ children }: { children: React.ReactNode }) {
             accent: theme?.primary,
             background: theme?.background,
         },
-        product
     };
 
     return <Providers defaultProductTheme={productTheme}>{children}</Providers>;

@@ -1,3 +1,5 @@
+
+
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { BoldMindOSLayout } from "./boldmindOSLayout";
@@ -183,8 +185,11 @@ export default function RootLayout({
         className={`${inter.variable} antialiased bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 font-sans`}
       >
         <ErrorBoundary>
-          <BoldMindOSLayout>{children}</BoldMindOSLayout>
+          <BoldMindOSLayout>
+            {children}
+          </BoldMindOSLayout>
         </ErrorBoundary>
+
       </body>
     </html>
   );

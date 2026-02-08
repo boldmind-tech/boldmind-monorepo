@@ -6,8 +6,9 @@ import { Mail, ArrowRight, Inbox, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { useAuth } from '@Digital Storefronts/auth';
 import { toast } from 'sonner';
+import { useAuth } from '@boldmind/auth';
+
 
 export default function VerifyEmailPage() {
     const searchParams = useSearchParams();

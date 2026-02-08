@@ -8,6 +8,7 @@ const __dirname = path.dirname(__filename);
 const nextConfig = {
 
   reactStrictMode: true,
+  basePath: '/branding',
 
   transpilePackages: [
     '@boldmind/ui',
