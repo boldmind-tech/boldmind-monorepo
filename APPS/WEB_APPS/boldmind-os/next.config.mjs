@@ -15,8 +15,7 @@ const nextConfig = {
   ],
 
   experimental: {
-    serverComponentsExternalPackages: ['mongoose', 'mongodb'],
-    outputFileTracingRoot: path.join(__dirname, '../../')
+    outputFileTracingRoot: path.join(__dirname, '../../../')
   },
 
   images: {
