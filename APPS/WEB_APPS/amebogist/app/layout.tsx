@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { AmebogistLayout } from "./amebogistLayout";
-import { ErrorBoundary } from "@boldmind/ui";
+import { ClientErrorBoundary } from "./components/ClientErrorBoundary";
 import "@boldmind/ui/dist/index.css";
 import "./globals.css";
 
@@ -273,9 +273,9 @@ export default function RootLayout({
       <body
         className={`${inter.variable} antialiased bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 font-sans`}
       >
-        <ErrorBoundary>
+        <ClientErrorBoundary>
           <AmebogistLayout>{children}</AmebogistLayout>
-        </ErrorBoundary>
+        </ClientErrorBoundary>
       </body>
     </html>
   );
