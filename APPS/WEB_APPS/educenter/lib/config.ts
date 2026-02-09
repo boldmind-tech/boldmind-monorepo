@@ -1,44 +1,4 @@
-// EduCenter Configuration using shared packages
-
-// Past Questions API Configuration
-export const PAST_QUESTIONS_CONFIG = {
-  baseUrl: 'https://questions.aloc.com.ng/api/v2',
-  accessToken: process.env['NEXT_PUBLIC_ALOC_ACCESS_TOKEN'] || '',
-  endpoints: {
-    getQuestions: '/q',
-    getSubjects: '/subjects',
-    getYears: '/years',
-  },
-};
-
-// Subjects available
-export const SUBJECTS = [
-  { value: 'english', label: 'English Language' },
-  { value: 'mathematics', label: 'Mathematics' },
-  { value: 'commerce', label: 'Commerce' },
-  { value: 'accounting', label: 'Accounting' },
-  { value: 'biology', label: 'Biology' },
-  { value: 'physics', label: 'Physics' },
-  { value: 'chemistry', label: 'Chemistry' },
-  { value: 'englishlit', label: 'English Literature' },
-  { value: 'government', label: 'Government' },
-  { value: 'crk', label: 'CRK' },
-  { value: 'geography', label: 'Geography' },
-  { value: 'economics', label: 'Economics' },
-  { value: 'irk', label: 'IRK' },
-  { value: 'civiledu', label: 'Civic Education' },
-  { value: 'insurance', label: 'Insurance' },
-  { value: 'currentaffairs', label: 'Current Affairs' },
-  { value: 'history', label: 'History' },
-];
-
-// Exam years available
-export const EXAM_YEARS = [
-  '2000', '2001', '2002', '2003', '2004', '2005',
-  '2006', '2007', '2008', '2009', '2010', '2011',
-  '2012', '2013', '2014', '2015', '2016', '2017',
-  '2018', '2019', '2020', '2021', '2022', '2023',
-];
+// APPS/boldmind-educenter/src/lib/config.ts
 
 // Subscription Plans
 export const SUBSCRIPTION_PLANS = {
@@ -104,3 +64,46 @@ export const SUBSCRIPTION_PLANS = {
     },
   },
 };
+
+// Exam Types
+export const EXAM_TYPES = [
+  { value: 'JAMB', label: 'JAMB' },
+  { value: 'WAEC', label: 'WAEC' },
+  { value: 'NECO', label: 'NECO' },
+];
+
+// Subjects (fallback if API doesn't return subjects)
+export const SUBJECTS = [
+  { value: 'mathematics', label: 'Mathematics' },
+  { value: 'english', label: 'English Language' },
+  { value: 'physics', label: 'Physics' },
+  { value: 'chemistry', label: 'Chemistry' },
+  { value: 'biology', label: 'Biology' },
+  { value: 'geography', label: 'Geography' },
+  { value: 'economics', label: 'Economics' },
+  { value: 'government', label: 'Government' },
+  { value: 'literature', label: 'Literature in English' },
+  { value: 'commerce', label: 'Commerce' },
+  { value: 'accounting', label: 'Accounting' },
+  { value: 'crk', label: 'Christian Religious Knowledge' },
+  { value: 'irk', label: 'Islamic Religious Knowledge' },
+  { value: 'civileducation', label: 'Civic Education' },
+  { value: 'agricultural-science', label: 'Agricultural Science' },
+];
+
+// Course Categories
+export const COURSE_CATEGORIES = [
+  { value: 'digital-marketing', label: 'Digital Marketing' },
+  { value: 'sales', label: 'Sales' },
+  { value: 'business-strategy', label: 'Business Strategy' },
+  { value: 'entrepreneurship', label: 'Entrepreneurship' },
+  { value: 'social-media', label: 'Social Media' },
+  { value: 'content-creation', label: 'Content Creation' },
+];
+
+// Course Levels
+export const COURSE_LEVELS = [
+  { value: 'beginner', label: 'Beginner' },
+  { value: 'intermediate', label: 'Intermediate' },
+  { value: 'advanced', label: 'Advanced' },
+];

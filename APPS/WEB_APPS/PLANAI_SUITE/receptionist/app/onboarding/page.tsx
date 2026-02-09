@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { SuperNavbar } from '@boldmind/ui';
 
-export default function PlanAIOnboarding() {
+export default function AiReceptionistOnboarding() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     businessName: '',

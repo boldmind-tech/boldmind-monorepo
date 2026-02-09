@@ -141,7 +141,7 @@ export const metadata: Metadata = {
       me: [
         "https://facebook.com/BoldMindTech",
         "https://instagram.com/boldmindtech",
-        "https://twitter.com/",
+        "https://x.com/villagecirl",
         "https://linkedin.com/company/boldmind-technology-solution-enterprise",
         "https://github.com/boldmind-tech",
       ],

@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { PrismaClient } from '../generated/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+import pg from 'pg';
 
 const connectionString = process.env.PAYMENT_SERVICE_DATABASE_URL;
 
@@ -12,7 +14,10 @@ if (!connectionString) {
     throw new Error('Missing env variable: PAYMENT_SERVICE_DATABASE_URL');
 }
 
-export const prisma = new PrismaClient();
+const pool = new pg.Pool({ connectionString });
+const adapter = new PrismaPg(pool);
+
+export const prisma = new PrismaClient({ adapter });
 
 // Graceful shutdown
 process.on('SIGTERM', async () => {

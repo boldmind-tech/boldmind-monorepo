@@ -9,26 +9,11 @@ export const middleware = composeMiddleware(
     createAuthMiddleware({
         publicRoutes: [
             '/',
-            '/login',
-            '/register',
-            '/about',
-            '/contact',
-            '/products',
-            '/products/*',
             '/privacy',
             '/terms',
-            '/forgot-password',
-            '/reset-password',
-            '/verify-email',
-            '/api/auth/*',
         ],
-        protectedRoutes: [
-            '/dashboard',
-            '/dashboard/*',
-            '/admin',
-            '/admin/*',
-        ],
-        redirectTo: '/login',
+      
+  
     }),
     createRateLimitMiddleware({
         maxRequests: 100,

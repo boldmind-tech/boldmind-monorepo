@@ -2,7 +2,7 @@
 // SERVICES/educenter-service/src/routes/quizzes.routes.ts
 
 import { Router } from 'express';
-import { prisma } from '../index';
+import { prisma } from '../database/prisma';
 import { AlocProvider } from '../providers/aloc.provider';
 
 const router: Router = Router();

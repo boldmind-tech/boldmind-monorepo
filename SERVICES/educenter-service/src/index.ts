@@ -18,7 +18,7 @@ const PORT = parseInt(process.env.PORT || '4003', 10);
 
 app.use(helmet());
 app.use(cors({
-  origin: process.env.CORS_ORIGIN?.split(',').map(o => o.trim()) || ['http://localhost:3001'],
+  origin: process.env.CORS_ORIGIN?.split(',').map(o => o.trim()) || ['http://localhost:3000'],
   credentials: true,
 }));
 app.use(morgan('dev'));

@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   MessageSquare,
-  Video,
   Briefcase,
   TrendingUp,
   BarChart3,
@@ -32,7 +31,7 @@ const PlanAIProducts = [
     id: "receptionist",
     name: "AI Receptionist",
     description: "24/7 automated lead capture & appointment booking",
-    status: "🚀 LIVE",
+    status: "LIVE",
     icon: MessageSquare,
     color: "from-green-500 to-emerald-600",
     features: [
@@ -46,27 +45,10 @@ const PlanAIProducts = [
     stats: { clients: 12, responseTime: "2s", successRate: "94%" },
   },
   {
-    id: "social-factory",
-    name: "Social Media Factory",
-    description: "AI video generation & multi-platform publishing",
-    status: "🔨 BUILDING",
-    icon: Video,
-    color: "from-blue-500 to-cyan-600",
-    features: [
-      "AI Video Generation",
-      "Multi-platform Sync",
-      "Content Calendar",
-      "Analytics Dashboard",
-    ],
-    revenue: "₦15k-₦30k/month",
-    link: "social.boldmind.ng",
-    stats: { videos: "500+", platforms: 6, engagement: "+300%" },
-  },
-  {
     id: "credibility-hubs",
     name: "Professional Credibility Hubs",
     description: "AI-powered personal branding & professional portfolios",
-    status: "📋 BUILDING",
+    status: "BUILDING",
     icon: Briefcase,
     color: "from-purple-500 to-pink-600",
     features: [
@@ -84,7 +66,7 @@ const PlanAIProducts = [
     name: "AI Business Planning",
     description:
       "Dynamic business plans & market analysis for Nigerian startups",
-    status: "📋 PLANNED",
+    status: "PLANNED",
     icon: TrendingUp,
     color: "from-orange-500 to-red-600",
     features: [
@@ -94,14 +76,14 @@ const PlanAIProducts = [
       "Financial Projections",
     ],
     revenue: "₦10k/plan",
-    link: "/planning",
+    link: "/business-planning",
     stats: { plans: "200+", industries: 15, fundingRate: "68%" },
   },
   {
     id: "financial-forecasting",
     name: "Financial Forecasting",
     description: "AI cashflow modeling & revenue projections for SMEs",
-    status: "📋 PLANNED",
+    status: "PLANNED",
     icon: BarChart3,
     color: "from-yellow-500 to-amber-600",
     features: [
@@ -118,7 +100,7 @@ const PlanAIProducts = [
     id: "investor-readiness",
     name: "Investor Readiness",
     description: "Complete funding documentation & cap table management",
-    status: "📋 PLANNED",
+    status: "PLANNED",
     icon: Shield,
     color: "from-indigo-500 to-violet-600",
     features: [
@@ -135,43 +117,43 @@ const PlanAIProducts = [
     id: "branding-design",
     name: "Branding & Design Tools",
     description: "AI logo creation & marketing visuals",
-    status: "📋 PLANNED",
+    status: "BUILDING",
     icon: Palette,
     color: "from-pink-500 to-rose-500",
     features: ["Logo generator", "Color palettes", "Marketing visuals"],
     revenue: "₦3k/design",
-    link: "/branding-design",
+    link: "/branding",
     stats: { designs: "1k+", users: "500+", satisfaction: "96%" },
   },
   {
     id: "digital-storefronts",
     name: "Digital Storefronts",
     description: "Instant e-commerce stores for SMEs",
-    status: "📋 PLANNED",
+    status: "BUILDING",
     icon: Store,
     color: "from-teal-500 to-emerald-500",
     features: ["Paystack integration", "Inventory", "Order tracking"],
     revenue: "₦5k setup + ₦2k/month",
-    link: "/digital-storefronts",
+    link: "/storefronts",
     stats: { stores: "50+", products: "5k+", transactions: "₦10M+" },
   },
   {
     id: "marketing-automation",
     name: "Marketing Automation",
     description: "AI-driven campaigns & lead nurturing",
-    status: "📋 PLANNED",
+    status: "PLANNED",
     icon: Mail,
     color: "from-blue-500 to-indigo-500",
     features: ["Email campaigns", "Segmentation", "Personalization"],
     revenue: "₦10k/month",
-    link: "/marketing-automation",
+    link: "/marketing",
     stats: { campaigns: "200+", openRate: "42%", conversion: "18%" },
   },
   {
     id: "analytics-dashboard",
     name: "Analytics Dashboard",
     description: "Cross-platform business intelligence",
-    status: "📋 PLANNED",
+    status: "BUILDING",
     icon: Zap,
     color: "from-purple-500 to-blue-500",
     features: [
@@ -180,7 +162,7 @@ const PlanAIProducts = [
       "Growth opportunities",
     ],
     revenue: "₦8k/month",
-    link: "/analytics-dashboard",
+    link: "/analytics",
     stats: { dashboards: "75+", dataPoints: "1M+", accuracy: "99%" },
   },
 ];
@@ -188,7 +170,7 @@ const PlanAIProducts = [
 const pricingTiers = [
   {
     name: "Starter",
-    price: "₦15,000",
+    price: "₦25,000",
     period: "/month",
     description: "Perfect for solo entrepreneurs",
     color: "from-blue-500 to-cyan-500",
@@ -268,12 +250,6 @@ export default function PlanAIPage() {
           { href: "#testimonials", label: "Success Stories", icon: "🌟" },
           { href: "/contact", label: "Contact", icon: "📞" },
         ]}
-        cta={{
-          href: "/onboarding",
-          label: "Start Free Trial",
-          icon: "🎯",
-          variant: "glow",
-        }}
         onLinkClick={handleNavClick}
         sticky={true}
       />
@@ -316,7 +292,7 @@ export default function PlanAIPage() {
               <motion.a
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                href="/onboarding"
+                // href="/onboarding"
                 className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-xl hover:shadow-2xl transition-all flex items-center gap-3"
               >
                 <Rocket className="w-5 h-5" />
@@ -399,9 +375,9 @@ export default function PlanAIPage() {
                           : "bg-blue-500/20 text-blue-400 border border-blue-500/30"
                         }`}
                     >
-                      {product.status.includes("LIVE") && "🚀"}
-                      {product.status.includes("BUILDING") && "🔨"}
-                      {product.status.includes("COMING SOON") && "📋"}
+                      {product.status.includes("LIVE")}
+                      {product.status.includes("BUILDING")}
+                      {product.status.includes("COMING SOON")}
                       {product.status}
                     </span>
                   </div>
@@ -596,10 +572,10 @@ export default function PlanAIPage() {
               <motion.a
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                href="/onboarding"
+                // href="/onboarding"
                 className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-xl hover:shadow-2xl transition-all"
               >
-                🚀 Start Free Trial
+              Start Free Trial
               </motion.a>
 
               <motion.a
@@ -628,9 +604,15 @@ export default function PlanAIPage() {
             title: "Products",
             links: [
               { href: "/receptionist", label: "AI Receptionist" },
-              { href: "/social-factory", label: "Social Media Factory" },
+              { href: "/business-planning", label: "Business Planing" },
               { href: "/credibility", label: "Credibility Hubs" },
-              { href: "/planning", label: "Business Planning" },
+              { href: "/storefronts", label: "Store Fronts" },
+              { href: "/marketing", label: "Store Fronts" },
+              { href: "/branding", label: "Branding Design" },
+              { href: "/analytics", label: "Analytics Dashboard" },
+              { href: "/finance", label: "Finacial Forcasting" },
+              { href: "/investor", label: "Investor Readiness" },
+
             ],
           },
           {
@@ -649,7 +631,7 @@ export default function PlanAIPage() {
           {
             title: "Resources",
             links: [
-              { href: "/blog", label: "Blog" },
+              {   href: "https://amebogist.ng", label: "Blog" },
               { href: "/docs", label: "Documentation" },
               { href: "/api", label: "API" },
               { href: "/status", label: "System Status" },
@@ -665,15 +647,6 @@ export default function PlanAIPage() {
         showStats={true}
         animated={true}
         copyright={`© ${new Date().getFullYear()} PlanAI by BoldMind. All rights reserved.`}
-      // socialLinks={[
-      //   { platform: "twitter", url: "https://twitter.com/boldmindtech" },
-      //   {
-      //     platform: "linkedin",
-      //     url: "https://linkedin.com/company/boldmind",
-      //   },
-      //   { platform: "instagram", url: "https://instagram.com/boldmindtech" },
-      //   { platform: "youtube", url: "https://youtube.com/@boldmindtech" },
-      // ]}
       />
     </div>
   );

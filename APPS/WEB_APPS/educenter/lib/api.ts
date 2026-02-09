@@ -1,56 +1,13 @@
+// APPS/boldmind-educenter/src/lib/api.ts
+
 import { createCurrentProductAPI, EducenterEndpoints } from '@boldmind/api-client';
-import { PAST_QUESTIONS_CONFIG } from './config';
-import axios, { AxiosInstance } from 'axios';
 
-// Past Questions API Client (External API)
-// We keep this as is because it's an external service not managed by our api-client
-class PastQuestionsAPI {
-  private client: AxiosInstance;
-
-  constructor() {
-    this.client = axios.create({
-      baseURL: PAST_QUESTIONS_CONFIG.baseUrl,
-      headers: {
-        'AccessToken': PAST_QUESTIONS_CONFIG.accessToken,
-        'Content-Type': 'application/json',
-      },
-    });
-  }
-
-  async getQuestions(subject: string, year: string, random: boolean = false) {
-    try {
-      const response = await this.client.get(PAST_QUESTIONS_CONFIG.endpoints.getQuestions, {
-        params: {
-          subject,
-          year,
-          random,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching questions:', error);
-      throw error;
-    }
-  }
-
-  async getRandomQuestion(subject: string, year: string) {
-    return this.getQuestions(subject, year, true);
-  }
-
-  async getAllQuestions(subject: string, year: string) {
-    return this.getQuestions(subject, year, false);
-  }
-}
-
-/**
- * BoldMind API Client (Backend API)
- * Refactored to use the central @boldmind/api-client
- */
 const api = createCurrentProductAPI();
 const educenterEndpoints = new EducenterEndpoints(api.gateway);
 
-class BoldMindAPI {
-  // Users
+class EducenterAPI {
+  // ==================== Users ====================
+
   async getUser(uid: string) {
     const response = await api.gateway.get(`/users/${uid}`);
     return response;
@@ -66,35 +23,129 @@ class BoldMindAPI {
     return response;
   }
 
-  // Study Hub
-  async getProgress(_uid: string) {
+  // ==================== Questions ====================
+
+  async getQuestions(data: {
+    subject: string;
+    examType: string;
+    year?: string;
+    limit?: number;
+  }) {
+    return educenterEndpoints.getQuestions(data);
+  }
+
+  async getSubjects(examType: string) {
+    return educenterEndpoints.getSubjects(examType);
+  }
+
+  async getYears(examType: string) {
+    return educenterEndpoints.getYears(examType);
+  }
+
+  async getSubjectsForYear(year: string) {
+    return educenterEndpoints.getSubjectsForYear(year);
+  }
+
+  async getYearsForSubject(subject: string) {
+    return educenterEndpoints.getYearsForSubject(subject);
+  }
+
+  async getComprehensionYears(subject: string) {
+    return educenterEndpoints.getComprehensionYears(subject);
+  }
+
+  async getTopQuestions(limit?: number) {
+    return educenterEndpoints.getTopQuestions(limit);
+  }
+
+  async getQuestionDetail(id: string, subject: string) {
+    return educenterEndpoints.getQuestionDetail(id, subject);
+  }
+
+  async getComprehensionQuestions(params: {
+    subject: string;
+    year?: string;
+    limit?: number;
+    random?: boolean;
+  }) {
+    return educenterEndpoints.getComprehensionQuestions(params);
+  }
+
+  async getMultiSubjectQuestions(params: {
+    subjects: string[];
+    questionsPerSubject?: number;
+  }) {
+    return educenterEndpoints.getMultiSubjectQuestions(params);
+  }
+
+  // ==================== Quizzes ====================
+
+  async startQuiz(data: {
+    examType: string;
+    subject: string;
+    numberOfQuestions?: number;
+  }) {
+    return educenterEndpoints.startQuiz(data);
+  }
+
+  async submitQuiz(quizId: string, answers: Record<string, string>) {
+    return educenterEndpoints.submitQuiz(quizId, { answers });
+  }
+
+  async getQuiz(quizId: string) {
+    return educenterEndpoints.getQuiz(quizId);
+  }
+
+  async getMyQuizzes() {
+    return educenterEndpoints.getMyQuizzes();
+  }
+
+  // ==================== Progress & Leaderboard ====================
+
+  async getProgress() {
     return educenterEndpoints.getMyProgress();
   }
 
-  async saveProgress(data: {
-    uid: string;
-    subject: string;
-    year: string;
-    questionId: string;
-    answer: string;
-    isCorrect: boolean;
-    timeSpent: number;
+  async getLeaderboard(filters?: {
+    examType?: string;
+    subject?: string;
   }) {
-    return educenterEndpoints.submitAttempt(data);
+    return educenterEndpoints.getGlobalLeaderboard(filters);
   }
 
-  async getLeaderboard() {
-    return educenterEndpoints.getLeaderboard();
+  async getMyRank(filters?: {
+    examType?: string;
+    subject?: string;
+  }) {
+    return educenterEndpoints.getMyRank(filters);
   }
 
-  // Business School
-  async getCourses(filters?: { category?: string; free?: boolean }) {
-    const params: { category?: string; status: string } = {
-      status: 'published'
-    };
+  // ==================== Courses ====================
+
+  async getCourses(filters?: {
+    category?: string;
+    level?: string;
+    isPublished?: boolean;
+  }) {
+    const params: {
+      category?: string;
+      level?: string;
+      isPublished?: boolean;
+    } = {};
+
     if (filters?.category) {
       params.category = filters.category;
     }
+    if (filters?.level) {
+      params.level = filters.level;
+    }
+    // Default to published courses only if not specified
+    if (filters?.isPublished !== undefined) {
+      params.isPublished = filters.isPublished;
+    } else {
+      params.isPublished = true;
+    }
+
     return educenterEndpoints.getCourses(params);
   }
 
@@ -102,25 +153,66 @@ class BoldMindAPI {
     return educenterEndpoints.getCourse(id);
   }
 
-  async enrollCourse(_uid: string, courseId: string) {
-    return educenterEndpoints.enrollCourse(_uid, courseId);
+  async createCourse(data: any) {
+    return educenterEndpoints.createCourse(data);
   }
 
-  // Subscriptions
-  async subscribe(data: {
-    uid: string;
-    plan: string;
-    email: string;
-    amount: number;
+  async updateCourse(id: string, data: any) {
+    return educenterEndpoints.updateCourse(id, data);
+  }
+
+  async enrollCourse(courseId: string) {
+    return educenterEndpoints.enrollInCourse(courseId);
+  }
+
+  async getMyEnrollments() {
+    return educenterEndpoints.getMyEnrollments();
+  }
+
+  async updateEnrollmentProgress(enrollmentId: string, data: {
+    progressPercentage?: number;
+    completedAt?: string;
   }) {
-    return educenterEndpoints.updateSubscription(data.plan);
+    return educenterEndpoints.updateEnrollmentProgress(enrollmentId, data);
   }
 
-  async getSubscriptions(_uid: string) {
+  // ==================== Notes ====================
+
+  async getNotes(examType: string, subject: string) {
+    return educenterEndpoints.getNotes(examType, subject);
+  }
+
+  async downloadNote(noteId: string) {
+    return educenterEndpoints.downloadNote(noteId);
+  }
+
+  // ==================== Study Materials ====================
+
+  async getStudyMaterials(filters?: {
+    subject?: string;
+    type?: string;
+  }) {
+    return educenterEndpoints.getStudyMaterials(filters);
+  }
+
+  // ==================== Subscriptions ====================
+
+  async subscribe(plan: string) {
+    return educenterEndpoints.updateSubscription(plan);
+  }
+
+  async getMySubscription() {
     return educenterEndpoints.getMySubscription();
+  }
+
+  async intializePayment(data: any) {
+    return api.gateway.post('/payments/initialize', data);
+  }
+
+  async verifyPayment(reference: string) {
+    return api.gateway.get(`/payments/verify/${reference}`);
   }
 }
 
-// Export instances
-export const pastQuestionsAPI = new PastQuestionsAPI();
-export const boldMindAPI = new BoldMindAPI();
+// Export instance
+export const educenterAPI = new EducenterAPI();

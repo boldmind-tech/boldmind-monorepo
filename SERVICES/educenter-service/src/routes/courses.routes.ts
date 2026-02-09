@@ -1,7 +1,7 @@
 // SERVICES/educenter-service/src/routes/courses.routes.ts
 
 import { Router } from 'express';
-import { prisma } from '../index';
+import { prisma } from '../database/prisma';
 
 const router: Router = Router();
 

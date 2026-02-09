@@ -3,7 +3,7 @@
 
 import { Router } from 'express';
 import { TierLimitService } from '../services/tier-limit.service';
-import { prisma } from '../index';
+import { prisma } from '../database/prisma';
 
 const router: Router = Router();
 const tierService = new TierLimitService(prisma);

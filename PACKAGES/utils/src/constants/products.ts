@@ -374,7 +374,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     version: '0.0.1',
     slug: 'business-planning',
     domain: 'planai.boldmind.ng',
-    subdomain: '/planning',
+    subdomain: '/business-planning',
     icon: '📊',
     database: 'postgres',
     revenueModel: 'Per plan (₦10k)',
@@ -1329,8 +1329,7 @@ export function getProductStatusSummary(): ProductStatusSummary {
 
 // Tech stack analysis
 export function getProductsByTech(tech: string): Product[] {
-  return BOLDMIND_PRODUCTS.filter(product =>
-    product.techStack.some(t => t.toLowerCase().includes(tech.toLowerCase()))
+  return BOLDMIND_PRODUCTS.filter(product => product.techStack.some(t => t.toLowerCase().includes(tech.toLowerCase()))
   );
 }
 

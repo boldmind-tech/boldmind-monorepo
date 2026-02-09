@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@boldmind/auth';
-import { boldMindAPI } from '../../../lib/api';
+import { educenterAPI } from '../../../lib/api';
 import { SUBSCRIPTION_PLANS } from '../../../lib/config';
 import toast from 'react-hot-toast';
-import { CheckCircle, Zap, Crown, Sparkles } from 'lucide-react';
+import { CheckCircle, Zap, Crown, Sparkles, Loader2 } from 'lucide-react';
 
 declare global {
   interface Window {
@@ -14,37 +14,54 @@ declare global {
   }
 }
 
+interface SubscriptionData {
+  active: boolean;
+  plan?: string;
+  expiresAt?: string;
+}
+
 export default function SubscriptionPage() {
   const router = useRouter();
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [activeSubscriptions, setActiveSubscriptions] = useState<any>(null);
+  const [activeSubscription, setActiveSubscription] = useState<SubscriptionData | null>(null);
+  const [loadingSubscription, setLoadingSubscription] = useState(true);
 
   useEffect(() => {
+    if (!user) {
+      toast.error('Please login first');
+      router.push('/login');
+      return;
+    }
+
     // Load Paystack inline script
     const script = document.createElement('script');
     script.src = 'https://js.paystack.co/v1/inline.js';
     script.async = true;
     document.body.appendChild(script);
 
-    // Load user subscriptions
-    loadSubscriptions();
+    // Load user subscription
+    loadSubscription();
 
     return () => {
-      document.body.removeChild(script);
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
     };
-  }, [user]);
+  }, [user, router]);
 
-  const loadSubscriptions = async () => {
-    if (!user) return;
-
+  const loadSubscription = async () => {
     try {
-      const subs = await boldMindAPI.getSubscriptions(user.uid);
-      setActiveSubscriptions(subs);
+      const response = await educenterAPI.getMySubscription();
+      setActiveSubscription(response.data);
     } catch (error) {
-      console.error('Error loading subscriptions:', error);
+      console.error('Error loading subscription:', error);
+    } finally {
+      setLoadingSubscription(false);
     }
   };
+
+
 
   const handleSubscribe = async (pillar: string, plan: string, amount: number) => {
     if (!user) {
@@ -57,30 +74,25 @@ export default function SubscriptionPage() {
 
     try {
       // Initialize payment
-      const response = await boldMindAPI.subscribe({
-        uid: user.uid,
-        email: user.email!,
-        amount,
-        plan,
-      });
+      const paymentData = await educenterAPI.intializePayment({ amount, plan, pillar });
 
       // Open Paystack popup
       const handler = window.PaystackPop.setup({
-        key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY!,
+        key: process.env['NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY']!,
         email: user.email!,
         amount,
-        ref: response.data.reference,
+        ref: paymentData.reference,
         metadata: {
-          uid: user.uid,
+          userId: user.id,
           plan,
           pillar,
         },
         callback: async (response: any) => {
           // Verify payment
           try {
-            await boldMindAPI.verifyPayment(response.reference);
+            await educenterAPI.verifyPayment(response.reference);
             toast.success('Subscription activated successfully!');
-            await loadSubscriptions();
+            await loadSubscription();
             router.push('/dashboard');
           } catch (error) {
             toast.error('Payment verification failed');
@@ -96,7 +108,6 @@ export default function SubscriptionPage() {
     } catch (error) {
       console.error('Subscription error:', error);
       toast.error('Failed to initialize payment');
-    } finally {
       setLoading(false);
     }
   };
@@ -111,15 +122,15 @@ export default function SubscriptionPage() {
         {
           duration: '6 Months',
           price: '₦700',
-          amount: 70000,
-          plan: '6months',
+          amount: SUBSCRIPTION_PLANS.studyHub.sixMonths.price,
+          plan: 'sixMonths',
           features: SUBSCRIPTION_PLANS.studyHub.sixMonths.features,
         },
         {
           duration: '1 Year',
           price: '₦1,000',
-          amount: 100000,
-          plan: '1year',
+          amount: SUBSCRIPTION_PLANS.studyHub.oneYear.price,
+          plan: 'oneYear',
           features: SUBSCRIPTION_PLANS.studyHub.oneYear.features,
           popular: true,
         },
@@ -134,7 +145,7 @@ export default function SubscriptionPage() {
         {
           duration: 'Lifetime',
           price: '₦1,000',
-          amount: 100000,
+          amount: SUBSCRIPTION_PLANS.businessSchool.lifetime.price,
           plan: 'lifetime',
           features: SUBSCRIPTION_PLANS.businessSchool.lifetime.features,
         },
@@ -149,13 +160,24 @@ export default function SubscriptionPage() {
         {
           duration: 'Lifetime',
           price: '₦1,000',
-          amount: 100000,
+          amount: SUBSCRIPTION_PLANS.aiLab.lifetime.price,
           plan: 'lifetime',
           features: SUBSCRIPTION_PLANS.aiLab.lifetime.features,
         },
       ],
     },
   ];
+
+  if (loadingSubscription) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-center">
+          <Loader2 className="w-10 h-10 animate-spin text-blue-600 mx-auto mb-4" />
+          <p className="text-gray-600 dark:text-gray-400">Loading subscription details...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -180,7 +202,7 @@ export default function SubscriptionPage() {
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{pillar.name}</h2>
-                  {activeSubscriptions?.[pillar.pillar]?.active && (
+                  {activeSubscription?.active && (
                     <span className="inline-block mt-1 px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 text-sm font-semibold rounded-full">
                       Active
                     </span>
@@ -192,11 +214,10 @@ export default function SubscriptionPage() {
                 {pillar.options.map((option, optionIndex) => (
                   <div
                     key={optionIndex}
-                    className={`bg-white dark:bg-gray-800 rounded-2xl shadow-xl border-2 ${
-                      option.popular
-                        ? 'border-purple-500 ring-4 ring-purple-500/20 scale-105'
-                        : 'border-gray-200 dark:border-gray-700'
-                    } overflow-hidden relative`}
+                    className={`bg-white dark:bg-gray-800 rounded-2xl shadow-xl border-2 ${option.popular
+                      ? 'border-purple-500 ring-4 ring-purple-500/20 scale-105'
+                      : 'border-gray-200 dark:border-gray-700'
+                      } overflow-hidden relative`}
                   >
                     {option.popular && (
                       <div className="absolute top-0 right-0">
@@ -226,7 +247,7 @@ export default function SubscriptionPage() {
                         ))}
                       </ul>
 
-                      {activeSubscriptions?.[pillar.pillar]?.active ? (
+                      {activeSubscription?.active ? (
                         <button
                           disabled
                           className="w-full py-4 rounded-lg font-semibold bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
@@ -237,13 +258,19 @@ export default function SubscriptionPage() {
                         <button
                           onClick={() => handleSubscribe(pillar.pillar, option.plan, option.amount)}
                           disabled={loading}
-                          className={`w-full py-4 rounded-lg font-semibold transition-all ${
-                            option.popular
-                              ? `bg-gradient-to-r ${pillar.color} text-white hover:shadow-lg`
-                              : 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100'
-                          } disabled:opacity-50 disabled:cursor-not-allowed`}
+                          className={`w-full py-4 rounded-lg font-semibold transition-all ${option.popular
+                            ? `bg-gradient-to-r ${pillar.color} text-white hover:shadow-lg`
+                            : 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100'
+                            } disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2`}
                         >
-                          {loading ? 'Processing...' : 'Subscribe Now'}
+                          {loading ? (
+                            <>
+                              <Loader2 className="w-5 h-5 animate-spin" />
+                              <span>Processing...</span>
+                            </>
+                          ) : (
+                            <span>Subscribe Now</span>
+                          )}
                         </button>
                       )}
                     </div>

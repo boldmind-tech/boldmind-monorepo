@@ -88,13 +88,13 @@ export const BOLDMIND_PRICING: ProductPricing[] = [
                 priceYearly: 0,
                 currency: 'NGN',
                 features: [
-                    '50 practice questions/day',
+                    '5 practice questions/day',
                     'Basic exam prep',
                     '1 subject',
                     'Weekly progress reports',
                 ],
                 limits: {
-                    questionsPerDay: 50,
+                    questionsPerDay: 5,
                     subjects: 1,
                 },
             },
@@ -207,13 +207,13 @@ export const BOLDMIND_PRICING: ProductPricing[] = [
                 priceYearly: 0,
                 currency: 'NGN',
                 features: [
-                    '10 AI-generated videos/month',
+                    '5 AI-generated videos/month',
                     '2 social accounts',
                     'Basic templates',
                     'Manual publishing',
                 ],
                 limits: {
-                    videosPerMonth: 10,
+                    videosPerMonth: 5,
                     accounts: 2,
                 },
             },

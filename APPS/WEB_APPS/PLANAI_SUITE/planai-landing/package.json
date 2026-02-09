@@ -28,8 +28,6 @@
     "@types/react-dom": "18.2.18",
     "typescript": "5.9.3",
     "@types/cookie": "^0.6.0",
-    "@boldmind/auth": "workspace:*",
-    "@boldmind/api-client": "workspace:*",
     "sonner": "^2.0.7"
   },
   "devDependencies": {
