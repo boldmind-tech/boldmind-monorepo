@@ -9,7 +9,7 @@
         "deploy": "pnpm prebuild && pnpm prisma:generate && pnpm build",
         "start:dev": "nest start --watch --preserveWatchOutput",
         "start:prod": "node dist/main",
-        "build": "pnpm prebuild && nest build --tsc",
+        "build": "pnpm prebuild && pnpm prisma:generate && nest build --tsc",
         "build:dev": "nest build --watch",
         "clean": "rm -rf dist",
         "prisma:generate": "dotenv -e .env -- prisma generate",

@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "tsx watch src/main.ts",
     "prebuild": "pnpm --filter '@boldmind/email' build",
-    "deploy": "pnpm prebuild && pnpm build",
-    "build": "tsc",
+    "build": "pnpm prebuild && tsc",
     "start": "node dist/main.js"
   },
   "dependencies": {
