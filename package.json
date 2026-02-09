@@ -56,7 +56,6 @@
     "vercel:amebogist": "turbo run build --filter='./APPS/WEB_APPS/amebogist'",
     "vercel:educenter": "turbo run build --filter='./APPS/WEB_APPS/educenter'",
     "deploy:all": "sh ./tools/scripts/deploy-all.sh",
-    "deploy:educenter": "sh ./tools/scripts/deploy-educenter.sh",
     "deploy:api-gateway": "sh ./tools/scripts/deploy-api-gateway.sh",
     "lint": "turbo run lint",
     "test": "turbo run test",

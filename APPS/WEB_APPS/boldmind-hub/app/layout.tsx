@@ -449,9 +449,7 @@ export default function RootLayout({
         className={`${inter.variable} antialiased bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 font-sans`}
       >
         <ErrorBoundary>
-          <BoldMindLayout
-
-          >
+          <BoldMindLayout>
             {children}
           </BoldMindLayout>
         </ErrorBoundary>

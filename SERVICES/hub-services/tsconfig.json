@@ -10,11 +10,6 @@
         ],
         "noPropertyAccessFromIndexSignature": false,
         "skipLibCheck": true,
-        "types": [
-            "node",
-            "passport-jwt",
-            "pg"
-        ],
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "baseUrl": ".",

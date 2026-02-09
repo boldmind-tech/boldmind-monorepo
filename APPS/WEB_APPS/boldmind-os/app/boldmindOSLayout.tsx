@@ -12,7 +12,7 @@ interface BoldMindOSLayoutProps {
 export function BoldMindOSLayout({ children }: BoldMindOSLayoutProps) {
     const forceProduct = 'boldmind-os';
     const product = getProductBySlug(forceProduct) || BOLDMIND_PRODUCTS[5];
-    const theme = getProductColors(forceProduct) || productThemes['boldmind-os'];
+    const colors = getProductColors(forceProduct) || productThemes['boldmind-os'];
 
     const productTheme: ProductThemeType = {
         slug: forceProduct,
@@ -21,10 +21,10 @@ export function BoldMindOSLayout({ children }: BoldMindOSLayoutProps) {
         icon: product?.icon || '🧠',
         status: product?.status || 'LIVE',
         colors: {
-            primary: theme?.primary,
-            secondary: theme?.secondary,
-            accent: theme?.primary,
-            background: theme?.background,
+            primary: colors?.primary || '',
+            secondary: colors?.secondary || '',
+            accent: colors?.primary || '',
+            background: colors?.background || '',
         },
     };
 

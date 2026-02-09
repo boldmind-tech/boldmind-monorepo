@@ -170,12 +170,24 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
+        <link rel="preconnect" href="https://cdn.os.boldmind.ng" />
+
+        {/* DNS Prefetch */}
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+        <link rel="dns-prefetch" href="//cdn.os.boldmind.ng" />
 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(softwareSchema),
           }}
+        />
+
+        <link
+          rel="preload"
+          href="/_next/static/css/app/layout.css"
+          as="style"
         />
 
         <meta name="apple-mobile-web-app-title" content="BoldMind OS" />

@@ -1,3 +1,5 @@
+//APPS/WEB_APPS/PLANAI_SUITE/planai-landing/next.config.mjs
+
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 

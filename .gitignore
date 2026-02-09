@@ -99,11 +99,9 @@ uploads/
 
 # AmeboGist specific
 apps/web/amebogist/.next/
-apps/web/amebogist/public/uploads/
 
 # EduCenter specific  
 apps/web/educenter/.next/
-apps/web/educenter/public/courses/
 
 # Services
 services/**/dist/

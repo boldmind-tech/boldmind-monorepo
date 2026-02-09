@@ -7,7 +7,7 @@
     "start": "node dist/index.js",
     "dev": "tsx watch src/index.ts",
     "deploy": "pnpm prisma:generate && pnpm build",
-    "build": "prisma generate && tsc && npx copyfiles -u 1 src/generated/client/**/* dist",
+    "build": "pnpm prisma:generate && tsc && copyfiles -u 1 \"src/generated/client/**/*\" dist",
     "clean": "rm -rf dist",
     "prisma:generate": "dotenv -e .env -- prisma generate",
     "prisma:migrate": "dotenv -e .env -- prisma migrate dev",
@@ -39,6 +39,7 @@
     "@types/pg": "^8.16.0"
   },
   "devDependencies": {
-    "tsx": "^4.7.0"
+    "tsx": "^4.7.0",
+    "copyfiles": "^2.4.1"
   }
 }
