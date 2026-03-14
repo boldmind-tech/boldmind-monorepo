@@ -1,4 +1,55 @@
-/* Kolo AI - App-specific styles */
-@import '@boldmind/ui/styles/globals.css';
+/* ─────────────────────────────────────────────────────────────────────────────
+   APP 10: apps/boldmind-concepts/app/globals.css
+   concept.boldmind.ng — Warm stone (#44403C) concept showcase
+   ───────────────────────────────────────────────────────────────────────────── */
 
-/* All base styles inherited from shared globals.css */
+@import '@boldmind/ui/styles/globals.css';
+ 
+.concept-card {
+  border: 2px solid var(--product-muted);
+  border-radius: var(--radius-2xl);
+  padding: 1.75rem;
+  background-color: var(--product-background);
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+.concept-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-xl); }
+ 
+.concept-status {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  display: inline-flex; align-items: center; gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem; font-weight: 900;
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+.concept-status.live    { background-color: var(--color-success-light); color: var(--color-success); }
+.concept-status.building { background-color: var(--color-warning-light); color: var(--color-warning); }
+.concept-status.planned { background-color: var(--color-info-light);    color: var(--color-info); }
+.concept-status.concept { background-color: var(--product-muted);       color: var(--product-foreground); opacity: 0.7; }
+ 
+.waitlist-form {
+  display: flex; gap: 0.5rem;
+  background-color: var(--product-muted);
+  border-radius: var(--radius-xl);
+  padding: 0.5rem;
+}
+.waitlist-form input {
+  flex: 1; padding: 0.75rem 1rem;
+  border: none; outline: none;
+  background: transparent;
+  font-family: var(--font-active, var(--font-primary));
+  font-size: 1rem;
+  color: var(--product-foreground);
+}
+.waitlist-form button {
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-lg);
+  font-weight: 700; border: none; cursor: pointer;
+  background-color: var(--product-primary);
+  color: white;
+  transition: all var(--transition-quick);
+}
+.waitlist-form button:hover { opacity: 0.9; transform: translateY(-1px); }

@@ -1,27 +1,61 @@
-/* Amebogist - App-specific styles */
-/* Inherits the full BoldMind design system from shared globals.css */
+/* ─────────────────────────────────────────────────────────────────────────────
+   APP 2: apps/amebogist/app/globals.css
+   amebogist.ng — Emerald green (#065F46) + Red (#DC2626) gossip theme
+   ───────────────────────────────────────────────────────────────────────────── */
+
 @import '@boldmind/ui/styles/globals.css';
-
-/* ============================================
-   APP-SPECIFIC OVERRIDES
-   Amebogist uses the emerald/red gossip theme
-   ============================================ */
-
-/* Amebogist-specific premium effects */
+ 
+:root {
+  --amebo-green-50:  #F0FDF4;
+  --amebo-green-100: #DCFCE7;
+  --amebo-green-400: #4ADE80;
+  --amebo-green-500: #22C55E;
+  --amebo-green-600: #16A34A;
+  --amebo-green-700: #15803D;
+  --amebo-green-900: #14532D;
+  --ecosystem-blue: #065F46;
+  --ecosystem-gold: #E9A825;
+}
+ 
 .heading-gradient {
   background-image: linear-gradient(135deg, var(--product-primary), var(--product-secondary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-
+ 
 .card-premium {
   background-color: var(--product-background);
   border: 1px solid var(--product-muted);
   box-shadow: var(--shadow-lg);
   transition: all var(--transition-base);
 }
-
-.card-premium:hover {
-  box-shadow: var(--shadow-xl);
+.card-premium:hover { box-shadow: var(--shadow-xl); }
+ 
+.shadow-premium { box-shadow: 0 8px 32px -4px rgba(6,95,70,0.15); }
+ 
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--product-muted);
+  border-radius: var(--radius-full);
 }
+ 
+.bg-ecosystem-blue   { background-color: var(--ecosystem-blue); }
+.text-ecosystem-gold { color: var(--ecosystem-gold); }
+ 
+.bg-amebogreen-50  { background-color: var(--amebo-green-50); }
+.bg-amebogreen-100 { background-color: var(--amebo-green-100); }
+.bg-amebogreen-600 { background-color: var(--amebo-green-600); }
+.bg-amebogreen-700 { background-color: var(--amebo-green-700); }
+.text-amebogreen-400 { color: var(--amebo-green-400); }
+.text-amebogreen-500 { color: var(--amebo-green-500); }
+.text-amebogreen-600 { color: var(--amebo-green-600); }
+.text-amebogreen-700 { color: var(--amebo-green-700); }
+.border-amebogreen-100 { border-color: var(--amebo-green-100); }
+.border-amebogreen-500 { border-color: var(--amebo-green-500); }
+.hover\:bg-amebogreen-100:hover { background-color: var(--amebo-green-100); }
+.hover\:bg-amebogreen-600:hover { background-color: var(--amebo-green-600); }
+.hover\:bg-amebogreen-700:hover { background-color: var(--amebo-green-700); }
+
+ 

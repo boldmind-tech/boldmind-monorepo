@@ -1,60 +1,51 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// apps/boldmind-hub/app/(public)/layout.tsx
+// apps/boldmind-hub/app/(public)/layout.tsx  [Server Component]
 // ─────────────────────────────────────────────────────────────────────────────
-// Route group (public) — wraps all public-facing hub pages:
-//   /pricing, /about, /products, /contact, /privacy, /terms
+// Route group (public) — every page in this group automatically gets
+// SuperNavbar + SuperFooter. No need to add them per-page.
 //
-// This adds SuperNavbar + SuperFooter at the shell level so every page in
-// this group gets them without each page component needing to include them.
+// Pages in this group:
+//   / (home), /pricing, /about, /products, /contact, /privacy, /terms
 //
-// STRUCTURE:
-//   apps/boldmind-hub/app/
-//     (public)/             ← route group (no URL segment)
-//       layout.tsx          ← this file — nav + footer shell
-//       page.tsx            ← home page
-//       pricing/page.tsx    ← pricing page (gets nav+footer from here)
-//       about/page.tsx
-//       products/page.tsx
-//     (auth)/               ← login/register (different shell — no footer)
-//     (dashboard)/          ← user dashboard (sidebar shell)
-//     admin/                ← admin area (admin sidebar)
-//
-// FIX: Before this file existed, pricing/page.tsx was missing a navbar
-// because the root layout.tsx only added BoldMindLayout (ThemeProvider),
-// not SuperNavbar. Now all (public) pages automatically get both.
+// The (public) folder name is a Next.js route group — it does NOT create
+// a URL segment. /pricing is still /pricing, not /(public)/pricing.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { SuperNavbar, SuperFooter } from '@boldmind/ui';
 import type { ReactNode } from 'react';
 
-const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/products', label: 'Products' },
-  { href: '/pricing', label: 'Pricing' },
-  { href: 'https://amebogist.ng', label: 'AmeboGist', isExternal: true },
-  { href: 'https://educenter.com.ng', label: 'EduCenter', isExternal: true },
-  { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
+// Navigation links shown on all public hub pages
+const NAV_LINKS = [
+  { href: '/',                         label: 'Home'       },
+  { href: '/products',                 label: 'Products'   },
+  { href: '/pricing',                  label: 'Pricing'    },
+  { href: 'https://amebogist.ng',      label: 'AmeboGist', isExternal: true },
+  { href: 'https://educenter.com.ng',  label: 'EduCenter', isExternal: true },
+  { href: '/about',                    label: 'About'      },
+  { href: '/contact',                  label: 'Contact'    },
 ];
 
-const footerSections = [
+const FOOTER_SECTIONS = [
   {
     title: '🚀 Ecosystem',
     links: [
-      { href: 'https://amebogist.ng',  label: 'AmeboGist',   isExternal: true },
-      { href: 'https://educenter.com.ng', label: 'EduCenter', isExternal: true },
-      { href: 'https://planai.boldmind.ng', label: 'PlanAI Suite', isExternal: true },
-      { href: 'https://fit.boldmind.ng',  label: 'NaijaFit',  isExternal: true },
-      { href: 'https://os.boldmind.ng',   label: 'BoldMind OS', isExternal: true },
+      { href: 'https://amebogist.ng',         label: 'AmeboGist',      isExternal: true },
+      { href: 'https://educenter.com.ng',      label: 'EduCenter',      isExternal: true },
+      { href: 'https://planai.boldmind.ng',    label: 'PlanAI Suite',   isExternal: true },
+      { href: 'https://fit.boldmind.ng',       label: 'NaijaFit',       isExternal: true },
+      { href: 'https://os.boldmind.ng',        label: 'BoldMind OS',    isExternal: true },
+      { href: 'https://studio.amebogist.ng',   label: 'Amebo Studio',   isExternal: true },
+      { href: 'https://tools.boldmind.ng',     label: 'BoldMind Tools', isExternal: true },
+      { href: 'https://concept.boldmind.ng',   label: 'Concept Hub',    isExternal: true },
     ],
   },
   {
     title: '🏢 Company',
     links: [
       { href: '/about',    label: 'About BoldMind' },
-      { href: '/products', label: 'All Products' },
+      { href: '/products', label: 'All 32+ Products' },
       { href: '/pricing',  label: 'Pricing' },
-      { href: '/contact',  label: 'Contact Us' },
+      { href: '/contact',  label: 'Contact' },
       { href: '/privacy',  label: 'Privacy Policy' },
       { href: '/terms',    label: 'Terms of Service' },
     ],
@@ -62,8 +53,9 @@ const footerSections = [
   {
     title: '🛟 Support',
     links: [
-      { href: 'mailto:hello@boldmind.ng', label: 'Email Us' },
-      { href: 'https://wa.me/2349138349271', label: 'WhatsApp', isExternal: true },
+      { href: 'mailto:hello@boldmind.ng',        label: 'Email Us' },
+      { href: 'https://wa.me/2349138349271',      label: 'WhatsApp Support', isExternal: true },
+      { href: 'https://wa.me/2349138349271',      label: 'Report a Bug',     isExternal: true },
     ],
   },
 ];
@@ -72,9 +64,9 @@ export default function PublicHubLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex flex-col min-h-screen">
       <SuperNavbar
-        links={navLinks}
+        links={NAV_LINKS}
         cta={{ href: '/register', label: 'Get Started Free', variant: 'secondary' }}
-        logoSrc="/logo.png"
+        logoSrc="/logo.webp"
         sticky
         showThemeControls
         showFontToggle
@@ -83,8 +75,8 @@ export default function PublicHubLayout({ children }: { children: ReactNode }) {
         {children}
       </main>
       <SuperFooter
-        logoSrc="/logo.png"
-        sections={footerSections}
+        logoSrc="/logo.webp"
+        sections={FOOTER_SECTIONS}
         contactInfo={{
           email:    'hello@boldmind.ng',
           phone:    '+2349138349271',

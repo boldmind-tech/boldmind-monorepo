@@ -1,4 +1,69 @@
-/* Naija Fither - App-specific styles */
-@import '@boldmind/ui/styles/globals.css';
+ 
+/* ─────────────────────────────────────────────────────────────────────────────
+   APP 9: apps/naija-fit/app/globals.css
+   fit.boldmind.ng — Rose (#BE185D) + Violet fitness / health app
+   ───────────────────────────────────────────────────────────────────────────── */
 
-/* All base styles inherited from shared globals.css */
+@import '@boldmind/ui/styles/globals.css';
+ 
+.workout-card {
+  border: 2px solid var(--product-muted);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  background-color: var(--product-background);
+  transition: all var(--transition-base);
+}
+.workout-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: var(--product-primary); }
+ 
+.macro-ring {
+  position: relative; display: inline-flex;
+  align-items: center; justify-content: center;
+}
+.macro-label {
+  position: absolute;
+  text-align: center;
+  font-weight: 900;
+  font-size: 1.25rem;
+  color: var(--product-primary);
+}
+ 
+.challenge-badge {
+  display: inline-flex; align-items: center; gap: 0.375rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem; font-weight: 700;
+  background: linear-gradient(135deg, var(--product-primary), var(--product-accent));
+  color: white;
+}
+ 
+.meal-tag {
+  display: inline-block;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem; font-weight: 700;
+  background-color: var(--color-success-light);
+  color: var(--color-success);
+}
+ 
+.body-metric {
+  text-align: center; padding: 1rem;
+  border: 2px solid var(--product-muted);
+  border-radius: var(--radius-xl);
+  background-color: var(--product-background);
+}
+.body-metric .value {
+  font-size: 2rem; font-weight: 900;
+  color: var(--product-primary);
+  line-height: 1;
+}
+.body-metric .label {
+  font-size: 0.75rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  opacity: 0.5; margin-top: 0.25rem;
+}
+ 
+.streak-fire {
+  display: inline-flex; align-items: center; gap: 0.375rem;
+  font-size: 1rem; font-weight: 900;
+  color: var(--color-warning);
+}

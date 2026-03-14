@@ -1,5 +1,75 @@
-/* BoldMind OS - App-specific styles */
-@import '@boldmind/ui/styles/globals.css';
+/* ─────────────────────────────────────────────────────────────────────────────
+   APP 7: apps/boldmind-os/app/globals.css
+   os.boldmind.ng — Rose (#9F1239) + Orange ADHD productivity OS
+   ───────────────────────────────────────────────────────────────────────────── */
 
-/* BoldMind OS uses the default ecosystem theme */
-/* All base styles inherited from shared globals.css */
+@import '@boldmind/ui/styles/globals.css';
+ 
+.pomodoro-ring {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pomodoro-ring svg { transform: rotate(-90deg); }
+.pomodoro-ring circle {
+  transition: stroke-dashoffset 1s linear;
+  stroke: var(--product-primary);
+  stroke-linecap: round;
+}
+ 
+.focus-mode-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: var(--product-background);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+ 
+.dopamine-checkbox {
+  width: 1.5rem; height: 1.5rem;
+  border: 2px solid var(--product-muted);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-spring);
+  display: flex; align-items: center; justify-content: center;
+}
+.dopamine-checkbox.checked {
+  background-color: var(--product-primary);
+  border-color: var(--product-primary);
+  transform: scale(1.1);
+}
+.dopamine-checkbox.checked::after {
+  content: '✓';
+  color: white;
+  font-weight: 900;
+  font-size: 0.875rem;
+}
+ 
+.knowledge-node {
+  border-radius: var(--radius-full);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border: 2px solid var(--product-primary);
+  background-color: var(--product-highlight);
+  color: var(--product-primary);
+  cursor: pointer;
+  transition: all var(--transition-quick);
+}
+.knowledge-node:hover { background-color: var(--product-primary); color: white; }
+ 
+.quick-capture {
+  background-color: var(--product-background);
+  border: 2px solid var(--product-muted);
+  border-radius: var(--radius-xl);
+  padding: 1rem 1.25rem;
+  font-family: var(--font-active, var(--font-primary));
+  width: 100%;
+  resize: none;
+  outline: none;
+  transition: border-color var(--transition-quick);
+}
+.quick-capture:focus { border-color: var(--product-primary); }

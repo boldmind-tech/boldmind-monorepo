@@ -1,244 +1,217 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// apps/boldmind-hub/app/(auth)/layout.tsx  [Client Component]
+// ─────────────────────────────────────────────────────────────────────────────
+// Auth shell for /login and /register pages.
+// - Clean, minimal layout (no navbar, no footer)
+// - Handles ?return_url= param so after login hub redirects user back
+// - Shows BoldMind branding + ecosystem products in split layout
+// ─────────────────────────────────────────────────────────────────────────────
+
 'use client';
 
-import { motion } from 'framer-motion';
-import { SuperNavbar, SuperFooter } from '@boldmind/ui';
+import { useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import Link from 'next/link';
-import { AuthProvider } from '@boldmind/auth';
-import { userAPIAdapter } from '../../lib/user-api-adapter';
-import { ReactNode } from 'react';
+import { useAuth } from '@boldmind/auth';
+// import { storeToken } from '@boldmind/auth';
+import { motion } from 'framer-motion';
 
-// Background dots pattern
-const DotsPattern = () => (
-  <div className="absolute inset-0 overflow-hidden opacity-[0.15]">
-    <div className="absolute inset-0" style={{
-      backgroundImage: 'radial-gradient(circle, #FFC800 1.5px, transparent 1.5px)',
-      backgroundSize: '32px 32px'
-    }} />
-  </div>
-);
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
+  const { user, isLoading } = useAuth();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnUrl = searchParams.get('return_url');
 
-// Animated floating circles
-const FloatingCircles = () => (
-  <>
-    <motion.div
-      className="absolute top-10 left-10 w-72 h-72 rounded-full"
-      style={{
-        background: 'radial-gradient(circle, rgba(255, 200, 0, 0.15) 0%, transparent 70%)',
-        filter: 'blur(40px)',
-      }}
-      animate={{
-        y: [0, 20, 0],
-        x: [0, 15, 0],
-        scale: [1, 1.1, 1]
-      }}
-      transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-    />
-    <motion.div
-      className="absolute bottom-20 right-10 w-96 h-96 rounded-full"
-      style={{
-        background: 'radial-gradient(circle, rgba(42, 74, 110, 0.2) 0%, transparent 70%)',
-        filter: 'blur(60px)',
-      }}
-      animate={{
-        y: [0, -30, 0],
-        x: [0, -20, 0],
-        scale: [1, 1.15, 1]
-      }}
-      transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-    />
-    <motion.div
-      className="absolute top-1/2 left-1/4 w-64 h-64 rounded-full"
-      style={{
-        background: 'radial-gradient(circle, rgba(0, 168, 89, 0.1) 0%, transparent 70%)',
-        filter: 'blur(50px)',
-      }}
-      animate={{
-        scale: [1, 1.2, 1],
-        opacity: [0.5, 0.8, 0.5]
-      }}
-      transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-    />
-  </>
-);
+  // If already logged in, redirect to return_url or dashboard
+  useEffect(() => {
+    if (!isLoading && user) {
+      const destination = returnUrl ?? '/dashboard';
+      // Validate return_url to prevent open redirect
+      if (returnUrl && !isSafeBoldMindUrl(returnUrl)) {
+        router.replace('/dashboard');
+      } else {
+        router.replace(destination);
+      }
+    }
+  }, [user, isLoading, router, returnUrl]);
 
-// Enhanced Testimonial Component
-const Testimonial = () => (
-  <motion.div
-    initial={{ opacity: 0, y: 30 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: 0.8, duration: 0.6 }}
-    className="relative group"
-  >
-    {/* Glow effect */}
-    <div className="absolute -inset-1 bg-gradient-to-r from-[#FFC800]/20 via-transparent to-[#00A859]/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-
-    <div className="relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 overflow-hidden">
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#FFC800]/5 via-transparent to-[#00A859]/5 pointer-events-none" />
-
-      {/* Quote icon */}
-      <div className="absolute top-4 right-4 text-[#FFC800]/20">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-        </svg>
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center"
+           style={{ backgroundColor: 'var(--product-background)' }}>
+        <div className="w-8 h-8 rounded-full border-2 border-t-[var(--product-primary)] border-[var(--product-muted)] animate-spin"
+             style={{ borderTopColor: 'var(--product-primary)', borderColor: 'var(--product-muted)' }} />
       </div>
+    );
+  }
 
-      {/* Stars */}
-      <div className="flex items-center gap-1 mb-3">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <motion.span
-            key={star}
-            className="text-[#FFC800] text-sm"
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 1 + (star * 0.1) }}
-          >
-            ★
-          </motion.span>
-        ))}
-        <span className="ml-2 text-white/40 text-xs font-medium tracking-wider">VERIFIED</span>
-      </div>
+  // Don't render if already logged in (redirect is happening)
+  if (user) return null;
 
-      <blockquote className="relative z-10 mb-4">
-        <p className="text-white/90 text-base leading-relaxed font-light">
-          "BoldMind's ecosystem has <span className="text-[#FFC800] font-medium">transformed</span> how I run my business. The AI tools saved me countless hours every week!"
-        </p>
-      </blockquote>
-
-      {/* Author */}
-      <div className="flex items-center gap-3 pt-4 border-t border-white/10">
-        <div className="relative">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FFC800] to-[#FF6B00] flex items-center justify-center text-[#00143C] font-bold text-sm shadow-lg shadow-[#FFC800]/20">
-            AO
-          </div>
-          <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-[#00A859] border-2 border-[#0A1F4F] rounded-full" />
-        </div>
-        <div>
-          <p className="font-bold text-white text-sm">Adaeze Okonkwo</p>
-          <p className="text-white/50 text-xs">Entrepreneur, Lagos</p>
-        </div>
-      </div>
-    </div>
-  </motion.div>
-);
-
-// Stats Component
-const StatsDisplay = () => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: 0.5, duration: 0.6 }}
-    className="grid grid-cols-3 gap-4"
-  >
-    {[
-      { value: '31+', label: 'Products', delay: 0.6 },
-      { value: '10K+', label: 'Users', delay: 0.7 },
-      { value: '₦95K+', label: 'Monthly Revenue', delay: 0.8 },
-    ].map((stat, index) => (
-      <motion.div
-        key={index}
-        className="text-center p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: stat.delay, duration: 0.4 }}
-        whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.08)' }}
-      >
-        <div className="text-xl font-black text-[#FFC800] mb-1">{stat.value}</div>
-        <div className="text-white/60 text-xs font-medium uppercase tracking-wider">{stat.label}</div>
-      </motion.div>
-    ))}
-  </motion.div>
-);
-
-export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
-    <AuthProvider userAPI={userAPIAdapter}>
-      <div className="min-h-screen flex flex-col">
-        <SuperNavbar
-          logoSrc="/logo.png"
-          theme="dark"
-          sticky={true}
-          showThemeControls={true}
-          links={[
-            { href: '/', label: 'Home' },
-            { href: '/products', label: 'Products' },
-            { href: '/about', label: 'About' },
-          ]}
-          cta={{
-            href: '/register',
-            label: 'Get Started',
-            variant: 'primary'
+    <div className="min-h-screen flex" style={{ backgroundColor: 'var(--product-background)' }}>
+
+      {/* ── Left panel — branding (hidden on mobile) ─────────────────────── */}
+      <div
+        className="hidden lg:flex lg:flex-col lg:w-[480px] lg:flex-shrink-0 relative overflow-hidden"
+        style={{
+          background: 'linear-gradient(135deg, var(--product-primary) 0%, color-mix(in srgb, var(--product-primary) 75%, black) 100%)',
+        }}
+      >
+        {/* Background texture */}
+        <div
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage: `radial-gradient(circle at 20% 50%, rgba(255,255,255,0.3) 0%, transparent 50%),
+                              radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 40%)`,
           }}
         />
 
-        {/* Main Auth Content */}
-        <div className="flex-1 flex overflow-hidden">
-          <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[#00143C] via-[#0A1F4F] to-[#1a365d] relative overflow-hidden">
-            <FloatingCircles />
-            <DotsPattern />
-
-            <div className="relative z-10 flex flex-col p-12 w-full h-full">
-              <div className="flex-1 flex flex-col justify-center gap-8">
-                {/* Heading Section */}
-                <motion.div
-                  initial={{ opacity: 0, x: -30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.7, delay: 0.2 }}
-                >
-                  <h2 className="text-4xl font-black text-white mb-6 leading-tight">
-                    Building Systems
-                    <br />
-                    That <span className="text-[#FFC800]">Shift Nations</span>
-                  </h2>
-                  <p className="text-white/70 text-lg max-w-md leading-relaxed">
-                    Join the movement to empower 1 million Nigerian entrepreneurs by 2030. Access 31+ innovative products designed for your success.
-                  </p>
-                </motion.div>
-
-                {/* Stats Section */}
-                <div>
-                  <StatsDisplay />
-                </div>
-
-                {/* Testimonial Section */}
-                <div>
-                  <Testimonial />
-                </div>
-              </div>
+        <div className="relative z-10 flex flex-col h-full p-12">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-3 mb-16 no-underline">
+            <div className="relative w-10 h-10">
+              <Image src="/logo.webp" alt="BoldMind" fill className="object-contain" />
             </div>
-          </div>
+            <span className="text-white font-black text-xl tracking-tight">BoldMind</span>
+          </Link>
 
-          {/* Right Side - Auth Form */}
-          <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 bg-white dark:bg-gray-950 relative overflow-y-auto">
-
-            <motion.div
+          {/* Hero copy */}
+          <div className="flex-1 flex flex-col justify-center">
+            <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="w-full max-w-md mt-16 lg:mt-0"
+              transition={{ delay: 0.1 }}
+              className="text-4xl font-black text-white leading-tight mb-6"
             >
-              {children}
-            </motion.div>
+              One account.
+              <br />
+              <span style={{ color: 'var(--product-secondary)' }}>
+                32+ products.
+              </span>
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="text-lg text-white/70 leading-relaxed mb-10"
+            >
+              Sign in once, access every BoldMind product — AmeboGist, EduCenter,
+              PlanAI Suite, BoldMind OS and more.
+            </motion.p>
 
-            {/* Mobile Back Link */}
-            <div className="lg:hidden absolute bottom-6 left-6 right-6 text-center">
-              <Link
-                href="/"
-                className="text-gray-500 hover:text-[#00143C] dark:hover:text-white text-sm transition-colors"
-              >
-                ← Back to Home
-              </Link>
-            </div>
+            {/* Ecosystem pills */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="flex flex-wrap gap-2"
+            >
+              {ECOSYSTEM_PRODUCTS.map((p) => (
+                <span
+                  key={p.slug}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold"
+                  style={{
+                    background: 'rgba(255,255,255,0.1)',
+                    color: 'rgba(255,255,255,0.85)',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                  }}
+                >
+                  <span>{p.icon}</span>
+                  {p.name}
+                </span>
+              ))}
+            </motion.div>
           </div>
+
+          {/* Footer */}
+          <p className="text-white/40 text-xs">
+            © {new Date().getFullYear()} BoldMind Technology Solution Enterprise
+          </p>
+        </div>
+      </div>
+
+      {/* ── Right panel — auth form ──────────────────────────────────────── */}
+      <div className="flex-1 flex flex-col">
+        {/* Mobile logo */}
+        <div className="lg:hidden p-6 border-b" style={{ borderColor: 'var(--product-muted)' }}>
+          <Link href="/" className="flex items-center gap-2 no-underline">
+            <div className="relative w-8 h-8">
+              <Image src="/logo.webp" alt="BoldMind" fill className="object-contain" />
+            </div>
+            <span className="font-black text-base" style={{ color: 'var(--product-primary)' }}>
+              BoldMind
+            </span>
+          </Link>
         </div>
 
-        <SuperFooter
-          logoSrc="/logo.png"
-          newsletter={true}
-          showStats={false}
-          className="bg-[#00143C]"
-        />
+        {/* Form area — centred */}
+        <div className="flex-1 flex items-center justify-center px-6 py-12">
+          <div className="w-full max-w-md">
+            {/* Show return context if present */}
+            {returnUrl && (
+              <div
+                className="mb-6 px-4 py-3 rounded-xl text-sm"
+                style={{
+                  backgroundColor: 'var(--product-highlight)',
+                  color: 'var(--product-primary)',
+                  border: '1px solid var(--product-primary)',
+                }}
+              >
+                <strong>Sign in</strong> to continue to{' '}
+                <span className="font-bold">{getAppNameFromUrl(returnUrl)}</span>
+              </div>
+            )}
+
+            {children}
+          </div>
+        </div>
       </div>
-    </AuthProvider>
+    </div>
   );
 }
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+const BOLDMIND_DOMAINS = [
+  'boldmind.ng', 'amebogist.ng', 'educenter.com.ng',
+  'localhost', '127.0.0.1',
+];
+
+function isSafeBoldMindUrl(url: string): boolean {
+  try {
+    const { hostname } = new URL(url);
+    return BOLDMIND_DOMAINS.some(
+      (d) => hostname === d || hostname.endsWith(`.${d}`),
+    );
+  } catch {
+    return false;
+  }
+}
+
+function getAppNameFromUrl(url: string): string {
+  try {
+    const { hostname } = new URL(url);
+    if (hostname.includes('amebogist'))  return 'AmeboGist';
+    if (hostname.includes('educenter'))  return 'EduCenter';
+    if (hostname.includes('planai'))     return 'PlanAI Suite';
+    if (hostname.includes('fit'))        return 'NaijaFit';
+    if (hostname.includes('os.'))        return 'BoldMind OS';
+    if (hostname.includes('studio'))     return 'Amebo Studio';
+    if (hostname.includes('tools'))      return 'BoldMind Tools';
+    if (hostname.includes('skills'))     return 'SkillGig';
+    return 'BoldMind';
+  } catch {
+    return 'BoldMind';
+  }
+}
+
+const ECOSYSTEM_PRODUCTS = [
+  { slug: 'amebogist',  name: 'AmeboGist',   icon: '📰' },
+  { slug: 'educenter',  name: 'EduCenter',   icon: '🎓' },
+  { slug: 'planai',     name: 'PlanAI',      icon: '🧠' },
+  { slug: 'fit',        name: 'NaijaFit',    icon: '💪' },
+  { slug: 'os',         name: 'BoldMind OS', icon: '🖥️' },
+  { slug: 'studio',     name: 'Studio',      icon: '✍️' },
+];

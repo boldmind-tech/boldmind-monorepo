@@ -1,51 +1,32 @@
-// APPS/WEB_APPS/boldmind-hub/middleware.ts
-import { createAuthMiddleware, createRateLimitMiddleware, composeMiddleware } from '@boldmind/auth';
-
-/**
- * BoldMind Hub Middleware
- * - Auth protection for dashboard/admin routes
- * - Rate limiting for all routes
- */
-export const middleware = composeMiddleware(
-    createAuthMiddleware({
-        publicRoutes: [
-            '/',
-            '/login',
-            '/register',
-            '/about',
-            '/contact',
-            '/products',
-            '/products/*',
-            '/privacy',
-            '/terms',
-            '/forgot-password',
-            '/reset-password',
-            '/verify-email',
-            '/api/auth/*',
-        ],
-        protectedRoutes: [
-            '/dashboard',
-            '/dashboard/*',
-            '/admin',
-            '/admin/*',
-        ],
-        redirectTo: '/login',
-    }),
-    createRateLimitMiddleware({
-        maxRequests: 100,
-        windowMs: 60000, // 1 minute
-    })
-);
-
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+ 
+const HUB_URL =
+  process.env['NEXT_PUBLIC_HUB_URL'] ||
+  (process.env.NODE_ENV === 'production' ? 'https://boldmind.ng' : 'http://localhost:3000');
+ 
+// Must match service/src/modules/auth/sso.service.ts
+const SSO_COOKIE = 'boldmind_sso';
+ 
+export function middlewareSSOGuard(request: NextRequest): NextResponse {
+  const token = request.cookies.get(SSO_COOKIE)?.value;
+ 
+  if (token) return NextResponse.next();
+ 
+  // Build hub login URL with the current URL as return destination
+  const loginUrl = new URL(`${HUB_URL}/login`);
+  loginUrl.searchParams.set('return_url', request.nextUrl.href);
+  return NextResponse.redirect(loginUrl);
+}
+ 
+// ─────────────────────────────────────────────────────────────────────────────
+// PER-APP MIDDLEWARE FILES
+// Copy one of these to your app's middleware.ts
+// ─────────────────────────────────────────────────────────────────────────────
+ 
+// ── apps/boldmind-hub/middleware.ts ──────────────────────────────────────────
+export default middlewareSSOGuard;
 export const config = {
-    matcher: [
-        /*
-         * Match all request paths except:
-         * - _next/static (static files)
-         * - _next/image (image optimization files)
-         * - favicon.ico (favicon file)
-         * - public files (images, etc.)
-         */
-        '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
-    ],
+  matcher: ['/dashboard/:path*', '/admin/:path*', '/profile/:path*'],
 };
+ 

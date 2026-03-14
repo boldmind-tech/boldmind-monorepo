@@ -1,159 +1,183 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// apps/boldmind-hub/app/layout.tsx
+// apps/boldmind-hub/app/layout.tsx  [ROOT — Server Component]
 // ─────────────────────────────────────────────────────────────────────────────
-// CHANGES:
-//   - Blocking <script> in <head> sets data-font BEFORE first paint (no FOUC)
-//   - body className uses var(--font-active) via CSS, NOT inter.className
-//     (inter is loaded as a CSS variable only so it's available when user
-//     switches to standard mode — it never forces Inter as the active font)
-//   - BoldMindLayout wrapper preserved
+// Root layout for boldmind.ng
+// Provides: SEO metadata, blocking font script, BoldMindLayout wrapper.
+// Does NOT include NavBar/Footer — route group layouts handle that.
 // ─────────────────────────────────────────────────────────────────────────────
 
-import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
-import { BoldMindLayout } from "./boldmindLayout";
-import { ErrorBoundary, FacebookSDK, CookieConsent } from "@boldmind/ui";
-import "@boldmind/ui/dist/index.css";
-import "./globals.css";
+import type { Metadata, Viewport } from 'next';
+import { Inter } from 'next/font/google';
+import { BoldMindLayout } from './boldmindLayout';
+import { ErrorBoundary, CookieConsent, FacebookSDK } from '@boldmind/ui';
+import '@boldmind/ui/dist/index.css';
+import './globals.css';
 
-// Load Inter as a CSS variable only — NOT applied to body.
-// OpenDyslexic is the default. Inter becomes available when user switches
-// to standard mode via the DyslexiaToggle.
 const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-  preload: false, // Don't block on Inter — OpenDyslexic is the default
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+  preload: false, // OpenDyslexic is the default; don't block on Inter
 });
 
-const getCanonicalUrl = () => {
-  const baseUrl = process.env["NEXT_PUBLIC_APP_URL"] || "https://boldmind.ng";
-  return baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
-};
-const canonicalUrl = getCanonicalUrl();
+const BASE_URL =
+  process.env['NEXT_PUBLIC_APP_URL']?.replace(/\/$/, '') ?? 'https://boldmind.ng';
+
+// ─── SEO Metadata ────────────────────────────────────────────────────────────
 
 export const metadata: Metadata = {
-  metadataBase: new URL(canonicalUrl),
+  metadataBase: new URL(BASE_URL),
   title: {
-    default: "BoldMind - Empowering 1M Nigerian Entrepreneurs by 2030",
-    template: "%s | BoldMind Technology Ecosystem",
+    default: 'BoldMind — Empowering 1M Nigerian Entrepreneurs by 2030',
+    template: '%s | BoldMind',
   },
   description:
-    "Nigerian tech ecosystem creating impact-driven products that solve fundamental problems through authentic media, education, and AI-powered technology.",
-  keywords: ["Nigerian entrepreneurs", "tech Nigeria", "AI Nigeria", "BoldMind ecosystem"],
-  authors: [{ name: "BoldMind Technology Solution Enterprise", url: canonicalUrl }],
-  creator: "BoldMind Technology Solution Enterprise",
-  publisher: "BoldMind Technology Solution Enterprise",
-  robots: { index: true, follow: true },
-  alternates: { canonical: canonicalUrl },
+    'Nigeria\'s premier tech ecosystem: AmeboGist, EduCenter, PlanAI Suite, and 28+ products empowering entrepreneurs through AI, education, and authentic media.',
+  keywords: [
+    'Nigerian entrepreneurs', 'BoldMind', 'AI Nigeria', 'PlanAI', 'AmeboGist',
+    'EduCenter', 'Nigerian tech ecosystem', 'African technology', 'business tools Nigeria',
+  ],
+  authors: [
+    { name: 'BoldMind Technology Solution Enterprise', url: BASE_URL },
+    { name: 'Charles Uche Chijuka' },
+  ],
+  creator: 'BoldMind Technology Solution Enterprise',
+  publisher: 'BoldMind Technology Solution Enterprise',
+  robots: {
+    index: true, follow: true,
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 },
+  },
+  alternates: { canonical: BASE_URL, languages: { 'en-NG': BASE_URL } },
   openGraph: {
-    type: "website", locale: "en_NG", url: canonicalUrl,
-    title: "BoldMind - Building Systems That Shift Nations",
-    siteName: "BoldMind",
-    description: "Empowering 1 million Nigerian Entrepreneurs by 2030.",
-    images: [{ url: `${canonicalUrl}/og-image.png`, width: 1200, height: 630, alt: "BoldMind" }],
+    type: 'website', locale: 'en_NG', url: BASE_URL,
+    title: 'BoldMind — Building Systems That Shift Nations',
+    siteName: 'BoldMind',
+    description: 'Empowering 1 million Nigerian Entrepreneurs by 2030 through 31+ innovative products.',
+    images: [{ url: `${BASE_URL}/og-image.png`, width: 1200, height: 630, alt: 'BoldMind' }],
   },
   twitter: {
-    card: "summary_large_image", site: "@boldmindtech",
-    title: "BoldMind - Empowering Nigerian Entrepreneurs",
-    images: [`${canonicalUrl}/og-image.png`],
+    card: 'summary_large_image', site: '@boldmindtech',
+    title: 'BoldMind — Empowering Nigerian Entrepreneurs',
+    description: 'AmeboGist, EduCenter, PlanAI and 28+ products transforming Nigeria.',
+    images: [`${BASE_URL}/og-image.png`],
   },
+  verification: { google: process.env['NEXT_PUBLIC_GOOGLE_SITE_VERIFY'] },
   icons: {
-    icon: [{ url: "/favicon.ico" }, { url: "/icon-192x192.png", sizes: "192x192" }],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512x512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
+    shortcut: '/favicon.ico',
   },
-  manifest: "/manifest.webmanifest",
-  appleWebApp: { title: "BoldMind", statusBarStyle: "black-translucent" },
+  manifest: '/manifest.webmanifest',
+  category: 'technology',
 };
 
 export const viewport: Viewport = {
-  // ✅ Corrected theme color to match logo
-  themeColor: "#2B4D87",
-  colorScheme: "light dark",
-  width: "device-width",
+  themeColor: '#2B4D87',  // BoldMind primary (from logo)
+  colorScheme: 'light dark',
+  width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  viewportFit: "cover",
+  viewportFit: 'cover',
 };
 
-const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "BoldMind Technology Solution Enterprise",
-  url: canonicalUrl,
-  logo: `${canonicalUrl}/logo.webp`,
-  description: "Empowering 1 million Nigerian Entrepreneurs by 2030",
-  foundingDate: "2025",
-  address: { "@type": "PostalAddress", addressCountry: "NG", addressRegion: "Lagos" },
-  contactPoint: { "@type": "ContactPoint", contactType: "customer service", email: "hello@boldmind.ng" },
+// ─── Schema.org structured data ──────────────────────────────────────────────
+
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'BoldMind Technology Solution Enterprise',
+  url: BASE_URL,
+  logo: `${BASE_URL}/logo.webp`,
+  description: 'Empowering 1 million Nigerian Entrepreneurs by 2030',
+  foundingDate: '2025',
+  address: {
+    '@type': 'PostalAddress',
+    addressCountry: 'NG',
+    addressRegion: 'Lagos',
+    addressLocality: 'Lagos',
+    streetAddress: 'No 5 Olusoji Imole Street, Ikosi Ketu',
+  },
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'customer service',
+    email: 'hello@boldmind.ng',
+    telephone: '+2349138349271',
+  },
   sameAs: [
-    "https://x.com/villagecircleng",
-    "https://facebook.com/boldmindng",
-    "https://linkedin.com/company/boldmind-technology-solution-enterprise",
-    "https://instagram.com/boldmindng",
+    'https://x.com/villagecircleng',
+    'https://facebook.com/boldmindng',
+    'https://instagram.com/boldmindng',
+    'https://linkedin.com/company/boldmind-technology-solution-enterprise',
+    'https://github.com/boldmind-tech',
   ],
 };
 
+// ─────────────────────────────────────────────────────────────────────────────
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`scroll-smooth ${inter.variable}`} suppressHydrationWarning>
+    <html
+      lang="en-NG"
+      className={inter.variable}
+      suppressHydrationWarning
+    >
       <head>
         {/*
-          Blocking script: runs synchronously before browser paints any pixel.
-          Sets data-font on <html> immediately so CSS picks up the right font
-          with zero flash. Must be in <head>, not in a component.
+          BLOCKING SCRIPT — runs synchronously before browser paints.
+          Sets data-font + data-product on <html> IMMEDIATELY.
+          This prevents Flash Of Unstyled Text (FOUT) when OpenDyslexic is active.
+          Must be in <head> as a raw script, NOT in a React component.
         */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var font = localStorage.getItem('boldmind-font-mode') || 'dyslexic';
-                  document.documentElement.setAttribute('data-font', font);
-                  document.documentElement.setAttribute('data-product', 'boldmind-hub');
-                } catch(e) {
-                  document.documentElement.setAttribute('data-font', 'dyslexic');
-                  document.documentElement.setAttribute('data-product', 'boldmind-hub');
-                }
-              })();
-            `,
+            __html: `(function(){try{var f=localStorage.getItem('boldmind-font-mode')||'dyslexic';document.documentElement.setAttribute('data-font',f);document.documentElement.setAttribute('data-product','boldmind-hub');}catch(e){document.documentElement.setAttribute('data-font','dyslexic');document.documentElement.setAttribute('data-product','boldmind-hub');}})();`,
           }}
         />
 
+        {/* Resource hints */}
+        <link rel="preconnect" href="https://fonts.cdnfonts.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://fonts.cdnfonts.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="//api.boldmind.ng" />
 
-        <meta name="geo.region" content="NG-LA" />
-        <meta name="geo.placename" content="Lagos" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
+        {/* PWA */}
         <meta name="mobile-web-app-capable" content="yes" />
-        {/* ✅ Corrected theme-color meta tags */}
-        <meta name="theme-color" content="#2B4D87" media="(prefers-color-scheme: light)" />
-        <meta name="theme-color" content="#1A3060" media="(prefers-color-scheme: dark)" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="BoldMind" />
+        <meta name="application-name" content="BoldMind" />
         <meta name="msapplication-TileColor" content="#2B4D87" />
 
+        {/* Geo */}
+        <meta name="geo.region" content="NG-LA" />
+        <meta name="geo.placename" content="Lagos, Nigeria" />
+
+        {/* Structured data */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
         />
       </head>
 
       {/*
-        body: does NOT set font via className.
-        Font is controlled entirely by CSS through data-font attribute.
-        Only the --font-inter CSS variable comes from next/font.
+        body: NO font class here.
+        Font is controlled by data-font attribute via font-classes.css.
+        Adding font-sans/font-primary here overrides OpenDyslexic.
       */}
       <body className="antialiased">
         <ErrorBoundary>
           <BoldMindLayout>
             {children}
-            <CookieConsent />
-            <FacebookSDK
-              appId={process.env["NEXT_PUBLIC_FACEBOOK_APP_ID"]}
-              pixelId={process.env["NEXT_PUBLIC_FACEBOOK_PIXEL_ID"]}
-            />
           </BoldMindLayout>
+          <CookieConsent />
+          <FacebookSDK
+            appId={process.env['NEXT_PUBLIC_FACEBOOK_APP_ID']}
+            pixelId={process.env['NEXT_PUBLIC_FACEBOOK_PIXEL_ID']}
+          />
         </ErrorBoundary>
       </body>
     </html>
