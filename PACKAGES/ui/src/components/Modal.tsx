@@ -31,19 +31,22 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 50,
+    zIndex: 1040,
     padding: '1rem',
+    backdropFilter: 'blur(4px)',
   };
 
   const modalStyle: React.CSSProperties = {
-    backgroundColor: 'white',
-    padding: '1.5rem',
-    borderRadius: '0.5rem',
+    backgroundColor: 'var(--product-background)',
+    color: 'var(--product-foreground)',
+    padding: '1.75rem',
+    borderRadius: 'var(--radius-lg)',
     maxWidth: '28rem',
     width: '100%',
     maxHeight: '90vh',
     overflowY: 'auto',
-    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+    boxShadow: 'var(--shadow-xl)',
+    border: '1px solid var(--product-muted)',
   };
 
   const headerStyle: React.CSSProperties = {
@@ -52,13 +55,13 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }
     alignItems: 'center',
     marginBottom: '1rem',
     paddingBottom: '0.75rem',
-    borderBottom: '1px solid #E5E7EB',
+    borderBottom: '1px solid var(--product-muted)',
   };
 
   const titleStyle: React.CSSProperties = {
     fontSize: '1.25rem',
     fontWeight: 600,
-    color: '#00143C',
+    color: 'var(--product-primary)',
     margin: 0,
   };
 
@@ -66,11 +69,11 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }
     background: 'none',
     border: 'none',
     fontSize: '1.5rem',
-    color: '#6B7280',
+    color: 'var(--neutral-500)',
     cursor: 'pointer',
     padding: '0.25rem',
-    borderRadius: '0.25rem',
-    transition: 'color 0.2s',
+    borderRadius: 'var(--radius-xs)',
+    transition: 'color var(--transition-quick)',
   };
 
   return (
@@ -81,8 +84,8 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }
           <button
             onClick={onClose}
             style={closeButtonStyle}
-            onMouseEnter={(e) => (e.currentTarget.style.color = '#374151')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = '#6B7280')}
+            onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--product-foreground)')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--neutral-500)')}
           >
             &times;
           </button>
@@ -92,3 +95,4 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }
     </div>
   );
 };
+

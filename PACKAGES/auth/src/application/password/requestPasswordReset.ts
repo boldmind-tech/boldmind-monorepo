@@ -1,6 +1,6 @@
 // PACKAGES/auth/src/application/password/requestPasswordReset.ts
-import { getSupabaseAuthProvider } from '../../providers/supabase/singleton';
+import { boldMindAPI } from "@boldmind/api-client";
 
 export async function requestPasswordReset(email: string): Promise<void> {
-  return getSupabaseAuthProvider().resetPasswordForEmail(email);
+  return boldMindAPI.auth.forgotPassword({ email });
 }

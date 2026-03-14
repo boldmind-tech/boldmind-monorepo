@@ -1,0 +1,141 @@
+{
+    "name": "ReceiptGenius NG - VAT Invoice Generator",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "/webhook/receiptgenius/create",
+                "responseMode": "responseNode"
+            },
+            "name": "Webhook - Create Invoice",
+            "type": "n8n-nodes-base.webhook",
+            "position": [
+                200,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "create",
+                "table": "invoices",
+                "columns": "invoice_number,customer_name,customer_email,customer_phone,items,subtotal,vat,total,status"
+            },
+            "name": "Save Invoice to DB",
+            "type": "n8n-nodes-base.postgres",
+            "position": [
+                400,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const invoice = $input.first().json;\n\n// Nigerian VAT calculation (7.5%)\nconst subtotal = invoice.amount;\nconst vat = subtotal * 0.075;\nconst total = subtotal + vat;\n\n// Generate invoice number\nconst date = new Date();\nconst invoiceNumber = `INV-${date.getFullYear()}${(date.getMonth()+1).toString().padStart(2,'0')}${date.getDate().toString().padStart(2,'0')}-${Math.floor(Math.random()*10000)}`;\n\nreturn [{\n  ...invoice,\n  invoice_number: invoiceNumber,\n  subtotal,\n  vat,\n  total,\n  vat_rate: '7.5%',\n  date: date.toISOString(),\n  due_date: new Date(date.setDate(date.getDate() + 30)).toISOString(),\n  firms_compliant: true\n}];"
+            },
+            "name": "Calculate VAT & Generate Number",
+            "type": "n8n-nodes-base.code",
+            "position": [
+                600,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://invoice-generator.com",
+                "sendBody": true,
+                "bodyParameters": {
+                    "from": "BoldMind Technology Solutions\n15 Allen Avenue, Ikeja\nLagos, Nigeria\nRC: 1234567\nVAT: 12345678-0001",
+                    "to": "={{ $json.customer_name }}\n={{ $json.customer_email }}\n={{ $json.customer_phone }}",
+                    "number": "={{ $json.invoice_number }}",
+                    "date": "={{ $json.date.split('T')[0] }}",
+                    "due_date": "={{ $json.due_date.split('T')[0] }}",
+                    "items": "={{ $json.items }}",
+                    "fields": {
+                        "tax": "%7.5",
+                        "discounts": "0",
+                        "shipping": "0"
+                    },
+                    "currency": "NGN",
+                    "logo": "https://boldmind.ng/logo.png",
+                    "template": "professional",
+                    "notes": "Thank you for your business! Payment due within 30 days.",
+                    "terms": "Bank Transfer: GTBank 0123456789 (BoldMind Technology)"
+                }
+            },
+            "name": "Generate PDF Invoice",
+            "type": "n8n-nodes-base.httpRequest",
+            "position": [
+                800,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "message",
+                "phoneNumberId": "={{ $env.WHATSAPP_PHONE_ID }}",
+                "to": "={{ $json.customer_phone }}",
+                "body": "*🧾 RECEIPT FROM {{ $json.business_name }}*\n\nInvoice: {{ $json.invoice_number }}\nAmount: ₦{{ $json.total.toLocaleString() }}\nVAT (7.5%): ₦{{ $json.vat.toLocaleString() }}\nDate: {{ $json.date.split('T')[0] }}\n\nDownload: {{ $json.invoice_url }}\n\nThank you for your patronage! 🇳🇬"
+            },
+            "name": "WhatsApp - Send to Customer",
+            "type": "n8n-nodes-base.whatsAppBusiness",
+            "position": [
+                1000,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "from": "invoices@receipt.boldmind.ng",
+                "to": "={{ $json.customer_email }}",
+                "subject": "🧾 Your Receipt from {{ $json.business_name }}",
+                "html": "<div style='font-family: Arial; max-width: 600px;'>\n<h2>Thank you for your payment!</h2>\n<p>Dear {{ $json.customer_name }},</p>\n<p>Your receipt/invoice is attached.</p>\n<table style='width: 100%; border-collapse: collapse;'>\n<tr><td>Invoice:</td><td><strong>{{ $json.invoice_number }}</strong></td></tr>\n<tr><td>Amount:</td><td><strong>₦{{ $json.total.toLocaleString() }}</strong></td></tr>\n<tr><td>VAT (7.5%):</td><td>₦{{ $json.vat.toLocaleString() }}</td></tr>\n<tr><td>Date:</td><td>{{ $json.date.split('T')[0] }}</td></tr>\n</table>\n<p>This is a legally compliant receipt for Nigerian tax purposes.</p>\n<p>BoldMind Technology<br>FIRS Registered</p>\n</div>",
+                "attachments": [
+                    {
+                        "filename": "invoice-{{ $json.invoice_number }}.pdf",
+                        "content": "={{ $node['Generate PDF Invoice'].json.content }}"
+                    }
+                ]
+            },
+            "name": "Email Invoice",
+            "type": "n8n-nodes-base.emailSend",
+            "position": [
+                1200,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "table": "invoices",
+                "updateKey": "invoice_number",
+                "columns": "pdf_url,whatsapp_sent,email_sent,status"
+            },
+            "name": "Update Invoice Status",
+            "type": "n8n-nodes-base.postgres",
+            "position": [
+                1400,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "sheetId": "={{ $env.GOOGLE_SHEET_ID }}",
+                "range": "Invoices!A:K",
+                "columns": [
+                    "Date",
+                    "Invoice #",
+                    "Customer",
+                    "Amount",
+                    "VAT",
+                    "Total",
+                    "Status"
+                ]
+            },
+            "name": "Google Sheets - Tax Records",
+            "type": "n8n-nodes-base.googleSheets",
+            "position": [
+                1600,
+                600
+            ]
+        }
+    ]
+}

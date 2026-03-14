@@ -1,0 +1,133 @@
+{
+    "name": "BoldMind AI Receptionist - Complete Product",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "/webhook/ai-receptionist/inbound",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "name": "Webhook - Instagram DM",
+            "type": "n8n-nodes-base.webhook",
+            "position": [
+                250,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "={{ $node[\"Webhook - Instagram DM\"].json[\"sender\"] }}",
+                "options": {},
+                "operation": "select",
+                "query": "SELECT * FROM customers WHERE instagram_id = '{{ $json.sender.id }}'"
+            },
+            "name": "Check Existing Customer",
+            "type": "n8n-nodes-base.postgres",
+            "position": [
+                450,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "model": "gpt-4",
+                "messages": {
+                    "values": [
+                        {
+                            "role": "system",
+                            "content": "You are a Nigerian receptionist. Extract: service type, location, urgency, phone number. Return JSON only."
+                        },
+                        {
+                            "role": "user",
+                            "content": "={{ $node[\"Webhook - Instagram DM\"].json[\"message\"] }}"
+                        }
+                    ]
+                }
+            },
+            "name": "AI - Parse Lead Intent",
+            "type": "n8n-nodes-base.openAi",
+            "position": [
+                650,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "create",
+                "table": "leads",
+                "columns": "instagram_id,name,message,service,location,phone,score,status"
+            },
+            "name": "Save to Database",
+            "type": "n8n-nodes-base.postgres",
+            "position": [
+                850,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "message",
+                "phoneNumberId": "={{ $env.WHATSAPP_PHONE_ID }}",
+                "to": "={{ $node[\"AI - Parse Lead Intent\"].json.phone }}",
+                "body": "Thank you for contacting {{ $json.business_name }}! We received your request for {{ $json.service }}. Your appointment is tentatively scheduled. Reply CONFIRM to finalize."
+            },
+            "name": "WhatsApp Auto-Reply",
+            "type": "n8n-nodes-base.whatsAppBusiness",
+            "position": [
+                1050,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "events",
+                "calendarId": "primary",
+                "summary": "Lead: {{ $json.service }} - {{ $json.name }}",
+                "description": "Instagram lead from @{{ $json.instagram_handle }}\nPhone: {{ $json.phone }}\nMessage: {{ $json.message }}",
+                "start": {
+                    "dateTime": "={{ $now.plus(1, 'day').set({hour: 10, minute: 0}) }}"
+                }
+            },
+            "name": "Create Calendar Booking",
+            "type": "n8n-nodes-base.googleCalendar",
+            "position": [
+                1250,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "sheetId": "={{ $env.GOOGLE_SHEET_ID }}",
+                "range": "Leads!A:G",
+                "columns": [
+                    "Date",
+                    "Instagram",
+                    "Name",
+                    "Service",
+                    "Phone",
+                    "Status",
+                    "Score"
+                ]
+            },
+            "name": "Google Sheets Backup",
+            "type": "n8n-nodes-base.googleSheets",
+            "position": [
+                1450,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "={{ $env.SLACK_WEBHOOK }}",
+                "text": "*🚀 NEW LEAD - AI Receptionist*\n*Business:* {{ $json.business_name }}\n*Service:* {{ $json.service }}\n*Location:* {{ $json.location }}\n*Phone:* {{ $json.phone }}\n*Score:* {{ $json.score }}%\n<{{ $json.calendar_link }}|View Booking>"
+            },
+            "name": "Slack Alert - Business Owner",
+            "type": "n8n-nodes-base.slack",
+            "position": [
+                1650,
+                300
+            ]
+        }
+    ]
+}

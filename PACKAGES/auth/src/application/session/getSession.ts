@@ -1,16 +1,13 @@
 // PACKAGES/auth/src/application/session/getSession.ts
-import { SupabaseAuthProvider } from '../../providers/supabase/auth';
+import { boldMindAPI } from "@boldmind/api-client";
 import { Session } from '../../domain/models/Session';
 
-let authProvider: SupabaseAuthProvider | null = null;
-
-function getAuthProvider() {
-  if (!authProvider) {
-    authProvider = new SupabaseAuthProvider();
-  }
-  return authProvider;
-}
-
 export async function getSession(): Promise<Session | null> {
-  return getAuthProvider().getSession();
+  try {
+    const response = await boldMindAPI.auth.getSession();
+    return (response as any).session || null;
+  } catch (error) {
+    console.error('Failed to get session:', error);
+    return null;
+  }
 }

@@ -1,573 +1,606 @@
-// constants/social.ts
+// PACKAGES/utils/src/constants/social-accounts.ts
+// Updated: March 2026 Sprint — Full Social Media Arsenal
+// Strategy: Storytelling-first, automation via n8n, each account has a clear niche
+
 export interface SocialAccount {
   id: string;
   name: string;
   url?: string;
   phone?: string;
   platform: string;
-  accessToken?: string;
-  refreshToken?: string;
-  connectedAt?: Date;
+  niche?: string;           // What this account covers
+  status: 'active' | 'new' | 'planned';
+  linkedProducts?: string[]; // Which BoldMind products this account promotes
+  postingFrequency?: string;
+  contentStyle?: string;
 }
 
-export interface PlatformRules {
-  platforms: string[];
-  schedule: string;
-  templates: Record<string, string>;
-}
-
-export interface ProductRules {
-  [product: string]: PlatformRules;
-}
-
-export const crossPostingRules: ProductRules = {
-  amebogist: {
-    platforms: ['facebook', 'twitter', 'instagram', 'whatsapp'],
-    schedule: 'immediate',
-    templates: {
-      facebook: '{title}\n\n{body}\n\nRead more: {url}',
-      twitter: '{title}\n\n{excerpt}... {url}',
-      instagram: '{title}\n\n{excerpt}\n\n{url}\n\n#AmeboGist #News',
-      whatsapp: '📰 *{title}*\n\n{excerpt}\n\nRead full article: {url}'
-    }
-  },
-  educenter: {
-    platforms: ['facebook', 'twitter', 'linkedin', 'whatsapp'],
-    schedule: 'immediate',
-    templates: {
-      facebook: '🎓 {title}\n\n{body}\n\nLearn more: {url}',
-      twitter: '🎓 {title}\n\n{excerpt}... {url} #Education #EduCenter',
-      linkedin: '{title}\n\n{body}\n\n🔗 {url}',
-      whatsapp: '📚 *{title}*\n\n{excerpt}\n\nEnroll now: {url}'
-    }
-  },
-  boldmind: {
-    platforms: ['twitter', 'linkedin', 'youtube'],
-    schedule: 'scheduled',
-    templates: {
-      twitter: '💻 {title}\n\n{excerpt}... {url} #Tech #Boldmind',
-      linkedin: '{title}\n\n{body}\n\n🔗 {url}\n\n#Technology #Innovation',
-      youtube: 'Check out our latest tech tutorial!\n\n{url}'
-    }
-  }
-};
+// ================================================================
+// === CURRENT + NEW ACCOUNTS — Full Arsenal ====================
+// ================================================================
 
 export const socialAccounts: Record<string, SocialAccount[]> = {
+
+  // ============================================================
+  // YOUTUBE — 4 existing + 3 new
+  // ============================================================
   youtube: [
-    { id: 'channel1', name: 'Boldmind Technology Solution Enterprise', url: 'https://youtube.com/@BoldMindTech', platform: 'youtube' },
-    { id: 'channel2', name: 'Code Fires', url: 'https://youtube.com/@Codefires', platform: 'youtube' },
-    { id: 'channel3', name: 'Chains to Coins', url: 'https://youtube.com/@ChainstoCoins', platform: 'youtube' },
-    { id: 'channel4', name: 'Echoes of the Elders', url: 'https://youtube.com/@EchoesoftheElders-d68', platform: 'youtube' },
+    // --- EXISTING ---
+    {
+      id: 'yt-boldmind',
+      name: 'BoldMind Technology Solution Enterprise',
+      url: 'https://youtube.com/@BoldMindTech',
+      platform: 'youtube',
+      status: 'active',
+      niche: 'Tech education, AI tools, Nigerian entrepreneurship',
+      linkedProducts: ['boldmind-hub', 'planai-suite', 'boldmind-os'],
+      postingFrequency: '2x/week',
+      contentStyle: 'Product demos, behind-the-scenes building, "AI for Nigerian business" tutorials',
+    },
+    {
+      id: 'yt-codefires',
+      name: 'Code Fires',
+      url: 'https://youtube.com/@Codefires',
+      platform: 'youtube',
+      status: 'active',
+      niche: 'Coding tutorials, African tech developers',
+      linkedProducts: ['educenter', 'boldmind-os'],
+      postingFrequency: '1x/week',
+      contentStyle: 'Developer tutorials in Pidgin/English, "Build with BoldMind" series',
+    },
+    {
+      id: 'yt-chainstocoins',
+      name: 'Chains to Coins',
+      url: 'https://youtube.com/@ChainstoCoins',
+      platform: 'youtube',
+      status: 'active',
+      niche: 'Financial freedom, entrepreneurship storytelling',
+      linkedProducts: ['planai-suite', 'emailscraper-pro', 'kolo-ai'],
+      postingFrequency: '2x/week',
+      contentStyle: 'Entrepreneurship origin stories, Nigerian business success narratives, income diversification',
+    },
+    {
+      id: 'yt-echoes',
+      name: 'Echoes of the Elders',
+      url: 'https://youtube.com/@EchoesoftheElders-d68',
+      platform: 'youtube',
+      status: 'active',
+      niche: 'African storytelling, culture, wisdom',
+      linkedProducts: ['amebogist', 'boldmind-hub'],
+      postingFrequency: '1x/week',
+      contentStyle: 'Long-form storytelling, African proverbs applied to modern business, community building',
+    },
+
+    // --- NEW — Open These ---
+    {
+      id: 'yt-boldfit',
+      name: 'BoldFit Nigeria',
+      url: 'https://youtube.com/@BoldFitNigeria',  // register this handle
+      platform: 'youtube',
+      status: 'new',
+      niche: 'Nigerian fitness, healthy eating, workout culture',
+      linkedProducts: ['boldfit'],
+      postingFrequency: '3x/week',
+      contentStyle: 'Home workouts you can do in your compound, Nigerian food calorie reveals (suya, shawarma, jollof rice), weekly challenge videos, "From flabby to BoldFit" transformation series',
+    },
+    {
+      id: 'yt-amebogist',
+      name: 'AmeboGist TV',
+      url: 'https://youtube.com/@AmeboGistTV',  // register this handle
+      platform: 'youtube',
+      status: 'new',
+      niche: 'Nigerian news commentary, viral stories, entertainment in Pidgin',
+      linkedProducts: ['amebogist'],
+      postingFrequency: '5x/week',
+      contentStyle: 'Short-form news commentary (5-8 min), "As e dey hot" news breaks, weekly trending stories roundup. Drive traffic to amebogist.ng. YouTube monetization goal.',
+    },
+    {
+      id: 'yt-naijahustle',
+      name: 'Naija Hustle Academy',
+      url: 'https://youtube.com/@NaijaHustleAcademy',  // register this handle
+      platform: 'youtube',
+      status: 'new',
+      niche: 'Nigerian small business education, marketing, sales',
+      linkedProducts: ['educenter', 'planai-suite', 'emailscraper-pro', 'marketing-automation'],
+      postingFrequency: '2x/week',
+      contentStyle: '"How I use AI to run my business" series, live business plan creation demos, "From market stall to online business" documentary-style content',
+    },
   ],
+
+  // ============================================================
+  // FACEBOOK — 4 existing + 3 new pages
+  // ============================================================
   facebook: [
-    { id: 'fb1', name: 'BoldMind Technology Solution Enterprise', url: 'https://facebook.com/BoldMindTech', platform: 'facebook' },
-    { id: 'fb2', name: 'Amebo Gist', url: 'https://facebook.com/amebogistng', platform: 'facebook' },
-    { id: 'fb3', name: 'Educenter', url: 'https://facebook.com/DevConectPage', platform: 'facebook' },
-    { id: 'fb4', name: 'Charles Uche Chijuka', url: 'https://facebook.com/cuche3', platform: 'facebook' },
+    // --- EXISTING ---
+    {
+      id: 'fb-boldmind',
+      name: 'BoldMind Technology Solution Enterprise',
+      url: 'https://facebook.com/boldmindng',
+      platform: 'facebook',
+      status: 'active',
+      niche: 'Tech ecosystem, product launches, entrepreneur community',
+      linkedProducts: ['boldmind-hub', 'planai-suite'],
+      contentStyle: 'Product announcements, community spotlights, entrepreneur success stories',
+    },
+    {
+      id: 'fb-amebogist',
+      name: 'Amebo Gist',
+      url: 'https://facebook.com/amebogistng',
+      platform: 'facebook',
+      status: 'active',
+      niche: 'Nigerian news, entertainment, viral content — Pidgin English',
+      linkedProducts: ['amebogist'],
+      contentStyle: 'Breaking news, viral stories, community polls, AdSense-driving traffic content',
+    },
+    {
+      id: 'fb-educenter',
+      name: 'Educenter Nigeria',
+      url: 'https://facebook.com/educenterc',
+      platform: 'facebook',
+      status: 'active',
+      niche: 'Nigerian exam prep, JAMB/WAEC resources, student community',
+      linkedProducts: ['educenter'],
+      contentStyle: 'Daily JAMB questions, study tips, student success stories, exam countdown posts',
+    },
+    {
+      id: 'fb-charles',
+      name: 'Charles Uche Chijuka',
+      url: 'https://facebook.com/cuche3',
+      platform: 'facebook',
+      status: 'active',
+      niche: 'Personal brand — founder storytelling, tech entrepreneur journey',
+      linkedProducts: ['boldmind-hub'],
+      contentStyle: 'Personal building journey, raw behind-the-scenes, wins and failures, entrepreneur mindset',
+    },
+
+    // --- NEW — Create These Pages ---
+    {
+      id: 'fb-boldfit',
+      name: 'BoldFit Nigeria',
+      url: 'https://facebook.com/boldfitng',  // create this
+      platform: 'facebook',
+      status: 'new',
+      niche: 'Nigerian fitness community — men and women',
+      linkedProducts: ['boldfit'],
+      contentStyle: '7-day challenge posts, Nigerian food nutrition facts, workout videos, community motivation, before/after posts (with permission)',
+    },
+    {
+      id: 'fb-villagecircle',
+      name: 'VillageCircle',
+      url: 'https://facebook.com/villagecircleng',
+      platform: 'facebook',
+      status: 'new',
+      niche: 'African community, storytelling, cultural connection',
+      linkedProducts: ['amebogist', 'boldmind-hub'],
+      contentStyle: 'Storytelling posts, African wisdom, community-building content, cross-promotion with YouTube',
+    },
+    {
+      id: 'fb-planai',
+      name: 'PlanAI — Business Tools for Nigeria',
+      url: 'https://facebook.com/planai.ng',  // create this
+      platform: 'facebook',
+      status: 'new',
+      niche: 'Nigerian SME business tools, AI automation for entrepreneurs',
+      linkedProducts: ['planai-suite', 'ai-receptionist', 'emailscraper-pro'],
+      contentStyle: 'Before/after: "Before PlanAI vs After" posts, client testimonial videos, live tool demos, Nigerian business tips',
+    },
   ],
+
+  // ============================================================
+  // INSTAGRAM — 5 existing + 4 new
+  // ============================================================
   instagram: [
-    { id: 'ig1', name: '@boldmindtech', url: 'https://instagram.com/boldmindtech', platform: 'instagram' },
-    { id: 'ig2', name: '@amebogist10', url: 'https://instagram.com/amebogist10', platform: 'instagram' },
-    { id: 'ig3', name: '@educenterc', url: 'https://instagram.com/educenterc', platform: 'instagram' },
-    { id: 'ig4', name: '@charleschijuka', url: 'https://instagram.com/charleschijuka', platform: 'instagram' },
-    { id: 'ig5', name: '@villagecircl', url: 'https://instagram.com/villagecircl', platform: 'instagram' },
+    // --- EXISTING ---
+    {
+      id: 'ig-boldmind',
+      name: '@boldmindng',
+      url: 'https://instagram.com/boldmindng',
+      platform: 'instagram',
+      status: 'active',
+      niche: 'Tech ecosystem, product aesthetic, founder life',
+      linkedProducts: ['boldmind-hub'],
+      contentStyle: 'Product screenshots, UI aesthetics, founder day-in-life Reels, "Build in public" Stories',
+    },
+    {
+      id: 'ig-amebogist',
+      name: '@amebogistng',
+      url: 'https://instagram.com/amebogistng',
+      platform: 'instagram',
+      status: 'active',
+      niche: 'Nigerian pop culture, trending gist, entertainment',
+      linkedProducts: ['amebogist'],
+      contentStyle: 'Trending news carousels, viral story Reels, Pidgin memes, link-in-bio to amebogist.ng',
+    },
+    {
+      id: 'ig-educenter',
+      name: '@educenterc',
+      url: 'https://instagram.com/educenterc',
+      platform: 'instagram',
+      status: 'active',
+      niche: 'Nigerian exam prep community, student motivation',
+      linkedProducts: ['educenter'],
+      contentStyle: 'Daily JAMB questions as carousel, study tips Reels, WAEC countdown, success stories',
+    },
+    {
+      id: 'ig-charles',
+      name: '@charleschijuka',
+      url: 'https://instagram.com/charleschijuka',
+      platform: 'instagram',
+      status: 'active',
+      niche: 'Personal brand — founder, builder, storyteller',
+      linkedProducts: ['boldmind-hub'],
+      contentStyle: 'Raw founder journey, "Day X of building BoldMind" series, entrepreneurship reflections',
+    },
+    {
+      id: 'ig-villagecircle',
+      name: '@villagecircleng',
+      url: 'https://instagram.com/villagecircleng',
+      platform: 'instagram',
+      status: 'active',
+      niche: 'African storytelling, community, cultural content',
+      linkedProducts: ['amebogist', 'boldmind-hub'],
+      contentStyle: 'Story-driven Reels, African proverbs + business application, VillageCircle community highlights',
+    },
+
+    // --- NEW — Create These ---
+    {
+      id: 'ig-boldfit',
+      name: '@boldfit.ng',
+      url: 'https://instagram.com/boldfit.ng',  // create this
+      platform: 'instagram',
+      status: 'new',
+      niche: 'Nigerian fitness — workouts, food, transformation',
+      linkedProducts: ['boldfit'],
+      contentStyle: '30-day fitness challenge Reels, Nigerian food calorie swaps, morning workout routines, transformation Tuesday posts, fitness motivation in Pidgin',
+    },
+    {
+      id: 'ig-planai',
+      name: '@planai_ng',
+      url: 'https://instagram.com/planai_ng',  // create this
+      platform: 'instagram',
+      status: 'new',
+      niche: 'Nigerian business tools, AI automation for SMEs',
+      linkedProducts: ['planai-suite', 'ai-receptionist'],
+      contentStyle: '"How I got 500 leads while sleeping" Reels (AI Receptionist demos), carousel posts showing tool outputs, Nigerian entrepreneur testimonials',
+    },
+    {
+      id: 'ig-naijahustle',
+      name: '@naijahustleacademy',
+      url: 'https://instagram.com/naijahustleacademy',  // create this
+      platform: 'instagram',
+      status: 'new',
+      niche: 'Nigerian business education, sales, marketing tips',
+      linkedProducts: ['educenter', 'emailscraper-pro', 'planai-suite'],
+      contentStyle: 'Quick business tips Reels (60-second MBA), "How Nigerian businesses fail" educational carousels, tool tutorials in simple language',
+    },
+    {
+      id: 'ig-kolo',
+      name: '@koloai.ng',
+      url: 'https://instagram.com/koloai.ng',  // create this
+      platform: 'instagram',
+      status: 'planned',
+      niche: 'Nigerian savings culture, group thrift (ajo/esusu), fintech',
+      linkedProducts: ['kolo-ai'],
+      contentStyle: 'Ajo/esusu education content, savings challenge posts, "How to grow your ajo group" tips',
+    },
   ],
+
+  // ============================================================
+  // TWITTER / X — 5 existing + 3 new
+  // ============================================================
   twitter: [
-    { id: 'tw1', name: 'VillageCircle', url: 'https://x.com/bobbycuc2025', platform: 'twitter' },
-    { id: 'tw2', name: 'AmeboGist', url: 'https://x.com/Amebo__Gist', platform: 'twitter' },
-    { id: 'tw3', name: 'ChainsToCoins', url: 'https://x.com/ChainsToCoins', platform: 'twitter' },
-    { id: 'tw4', name: 'CodeFiresAfrica', url: 'https://x.com/mediaman9ja', platform: 'twitter' },
-    { id: 'tw5', name: 'Charles Uche Chijuka', url: 'https://x.com/CharlesUcheCh', platform: 'twitter' },
+    // --- EXISTING ---
+    {
+      id: 'tw-villagecircle',
+      name: 'VillageCircle',
+      url: 'https://x.com/villagecircl',
+      platform: 'twitter',
+      status: 'active',
+      niche: 'African storytelling, tech-meets-culture commentary',
+      linkedProducts: ['amebogist', 'boldmind-hub'],
+      contentStyle: 'Long-form threads on African business, storytelling threads, commentary on Nigerian tech',
+    },
+    {
+      id: 'tw-amebogist',
+      name: 'AmeboGist',
+      url: 'https://x.com/Amebo__Gist',
+      platform: 'twitter',
+      status: 'active',
+      niche: 'Breaking Nigerian news, viral gist, Pidgin commentary',
+      linkedProducts: ['amebogist'],
+      contentStyle: 'Real-time news tweets, trending topic threads, Pidgin hot-takes',
+    },
+    {
+      id: 'tw-chainstocoins',
+      name: 'ChainsToCoins',
+      url: 'https://x.com/ChainsToCoins',
+      platform: 'twitter',
+      status: 'active',
+      niche: 'Financial freedom, African entrepreneurship',
+      linkedProducts: ['planai-suite', 'kolo-ai'],
+      contentStyle: 'Entrepreneurship threads, money mindset tweets, Nigerian business commentary',
+    },
+    {
+      id: 'tw-codefires',
+      name: 'CodeFiresAfrica',
+      url: 'https://x.com/mediaman9ja',
+      platform: 'twitter',
+      status: 'active',
+      niche: 'African tech, coding, developer community',
+      linkedProducts: ['educenter', 'boldmind-os'],
+      contentStyle: 'Tech threads, African dev community, "Build in Africa" content',
+    },
+    {
+      id: 'tw-charles',
+      name: 'Charles Uche Chijuka',
+      url: 'https://x.com/CharlesUcheCh',
+      platform: 'twitter',
+      status: 'active',
+      niche: 'Personal brand, founder journey, startup thoughts',
+      linkedProducts: ['boldmind-hub'],
+      contentStyle: 'Build-in-public updates, startup learnings, 30-day sprint documentation',
+    },
+
+    // --- NEW ---
+    {
+      id: 'tw-boldmind',
+      name: 'BoldMind NG',
+      url: 'https://x.com/BoldMindNG',  // register this
+      platform: 'twitter',
+      status: 'new',
+      niche: 'Official BoldMind ecosystem account',
+      linkedProducts: ['boldmind-hub'],
+      contentStyle: 'Product launches, ecosystem updates, Nigerian tech news commentary, community retweets',
+    },
+    {
+      id: 'tw-boldfit',
+      name: 'BoldFit Nigeria',
+      url: 'https://x.com/BoldFitNG',  // register this
+      platform: 'twitter',
+      status: 'new',
+      niche: 'Nigerian fitness culture, health tips',
+      linkedProducts: ['boldfit'],
+      contentStyle: 'Daily fitness motivation, Nigerian food health facts, fitness challenge announcements',
+    },
+    {
+      id: 'tw-planai',
+      name: 'PlanAI Nigeria',
+      url: 'https://x.com/PlanAI_NG',  // register this
+      platform: 'twitter',
+      status: 'planned',
+      niche: 'AI tools for Nigerian entrepreneurs',
+      linkedProducts: ['planai-suite'],
+      contentStyle: 'AI tool tips, Nigerian business automation case studies, product feature threads',
+    },
   ],
+
+  // ============================================================
+  // TIKTOK — 3 existing + 3 new (highest growth potential)
+  // ============================================================
   tiktok: [
-    { id: 'tt1', name: 'CodeFiresAfrica', url: 'https://tiktok.com/@codesfiresafrica', platform: 'tiktok' },
-    { id: 'tt2', name: 'VillageCircle', url: 'https://tiktok.com/@viilagecircle', platform: 'tiktok' },
+    // --- EXISTING (VillageCircle = highest growth per your data) ---
+    {
+      id: 'tt-codefires',
+      name: 'CodeFiresAfrica',
+      url: 'https://tiktok.com/@codesfiresafrica',
+      platform: 'tiktok',
+      status: 'active',
+      niche: 'African tech, coding, developer culture',
+      linkedProducts: ['educenter', 'boldmind-os'],
+      contentStyle: 'Quick coding tips (60s), "Nigerians building tech" series, developer life in Africa',
+    },
+    {
+      id: 'tt-villagecircle',
+      name: 'VillageCircle',
+      url: 'https://tiktok.com/@viilagecircle',
+      platform: 'tiktok',
+      status: 'active',
+      niche: 'African storytelling, culture, wisdom — HIGHEST GROWTH ACCOUNT',
+      linkedProducts: ['amebogist', 'boldmind-hub'],
+      postingFrequency: '2x/day (priority account)',
+      contentStyle: 'Emotional storytelling videos (2-5 min), "What Nigerians never talk about" series, proverb + business lesson mashups. PRIORITY: double down on what drove growth',
+    },
+    {
+      id: 'tt-chainstocoins',
+      name: 'ChainsToCoins',
+      url: 'https://tiktok.com/@chainstocoins',
+      platform: 'tiktok',
+      status: 'active',
+      niche: 'Financial freedom, hustle culture, income building',
+      linkedProducts: ['planai-suite', 'kolo-ai'],
+      contentStyle: '"How I made ₦X with zero capital" stories, Nigerian money mindset, savings culture content',
+    },
+
+    // --- NEW ---
+    {
+      id: 'tt-boldfit',
+      name: 'BoldFit Nigeria',
+      url: 'https://tiktok.com/@boldfitnigeria',  // create this
+      platform: 'tiktok',
+      status: 'new',
+      niche: 'Nigerian fitness — biggest opportunity on TikTok right now',
+      linkedProducts: ['boldfit'],
+      postingFrequency: '3x/day recommended',
+      contentStyle: 'Home workout challenges, Nigerian food calorie reveals (hook: "You ate suya? Here\'s what that cost you"), 30-day body transformation, "Fit Naija" lifestyle content, duets with fitness creators',
+    },
+    {
+      id: 'tt-amebogist',
+      name: 'AmeboGist',
+      url: 'https://tiktok.com/@amebogistng',  // create this
+      platform: 'tiktok',
+      status: 'new',
+      niche: 'Nigerian viral stories, Pidgin commentary, news entertainment',
+      linkedProducts: ['amebogist'],
+      postingFrequency: '2x/day',
+      contentStyle: '"You won\'t believe this story" viral hooks, Pidgin news commentary, trending Nigerian topics with twist endings. TikTok algorithm loves news-style content.',
+    },
+    {
+      id: 'tt-boldmind',
+      name: 'BoldMind Tech',
+      url: 'https://tiktok.com/@boldmindtech',  // create this
+      platform: 'tiktok',
+      status: 'planned',
+      niche: 'Nigerian tech entrepreneur building in public',
+      linkedProducts: ['boldmind-hub'],
+      contentStyle: '"Watch me build a tech startup in Nigeria" series, AI tools demos in Pidgin, "How I use AI to do X in 5 minutes" format',
+    },
   ],
+
+  // ============================================================
+  // WHATSAPP — 3 existing
+  // ============================================================
   whatsapp: [
-    { id: 'wa1', name: 'Charles', phone: '+2348136705908', platform: 'whatsapp' },
-    { id: 'wa2', name: 'BoldMind Technology Solution Enterprises', phone: '+2349138349271', platform: 'whatsapp' },
+    {
+      id: 'wa-charles',
+      name: 'Charles (Personal)',
+      phone: '+2348136705908',
+      platform: 'whatsapp',
+      status: 'active',
+      niche: 'Direct outreach to scraped business list, personalized follow-ups',
+      contentStyle: 'Personalized business messages. Use AI Receptionist templates. 20 outreach messages/day.',
+    },
+    {
+      id: 'wa-boldmind',
+      name: 'BoldMind Technology Solution Enterprises',
+      phone: '+2349138349271',
+      platform: 'whatsapp',
+      status: 'active',
+      niche: 'Business WhatsApp — client onboarding, support, demos',
+      linkedProducts: ['ai-receptionist', 'planai-suite'],
+      contentStyle: 'Business card shareable number. WhatsApp Business API for AI Receptionist demos.',
+    },
+    {
+      id: 'wa-villagecircle',
+      name: 'Village Circle',
+      phone: '+2348055762023',
+      platform: 'whatsapp',
+      status: 'active',
+      niche: 'Community WhatsApp for VillageCircle audience',
+      contentStyle: 'Broadcast list for story updates, EduCenter links during exam season',
+    },
   ],
+
+  // ============================================================
+  // LINKEDIN — 2 existing + 1 new
+  // ============================================================
   linkedin: [
-    { id: 'li1', name: 'BoldMind Technology Solutions', url: 'https://linkedin.com/company/boldmindtech', platform: 'linkedin' },
-    { id: 'li2', name: 'Charles Uche Chijuka', url: 'https://linkedin.com/in/charleschijuka', platform: 'linkedin' },
-  ]
+    {
+      id: 'li-boldmind',
+      name: 'BoldMind Technology Solutions',
+      url: 'https://linkedin.com/company/boldmindtech',
+      platform: 'linkedin',
+      status: 'active',
+      niche: 'B2B, corporate, investor-facing content',
+      linkedProducts: ['planai-suite', 'emailscraper-pro', 'ai-receptionist'],
+      contentStyle: 'Company milestones, product launches, "Building Nigeria\'s tech ecosystem" thought leadership, AI Receptionist case studies for B2B audience',
+    },
+    {
+      id: 'li-charles',
+      name: 'Charles Uche Chijuka',
+      url: 'https://linkedin.com/in/charleschijuka',
+      platform: 'linkedin',
+      status: 'active',
+      niche: 'Personal brand — founder, entrepreneur, builder',
+      linkedProducts: ['boldmind-hub'],
+      contentStyle: 'Sprint updates, lessons from building 32 products, Nigerian startup ecosystem commentary, fundraising journey (when ready)',
+    },
+    {
+      id: 'li-planai',
+      name: 'PlanAI — AI Business Suite',
+      url: 'https://linkedin.com/company/planai-ng',  // create this
+      platform: 'linkedin',
+      status: 'new',
+      niche: 'B2B AI tools, Nigerian SME automation, corporate sales',
+      linkedProducts: ['planai-suite', 'ai-receptionist', 'emailscraper-pro'],
+      contentStyle: 'ROI case studies, "How X business reduced costs with AI" articles, B2B value proposition content, corporate product showcase',
+    },
+  ],
 };
 
-// Enhanced SocialIntegration class with fixed types
-export class SocialIntegration {
-  private platformTokens: Map<string, string> = new Map();
-  // private apiClients: Map<string, any> = new Map();
-  private postingQueue: Array<() => Promise<void>> = [];
-  private isProcessingQueue = false;
+// ================================================================
+// === CONTENT CALENDAR STRATEGY ================================
+// ================================================================
 
-  constructor(private config = {
-    maxRetries: 3,
-    delayBetweenPosts: 1000, // 1 second
-    batchSize: 5,
-    enableAnalytics: true
-  }) { }
+export const contentStrategy = {
+  // Accounts to prioritize for automation via n8n + Social Factory
+  automationPriority: [
+    'tt-villagecircle',    // Highest growth — maintain momentum
+    'tt-boldfit',          // New — needs volume to grow
+    'tt-amebogist',        // News content — high frequency needed
+    'ig-boldfit',          // Support TikTok with repurposed content
+    'fb-amebogist',        // Traffic driver for AdSense
+    'tw-amebogist',        // Real-time news → drives amebogist.ng
+  ],
 
-  // Connect to all social accounts with better error handling
-  async connectAllAccounts(): Promise<{ success: number; failed: number; errors: string[] }> {
-    const results = {
-      success: 0,
-      failed: 0,
-      errors: [] as string[]
-    };
+  // Storytelling accounts — Charles manages personally (your strongest skill)
+  personalContent: [
+    'ig-charles',
+    'tw-charles',
+    'yt-chainstocoins',
+    'tt-villagecircle',   // This one too — your storytelling is what drives it
+    'yt-echoes',
+  ],
 
-    const connectionPromises = [];
+  // Product → Primary social account mapping for outreach
+  productPromotionMapping: {
+    'ai-receptionist': ['fb-planai', 'ig-planai', 'li-boldmind', 'wa-boldmind'],
+    'educenter': ['fb-educenter', 'ig-educenter', 'wa-villagecircle'],
+    'amebogist': ['fb-amebogist', 'ig-amebogist', 'tt-amebogist', 'tw-amebogist'],
+    'boldfit': ['tt-boldfit', 'ig-boldfit', 'yt-boldfit', 'tw-boldfit'],
+    'emailscraper-pro': ['li-planai', 'fb-planai', 'tw-planai'],
+    'planai-suite': ['li-boldmind', 'ig-planai', 'fb-planai'],
+    'boldmind-os': ['ig-charles', 'tt-boldmind', 'yt-boldmind'],
+    'social-factory': ['ig-boldmind', 'li-boldmind'],
+  },
 
-    for (const [platform, accounts] of Object.entries(socialAccounts)) {
-      for (const account of accounts) {
-        connectionPromises.push(
-          this.connectAccount(platform, account).then(
-            () => results.success++,
-            (error) => {
-              results.failed++;
-              results.errors.push(`Failed to connect ${account.name} on ${platform}: ${error.message}`);
-            }
-          )
-        );
-      }
-    }
-
-    await Promise.allSettled(connectionPromises);
-    console.log(`✅ Connected ${results.success} social accounts, ${results.failed} failed`);
-    return results;
-  }
-
-  // Enhanced cross-posting with better typing
-  async crossPost(content: {
-    title: string;
-    body: string;
-    excerpt: string;
-    url: string;
-    image?: string;
-    product: string;
-  }): Promise<PostResult[]> {
-    const rules = crossPostingRules[content.product as keyof typeof crossPostingRules];
-
-    if (!rules) {
-      console.warn(`No cross-posting rules found for product: ${content.product}`);
-      return [];
-    }
-
-    const results: PostResult[] = [];
-
-    // Group by platform to handle multiple accounts per platform
-    for (const platform of rules.platforms) {
-      const platformAccounts = socialAccounts[platform] || [];
-      // const template = rules.templates[platform] || '{title}\n\n{body}\n\n{url}';
-
-      for (const account of platformAccounts) {
-        try {
-          // const message = this.formatMessage(template, content);
-          const result = await this.postToPlatform(platform, account.id);
-
-          results.push({
-            platform,
-            accountId: account.id,
-            accountName: account.name,
-            success: true,
-            messageId: result.messageId,
-            timestamp: new Date(),
-            content: {
-              title: content.title,
-              excerpt: content.excerpt,
-              url: content.url
-            }
-          });
-
-          // Respect rate limits
-          await this.delay(this.config.delayBetweenPosts);
-
-        } catch (error) {
-          results.push({
-            platform,
-            accountId: account.id,
-            accountName: account.name,
-            success: false,
-            error: error instanceof Error ? error.message : 'Unknown error',
-            timestamp: new Date()
-          });
-          console.error(`Failed to post to ${platform} (${account.name}):`, error);
-        }
-      }
-    }
-
-    return results;
-  }
-
-  // Fixed method signature for postToPlatform
-  private async postToPlatform(
-    platform: string,
-    accountId: string,
-    // message: string,
-    // image?: string,
-    // url?: string
-  ): Promise<{ messageId: string; platform: string }> {
-    // Implementation for each platform's API
-    switch (platform) {
-      case 'facebook':
-        return this.postToFacebook(accountId);
-      case 'instagram':
-        return this.postToInstagram(accountId);
-      case 'twitter':
-      case 'x':
-        return this.postToTwitter(accountId);
-      case 'youtube':
-        return this.postToYouTube(accountId);
-      case 'tiktok':
-        return this.postToTikTok(accountId);
-      case 'whatsapp':
-        return this.postToWhatsApp(accountId);
-      case 'linkedin':
-        return this.postToLinkedIn(accountId);
-      default:
-        throw new Error(`Unsupported platform: ${platform}`);
-    }
-  }
-
-  // Fixed formatMessage method
-  // private formatMessage(template: string, content: {
-  //   title: string;
-  //   body: string;
-  //   excerpt: string;
-  //   url: string;
-  //   product: string;
-  // }): string {
-  //   return template
-  //     .replace(/{title}/g, content.title)
-  //     .replace(/{body}/g, content.body)
-  //     .replace(/{excerpt}/g, content.excerpt)
-  //     .replace(/{url}/g, content.url)
-  //     .replace(/{product}/g, content.product);
-  // }
-
-  // Enhanced postToAllProducts with proper typing
-  async postToAllProducts(productPost: {
-    amebogist?: { title: string; excerpt: string; url: string; body?: string; image?: string };
-    educenter?: { title: string; excerpt: string; url: string; body?: string; image?: string };
-    boldmind?: { title: string; excerpt: string; url: string; body?: string; image?: string };
-  }): Promise<Record<string, PostResult[]>> {
-    const results: Record<string, PostResult[]> = {};
-    const posts = [];
-
-    if (productPost.amebogist) {
-      posts.push(
-        this.crossPost({
-          ...productPost.amebogist,
-          body: productPost.amebogist.body || productPost.amebogist.excerpt,
-          product: 'amebogist'
-        }).then(result => { results['amebogist'] = result; })
-      );
-    }
-
-    if (productPost.educenter) {
-      posts.push(
-        this.crossPost({
-          ...productPost.educenter,
-          body: productPost.educenter.body || productPost.educenter.excerpt,
-          product: 'educenter'
-        }).then(result => { results['educenter'] = result; })
-      );
-    }
-
-    if (productPost.boldmind) {
-      posts.push(
-        this.crossPost({
-          ...productPost.boldmind,
-          body: productPost.boldmind.body || productPost.boldmind.excerpt,
-          product: 'boldmind'
-        }).then(result => { results['boldmind'] = result; })
-      );
-    }
-
-    await Promise.all(posts);
-    return results;
-  }
-
-  // Queue posting for rate limiting
-  async queuePost(postFn: () => Promise<void>): Promise<void> {
-    this.postingQueue.push(postFn);
-
-    if (!this.isProcessingQueue) {
-      this.processQueue();
-    }
-  }
-
-  private async processQueue(): Promise<void> {
-    if (this.isProcessingQueue || this.postingQueue.length === 0) return;
-
-    this.isProcessingQueue = true;
-
-    while (this.postingQueue.length > 0) {
-      const batch = this.postingQueue.splice(0, this.config.batchSize);
-
-      await Promise.all(
-        batch.map(async (postFn, index) => {
-          // Stagger posts within batch
-          await this.delay(index * 500);
-          await this.retryOperation(postFn, this.config.maxRetries);
-        })
-      );
-
-      // Delay between batches
-      if (this.postingQueue.length > 0) {
-        await this.delay(this.config.delayBetweenPosts * 2);
-      }
-    }
-
-    this.isProcessingQueue = false;
-  }
-
-  // Platform-specific implementations (simplified)
-  private async postToFacebook(
-    accountId: string,
-    // message: string,
-    // image?: string,
-    // url?: string
-  ): Promise<{ messageId: string; platform: string }> {
-    // Implementation using Facebook Graph API
-    console.log(`Posting to Facebook account ${accountId}`);
-    // Actual API call would go here
-    return { messageId: `fb_${Date.now()}`, platform: 'facebook' };
-  }
-
-  private async postToTwitter(
-    accountId: string,
-    // message: string,
-    // image?: string,
-    // url?: string
-  ): Promise<{ messageId: string; platform: string }> {
-    // Implementation using Twitter API v2
-    console.log(`Posting to Twitter account ${accountId}`);
-    return { messageId: `tw_${Date.now()}`, platform: 'twitter' };
-  }
-
-  private async postToInstagram(
-    accountId: string,
-    // message: string,
-    // image?: string
-  ): Promise<{ messageId: string; platform: string }> {
-    // Implementation using Instagram Graph API
-    console.log(`Posting to Instagram account ${accountId}`);
-    return { messageId: `ig_${Date.now()}`, platform: 'instagram' };
-  }
-
-  private async postToYouTube(
-    accountId: string,
-    // message: string,
-    // image: string,
-    // url?: string
-  ): Promise<{ messageId: string; platform: string }> {
-    // Implementation using YouTube Data API
-    console.log(`Posting to YouTube account ${accountId}`);
-    return { messageId: `yt_${Date.now()}`, platform: 'youtube' };
-  }
-
-  private async postToWhatsApp(
-    accountId: string,
-    // message: string,
-    // url?: string
-  ): Promise<{ messageId: string; platform: string }> {
-    // Implementation using WhatsApp Business API
-    console.log(`Posting to WhatsApp account ${accountId}`);
-    return { messageId: `wa_${Date.now()}`, platform: 'whatsapp' };
-  }
-
-  private async postToTikTok(
-    accountId: string,
-    // message: string,
-    // image?: string
-  ): Promise<{ messageId: string; platform: string }> {
-    // Implementation using TikTok API
-    console.log(`Posting to TikTok account ${accountId}`);
-    return { messageId: `tt_${Date.now()}`, platform: 'tiktok' };
-  }
-
-  private async postToLinkedIn(
-    accountId: string,
-    // message: string,
-    // image?: string,
-    // url?: string
-  ): Promise<{ messageId: string; platform: string }> {
-    // Implementation using LinkedIn API
-    console.log(`Posting to LinkedIn account ${accountId}`);
-    return { messageId: `li_${Date.now()}`, platform: 'linkedin' };
-  }
-
-  private async connectAccount(platform: string, account: SocialAccount): Promise<void> {
-    // Implementation for each platform's authentication
-    console.log(`Connecting ${account.name} on ${platform}`);
-    // Store tokens in this.platformTokens
-    this.platformTokens.set(`${platform}:${account.id}`, 'mock_token');
-  }
-
-  // Helper methods
-  private async delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  private async retryOperation<T>(
-    operation: () => Promise<T>,
-    maxRetries: number,
-    delayMs = 1000
-  ): Promise<T> {
-    for (let attempt = 1; attempt <= maxRetries; attempt++) {
-      try {
-        return await operation();
-      } catch (error) {
-        if (attempt === maxRetries) throw error;
-        console.log(`Retry ${attempt}/${maxRetries} after error:`, error);
-        await this.delay(delayMs * attempt); // Exponential backoff
-      }
-    }
-    throw new Error('Max retries exceeded');
-  }
-
-  // Enhanced analytics with error handling
-  async getUnifiedAnalytics(startDate?: Date, endDate?: Date): Promise<AnalyticsData> {
-    const analytics: AnalyticsData = {
-      totalFollowers: 0,
-      engagement: 0,
-      reach: 0,
-      postsCount: 0,
-      platformBreakdown: {},
-      period: {
-        start: startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days
-        end: endDate || new Date()
-      }
-    };
-
-    for (const [platform, accounts] of Object.entries(socialAccounts)) {
-      let platformFollowers = 0;
-      let platformEngagement = 0;
-      let platformReach = 0;
-      let platformPosts = 0;
-
-      for (const account of accounts) {
-        try {
-          const stats = await this.fetchPlatformStats(platform);
-          platformFollowers += stats.followers || 0;
-          platformEngagement += stats.engagement || 0;
-          platformReach += stats.reach || 0;
-          platformPosts += stats.postsCount || 0;
-        } catch (error) {
-          console.warn(`Failed to fetch stats for ${account.name} on ${platform}:`, error);
-        }
-      }
-
-      analytics.totalFollowers += platformFollowers;
-      analytics.engagement += platformEngagement;
-      analytics.reach += platformReach;
-      analytics.postsCount += platformPosts;
-
-      analytics.platformBreakdown[platform] = {
-        followers: platformFollowers,
-        engagement: platformEngagement,
-        reach: platformReach,
-        postsCount: platformPosts,
-        accounts: accounts.length,
-        avgEngagementRate: platformFollowers > 0 ? (platformEngagement / platformFollowers) * 100 : 0
-      };
-    }
-
-    return analytics;
-  }
-
-  private async fetchPlatformStats(
-    platform: string,
-    // accountId: string,
-    // startDate?: Date,
-    // endDate?: Date
-  ): Promise<PlatformStats> {
-    // Implementation to fetch platform-specific statistics
-    return {
-      followers: Math.floor(Math.random() * 10000),
-      engagement: Math.floor(Math.random() * 1000),
-      reach: Math.floor(Math.random() * 50000),
-      postsCount: Math.floor(Math.random() * 50),
-      platform
-    };
-  }
-}
-
-// Additional types
-export interface PostResult {
-  platform: string;
-  accountId: string;
-  accountName: string;
-  success: boolean;
-  messageId?: string;
-  error?: string;
-  timestamp: Date;
-  content?: {
-    title: string;
-    excerpt: string;
-    url: string;
-  };
-}
-
-export interface PlatformStats {
-  followers: number;
-  engagement: number;
-  reach: number;
-  postsCount: number;
-  platform: string;
-}
-
-export interface AnalyticsData {
-  totalFollowers: number;
-  engagement: number;
-  reach: number;
-  postsCount: number;
-  platformBreakdown: Record<string, {
-    followers: number;
-    engagement: number;
-    reach: number;
-    postsCount: number;
-    accounts: number;
-    avgEngagementRate: number;
-  }>;
-  period: {
-    start: Date;
-    end: Date;
-  };
-}
-
-// Example usage
-export async function exampleUsage() {
-  const social = new SocialIntegration({
-    maxRetries: 3,
-    delayBetweenPosts: 2000,
-    batchSize: 3,
-    enableAnalytics: true
-  });
-
-  // Connect accounts
-  const connectionResult = await social.connectAllAccounts();
-  console.log('Connection results:', connectionResult);
-
-  // Post to all products
-  const results = await social.postToAllProducts({
-    amebogist: {
-      title: 'Breaking News: Tech Revolution',
-      excerpt: 'A major breakthrough in AI technology has been announced...',
-      body: 'Full article content here...',
-      url: 'https://amebogist.com/news/tech-revolution',
-      image: 'https://amebogist.com/images/tech-revolution.jpg'
+  // n8n Posting Schedule Template (run via n8n workflow)
+  postingSchedule: {
+    tiktok: {
+      times: ['07:00', '13:00', '20:00'],  // Nigerian peak times
+      frequency: 'daily for tt-villagecircle, tt-boldfit, tt-amebogist',
     },
-    educenter: {
-      title: 'New Course: Advanced React Patterns',
-      excerpt: 'Learn advanced React patterns and best practices...',
-      url: 'https://educenter.com/courses/react-patterns'
-    }
-  });
+    instagram: {
+      times: ['08:00', '18:00'],
+      frequency: 'daily for ig-boldfit, ig-amebogist; 3x/week others',
+    },
+    facebook: {
+      times: ['09:00', '17:00'],
+      frequency: '2x/day for fb-amebogist; daily for others',
+    },
+    twitter: {
+      times: ['07:30', '12:00', '19:00', '22:00'],
+      frequency: '4x/day for tw-amebogist (news account); 2x/day others',
+    },
+    youtube: {
+      times: ['16:00'],  // 4pm Nigeria time (post-work traffic)
+      frequency: 'per-channel schedule above',
+    },
+  },
+};
 
-  console.log('Posting results:', results);
+// ================================================================
+// === HELPER FUNCTIONS =========================================
+// ================================================================
 
-  // Get analytics
-  const analytics = await social.getUnifiedAnalytics();
-  console.log('Analytics:', analytics);
+export function getAccountsByPlatform(platform: string): SocialAccount[] {
+  return socialAccounts[platform] || [];
+}
+
+export function getAccountsByProduct(productSlug: string): SocialAccount[] {
+  const allAccounts = Object.values(socialAccounts).flat();
+  return allAccounts.filter(a => a.linkedProducts?.includes(productSlug));
+}
+
+export function getActiveAccounts(): SocialAccount[] {
+  return Object.values(socialAccounts).flat().filter(a => a.status === 'active');
+}
+
+export function getNewAccountsToCreate(): SocialAccount[] {
+  return Object.values(socialAccounts).flat().filter(a => a.status === 'new');
+}
+
+export function getAccountCount(): Record<string, number> {
+  return Object.fromEntries(
+    Object.entries(socialAccounts).map(([platform, accounts]) => [platform, accounts.length])
+  );
 }

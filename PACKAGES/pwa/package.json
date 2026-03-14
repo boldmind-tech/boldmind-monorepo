@@ -1,0 +1,19 @@
+{
+    "name": "@boldmind/pwa",
+    "version": "1.0.0",
+    "private": true,
+    "main": "src/index.ts",
+    "types": "src/index.ts",
+    "scripts": {
+        "build": "tsdown src/index.ts --format esm,cjs --dts",
+        "type-check": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@boldmind/config": "workspace:*",
+        "cookie": "^1.1.1"
+    },
+    "devDependencies": {
+        "typescript": "^5.3.3",
+        "@types/cookie": "^1.0.0"
+    }
+}

@@ -1,5 +1,5 @@
 {
-    "extends": "../../tsconfig.frontend.json", // or tsconfig.base.json / tsconfig.json
+    "extends": "../../tsconfig.base.json", // or tsconfig.base.json / tsconfig.json
     "compilerOptions": {
         "composite": true, // required for project references
         "jsx": "react-jsx", // only if this package has JSX
@@ -14,7 +14,9 @@
         "noUnusedParameters": false,
         "noEmit": false, // must be false for composite libs
         "incremental": true, // speeds up rebuilds
-        "types": [],
+        "types": [
+            "node"
+        ],
         // paths only for things inside monorepo that this lib depends on
         "paths": {
             "@boldmind/ui": [

@@ -16,7 +16,8 @@ export default defineConfig({
     'framer-motion',
     'lucide-react',
     'tailwind-merge',
-    'tw-animate-css'
+    'tw-animate-css',
+    'react-hot-toast'
   ],
   platform: 'neutral',
   treeshake: true,

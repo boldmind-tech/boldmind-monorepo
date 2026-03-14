@@ -1,0 +1,40 @@
+{
+    "type": "module",
+    "name": "@boldmind/boldmind-tools",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "@boldmind/api-client": "workspace:*",
+        "@boldmind/auth": "workspace:*",
+        "@boldmind/config": "workspace:*",
+        "@boldmind/pwa": "workspace:*",
+        "@boldmind/ui": "workspace:*",
+        "@boldmind/utils": "workspace:*",
+        "@types/node": "^20.11.5",
+        "@types/react": "^18.2.61",
+        "@types/react-dom": "^18.2.19",
+        "autoprefixer": "^10.4.16",
+        "clsx": "^2.1.1",
+        "cookie": "^1.1.1",
+        "framer-motion": "^10.16.4",
+        "lucide-react": "^0.309.0",
+        "next": "^14.2.35",
+        "postcss": "^8.4.33",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "sonner": "^2.0.7",
+        "tailwind-merge": "^3.5.0",
+        "tailwindcss": "^3.4.1",
+        "typescript": "^5.3.3"
+    },
+    "devDependencies": {
+        "eslint": "^8",
+        "eslint-config-next": "14.2.35"
+    }
+}

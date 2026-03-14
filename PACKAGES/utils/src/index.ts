@@ -1,5 +1,5 @@
 // PACKAGES/utils/src/index.ts
-// COMPLETE BOLDMIND UTILS PACKAGE - FIXED
+// COMPLETE BOLDMIND UTILS PACKAGE - WITH NAVIGATION
 
 // ===================================
 // PRODUCTS & CATALOG
@@ -8,16 +8,13 @@ import {
   BOLDMIND_PRODUCTS,
   getProductById,
   getProductBySlug,
-  getProductByDomain,
   getProductsByStatus,
   getProductsByCategory,
-  getProductsByDatabase,
   getLiveProducts,
-  getBuildingProducts,
   getPlannedProducts,
+  getBuildingProducts,
   getConceptProducts,
   calculateTotalMonthlyRevenue,
-  calculateProjectedRevenue,
   getProductStatusSummary,
   type Product,
   type ProductStatus,
@@ -29,16 +26,13 @@ export {
   BOLDMIND_PRODUCTS,
   getProductById,
   getProductBySlug,
-  getProductByDomain,
   getProductsByStatus,
   getProductsByCategory,
-  getProductsByDatabase,
   getLiveProducts,
-  getBuildingProducts,
   getPlannedProducts,
+  getBuildingProducts,
   getConceptProducts,
   calculateTotalMonthlyRevenue,
-  calculateProjectedRevenue,
   getProductStatusSummary,
   type Product,
   type ProductStatus,
@@ -53,54 +47,43 @@ import {
   BOLDMIND_PRICING,
   getProductPricing,
   calculateYearlySavings,
+  calculateYearlySavingsPercent,
+  getProductsByTier,
+  getEntryTier,
+  getFreeProducts,
+  ngnToUsd,
+  type PricingTier,
+  type ProductPricing,
 } from './constants/pricing';
 
 export {
   BOLDMIND_PRICING,
   getProductPricing,
   calculateYearlySavings,
+  calculateYearlySavingsPercent,
+  getProductsByTier,
+  getEntryTier,
+  getFreeProducts,
+  ngnToUsd,
+  type PricingTier,
+  type ProductPricing,
 };
 
 // ===================================
 // DATABASE CONFIGURATION
 // ===================================
 import {
-  DATABASE_CONFIG,
-  getServiceDatabase,
+
   getServiceForProduct,
-  getDatabaseName,
-  getDatabaseEnvVar,
-  getConnectionString,
-  getServiceUrl,
-  usesPostgres,
-  usesMongoDB,
-  getServicesByDatabase,
-  getProductsForService,
+
   validateDatabaseEnvVars,
-  SERVICE_DB_CONFIG,
-  type PostgresService,
-  type MongoService,
-  type ServiceName,
   type ProductSlug,
 } from './constants/database-config';
 
 export {
-  DATABASE_CONFIG,
-  getServiceDatabase,
+
   getServiceForProduct,
-  getDatabaseName,
-  getDatabaseEnvVar,
-  getConnectionString,
-  getServiceUrl,
-  usesPostgres,
-  usesMongoDB,
-  getServicesByDatabase,
-  getProductsForService,
   validateDatabaseEnvVars,
-  SERVICE_DB_CONFIG,
-  type PostgresService,
-  type MongoService,
-  type ServiceName,
   type ProductSlug,
 };
 
@@ -110,19 +93,63 @@ export {
 import {
   DOMAIN_MAPPINGS,
   getProductFromDomain,
-  getDomainFromProduct,
-  getDomainsByStatus,
-  getAPIEndpoint,
-  isLiveDomain,
+  
+  type DomainMapping,
 } from './constants/domains';
 
 export {
   DOMAIN_MAPPINGS,
   getProductFromDomain,
-  getDomainFromProduct,
-  getDomainsByStatus,
-  getAPIEndpoint,
-  isLiveDomain,
+  type DomainMapping,
+};
+
+// ===================================
+// CROSS-DOMAIN NAVIGATION & TRACKING
+// ===================================
+import {
+  CrossDomainNavigation,
+} from './navigation/cross-domain';
+
+import {
+  NavigationTracker,
+} from './navigation/tracker';
+
+import type {
+  CrossDomainNavParams,
+  NavigationIntent,
+  InternalNavEvent,
+  NavigationAnalytics,
+} from './navigation/types';
+
+export {
+  // Classes
+  CrossDomainNavigation,
+  NavigationTracker,
+
+  // Types
+  type CrossDomainNavParams,
+  type NavigationIntent,
+  type InternalNavEvent,
+  type NavigationAnalytics,
+};
+
+// ===================================
+// NAVIGATION HELPERS
+// ===================================
+import {
+  getLiveProductsNavigation,
+  getAllProductsNavigation,
+  getProductsByCategory as getProductsByCategoryNav,
+  type NavigationItem,
+  type InternalNavigationItem,
+} from './constants/navigation';
+
+export {
+  getLiveProductsNavigation,
+  getAllProductsNavigation,
+  getProductsByCategoryNav,
+  type NavigationItem,
+  type InternalNavigationItem,
 };
 
 // ===================================
@@ -159,18 +186,27 @@ export {
   getProductThemeClass,
 } from './styles/theme';
 
+// ===================================
+// SOCIAL INTEGRATIONS
+// ===================================
 import {
   socialAccounts,
-  crossPostingRules,
-  SocialIntegration,
+
 } from './constants/social';
 
 export {
-  crossPostingRules,
   socialAccounts,
-  SocialIntegration,
+  
 };
 
+export {
+  type UserRole,
+  type EcosystemRole,
+  AuthProvider,
+  SYSTEM_ROLE_PERMISSIONS,
+  ECOSYSTEM_ROLE_PERMISSIONS,
+  getRolePermissions,
+} from './constants/auth';
 
 // ===================================
 // UTILITY FUNCTIONS
@@ -279,12 +315,8 @@ export function truncateText(text: string, maxLength: number = 100): string {
   return text.slice(0, maxLength).trim() + '...';
 }
 
-/**
- * Class name utility (like clsx)
- */
-export function cn(...classes: (string | undefined | null | false)[]): string {
-  return classes.filter(Boolean).join(' ');
-}
+// NOTE: cn() intentionally NOT exported from @boldmind/utils.
+// Use the cn() from @boldmind/ui which uses clsx + tailwind-merge for proper Tailwind class conflict resolution.
 
 /**
  * Sleep utility
@@ -292,20 +324,6 @@ export function cn(...classes: (string | undefined | null | false)[]): string {
 export function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-
-/**
- * Debounce function
- */
-// export function debounce<T extends (...args: any[]) => any>(
-//   func: T,
-//   wait: number
-// ): (...args: Parameters<T>) => void {
-//   let timeout: NodeJS.Timeout;
-//   return (...args: Parameters<T>) => {
-//     clearTimeout(timeout);
-//     timeout = setTimeout(() => func(...args), wait);
-//   };
-// }
 
 /**
  * Throttle function
@@ -475,38 +493,37 @@ export function getRelativeTime(date: string | Date): string {
 }
 
 // ===================================
-// RE-EXPORT EVERYTHING AS DEFAULT
+// PRODUCT DETECTOR HELPERS
 // ===================================
+// switchTheme, injectProductAttributes, toggleDyslexiaMode live here.
+// NOTE: detectCurrentProduct is defined above in UTILITY FUNCTIONS (it's more complete).
+export {
+  injectProductAttributes,
+  switchTheme,
+  toggleDyslexiaMode,
+} from './helpers/product-detector';
 
-export default {
-  // Core constants
-  products: BOLDMIND_PRODUCTS,
-  database: DATABASE_CONFIG,
-  domains: DOMAIN_MAPPINGS,
-  colors: BOLDMIND_COLOR_SCHEMES,
+// ===================================
+// AUTH & PERMISSIONS
+// ===================================
+export * from './constants/auth';
 
-  // Utils
-  utils: {
-    detectCurrentProduct,
-    getProductFromPath,
-    formatCurrency,
-    formatDate,
-    truncateText,
-    cn,
-    sleep,
-    // debounce,
-    throttle,
-    generateId,
-    isNigerianUser,
-    getGreeting,
-    copyToClipboard,
-    shareContent,
-    formatPhoneNumber,
-    isValidEmail,
-    isValidNigerianPhone,
-    calculateReadingTime,
-    pluralize,
-    formatNumberShort,
-    getRelativeTime,
-  },
-};
+// ===================================
+// SHARED TYPES
+// ===================================
+export type {
+  Subscription,
+  Transaction,
+} from './types/index';
+// Note: 'User' and 'Product' from types/index.ts conflict with specialized versions.
+// We use User from auth.ts and Product from products.ts as canonical.
+
+// ===================================
+// FACEBOOK & META UTILITIES
+// ===================================
+// ⚠️  INTENTIONALLY NOT exported here.
+// facebook-webhook-utils uses Node.js 'crypto' which cannot be bundled
+// into client-side code. Import it directly in server-only code:
+//   import { verifyFacebookSignature } from '@boldmind/utils/facebook';
+// The package.json exports map for "@boldmind/utils/facebook" should be
+// added if a subpath export is needed.

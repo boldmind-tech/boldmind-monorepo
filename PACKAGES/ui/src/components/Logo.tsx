@@ -51,8 +51,13 @@ export const Logo: React.FC<LogoProps> = ({
   return (
     <div className={`flex items-center ${className}`}>
       <div
-        className="rounded-full bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center text-white font-bold"
-        style={{ width: pixelSize, height: pixelSize }}
+        className="rounded-full flex items-center justify-center font-bold"
+        style={{
+          width: pixelSize,
+          height: pixelSize,
+          background: 'linear-gradient(to bottom right, var(--product-primary), var(--product-accent))',
+          color: 'var(--product-background)',
+        }}
       >
         {size === 'sm' || pixelSize <= 32 ? 'BM' : 'BM'}
       </div>

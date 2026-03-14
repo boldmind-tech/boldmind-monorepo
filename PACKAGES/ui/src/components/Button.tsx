@@ -29,64 +29,65 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       display: 'inline-flex',
       alignItems: 'center',
       justifyContent: 'center',
+      fontFamily: 'var(--font-primary)',
       fontWeight: 600,
-      borderRadius: '0.5rem',
-      transition: 'all 0.2s',
+      letterSpacing: '0.02em',
+      borderRadius: 'var(--radius-md)',
+      transition: 'all var(--transition-base)',
       cursor: disabled ? 'not-allowed' : 'pointer',
       opacity: disabled ? 0.6 : 1,
       width: fullWidth ? '100%' : 'auto',
       position: 'relative',
       overflow: 'hidden',
+      border: '2px solid transparent',
     };
 
     const variantStyles: Record<string, React.CSSProperties> = {
       primary: {
-        backgroundColor: isHovered ? '#FFD700' : '#FFC800',
-        color: '#00143C',
-        border: 'none',
-        boxShadow: isHovered
-          ? '0 4px 12px rgba(255, 200, 0, 0.3)'
-          : 'none',
-        transform: isHovered ? 'translateY(-1px)' : 'translateY(0)',
+        backgroundColor: 'var(--product-primary)',
+        color: 'var(--product-background)',
+        boxShadow: isHovered ? 'var(--shadow-md)' : 'var(--shadow-sm)',
+        transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
       },
       secondary: {
-        backgroundColor: isHovered ? '#002A5C' : '#00143C',
-        color: 'white',
-        border: 'none',
-        boxShadow: isHovered ? '0 4px 12px rgba(0, 20, 60, 0.3)' : 'none',
-        transform: isHovered ? 'translateY(-1px)' : 'translateY(0)',
+        backgroundColor: 'transparent',
+        color: 'var(--product-primary)',
+        borderColor: 'var(--product-primary)',
+        boxShadow: isHovered ? 'var(--shadow-sm)' : 'none',
+        transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
       },
       outline: {
-        backgroundColor: isHovered ? '#00143C' : 'transparent',
-        color: isHovered ? 'white' : '#00143C',
-        border: '2px solid #00143C',
-        boxShadow: isHovered ? '0 4px 12px rgba(0, 20, 60, 0.1)' : 'none',
+        backgroundColor: isHovered ? 'var(--product-primary)' : 'transparent',
+        color: isHovered ? 'var(--product-background)' : 'var(--product-primary)',
+        borderColor: 'var(--product-primary)',
+        boxShadow: isHovered ? 'var(--shadow-sm)' : 'none',
       },
       ghost: {
-        backgroundColor: isHovered ? 'rgba(0, 20, 60, 0.1)' : 'transparent',
-        color: '#00143C',
+        backgroundColor: isHovered ? 'var(--product-highlight)' : 'transparent',
+        color: 'var(--product-primary)',
         border: 'none',
       },
     };
 
     const sizeStyles: Record<string, React.CSSProperties> = {
       sm: {
-        padding: '0.5rem 1rem',
-        fontSize: '0.875rem',
+        padding: '0.625rem 1.25rem',
+        fontSize: '0.9375rem',
       },
       md: {
-        padding: '0.75rem 1.5rem',
+        padding: '0.875rem 1.75rem',
         fontSize: '1rem',
       },
       lg: {
-        padding: '1rem 2rem',
+        padding: '1.125rem 2.25rem',
         fontSize: '1.125rem',
+        borderRadius: 'var(--radius-lg)',
       },
     };
 
     const activeStyle: React.CSSProperties = {
       transform: 'translateY(0)',
-      boxShadow: 'none',
+      boxShadow: 'var(--shadow-xs)',
     };
 
     const styles = {
@@ -130,3 +131,4 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 
 Button.displayName = 'Button';
+

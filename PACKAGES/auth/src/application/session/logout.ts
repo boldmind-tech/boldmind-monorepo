@@ -1,6 +1,6 @@
 // PACKAGES/auth/src/application/session/logout.ts
-import { getSupabaseAuthProvider } from '../../providers/supabase/singleton';
+import { boldMindAPI } from "@boldmind/api-client";
 
 export async function logout(): Promise<void> {
-  return getSupabaseAuthProvider().signOut();
+  return boldMindAPI.auth.logout();
 }

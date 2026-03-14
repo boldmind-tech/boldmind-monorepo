@@ -1,19 +1,15 @@
 packages:
-  # Web apps
-  - 'APPS/WEB_APPS/*'
-  - 'APPS/WEB_APPS/PLANAI_SUITE/*'
-
-  # Mobile apps
-  - 'APPS/MOBILE/*'
-
-  # Concept apps
-  - 'APPS/CONCEPT_APPS/*'
-
-  # Backend services
-  - 'SERVICES/*'
+  # Frontend apps
+  - 'apps/*'
 
   # Shared packages
-  - 'PACKAGES/*'
+  - 'packages/*'
+
+  # Backend service (NestJS monolith)
+  - 'service'
+
+  # Tooling
+  - 'tooling/*'
 
 shared-workspace-lockfile: true
 

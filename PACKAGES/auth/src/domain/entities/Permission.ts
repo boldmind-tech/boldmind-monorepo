@@ -1,7 +1,5 @@
-export type Permission =
-  | "read:content"
-  | "write:content"
-  | "manage:users"
-  | "manage:subscriptions"
-  | "view:analytics"
-  | "access:admin";
+// PACKAGES/auth/src/domain/entities/Permission.ts
+
+import { PRODUCT_PERMISSIONS } from '@boldmind/utils';
+
+export type Permission = keyof typeof PRODUCT_PERMISSIONS | 'admin:all' | '*';

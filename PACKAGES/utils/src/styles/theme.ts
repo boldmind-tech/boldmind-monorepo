@@ -1,5 +1,5 @@
-// packages/utils/src/styles/theme.ts
-// SIMPLE THEME SYSTEM - USING THE SINGLE SOURCE OF TRUTH FROM constants/colors.ts
+// PACKAGES/utils/src/styles/theme.ts
+// UPDATED THEME SYSTEM - OPENDYSLEXIC FIRST
 
 // Import from constants
 import {
@@ -13,37 +13,48 @@ import {
   generateThemeClasses
 } from '../constants/colors';
 
-// === TYPOGRAPHY ===
+// === TYPOGRAPHY - OPENDYSLEXIC FIRST ===
 export const boldmindTypography = {
   fonts: {
-    heading: "'Plus Jakarta Sans', 'Inter', sans-serif",
-    body: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-    mono: "'JetBrains Mono', 'Fira Code', monospace",
+    primary: "'OpenDyslexic', 'Comic Sans MS', 'Arial', sans-serif",
+    heading: "'OpenDyslexic', 'Comic Sans MS', 'Arial', sans-serif",
+    body: "'OpenDyslexic', 'Comic Sans MS', 'Arial', sans-serif",
     serif: "'Lora', Georgia, 'Times New Roman', serif",
-    dyslexic: "'OpenDyslexic', 'Comic Sans MS', sans-serif",
+    mono: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace",
   },
   sizes: {
-    xs: '0.75rem',    // 12px
-    sm: '0.875rem',   // 14px
-    base: '1rem',     // 16px
-    lg: '1.125rem',   // 18px
-    xl: '1.25rem',    // 20px
-    '2xl': '1.5rem',  // 24px
-    '3xl': '1.875rem',// 30px
-    '4xl': '2.25rem', // 36px
-    '5xl': '3rem',    // 48px
-    '6xl': '3.75rem', // 60px
-    '7xl': '4.5rem',  // 72px
-    '8xl': '6rem',    // 96px
+    xs: '0.8125rem',   // 13px
+    sm: '0.9375rem',   // 15px
+    base: '1.0625rem', // 17px (default - larger for readability)
+    lg: '1.125rem',    // 18px
+    xl: '1.25rem',     // 20px
+    '2xl': '1.5rem',   // 24px
+    '3xl': '1.875rem', // 30px
+    '4xl': '2.25rem',  // 36px
+    '5xl': '3rem',     // 48px
+    '6xl': '3.75rem',  // 60px
+    '7xl': '4.5rem',   // 72px
+    '8xl': '6rem',     // 96px
+  },
+  lineHeights: {
+    tight: '1.3',
+    base: '1.8',
+    relaxed: '2.0',
+  },
+  letterSpacing: {
+    tight: '0.01em',
+    base: '0.03em',
+    wide: '0.05em',
   }
 };
 
 // === ANIMATIONS ===
 export const boldmindAnimations = {
   transitions: {
-    fast: '150ms ease-in-out',
-    normal: '300ms ease-in-out',
-    slow: '500ms ease-in-out',
+    quick: '150ms cubic-bezier(0.4, 0, 0.2, 1)',
+    base: '250ms cubic-bezier(0.4, 0, 0.2, 1)',
+    slow: '400ms cubic-bezier(0.4, 0, 0.2, 1)',
+    spring: '500ms cubic-bezier(0.34, 1.56, 0.64, 1)',
   },
   keyframes: {
     float: {
@@ -65,6 +76,14 @@ export const boldmindAnimations = {
     fadeIn: {
       '0%': { opacity: 0 },
       '100%': { opacity: 1 },
+    },
+    slideUp: {
+      '0%': { transform: 'translateY(20px)', opacity: 0 },
+      '100%': { transform: 'translateY(0)', opacity: 1 },
+    },
+    scaleIn: {
+      '0%': { transform: 'scale(0.95)', opacity: 0 },
+      '100%': { transform: 'scale(1)', opacity: 1 },
     }
   }
 };
@@ -122,10 +141,11 @@ export type ProductThemeValue = ProductTheme;
 export function getProductTheme(slug: string): ProductTheme {
   const theme = productThemes[slug];
   if (!theme) {
-    return productThemes['boldmind-hub']!; // Non-null assertion since we know it exists
+    return productThemes['boldmind-hub']!;
   }
   return theme;
 }
+
 export function getProductColors(slug: string) {
   const theme = getProductTheme(slug);
   return {

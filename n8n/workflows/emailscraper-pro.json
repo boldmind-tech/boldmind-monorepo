@@ -1,0 +1,155 @@
+{
+    "name": "EmailScraper Pro - B2B Lead Engine",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "/webhook/emailscraper/search",
+                "responseMode": "responseNode"
+            },
+            "name": "Webhook - Search Request",
+            "type": "n8n-nodes-base.webhook",
+            "position": [
+                200,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "search",
+                "query": "={{ $json.industry }} company in Nigeria {{ $json.location }}",
+                "num": 50
+            },
+            "name": "Google - Find Companies",
+            "type": "n8n-nodes-base.googleSearch",
+            "position": [
+                400,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const urls = [];\n$input.all().forEach(item => {\n  const link = item.json.link;\n  if (link && link.includes('.com.ng') || link.includes('.ng')) {\n    urls.push({\n      url: link,\n      title: item.json.title,\n      snippet: item.json.snippet\n    });\n  }\n});\nreturn urls;"
+            },
+            "name": "Extract Nigerian Domains",
+            "type": "n8n-nodes-base.code",
+            "position": [
+                600,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://prospeo.io/api/v1/email/find",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": {
+                    "X-API-Key": "={{ $env.PROSPEO_KEY }}"
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "url": "={{ $json.url }}"
+                }
+            },
+            "name": "Prospeo - Find Emails",
+            "type": "n8n-nodes-base.httpRequest",
+            "position": [
+                800,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://api.hunter.io/v2/email-verifier",
+                "options": {
+                    "qs": {
+                        "email": "={{ $json.email }}",
+                        "api_key": "={{ $env.HUNTER_KEY }}"
+                    }
+                }
+            },
+            "name": "Hunter - Verify Email",
+            "type": "n8n-nodes-base.httpRequest",
+            "position": [
+                1000,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "create",
+                "table": "leads",
+                "columns": "company,website,email,status,score,industry,location,source"
+            },
+            "name": "Save to Database",
+            "type": "n8n-nodes-base.postgres",
+            "position": [
+                1200,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "rows",
+                "operation": "append",
+                "spreadsheetId": "={{ $env.LEADS_SPREADSHEET_ID }}",
+                "range": "Leads!A:H",
+                "columns": [
+                    "Date",
+                    "Company",
+                    "Email",
+                    "Phone",
+                    "Website",
+                    "Score",
+                    "Status"
+                ]
+            },
+            "name": "Google Sheets - Export",
+            "type": "n8n-nodes-base.googleSheets",
+            "position": [
+                1400,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://api.hubapi.com/crm/v3/objects/contacts",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": {
+                    "Authorization": "Bearer {{ $env.HUBSPOT_KEY }}"
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "properties": {
+                        "email": "={{ $json.email }}",
+                        "company": "={{ $json.company }}",
+                        "website": "={{ $json.website }}",
+                        "lead_source": "EmailScraper Pro",
+                        "lead_score": "={{ $json.score }}"
+                    }
+                }
+            },
+            "name": "HubSpot - Push Lead",
+            "type": "n8n-nodes-base.httpRequest",
+            "position": [
+                1600,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "message",
+                "phoneNumberId": "={{ $env.WHATSAPP_PHONE_ID }}",
+                "to": "={{ $env.SALES_TEAM_PHONE }}",
+                "body": "*🔍 NEW LEAD FOUND*\n*Company:* {{ $json.company }}\n*Email:* {{ $json.email }}\n*Score:* {{ $json.score }}%\n*Source:* {{ $json.source }}\n\nView in CRM: {{ $json.crm_link }}"
+            },
+            "name": "WhatsApp - Sales Team Alert",
+            "type": "n8n-nodes-base.whatsAppBusiness",
+            "position": [
+                1800,
+                500
+            ]
+        }
+    ]
+}

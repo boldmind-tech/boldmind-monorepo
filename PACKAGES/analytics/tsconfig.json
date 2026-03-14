@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.frontend.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "jsx": "react-jsx", // ✅ Correct for React
     "lib": [
@@ -9,7 +9,6 @@
     ],
     "baseUrl": ".",
     "outDir": "./dist",
-    "rootDir": "./src",
     "paths": {
       "@/*": [
         "./src/*"

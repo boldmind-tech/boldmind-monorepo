@@ -1,0 +1,363 @@
+{
+    "name": "Instagram - Content Publisher & Engagement Bot",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "/webhook/instagram-publish-post",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "name": "Webhook - Publish Request",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                250,
+                300
+            ],
+            "webhookId": "instagram-publish"
+        },
+        {
+            "parameters": {
+                "url": "https://graph.facebook.com/v19.0/={{ $env.INSTAGRAM_BUSINESS_ACCOUNT_ID }}/media",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": {
+                    "Authorization": "Bearer {{ $env.FACEBOOK_PAGE_ACCESS_TOKEN }}"
+                },
+                "method": "POST",
+                "sendBody": true,
+                "bodyParameters": {
+                    "image_url": "={{ $json.imageUrl }}",
+                    "caption": "={{ $json.caption }}",
+                    "location_id": "={{ $json.locationId || '' }}"
+                },
+                "options": {}
+            },
+            "name": "Create Media Container",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                450,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "amount": 5,
+                "unit": "seconds"
+            },
+            "name": "Wait for Processing",
+            "type": "n8n-nodes-base.wait",
+            "typeVersion": 1,
+            "position": [
+                650,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://graph.facebook.com/v19.0/={{ $env.INSTAGRAM_BUSINESS_ACCOUNT_ID }}/media_publish",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": {
+                    "Authorization": "Bearer {{ $env.FACEBOOK_PAGE_ACCESS_TOKEN }}"
+                },
+                "method": "POST",
+                "sendBody": true,
+                "bodyParameters": {
+                    "creation_id": "={{ $node['Create Media Container'].json.id }}"
+                },
+                "options": {}
+            },
+            "name": "Publish to Instagram",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                850,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "insert",
+                "table": "instagram_posts",
+                "columns": "media_id,ig_user_id,caption,image_url,permalink,published_at,status",
+                "values": "={{ $json.id }},={{ $env.INSTAGRAM_BUSINESS_ACCOUNT_ID }},={{ $node['Webhook - Publish Request'].json.caption }},={{ $node['Webhook - Publish Request'].json.imageUrl }},https://instagram.com/p/{{ $json.id }},NOW(),published"
+            },
+            "name": "Save to Database",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 2,
+            "position": [
+                1050,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ JSON.stringify({ success: true, mediaId: $json.id, permalink: `https://instagram.com/p/${$json.id}` }) }}"
+            },
+            "name": "Respond Success",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1,
+            "position": [
+                1250,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "/webhook/instagram-new-comment",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "name": "Webhook - New Comment",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                250,
+                600
+            ],
+            "webhookId": "instagram-comment"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Extract comment from webhook\nconst change = $input.body.entry[0].changes[0];\n\nreturn [{\n  commentId: change.value.id,\n  mediaId: change.value.media.id,\n  text: change.value.text,\n  fromId: change.value.from.id,\n  fromUsername: change.value.from.username,\n  timestamp: Date.now()\n}];"
+            },
+            "name": "Extract Comment Data",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                450,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "model": "gpt-4",
+                "messages": {
+                    "values": [
+                        {
+                            "role": "system",
+                            "content": "You are a social media manager for BoldMind. Analyze this Instagram comment and determine: 1) Sentiment (positive/negative/neutral), 2) If it requires a response (yes/no), 3) Suggested reply (if needed). Return JSON only."
+                        },
+                        {
+                            "role": "user",
+                            "content": "Comment: {{ $json.text }}\nFrom: @{{ $json.fromUsername }}"
+                        }
+                    ]
+                }
+            },
+            "name": "AI - Analyze Comment",
+            "type": "n8n-nodes-base.openAi",
+            "typeVersion": 1,
+            "position": [
+                650,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "string": [
+                        {
+                            "value1": "={{ $json.requiresResponse }}",
+                            "operation": "equals",
+                            "value2": "yes"
+                        }
+                    ]
+                }
+            },
+            "name": "Should Reply?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 1,
+            "position": [
+                850,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://graph.facebook.com/v19.0/={{ $node['Extract Comment Data'].json.commentId }}/replies",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": {
+                    "Authorization": "Bearer {{ $env.FACEBOOK_PAGE_ACCESS_TOKEN }}"
+                },
+                "method": "POST",
+                "sendBody": true,
+                "bodyParameters": {
+                    "message": "={{ $node['AI - Analyze Comment'].json.suggestedReply }}"
+                },
+                "options": {}
+            },
+            "name": "Reply to Comment",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                1050,
+                550
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "insert",
+                "table": "instagram_comments",
+                "columns": "comment_id,media_id,text,from_username,sentiment,replied,reply_text,created_at",
+                "values": "={{ $node['Extract Comment Data'].json.commentId }},={{ $node['Extract Comment Data'].json.mediaId }},={{ $node['Extract Comment Data'].json.text }},={{ $node['Extract Comment Data'].json.fromUsername }},={{ $node['AI - Analyze Comment'].json.sentiment }},true,={{ $node['AI - Analyze Comment'].json.suggestedReply }},NOW()"
+            },
+            "name": "Log Comment & Reply",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 2,
+            "position": [
+                1250,
+                550
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ JSON.stringify({ success: true }) }}"
+            },
+            "name": "Respond to Webhook",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1,
+            "position": [
+                1450,
+                600
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook - Publish Request": {
+            "main": [
+                [
+                    {
+                        "node": "Create Media Container",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create Media Container": {
+            "main": [
+                [
+                    {
+                        "node": "Wait for Processing",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Wait for Processing": {
+            "main": [
+                [
+                    {
+                        "node": "Publish to Instagram",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Publish to Instagram": {
+            "main": [
+                [
+                    {
+                        "node": "Save to Database",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Save to Database": {
+            "main": [
+                [
+                    {
+                        "node": "Respond Success",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Webhook - New Comment": {
+            "main": [
+                [
+                    {
+                        "node": "Extract Comment Data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract Comment Data": {
+            "main": [
+                [
+                    {
+                        "node": "AI - Analyze Comment",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI - Analyze Comment": {
+            "main": [
+                [
+                    {
+                        "node": "Should Reply?",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Should Reply?": {
+            "main": [
+                [
+                    {
+                        "node": "Reply to Comment",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Respond to Webhook",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Reply to Comment": {
+            "main": [
+                [
+                    {
+                        "node": "Log Comment & Reply",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Log Comment & Reply": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to Webhook",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

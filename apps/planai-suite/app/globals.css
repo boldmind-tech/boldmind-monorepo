@@ -1,0 +1,5 @@
+/* PlanAI Landing - App-specific styles */
+@import '@boldmind/ui/styles/globals.css';
+
+/* PlanAI uses the AI/planning product theme */
+/* All base styles inherited from shared globals.css */

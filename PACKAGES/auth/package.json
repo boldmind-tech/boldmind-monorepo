@@ -32,14 +32,16 @@
     "dist"
   ],
   "scripts": {
-    "prebuild": "rm -rf dist",
+    "prebuild": "rimraf dist",
     "build": "tsdown",
     "dev": "tsdown --watch",
-    "clean": "rm -rf dist node_modules",
+    "clean": "rimraf dist node_modules",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@boldmind/config": "workspace:*",
+    "@boldmind/utils": "workspace:*",
+    "@boldmind/api-client": "workspace:*",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.91.1",
     "@types/cookie": "^1.0.0",

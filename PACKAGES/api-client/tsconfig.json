@@ -1,39 +1,18 @@
 {
-  "extends": "../../tsconfig.frontend.json", // or .base / whatever your shared base is
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "composite": true,
     "declaration": true,
     "declarationMap": true,
-    "emitDeclarationOnly": true, // ← only emit .d.ts, no .js (libs usually do this)
     "outDir": "./dist",
     "rootDir": "./src",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "jsx": "react-jsx", // if api-client has any JSX
     "incremental": true,
     "noEmit": false,
-    "types": [
-      "node"
-    ] // prevents random implicit libs like 'cookie'
+    "skipLibCheck": true,
+    "types": ["node"]
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "**/*.test.ts",
-    "**/*.spec.ts",
-    "dist",
-    "node_modules"
-  ],
-  "references": [
-    {
-      "path": "../utils",
-    }, // ← add this – points to utils/tsconfig.json
-    {
-      "path": "../auth",
-    }, // ← add this – points to utils/tsconfig.json
-    {
-      "path": "../config",
-    }, // ← add this – points to utils/tsconfig.json
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["dist", "node_modules"]
 }

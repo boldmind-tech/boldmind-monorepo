@@ -1,0 +1,5 @@
+/* BoldMind OS - App-specific styles */
+@import '@boldmind/ui/styles/globals.css';
+
+/* BoldMind OS uses the default ecosystem theme */
+/* All base styles inherited from shared globals.css */

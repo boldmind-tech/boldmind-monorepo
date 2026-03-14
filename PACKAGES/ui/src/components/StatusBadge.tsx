@@ -13,22 +13,51 @@ export interface StatusBadgeProps {
 }
 
 export function StatusBadge({ variant, children, className }: StatusBadgeProps) {
-  const variantStyles = {
-    live: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-    building: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
-    planned: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-    concept: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
-    hiring: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
-    new: 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300',
-    premium: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
+  const variantStyles: Record<BadgeVariant, React.CSSProperties> = {
+    live: {
+      backgroundColor: 'color-mix(in srgb, var(--color-success) 15%, transparent)',
+      color: 'var(--color-success)',
+    },
+    building: {
+      backgroundColor: 'color-mix(in srgb, var(--color-warning) 15%, transparent)',
+      color: 'var(--color-warning)',
+    },
+    planned: {
+      backgroundColor: 'color-mix(in srgb, var(--color-info) 15%, transparent)',
+      color: 'var(--color-info)',
+    },
+    concept: {
+      backgroundColor: 'color-mix(in srgb, var(--product-accent) 15%, transparent)',
+      color: 'var(--product-accent)',
+    },
+    hiring: {
+      backgroundColor: 'color-mix(in srgb, var(--color-error) 15%, transparent)',
+      color: 'var(--color-error)',
+    },
+    new: {
+      backgroundColor: 'color-mix(in srgb, var(--product-accent) 15%, transparent)',
+      color: 'var(--product-accent)',
+    },
+    premium: {
+      backgroundColor: 'color-mix(in srgb, var(--color-warning) 15%, transparent)',
+      color: 'var(--color-warning)',
+    },
   };
 
   return (
-    <span className={cn(
-      'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
-      variantStyles[variant],
-      className
-    )}>
+    <span
+      className={cn(className)}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        padding: '0.25rem 0.75rem',
+        borderRadius: '9999px',
+        fontSize: '0.8125rem',
+        fontWeight: 600,
+        letterSpacing: '0.02em',
+        ...variantStyles[variant],
+      }}
+    >
       {children}
     </span>
   );

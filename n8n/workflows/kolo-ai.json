@@ -1,0 +1,168 @@
+{
+    "name": "KoloAI - Digital Thrift Collector",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "/webhook/koloai/payment",
+                "responseMode": "responseNode"
+            },
+            "name": "Webhook - Paystack Payment",
+            "type": "n8n-nodes-base.webhook",
+            "position": [
+                200,
+                700
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "select",
+                "query": "SELECT * FROM thrift_groups WHERE group_id = '{{ $json.metadata.group_id }}'"
+            },
+            "name": "Fetch Group Details",
+            "type": "n8n-nodes-base.postgres",
+            "position": [
+                400,
+                700
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "create",
+                "table": "contributions",
+                "columns": "group_id,user_id,amount,date,payment_reference,status"
+            },
+            "name": "Record Contribution",
+            "type": "n8n-nodes-base.postgres",
+            "position": [
+                600,
+                700
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "aggregate",
+                "aggregation": {
+                    "values": [
+                        {
+                            "function": "sum",
+                            "field": "amount"
+                        }
+                    ]
+                },
+                "groupBy": {
+                    "values": [
+                        {
+                            "field": "user_id"
+                        }
+                    ]
+                }
+            },
+            "name": "Calculate User Total",
+            "type": "n8n-nodes-base.postgres",
+            "position": [
+                800,
+                700
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const group = $input.all()[0].json;\nconst contribution = $input.all()[1].json;\nconst userTotal = $input.all()[2].json.sum_amount || 0;\n\n// AI default prediction\nlet defaultRisk = 'low';\nlet riskScore = 10;\n\n// Simple ML logic - can be replaced with actual model\nif (contribution.late_payments > 2) {\n  defaultRisk = 'high';\n  riskScore = 75;\n} else if (contribution.late_payments > 0) {\n  defaultRisk = 'medium';\n  riskScore = 40;\n}\n\n// Calculate rotation order\nconst memberCount = group.members.length;\nconst currentCycle = Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000));\nconst payoutOrder = (currentCycle % memberCount) + 1;\n\nreturn [{\n  ...contribution,\n  user_total: userTotal,\n  default_risk: defaultRisk,\n  risk_score: riskScore,\n  payout_order: payoutOrder,\n  next_payout_date: new Date(Date.now() + (7 * 24 * 60 * 60 * 1000)).toISOString()\n}];"
+            },
+            "name": "AI - Predict Default Risk",
+            "type": "n8n-nodes-base.code",
+            "position": [
+                1000,
+                700
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "table": "thrift_groups",
+                "updateKey": "group_id",
+                "columns": "total_saved,member_balances,risk_profile"
+            },
+            "name": "Update Group Balance",
+            "type": "n8n-nodes-base.postgres",
+            "position": [
+                1200,
+                700
+            ]
+        },
+        {
+            "parameters": {
+                "condition": "={{ $node[\"AI - Predict Default Risk\"].json.risk_score > 50 }}"
+            },
+            "name": "IF - High Risk Detected",
+            "type": "n8n-nodes-base.if",
+            "position": [
+                1400,
+                700
+            ],
+            "branches": {
+                "true": [
+                    1600,
+                    600
+                ],
+                "false": [
+                    1600,
+                    800
+                ]
+            }
+        },
+        {
+            "parameters": {
+                "resource": "message",
+                "phoneNumberId": "={{ $env.WHATSAPP_PHONE_ID }}",
+                "to": "={{ $json.group_admin_phone }}",
+                "body": "*⚠️ KOLO AI RISK ALERT*\n\nGroup: {{ $json.group_name }}\nMember: {{ $json.user_name }}\nRisk Level: {{ $node['AI - Predict Default Risk'].json.default_risk }}\nRisk Score: {{ $node['AI - Predict Default Risk'].json.risk_score }}%\n\nRecommendation: Pause contributions or request early payment."
+            },
+            "name": "WhatsApp - Admin Alert",
+            "type": "n8n-nodes-base.whatsAppBusiness",
+            "position": [
+                1600,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "message",
+                "phoneNumberId": "={{ $env.WHATSAPP_PHONE_ID }}",
+                "to": "={{ $json.user_phone }}",
+                "body": "*✅ CONTRIBUTION RECEIVED*\n\nKolo: {{ $json.group_name }}\nAmount: ₦{{ $json.amount.toLocaleString() }}\nTotal Saved: ₦{{ $node['AI - Predict Default Risk'].json.user_total.toLocaleString() }}\nNext Payout: {{ $node['AI - Predict Default Risk'].json.next_payout_date.split('T')[0] }}\n\nThank you for saving! 🇳🇬💰"
+            },
+            "name": "WhatsApp - Member Confirmation",
+            "type": "n8n-nodes-base.whatsAppBusiness",
+            "position": [
+                1800,
+                800
+            ]
+        },
+        {
+            "parameters": {
+                "condition": "={{ $json.auto_pause_enabled === true && $node['AI - Predict Default Risk'].json.risk_score > 60 }}"
+            },
+            "name": "IF - Auto-Pause Eligible",
+            "type": "n8n-nodes-base.if",
+            "position": [
+                2000,
+                700
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "table": "user_subscriptions",
+                "updateKey": "user_id",
+                "columns": "status,pause_until,auto_pause_reason"
+            },
+            "name": "Auto-Pause Contributions",
+            "type": "n8n-nodes-base.postgres",
+            "position": [
+                2200,
+                700
+            ]
+        }
+    ]
+}

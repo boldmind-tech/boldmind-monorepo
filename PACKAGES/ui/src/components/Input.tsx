@@ -19,7 +19,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             display: 'block',
             marginBottom: '0.5rem',
             fontWeight: 500,
-            color: '#00143C'
+            color: 'var(--product-primary)'
           }}>
             {label}
           </label>
@@ -31,7 +31,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               left: '1rem',
               top: '50%',
               transform: 'translateY(-50%)',
-              color: '#6B7280',
+              color: 'var(--neutral-500)',
               pointerEvents: 'none' as const,
             }}>
               {icon}
@@ -41,23 +41,25 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             style={{
               width: '100%',
-              padding: icon ? '0.75rem 1rem 0.75rem 3rem' : '0.75rem 1rem',
-              border: `1px solid ${error ? '#EF4444' : '#D1D5DB'}`,
-              borderRadius: '0.5rem',
+              padding: icon ? '0.875rem 1.25rem 0.875rem 3rem' : '0.875rem 1.25rem',
+              border: `2px solid ${error ? 'var(--color-error)' : 'var(--product-muted)'}`,
+              borderRadius: 'var(--radius-md)',
+              fontFamily: 'var(--font-primary)',
               fontSize: '1rem',
-              color: '#00143C',
-              backgroundColor: 'white',
-              transition: 'all 0.2s',
+              lineHeight: '1.5',
+              color: 'var(--product-foreground)',
+              backgroundColor: 'var(--product-background)',
+              transition: 'all var(--transition-quick)',
               outline: 'none',
               boxShadow: 'none',
             }}
             className={cn(className)}
             onFocus={(e) => {
-              e.currentTarget.style.borderColor = '#00143C';
-              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(0, 20, 60, 0.1)';
+              e.currentTarget.style.borderColor = 'var(--product-primary)';
+              e.currentTarget.style.boxShadow = '0 0 0 3px var(--product-highlight)';
             }}
             onBlur={(e) => {
-              e.currentTarget.style.borderColor = error ? '#EF4444' : '#D1D5DB';
+              e.currentTarget.style.borderColor = error ? 'var(--color-error)' : 'var(--product-muted)';
               e.currentTarget.style.boxShadow = 'none';
             }}
             {...props}
@@ -65,7 +67,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         </div>
         {error && (
           <p style={{
-            color: '#EF4444',
+            color: 'var(--color-error)',
             fontSize: '0.875rem',
             marginTop: '0.25rem'
           }}>
@@ -78,3 +80,4 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 );
 
 Input.displayName = 'Input';
+

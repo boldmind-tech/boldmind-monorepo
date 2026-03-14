@@ -1,0 +1,206 @@
+{
+    "name": "Social Factory - AI Video Production Pipeline",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "GET",
+                "path": "/webhook/social-factory/schedule",
+                "responseMode": "onReceived",
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "hours",
+                            "hoursInterval": 24
+                        }
+                    ]
+                }
+            },
+            "name": "Cron - Daily Content Trigger",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "position": [
+                200,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "select",
+                "query": "SELECT * FROM content_calendar WHERE publish_date = CURRENT_DATE AND status = 'scheduled'"
+            },
+            "name": "Fetch Today's Content",
+            "type": "n8n-nodes-base.postgres",
+            "position": [
+                400,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "model": "gpt-4",
+                "messages": {
+                    "values": [
+                        {
+                            "role": "system",
+                            "content": "Generate a 30-second TikTok/Reels script. Include: hook (first 3 seconds), main content (20 seconds), CTA (7 seconds). Make it engaging for Nigerian audience. Use Pidgin English if appropriate."
+                        },
+                        {
+                            "role": "user",
+                            "content": "Topic: {{ $json.topic }}\nGoal: {{ $json.goal }}\nTarget audience: {{ $json.audience }}"
+                        }
+                    ]
+                }
+            },
+            "name": "AI - Generate Script",
+            "type": "n8n-nodes-base.openAi",
+            "position": [
+                600,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://api.replicate.com/v1/predictions",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": {
+                    "Authorization": "Token {{ $env.REPLICATE_TOKEN }}"
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "version": "stability-ai/stable-video-diffusion",
+                    "input": {
+                        "prompt": "={{ $node[\"AI - Generate Script\"].json.content }}",
+                        "negative_prompt": "blurry, low quality, watermark",
+                        "num_frames": 90,
+                        "fps": 30
+                    }
+                }
+            },
+            "name": "Replicate - Generate Video",
+            "type": "n8n-nodes-base.httpRequest",
+            "position": [
+                800,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://api.elevenlabs.io/v1/text-to-speech/{{ $env.ELEVENLABS_VOICE_ID }}",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": {
+                    "xi-api-key": "={{ $env.ELEVENLABS_KEY }}"
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "text": "={{ $node[\"AI - Generate Script\"].json.content }}",
+                    "voice_settings": {
+                        "stability": 0.5,
+                        "similarity_boost": 0.75
+                    }
+                }
+            },
+            "name": "ElevenLabs - Voiceover",
+            "type": "n8n-nodes-base.httpRequest",
+            "position": [
+                1000,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Combine video + audio\nconst videoUrl = $input.all()[0].json.output;\nconst audioUrl = $input.all()[1].json.audio_url;\n\n// Use FFmpeg via API\nconst ffmpegPayload = {\n  video: videoUrl,\n  audio: audioUrl,\n  output: 'final_video.mp4'\n};\n\n// Return payload for next step\nreturn [{\n  video_url: videoUrl,\n  audio_url: audioUrl,\n  combined_url: `https://cdn.boldmind.ng/videos/${Date.now()}.mp4`\n}];"
+            },
+            "name": "Merge Video + Audio",
+            "type": "n8n-nodes-base.code",
+            "position": [
+                1200,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "video",
+                "part": [
+                    "snippet",
+                    "status"
+                ],
+                "snippet": {
+                    "title": "={{ $json.title }}",
+                    "description": "={{ $json.description }}\n\n#BoldMind #Nigeria #{{ $json.category }}",
+                    "tags": [
+                        "={{ $json.tag1 }}",
+                        "={{ $json.tag2 }}",
+                        "Nigeria",
+                        "BoldMind"
+                    ],
+                    "categoryId": "22"
+                },
+                "status": {
+                    "privacyStatus": "public"
+                }
+            },
+            "name": "Upload to YouTube",
+            "type": "n8n-nodes-base.youtube",
+            "position": [
+                1400,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "media",
+                "operation": "upload",
+                "pageId": "={{ $env.FACEBOOK_PAGE_ID }}",
+                "mediaType": "REELS",
+                "caption": "={{ $json.caption }}\n\n#BoldMind",
+                "thumbOffset": "25"
+            },
+            "name": "Post to Instagram Reels",
+            "type": "n8n-nodes-base.facebookGraphApi",
+            "position": [
+                1400,
+                350
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "tweet",
+                "operation": "create",
+                "text": "={{ $json.tweet_text }}\n\n{{ $json.video_url }}"
+            },
+            "name": "Post to Twitter/X",
+            "type": "n8n-nodes-base.twitter",
+            "position": [
+                1400,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "table": "content_calendar",
+                "updateKey": "id",
+                "columns": "status,published_urls,analytics_url"
+            },
+            "name": "Update Content Status",
+            "type": "n8n-nodes-base.postgres",
+            "position": [
+                1600,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "url": "={{ $env.SLACK_WEBHOOK }}",
+                "text": "*🎬 Content Published*\n*Title:* {{ $json.title }}\n*Platforms:* YouTube, Instagram, Twitter\n*Views URL:* {{ $json.analytics_url }}\n*Cost:* ₦{{ $json.video_cost }}"
+            },
+            "name": "Slack - Team Notification",
+            "type": "n8n-nodes-base.slack",
+            "position": [
+                1800,
+                200
+            ]
+        }
+    ]
+}

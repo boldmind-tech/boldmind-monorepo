@@ -335,16 +335,9 @@ export function SuperFooter({
   // Get the first letter of product name for logo
   const productInitial = currentProduct?.name.charAt(0);
 
-  // Get product-specific color
+  // Get product-specific color from theme system
   const getProductColor = () => {
-    const colorMap: Record<string, string> = {
-      amebogist: "#10B981", // Green
-      educenter: "#3B82F6", // Blue
-      "boldmind-hub": "#F59E0B", // Amber
-      "ai-receptionist": "#8B5CF6", // Purple
-      "boldmind-os": "#EC4899", // Pink
-    };
-    return colorMap[productTheme.slug] || productTheme.colors.primary;
+    return productTheme.colors.primary;
   };
 
   const productColor = getProductColor();
@@ -629,38 +622,40 @@ export function SuperFooter({
             </div>
           </div>
 
-          {/* Links Sections */}
-          {footerSections.map((section, index) => (
-            <div key={index} className="lg:col-span-2">
-              <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                {section.title}
-              </h3>
-              <ul className="space-y-3">
-                {section.links.map((link, linkIndex) => (
-                  <li key={linkIndex}>
-                    <Link
-                      href={link.href}
-                      target={link.isExternal ? "_blank" : undefined}
-                      className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
-                    >
-                      <span className="opacity-60 group-hover:opacity-100">
-                        {getIconComponent(link.icon as string)}
-                      </span>
-                      <span>{link.label}</span>
-                      {link.badge && (
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-white/10">
-                          {link.badge}
+          {/* Links Sections - Using flex for better responsiveness and avoidance of overflow */}
+          <div className="lg:col-span-4 grid grid-cols-2 sm:grid-cols-3 gap-6">
+            {footerSections.map((section, index) => (
+              <div key={index}>
+                <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                  {section.title}
+                </h3>
+                <ul className="space-y-3">
+                  {section.links.map((link, linkIndex) => (
+                    <li key={linkIndex}>
+                      <Link
+                        href={link.href}
+                        target={link.isExternal ? "_blank" : undefined}
+                        className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
+                      >
+                        <span className="opacity-60 group-hover:opacity-100 flex-shrink-0">
+                          {getIconComponent(link.icon as string)}
                         </span>
-                      )}
-                      {link.isExternal && (
-                        <ExternalLink className="w-3 h-3 opacity-50" />
-                      )}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+                        <span className="text-sm sm:text-base">{link.label}</span>
+                        {link.badge && (
+                          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-white/10">
+                            {link.badge}
+                          </span>
+                        )}
+                        {link.isExternal && (
+                          <ExternalLink className="w-3 h-3 opacity-50 flex-shrink-0" />
+                        )}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
 
           {/* Newsletter Section */}
           {newsletter && (

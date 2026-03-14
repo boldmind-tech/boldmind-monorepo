@@ -1,0 +1,27 @@
+/* Amebogist - App-specific styles */
+/* Inherits the full BoldMind design system from shared globals.css */
+@import '@boldmind/ui/styles/globals.css';
+
+/* ============================================
+   APP-SPECIFIC OVERRIDES
+   Amebogist uses the emerald/red gossip theme
+   ============================================ */
+
+/* Amebogist-specific premium effects */
+.heading-gradient {
+  background-image: linear-gradient(135deg, var(--product-primary), var(--product-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card-premium {
+  background-color: var(--product-background);
+  border: 1px solid var(--product-muted);
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-base);
+}
+
+.card-premium:hover {
+  box-shadow: var(--shadow-xl);
+}

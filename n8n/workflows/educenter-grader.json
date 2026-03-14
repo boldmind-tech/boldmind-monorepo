@@ -1,0 +1,184 @@
+{
+    "name": "EduCenter - Auto-Grading & Certificate Engine",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "/webhook/educenter/submit-exam",
+                "responseMode": "responseNode"
+            },
+            "name": "Webhook - Student Submission",
+            "type": "n8n-nodes-base.webhook",
+            "position": [
+                200,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "select",
+                "query": "SELECT * FROM exam_answers WHERE exam_id = '{{ $json.exam_id }}'"
+            },
+            "name": "Fetch Answer Key",
+            "type": "n8n-nodes-base.postgres",
+            "position": [
+                400,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const studentAnswers = $input.first().json.answers;\nconst answerKey = $input.all()[1].json;\n\nlet score = 0;\nlet total = Object.keys(answerKey).length;\nlet results = {};\n\nObject.keys(answerKey).forEach(q => {\n  const isCorrect = studentAnswers[q] === answerKey[q];\n  if (isCorrect) score++;\n  results[q] = {\n    correct: answerKey[q],\n    student: studentAnswers[q],\n    isCorrect\n  };\n});\n\nconst percentage = (score / total) * 100;\nconst passed = percentage >= 50;\n\nreturn [{\n  score,\n  total,\n  percentage,\n  passed,\n  results,\n  grade: percentage >= 75 ? 'A' : percentage >= 60 ? 'B' : percentage >= 50 ? 'C' : 'F'\n}];"
+            },
+            "name": "JavaScript - Auto-Grade Exam",
+            "type": "n8n-nodes-base.code",
+            "position": [
+                600,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "table": "exam_attempts",
+                "updateKey": "id",
+                "columns": "score,percentage,grade,status,completed_at"
+            },
+            "name": "Save Results",
+            "type": "n8n-nodes-base.postgres",
+            "position": [
+                800,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "condition": "={{ $node[\"JavaScript - Auto-Grade Exam\"].json.passed === true }}"
+            },
+            "name": "IF - Student Passed",
+            "type": "n8n-nodes-base.if",
+            "position": [
+                1000,
+                400
+            ],
+            "branches": {
+                "true": [
+                    1200,
+                    300
+                ],
+                "false": [
+                    1200,
+                    500
+                ]
+            }
+        },
+        {
+            "parameters": {
+                "resource": "whatsapp",
+                "phoneNumberId": "={{ $env.WHATSAPP_PHONE_ID }}",
+                "to": "={{ $json.student_phone }}",
+                "template": "exam_results",
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {
+                                "type": "text",
+                                "text": "={{ $json.exam_name }}"
+                            },
+                            {
+                                "type": "text",
+                                "text": "={{ $node[\"JavaScript - Auto-Grade Exam\"].json.score }}"
+                            },
+                            {
+                                "type": "text",
+                                "text": "={{ $node[\"JavaScript - Auto-Grade Exam\"].json.total }}"
+                            },
+                            {
+                                "type": "text",
+                                "text": "={{ $node[\"JavaScript - Auto-Grade Exam\"].json.percentage }}%"
+                            },
+                            {
+                                "type": "text",
+                                "text": "={{ $node[\"JavaScript - Auto-Grade Exam\"].json.grade }}"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "name": "WhatsApp - Send Results",
+            "type": "n8n-nodes-base.whatsAppBusiness",
+            "position": [
+                1200,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://api.pdflayer.com/api/convert",
+                "options": {
+                    "qs": {
+                        "access_key": "={{ $env.PDFLAYER_KEY }}",
+                        "document_name": "Certificate - {{ $json.student_name }}",
+                        "template_id": "educenter_certificate",
+                        "data": {
+                            "student_name": "={{ $json.student_name }}",
+                            "exam_name": "={{ $json.exam_name }}",
+                            "grade": "={{ $node[\"JavaScript - Auto-Grade Exam\"].json.grade }}",
+                            "date": "={{ $now.format('dd MMM yyyy') }}",
+                            "certificate_id": "={{ $json.id }}-{{ $now.format('YYYYMMDD') }}"
+                        }
+                    }
+                }
+            },
+            "name": "Generate PDF Certificate",
+            "type": "n8n-nodes-base.httpRequest",
+            "position": [
+                1400,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "from": "certificates@educenter.com.ng",
+                "to": "={{ $json.student_email }}",
+                "subject": "🎓 Your Certificate from EduCenter",
+                "html": "<h2>Congratulations {{ $json.student_name }}!</h2><p>You passed {{ $json.exam_name }} with {{ $node['JavaScript - Auto-Grade Exam'].json.percentage }}% (Grade {{ $node['JavaScript - Auto-Grade Exam'].json.grade }}).</p><p>Your certificate is attached.</p>",
+                "attachments": [
+                    {
+                        "filename": "certificate.pdf",
+                        "content": "={{ $node['Generate PDF Certificate'].json.content }}"
+                    }
+                ]
+            },
+            "name": "Email Certificate",
+            "type": "n8n-nodes-base.emailSend",
+            "position": [
+                1600,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "sheetId": "={{ $env.GOOGLE_SHEET_ID }}",
+                "range": "ExamResults!A:H",
+                "columns": [
+                    "Date",
+                    "Student",
+                    "Email",
+                    "Exam",
+                    "Score",
+                    "Percentage",
+                    "Grade",
+                    "Certificate"
+                ]
+            },
+            "name": "Google Sheets - Audit Log",
+            "type": "n8n-nodes-base.googleSheets",
+            "position": [
+                1800,
+                300
+            ]
+        }
+    ]
+}

@@ -1,5 +1,5 @@
 {
-    "extends": "../../tsconfig.frontend.json", // or .base / whatever your shared base is
+    "extends": "../../tsconfig.base.json", // or .base / whatever your shared base is
     "compilerOptions": {
         "composite": true,
         "declaration": true,

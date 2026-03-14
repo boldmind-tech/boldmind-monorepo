@@ -17,13 +17,31 @@ export interface RegisterRequest {
   locale?: string;
 }
 
-export interface PasswordResetRequest {
-  email: string;
-}
-
 export interface UpdatePasswordRequest {
   newPassword: string;
 }
+
+export interface ResetPasswordRequest {
+  email: string;
+  code: string;
+  newPassword: string;
+}
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface VerifyOtpRequest {
+  email: string;
+  code: string;
+  purpose: 'email_verify' | 'phone_verify' | 'password_reset' | '2fa';
+}
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}
+
 
 export class AuthEndpoints {
   constructor(private client: APIClient) { }
@@ -48,15 +66,23 @@ export class AuthEndpoints {
     return this.client.post<{ session: Session }>('/auth/refresh');
   }
 
-  async requestPasswordReset(data: PasswordResetRequest) {
-    return this.client.post('/auth/password-reset/request', data);
+  async forgotPassword(data: ForgotPasswordRequest) {
+    return this.client.post('/auth/forgot-password', data);
   }
 
-  async updatePassword(data: UpdatePasswordRequest) {
-    return this.client.post('/auth/password-reset/update', data);
+  async resetPassword(data: ResetPasswordRequest) {
+    return this.client.post('/auth/reset-password', data);
   }
 
-  async verifyEmail(token: string) {
-    return this.client.post('/auth/verify-email', { token });
+  async changePassword(data: ChangePasswordRequest) {
+    return this.client.patch('/auth/change-password', data);
+  }
+
+  async verifyOtp(data: VerifyOtpRequest) {
+    return this.client.post('/auth/verify-email', data);
+  }
+
+  async resendVerification(email: string) {
+    return this.client.post('/auth/resend-verification', { email });
   }
 }

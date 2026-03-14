@@ -1,4 +1,5 @@
-// flywheel.ts
+// PACKAGES/analytics/src/flywheel.ts
+
 import { SocialIntegration, BOLDMIND_PRODUCTS } from '@boldmind/utils';
 
 export interface CustomerJourney {

@@ -1,3 +1,5 @@
+//packages/utils/src/social/integrations.ts
+
 import { socialAccounts, crossPostingRules } from '../constants/social';
 import type {
   SocialAccount,

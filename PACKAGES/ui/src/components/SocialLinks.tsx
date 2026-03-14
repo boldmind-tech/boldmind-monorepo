@@ -1,4 +1,4 @@
-// packages/ui/src/components/SocialLinks.tsx
+// PACKAGES/ui/src/components/SocialLinks.tsx
 "use client";
 
 import React, { useState } from 'react';
@@ -26,8 +26,8 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({ links }) => {
       {links.map((link, index) => {
         const isHovered = hoveredIndex === index;
         const linkStyle: React.CSSProperties = {
-          color: isHovered ? '#FFC800' : '#6B7280',
-          transition: 'color 0.2s',
+          color: isHovered ? 'var(--product-accent)' : 'var(--neutral-500)',
+          transition: 'color var(--transition-quick)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

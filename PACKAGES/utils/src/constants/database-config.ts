@@ -1,255 +1,274 @@
-import { DatabaseType } from './products';
+// packages/utils/src/constants/database-config.ts
 
-export const DATABASE_CONFIG = {
-  // PostgreSQL/Prisma Services (each has own database)
+export type DatabaseType = 'postgres' | 'mongodb' | 'redis';
+
+export type ModuleName =
+  // Core
+  | 'auth'
+  | 'user'
+  | 'payment'
+  | 'notification'
+  | 'media'
+  | 'admin'
+  | 'educenter'
+  | 'planai'
+  | 'receptionist'
+  | 'content'        
+  | 'emailscraper'
+  | 'social-factory'
+  | 'naija-fit'
+  | 'boldmind-os'
+  | 'storefronts'
+  | 'automation';
+
+export type ProductSlug =
+  | 'boldmind-hub'
+  | 'planai-suite'
+  | 'amebogist'
+  | 'amebo-studio'
+  | 'educenter'
+  | 'skillgig'
+  | 'naija-fit'
+  | 'naija-fither'     
+  | 'boldmind-os'
+  | 'boldmind-tools'
+  | 'boldmind-concepts'
+  | 'ai-receptionist'
+  | 'credibility-hubs'
+  | 'business-planning'
+  | 'financial-forecasting'
+  | 'investor-readiness'
+  | 'branding-design'
+  | 'digital-storefronts'
+  | 'marketing-automation'
+  | 'analytics-dashboard'
+  | 'emailscraper-pro'
+  | 'social-factory'
+  | 'kolo-ai'
+  | 'safe-ai'
+  | 'afrohustle-os'
+  | 'naijagig-matcher'
+  | 'borderless-remit'
+  | 'farmgate-direct'
+  | 'power-alert'
+  | 'receipt-genius'
+  | 'skill2cash'
+  | 'afrocopy-ai'
+  | 'anontruth-mic';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Single-connection config (monolith)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * All database connections — single URL each.
+ * Set these in Railway environment variables.
+ */
+export const DATABASE_CONNECTIONS = {
+  /**
+   * PostgreSQL — Neon serverless
+   * Used for: users, subscriptions, educenter questions,
+   *           planai jobs, fitness profiles, payments
+   */
   postgres: {
-    'boldmind-os-service': 'boldmind_os',
-    'user-service': 'user_service',
-    'payment-service': 'payment_service',
-    'analytics-service': 'analytics_service',
-    'educenter-service': 'educenter_service',
-    'fither-service': 'fither_service',
-    'planai-service': 'planai_service',
-    'hub-service': 'hub_service',
-    'receptionist-service': 'receptionist_service',
-    'credibility-service': 'credibility_service',
-    'business-planning-service': 'business_planning_service',
-    'financial-service': 'financial_service',
-    'investor-service': 'investor_service',
-    'storefronts-service': 'storefronts_service',
-    'digital-storefronts': 'digital_storefronts_service',
-    'marketing-service': 'marketing_service',
-    'analytics-dashboard-service': 'analytics_dashboard_service',
-    'safeai-service': 'safeai_service',
-    'koloai-service': 'koloai_service',
-    'receipt-service': 'receipt_service'
-  } as const,
+    envVar: 'DATABASE_URL',
+    provider: 'neon',
+    url: process.env['DATABASE_URL'],
+  },
 
-  // MongoDB Services (each has own database)
+  /**
+   * MongoDB — Atlas M0 (free tier)
+   * Used for: amebogist articles, email leads,
+   *           social posts, automation logs
+   */
   mongodb: {
-    'amebogist-service': 'amebogist',
-    'social-factory-service': 'social_factory',
-    'emailscraper-pro-service': 'emailscraper_pro',
-    'safeai-service': 'safeai',
-    'afrohustle-service': 'afrohustle',
-    'naijagig-matcher-service': 'naijagig_matcher',
-    'borderless-remit-service': 'borderless_remit',
-    'power-alert-service': 'power_alert',
-    'farmgate-direct-service': 'farmgate_direct',
-    'afrocopy-ai-service': 'afrocopy_ai',
-    'skill2cash-service': 'skill2cash',
-    'anontruth-mic-service': 'anontruth_mic'
-  } as const,
+    envVar: 'MONGODB_URL',
+    provider: 'atlas',
+    url: process.env['MONGODB_URL'],
+  },
 
-  // Frontend/App Products mapping to backend services
-  products: {
-    // PostgreSQL-based products
-    'boldmind-hub': 'hub-service',
-    'educenter': 'educenter-service',
-    'receptionist': 'receptionist-service',
-    'boldmind-os': 'boldmind-os-service',
-    'naija-fither': 'fither-service',
-    'credibility-hubs': 'credibility-service',
-    'business-planning': 'business-planning-service',
-    'financial-forecasting': 'financial-service',
-    'investor-readiness': 'investor-service',
-    'digital-storefronts': 'digital-storefronts',
-    'marketing-automation': 'marketing-service',
-    'analytics-dashboard': 'analytics-dashboard-service',
-    'receipt-genius': 'receipt-service',
-    'safe-ai': 'safeai-service',
-    'kolo-ai': 'koloai-service',
-    'planai': 'planai-service',
-
-    // MongoDB-based products
-    'amebogist': 'amebogist-service',
-    'social-factory': 'social-factory-service',
-    'emailscraper-pro': 'emailscraper-pro-service',
-    'branding-design': 'safeai-service',
-    'afrohustle-os': 'afrohustle-service',
-    'naijagig-matcher': 'naijagig-matcher-service',
-    'borderless-remit': 'borderless-remit-service',
-    'power-alert': 'power-alert-service',
-    'farmgate-direct': 'farmgate-direct-service',
-    'afrocopy-ai': 'afrocopy-ai-service',
-    'skill2cash': 'skill2cash-service',
-    'anontruth-mic': 'anontruth-mic-service'
-  } as const
+  /**
+   * Redis — Upstash (serverless)
+   * Used for: AI response cache, BullMQ queues,
+   *           session store, rate limiting
+   */
+  redis: {
+    envVar: 'REDIS_URL',
+    provider: 'upstash',
+    url: process.env['REDIS_URL'],
+  },
 } as const;
 
-// Type helpers
-export type PostgresService = keyof typeof DATABASE_CONFIG.postgres;
-export type MongoService = keyof typeof DATABASE_CONFIG.mongodb;
-export type ServiceName = PostgresService | MongoService;
-export type ProductSlug = keyof typeof DATABASE_CONFIG.products;
+// ─────────────────────────────────────────────────────────────────────────────
+// Module → Database mapping
+// Which database does each NestJS module use?
+// ─────────────────────────────────────────────────────────────────────────────
 
-/**
- * Get which database a service uses
- */
-export function getServiceDatabase(serviceName: ServiceName): DatabaseType {
-  if (serviceName in DATABASE_CONFIG.postgres) {
-    return 'postgres';
-  }
-  if (serviceName in DATABASE_CONFIG.mongodb) {
-    return 'mongodb';
-  }
-  throw new Error(`Unknown service: ${serviceName}`);
+export const MODULE_DATABASE: Record<ModuleName, DatabaseType> = {
+  auth: 'postgres',
+  user: 'postgres',
+  payment: 'postgres',
+  notification: 'postgres',
+  media: 'postgres',
+  admin: 'postgres',
+  educenter: 'postgres',
+  planai: 'postgres',
+  receptionist: 'postgres',
+  'naija-fit': 'postgres',
+  'boldmind-os': 'postgres',
+  storefronts: 'postgres',
+
+  content: 'mongodb',
+  emailscraper: 'mongodb',
+  'social-factory': 'mongodb',
+  automation: 'mongodb',
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Product → Module mapping
+// Which NestJS module handles each product slug?
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const PRODUCT_MODULE: Record<ProductSlug, ModuleName> = {
+  // Hub
+  'boldmind-hub': 'admin',
+  'planai-suite': 'planai',
+  'ai-receptionist': 'receptionist',
+  'credibility-hubs': 'planai',
+  'business-planning': 'planai',
+  'financial-forecasting': 'planai',
+  'investor-readiness': 'planai',
+  'branding-design': 'planai',
+  'digital-storefronts': 'storefronts',
+  'marketing-automation': 'planai',
+  'analytics-dashboard': 'admin',
+
+  // AmeboGist
+  'amebogist': 'content',
+  'amebo-studio': 'content',
+  'anontruth-mic': 'content',
+
+  // EduCenter
+  'educenter': 'educenter',
+  'skillgig': 'educenter',
+
+  // Fitness
+  'naija-fit': 'naija-fit',
+  'naija-fither': 'naija-fit', 
+
+  // Productivity
+  'boldmind-os': 'boldmind-os',
+
+  // B2B Tools
+  'boldmind-tools': 'emailscraper',
+  'emailscraper-pro': 'emailscraper',
+  'social-factory': 'social-factory',
+
+  'boldmind-concepts': 'admin',
+  'kolo-ai': 'admin',
+  'safe-ai': 'admin',
+  'afrohustle-os': 'admin',
+  'naijagig-matcher': 'admin',
+  'borderless-remit': 'admin',
+  'farmgate-direct': 'admin',
+  'power-alert': 'admin',
+  'receipt-genius': 'admin',
+  'skill2cash': 'admin',
+  'afrocopy-ai': 'admin',
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// App → Domain mapping
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const APP_DOMAINS: Record<string, string> = {
+  'boldmind-hub': 'boldmind.ng',
+  'planai-suite': 'planai.boldmind.ng',
+  'amebogist': 'amebogist.ng',
+  'amebo-studio': 'studio.amebogist.ng',
+  'educenter': 'educenter.com.ng',
+  'skillgig': 'skills.educenter.com.ng',
+  'naija-fit': 'fit.boldmind.ng',
+  'boldmind-os': 'os.boldmind.ng',
+  'boldmind-tools': 'tools.boldmind.ng',
+  'boldmind-concepts': 'concept.boldmind.ng',
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Helper functions
+// ─────────────────────────────────────────────────────────────────────────────
+
+export function getModuleForProduct(slug: string): ModuleName | null {
+  return PRODUCT_MODULE[slug as ProductSlug] ?? null;
+}
+
+export function getDatabaseForProduct(slug: string): DatabaseType | null {
+  const module = getModuleForProduct(slug);
+  return module ? MODULE_DATABASE[module] : null;
+}
+
+export function getDatabaseForModule(module: ModuleName): DatabaseType {
+  return MODULE_DATABASE[module];
+}
+
+export function getPostgresModules(): ModuleName[] {
+  return Object.entries(MODULE_DATABASE)
+    .filter(([, db]) => db === 'postgres')
+    .map(([mod]) => mod as ModuleName);
+}
+
+export function getMongoModules(): ModuleName[] {
+  return Object.entries(MODULE_DATABASE)
+    .filter(([, db]) => db === 'mongodb')
+    .map(([mod]) => mod as ModuleName);
+}
+
+export function getDomainForApp(appKey: string): string {
+  return APP_DOMAINS[appKey] ?? `${appKey}.boldmind.ng`;
 }
 
 /**
- * Get which backend service handles a product
+ * Validate that all required database env vars are set at startup.
+ * Call this in NestJS main.ts before bootstrapping.
  */
-export function getServiceForProduct(productSlug: string): ServiceName | null {
-  return DATABASE_CONFIG.products[productSlug as ProductSlug] || null;
+export function validateDatabaseEnvVars(): { valid: boolean; missing: string[] } {
+  const required = ['DATABASE_URL', 'MONGODB_URL', 'REDIS_URL'];
+  const missing = required.filter(v => !process.env[v]);
+  return { valid: missing.length === 0, missing };
 }
 
 /**
- * Get database name for a service
+ * @deprecated Old microservice helper — use getModuleForProduct() instead
+ * Kept for backward compatibility during migration
  */
-export function getDatabaseName(serviceName: ServiceName): string {
-  if (serviceName in DATABASE_CONFIG.postgres) {
-    return DATABASE_CONFIG.postgres[serviceName as PostgresService];
-  }
-  if (serviceName in DATABASE_CONFIG.mongodb) {
-    return DATABASE_CONFIG.mongodb[serviceName as MongoService];
-  }
-  throw new Error(`Unknown service: ${serviceName}`);
+export function getServiceForProduct(productSlug: string): string | null {
+  const module = getModuleForProduct(productSlug);
+  return module ? `${module}-module` : null;
 }
 
-/**
- * Check if service uses PostgreSQL
- */
-export function usesPostgres(serviceName: ServiceName): boolean {
-  return serviceName in DATABASE_CONFIG.postgres;
-}
+// ─────────────────────────────────────────────────────────────────────────────
+// Prisma schema hint — Postgres collections per module
+// (reference only — actual schema is in service/prisma/schema.prisma)
+// ─────────────────────────────────────────────────────────────────────────────
 
-/**
- * Check if service uses MongoDB
- */
-export function usesMongoDB(serviceName: ServiceName): boolean {
-  return serviceName in DATABASE_CONFIG.mongodb;
-}
+export const POSTGRES_TABLES = {
+  auth: ['User', 'RefreshToken', 'OTPVerification'],
+  user: ['UserProfile', 'ActivityLog'],
+  payment: ['Subscription', 'Payment', 'Invoice'],
+  notification: ['NotificationLog', 'PushSubscription'],
+  media: ['MediaFile'],
+  educenter: ['Question', 'StudentProgress', 'StudyStreak'],
+  planai: ['PlanAIJob', 'PlanAITemplate'],
+  receptionist: ['ReceptionistClient', 'ConversationLog', 'LeadCapture'],
+  'naija-fit': ['FitnessProfile', 'WorkoutPlan', 'WorkoutLog', 'MealLog'],
+  'boldmind-os': ['OSProfile', 'Task', 'PomodoroSession', 'KnowledgeNode'],
+  storefronts: ['Store', 'Product', 'Order'],
+  admin: ['AdminLog', 'WaitlistEntry'],
+} as const;
 
-/**
- * Get all services using a specific database
- */
-export function getServicesByDatabase(db: DatabaseType): readonly ServiceName[] {
-  return Object.keys(
-    db === 'postgres' ? DATABASE_CONFIG.postgres : DATABASE_CONFIG.mongodb
-  ) as ServiceName[];
-}
-
-/**
- * Get all products for a service
- */
-export function getProductsForService(serviceName: ServiceName): ProductSlug[] {
-  return Object.entries(DATABASE_CONFIG.products)
-    .filter(([_, service]) => service === serviceName)
-    .map(([product]) => product) as ProductSlug[];
-}
-
-/**
- * Get environment variable name for a service's database URL
- */
-export function getDatabaseEnvVar(serviceName: ServiceName): string {
-  const dbType = getServiceDatabase(serviceName);
-
-  if (dbType === 'postgres') {
-    // PostgreSQL services use SERVICE_NAME_DATABASE_URL
-    const suffix = serviceName.toUpperCase().replace(/-/g, '_');
-    return `${suffix}_DATABASE_URL`;
-  } else {
-    // MongoDB services use SERVICE_NAME_MONGODB_URL
-    const suffix = serviceName.toUpperCase().replace(/-/g, '_');
-    return `${suffix}_MONGODB_URL`;
-  }
-}
-
-/**
- * Get HTTP service URL environment variable name
- * (For API Gateway to communicate with services)
- */
-export function getServiceUrlEnvVar(serviceName: ServiceName): string {
-  const suffix = serviceName.toUpperCase().replace(/-/g, '_');
-  return `${suffix}_URL`;
-}
-
-/**
- * Get connection string from environment variables
- * Throws error if environment variable is not set
- */
-export function getConnectionString(serviceName: ServiceName): string {
-  const envVar = getDatabaseEnvVar(serviceName);
-  const connectionString = process.env[envVar];
-
-  if (!connectionString) {
-    throw new Error(
-      `Database connection string not found for ${serviceName}. ` +
-      `Please set ${envVar} environment variable.`
-    );
-  }
-
-  return connectionString;
-}
-
-/**
- * Get service URL from environment variables
- * (For HTTP communication between services)
- */
-export function getServiceUrl(serviceName: ServiceName): string {
-  const envVar = getServiceUrlEnvVar(serviceName);
-  const url = process.env[envVar];
-
-  if (!url) {
-    // Fallback to default localhost with standard port pattern
-    const serviceNumber = serviceName === 'hub-service' ? '4001' :
-      serviceName === 'user-service' ? '4002' :
-        serviceName === 'payment-service' ? '4003' : '4000';
-    return `http://localhost:${serviceNumber}`;
-  }
-
-  return url;
-}
-
-/**
- * Validate all required database environment variables are set
- */
-export function validateDatabaseEnvVars(): string[] {
-  const missing: string[] = [];
-
-  // Check all PostgreSQL services
-  Object.keys(DATABASE_CONFIG.postgres).forEach(serviceName => {
-    const envVar = getDatabaseEnvVar(serviceName as ServiceName);
-    if (!process.env[envVar]) {
-      missing.push(envVar);
-    }
-  });
-
-  // Check all MongoDB services
-  Object.keys(DATABASE_CONFIG.mongodb).forEach(serviceName => {
-    const envVar = getDatabaseEnvVar(serviceName as ServiceName);
-    if (!process.env[envVar]) {
-      missing.push(envVar);
-    }
-  });
-
-  return missing;
-}
-
-/**
- * Database configuration for each service
- */
-export const SERVICE_DB_CONFIG = Object.fromEntries(
-  [...Object.keys(DATABASE_CONFIG.postgres), ...Object.keys(DATABASE_CONFIG.mongodb)].map(
-    (serviceName) => [
-      serviceName,
-      {
-        database: getDatabaseName(serviceName as ServiceName),
-        type: getServiceDatabase(serviceName as ServiceName),
-        envVar: getDatabaseEnvVar(serviceName as ServiceName),
-        serviceUrl: getServiceUrl(serviceName as ServiceName),
-        products: getProductsForService(serviceName as ServiceName)
-      }
-    ]
-  )
-);
+export const MONGO_COLLECTIONS = {
+  content: ['articles', 'comments', 'reactions', 'creator_stats'],
+  emailscraper: ['email_leads', 'scrape_jobs'],
+  'social-factory': ['social_posts', 'content_calendars', 'account_connections'],
+  automation: ['n8n_logs', 'workflow_runs'],
+} as const;

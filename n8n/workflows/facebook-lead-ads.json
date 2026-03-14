@@ -1,0 +1,286 @@
+{
+    "name": "Facebook Lead Ads - Real-time Capture & Follow-up",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "/webhook/facebook-lead-capture",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "name": "Webhook - Facebook Lead",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                250,
+                300
+            ],
+            "webhookId": "facebook-lead-capture"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Verify Facebook signature\nconst crypto = require('crypto');\nconst appSecret = $env.FACEBOOK_APP_SECRET;\nconst signature = $input.headers['x-hub-signature-256'];\nconst payload = JSON.stringify($input.body);\n\nconst expectedSignature = crypto\n  .createHmac('sha256', appSecret)\n  .update(payload)\n  .digest('hex');\n\nif (`sha256=${expectedSignature}` !== signature) {\n  throw new Error('Invalid signature');\n}\n\n// Extract lead data\nconst entry = $input.body.entry[0];\nconst change = entry.changes[0];\n\nreturn [{\n  leadId: change.value.leadgen_id,\n  formId: change.value.form_id,\n  adId: change.value.ad_id,\n  pageId: change.value.page_id,\n  createdTime: change.value.created_time\n}];"
+            },
+            "name": "Verify & Extract Lead",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                450,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://graph.facebook.com/v19.0/={{ $json.leadId }}",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": {
+                    "Authorization": "Bearer {{ $env.FACEBOOK_PAGE_ACCESS_TOKEN }}"
+                },
+                "options": {}
+            },
+            "name": "Get Lead Details from Facebook",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                650,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Parse lead field data\nconst fieldData = $input.json.field_data;\nconst lead = {};\n\nfieldData.forEach(field => {\n  lead[field.name] = field.values[0];\n});\n\nreturn [{\n  leadId: $input.json.id,\n  formId: $node['Verify & Extract Lead'].json.formId,\n  adId: $node['Verify & Extract Lead'].json.adId,\n  pageId: $node['Verify & Extract Lead'].json.pageId,\n  fullName: lead.full_name,\n  email: lead.email,\n  phone: lead.phone_number,\n  businessName: lead.business_name || '',\n  service: lead.service_interested || '',\n  createdTime: $node['Verify & Extract Lead'].json.createdTime\n}];"
+            },
+            "name": "Parse Lead Fields",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                850,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "insert",
+                "table": "facebook_leads",
+                "columns": "lead_id,form_id,ad_id,page_id,full_name,email,phone,business_name,service,field_data,created_time,processed",
+                "values": "={{ $json.leadId }},={{ $json.formId }},={{ $json.adId }},={{ $json.pageId }},={{ $json.fullName }},={{ $json.email }},={{ $json.phone }},={{ $json.businessName }},={{ $json.service }},={{ JSON.stringify($json) }},={{ $json.createdTime }},false"
+            },
+            "name": "Save to Database",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 2,
+            "position": [
+                1050,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "message",
+                "phoneNumberId": "={{ $env.WHATSAPP_PHONE_NUMBER_ID }}",
+                "to": "={{ $json.phone }}",
+                "messageType": "template",
+                "template": {
+                    "name": "lead_welcome",
+                    "language": {
+                        "code": "en"
+                    },
+                    "components": [
+                        {
+                            "type": "body",
+                            "parameters": [
+                                {
+                                    "type": "text",
+                                    "text": "={{ $json.fullName }}"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "={{ $json.service }}"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "name": "WhatsApp - Welcome Message",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                1250,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "fromEmail": "leads@boldmind.ng",
+                "toEmail": "sales@boldmind.ng",
+                "subject": "🚀 New Facebook Lead: {{ $json.fullName }}",
+                "text": "New lead captured from Facebook Lead Ads!\n\nName: {{ $json.fullName }}\nEmail: {{ $json.email }}\nPhone: {{ $json.phone }}\nBusiness: {{ $json.businessName }}\nService: {{ $json.service }}\n\nAd ID: {{ $json.adId }}\nForm ID: {{ $json.formId }}\n\nPlease follow up within 5 minutes for best conversion rates.",
+                "options": {}
+            },
+            "name": "Email - Sales Team",
+            "type": "n8n-nodes-base.emailSend",
+            "typeVersion": 2,
+            "position": [
+                1250,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+                "sendBody": true,
+                "bodyParameters": {
+                    "text": "*🎯 NEW FACEBOOK LEAD*\n\n*Name:* {{ $json.fullName }}\n*Email:* {{ $json.email }}\n*Phone:* {{ $json.phone }}\n*Business:* {{ $json.businessName }}\n*Service:* {{ $json.service }}\n\n*Source:* Facebook Lead Ads\n*Ad ID:* {{ $json.adId }}\n*Time:* {{ $json.createdTime }}"
+                },
+                "options": {}
+            },
+            "name": "Slack - Team Notification",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                1250,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://graph.facebook.com/v19.0/={{ $env.FACEBOOK_PIXEL_ID }}/events",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": {
+                    "Authorization": "Bearer {{ $env.FACEBOOK_SYSTEM_USER_TOKEN }}"
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "data": [
+                        {
+                            "event_name": "Lead",
+                            "event_time": "={{ Math.floor(Date.now() / 1000) }}",
+                            "user_data": {
+                                "em": "={{ crypto.createHash('sha256').update($json.email.toLowerCase()).digest('hex') }}",
+                                "ph": "={{ crypto.createHash('sha256').update($json.phone.replace(/\\D/g, '')).digest('hex') }}",
+                                "fn": "={{ crypto.createHash('sha256').update($json.fullName.split(' ')[0].toLowerCase()).digest('hex') }}"
+                            },
+                            "custom_data": {
+                                "service": "={{ $json.service }}",
+                                "source": "lead_form"
+                            },
+                            "action_source": "website"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "name": "Conversions API - Track Lead",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                1450,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ JSON.stringify({ success: true, leadId: $json.leadId }) }}"
+            },
+            "name": "Respond to Facebook",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1,
+            "position": [
+                1650,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook - Facebook Lead": {
+            "main": [
+                [
+                    {
+                        "node": "Verify & Extract Lead",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Verify & Extract Lead": {
+            "main": [
+                [
+                    {
+                        "node": "Get Lead Details from Facebook",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get Lead Details from Facebook": {
+            "main": [
+                [
+                    {
+                        "node": "Parse Lead Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Parse Lead Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Save to Database",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Save to Database": {
+            "main": [
+                [
+                    {
+                        "node": "WhatsApp - Welcome Message",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Email - Sales Team",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Slack - Team Notification",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Slack - Team Notification": {
+            "main": [
+                [
+                    {
+                        "node": "Conversions API - Track Lead",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Conversions API - Track Lead": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to Facebook",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

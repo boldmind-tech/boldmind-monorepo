@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.frontend.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "composite": true,
     "jsx": "react-jsx", // ✅ Correct for React
@@ -26,6 +26,9 @@
   "references": [
     {
       "path": "../utils"
+    },
+    {
+      "path": "../auth"
     }
   ],
   "exclude": [

@@ -25,7 +25,12 @@ export {
   getUserTier,
   PRODUCT_FEATURES
 } from './domain/policies/canAccessFeature';
-export type { ProductSlug, FeatureTier } from './domain/policies/canAccessFeature';
+export {
+  hasPermission,
+  hasAnyPermission,
+  hasAllPermissions,
+} from './domain/policies/permissions';
+export type { Permission, Role } from './domain/policies/permissions';
 
 // providers - ONLY export the class, not the instance
 // export { SupabaseAuthProvider } from './providers/supabase/auth';

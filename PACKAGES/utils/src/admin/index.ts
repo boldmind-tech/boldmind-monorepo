@@ -1,67 +1,59 @@
-// packages/utils/src/admin/index.ts
+// PACKAGES/utils/src/admin/index.ts
+
+import {
+    User,
+    SystemRole,
+    SYSTEM_ROLE_PERMISSIONS,
+    PRODUCT_PERMISSIONS,
+} from '../constants/auth';
+
 import { BOLDMIND_PRODUCTS } from '../constants/products';
+
+/* ============================================
+   PERMISSION REGISTRY
+   Derived from auth.ts PRODUCT_PERMISSIONS — single source of truth.
+   Adds category + description metadata for admin UI display.
+============================================ */
+
+export type PermissionKey = keyof typeof PRODUCT_PERMISSIONS;
 
 export interface Permission {
     category: string;
-    name: string;
+    name: PermissionKey;
     description: string;
 }
 
-export const ADMIN_PERMISSIONS: Record<string, Permission[]> = {
-    // User permissions
-    users: [
-        { category: 'users', name: 'users:read', description: 'View users' },
-        { category: 'users', name: 'users:create', description: 'Create users' },
-        { category: 'users', name: 'users:update', description: 'Update users' },
-        { category: 'users', name: 'users:delete', description: 'Delete users' },
-        { category: 'users', name: 'users:reset_password', description: 'Reset passwords' },
-        { category: 'users', name: 'users:manage_super_admin', description: 'Manage super admins' },
-        { category: 'users', name: 'users:impersonate', description: 'Impersonate users' },
-    ],
+/**
+ * Groups all known permissions into categories for admin UI display.
+ * The permission strings and descriptions come directly from PRODUCT_PERMISSIONS
+ * in auth.ts — no duplication.
+ */
+export const ADMIN_PERMISSIONS: Record<string, Permission[]> = (
+    Object.entries(PRODUCT_PERMISSIONS) as [PermissionKey, string][]
+).reduce(
+    (acc, [key, description]) => {
+        const category = key.split(':')[0] ?? key;
+        if (!acc[category]) acc[category] = [];
+        acc[category].push({ category, name: key, description });
+        return acc;
+    },
+    {} as Record<string, Permission[]>,
+);
 
-    // Product permissions
-    products: [
-        { category: 'products', name: 'products:read', description: 'View products' },
-        { category: 'products', name: 'products:create', description: 'Create products' },
-        { category: 'products', name: 'products:update', description: 'Update products' },
-        { category: 'products', name: 'products:delete', description: 'Delete products' },
-        { category: 'products', name: 'products:publish', description: 'Publish products' },
-        { category: 'products', name: 'products:archive', description: 'Archive products' },
-    ],
-
-    // Analytics permissions
-    analytics: [
-        { category: 'analytics', name: 'analytics:read', description: 'View analytics' },
-        { category: 'analytics', name: 'analytics:export', description: 'Export analytics' },
-        { category: 'analytics', name: 'analytics:configure', description: 'Configure analytics' },
-    ],
-
-    // Billing permissions
-    billing: [
-        { category: 'billing', name: 'billing:read', description: 'View billing' },
-        { category: 'billing', name: 'billing:update', description: 'Update billing' },
-        { category: 'billing', name: 'billing:refund', description: 'Process refunds' },
-        { category: 'billing', name: 'billing:manage_subscriptions', description: 'Manage subscriptions' },
-    ],
-
-    // Content permissions
-    content: [
-        { category: 'content', name: 'content:read', description: 'View content' },
-        { category: 'content', name: 'content:create', description: 'Create content' },
-        { category: 'content', name: 'content:update', description: 'Update content' },
-        { category: 'content', name: 'content:delete', description: 'Delete content' },
-        { category: 'content', name: 'content:publish', description: 'Publish content' },
-        { category: 'content', name: 'content:moderate', description: 'Moderate content' },
-    ],
-};
+/* ============================================
+   ROLE DEFINITIONS
+   Permission arrays are derived from SYSTEM_ROLE_PERMISSIONS in auth.ts.
+   Only admin-specific metadata (level, description, isSystemRole) is added here.
+============================================ */
 
 export interface RoleDefinition {
-    id: string;
+    id: SystemRole;
     name: string;
     description: string;
     level: number;
-    permissions: string[];
     isSystemRole: boolean;
+    /** Derived from SYSTEM_ROLE_PERMISSIONS — do not set manually. */
+    permissions: string[];
 }
 
 export const ADMIN_ROLES: RoleDefinition[] = [
@@ -70,134 +62,114 @@ export const ADMIN_ROLES: RoleDefinition[] = [
         name: 'Super Admin',
         description: 'Full system access',
         level: 1,
-        permissions: ['*'],
         isSystemRole: true,
+        permissions: SYSTEM_ROLE_PERMISSIONS.super_admin,
     },
     {
         id: 'admin',
         name: 'Admin',
         description: 'Administrative access to most features',
         level: 2,
-        permissions: [
-            'users:read', 'users:create', 'users:update', 'users:delete',
-            'products:read', 'products:update', 'products:publish',
-            'analytics:read', 'analytics:export',
-            'billing:read', 'billing:update',
-            'content:read', 'content:create', 'content:update', 'content:delete', 'content:publish',
-        ],
         isSystemRole: true,
+        permissions: SYSTEM_ROLE_PERMISSIONS.admin,
     },
     {
         id: 'manager',
         name: 'Manager',
         description: 'Management access to assigned products',
         level: 3,
-        permissions: [
-            'users:read',
-            'products:read', 'products:update',
-            'analytics:read',
-            'content:read', 'content:create', 'content:update',
-        ],
         isSystemRole: false,
+        permissions: SYSTEM_ROLE_PERMISSIONS.manager,
     },
     {
         id: 'editor',
         name: 'Editor',
         description: 'Content editing access',
         level: 4,
-        permissions: [
-            'content:read', 'content:create', 'content:update',
-        ],
         isSystemRole: false,
+        permissions: SYSTEM_ROLE_PERMISSIONS.editor,
     },
     {
         id: 'support',
         name: 'Support',
         description: 'Customer support access',
         level: 5,
-        permissions: [
-            'users:read',
-            'billing:read',
-        ],
         isSystemRole: false,
+        permissions: SYSTEM_ROLE_PERMISSIONS.support,
     },
     {
         id: 'analyst',
         name: 'Analyst',
         description: 'Analytics and reporting access',
         level: 6,
-        permissions: [
-            'analytics:read', 'analytics:export',
-        ],
         isSystemRole: false,
+        permissions: SYSTEM_ROLE_PERMISSIONS.analyst,
     },
 ];
 
-export function hasAdminPermission(user: any, permission: string): boolean {
+/* ============================================
+   ADMIN PERMISSION HELPERS
+============================================ */
+
+/**
+ * Checks if a user has a specific admin permission.
+ * Matches role by `id` (snake_case), not `name` (display string).
+ */
+export function hasAdminPermission(user: User, permission: string): boolean {
     if (!user) return false;
 
     // Super admin has all permissions
-    if (user.isSuperAdmin) return true;
+    if (user.role === 'super_admin') return true;
 
-    // Check if user is admin
-    if (!user.isAdmin) return false;
-
-    // Check for wildcard permission
+    // Wildcard on direct permissions
     if (user.permissions?.includes('*')) return true;
 
-    // Check specific permission
+    // Direct permission grant
     if (user.permissions?.includes(permission)) return true;
 
-    // Check role-based permissions
-    const userRole = ADMIN_ROLES.find(role => role.name === user.role);
-    if (userRole?.permissions.includes('*')) return true;
-    if (userRole?.permissions.includes(permission)) return true;
+    // Role-based permissions — match by id (was previously matching name, which was a bug)
+    const roleDefinition = ADMIN_ROLES.find(r => r.id === user.role);
+    if (roleDefinition?.permissions.includes('*')) return true;
+    if (roleDefinition?.permissions.includes(permission)) return true;
 
     return false;
 }
 
+/**
+ * Returns the display name for a given role id.
+ */
 export function getUserRoleDisplay(role: string): string {
-    const roleNames: Record<string, string> = {
-        'super_admin': 'Super Admin',
-        'admin': 'Admin',
-        'manager': 'Manager',
-        'editor': 'Editor',
-        'user': 'User',
-        'guest': 'Guest',
-        'support': 'Support',
-        'analyst': 'Analyst',
-    };
-
-    return roleNames[role] || role.replace('_', ' ').toUpperCase();
+    const roleDefinition = ADMIN_ROLES.find(r => r.id === role);
+    if (roleDefinition) return roleDefinition.name;
+    return role.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 }
 
-export function getPermissionsForRole(roleId: string): string[] {
-    const role = ADMIN_ROLES.find(r => r.id === roleId);
-    return role?.permissions || [];
+/**
+ * Returns the permission strings for a given role id.
+ */
+export function getPermissionsForRole(roleId: SystemRole): string[] {
+    return SYSTEM_ROLE_PERMISSIONS[roleId] ?? [];
 }
 
-export function canManageRole(currentUser: any, targetRole: string): boolean {
+/**
+ * Returns true if `currentUser` has authority to manage `targetRole`.
+ * Based on level: lower level number = higher authority.
+ */
+export function canManageRole(currentUser: User, targetRoleId: string): boolean {
     if (!currentUser) return false;
 
-    // Super admin can manage all roles
-    if (currentUser.isSuperAdmin) return true;
+    if (currentUser.role === 'super_admin') return true;
 
-    // Get current user's role level
-    const currentUserRole = ADMIN_ROLES.find(r =>
-        r.id === currentUser.role?.toLowerCase() ||
-        r.name === currentUser.role
-    );
+    const currentRoleDef = ADMIN_ROLES.find(r => r.id === currentUser.role);
+    const targetRoleDef = ADMIN_ROLES.find(r => r.id === targetRoleId);
 
-    // Get target role level
-    const targetUserRole = ADMIN_ROLES.find(r =>
-        r.id === targetRole.toLowerCase() ||
-        r.name === targetRole
-    );
-
-    // Can only manage roles at lower levels
-    if (!currentUserRole || !targetUserRole) return false;
-    return currentUserRole.level < targetUserRole.level;
+    if (!currentRoleDef || !targetRoleDef) return false;
+    return currentRoleDef.level < targetRoleDef.level;
 }
+
+/* ============================================
+   AUDIT HELPERS
+============================================ */
 
 export function formatAuditAction(action: string): string {
     return action
@@ -208,26 +180,26 @@ export function formatAuditAction(action: string): string {
 
 export function getAuditActionIcon(action: string): string {
     const icons: Record<string, string> = {
-        'CREATE': '➕',
-        'UPDATE': '✏️',
-        'DELETE': '🗑️',
-        'LOGIN': '🔑',
-        'LOGOUT': '🚪',
-        'PASSWORD_RESET': '🔄',
-        'ROLE_ASSIGN': '👑',
-        'PRODUCT_ASSIGN': '📦',
-        'INVITATION': '📧',
+        CREATE: '➕',
+        UPDATE: '✏️',
+        DELETE: '🗑️',
+        LOGIN: '🔑',
+        LOGOUT: '🚪',
+        PASSWORD_RESET: '🔄',
+        ROLE_ASSIGN: '👑',
+        PRODUCT_ASSIGN: '📦',
+        INVITATION: '📧',
     };
-
-    return icons[action] || '📝';
+    return icons[action] ?? '📝';
 }
+
+/* ============================================
+   PRODUCT SCOPE HELPERS
+============================================ */
 
 export function filterProductsByScope(products: any[], scope: string[] | null): any[] {
     if (!scope || scope.length === 0) return products;
-
-    return products.filter(product =>
-        scope.includes(product.slug) || scope.includes('*')
-    );
+    return products.filter(p => scope.includes(p.slug) || scope.includes('*'));
 }
 
 export function calculateProductMetrics() {
@@ -247,8 +219,7 @@ export function calculateProductMetrics() {
     }, {} as Record<string, number>);
 
     const priorityDistribution = products.reduce((acc, p) => {
-        const priorityGroup = p.priority <= 10 ? 'high' :
-            p.priority <= 20 ? 'medium' : 'low';
+        const priorityGroup = p.priority <= 10 ? 'high' : p.priority <= 20 ? 'medium' : 'low';
         acc[priorityGroup] = (acc[priorityGroup] || 0) + 1;
         return acc;
     }, {} as Record<string, number>);
@@ -264,9 +235,7 @@ export function calculateProductMetrics() {
             byCategory,
             byPriority: priorityDistribution,
         },
-        upcoming: products.filter(p =>
-            p.status === 'BUILDING' || p.status === 'PLANNED'
-        ).length,
+        upcoming: products.filter(p => p.status === 'BUILDING' || p.status === 'PLANNED').length,
     };
 }
 
@@ -275,6 +244,7 @@ export default {
     ADMIN_ROLES,
     hasAdminPermission,
     getUserRoleDisplay,
+    getPermissionsForRole,
     canManageRole,
     formatAuditAction,
     getAuditActionIcon,

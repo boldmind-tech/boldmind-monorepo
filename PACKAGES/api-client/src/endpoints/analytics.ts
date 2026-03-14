@@ -1,34 +1,41 @@
 import { AnalyticsPeriod, AnalyticsData, UserGrowthData, RevenueData } from '../types/api';
 import APIClient from '../client';
 
-// Create a default instance for analytics
-const defaultClient = new APIClient(process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:4000/api');
+export class AnalyticsEndpoints {
+    constructor(private client: APIClient) { }
 
-export const analyticsApi = {
-  getDashboardStats: (period?: AnalyticsPeriod) =>
-    defaultClient.get<AnalyticsData>('/analytics/dashboard', period ? { params: period } : {}),
+    async getDashboardStats(period?: AnalyticsPeriod) {
+        return this.client.get<AnalyticsData>('/analytics/dashboard', period ? { params: period } : {});
+    }
 
-  getUserGrowth: (period: AnalyticsPeriod) =>
-    defaultClient.get<UserGrowthData[]>('/analytics/user-growth', { params: period }),
+    async getUserGrowth(period: AnalyticsPeriod) {
+        return this.client.get<UserGrowthData[]>('/analytics/user-growth', { params: period });
+    }
 
-  getRevenue: (period: AnalyticsPeriod) =>
-    defaultClient.get<RevenueData[]>('/analytics/revenue', { params: period }),
+    async getRevenue(period: AnalyticsPeriod) {
+        return this.client.get<RevenueData[]>('/analytics/revenue', { params: period });
+    }
 
-  getProductAnalytics: (productId: string, period?: AnalyticsPeriod) =>
-    defaultClient.get<any>(`/analytics/products/${productId}`, period ? { params: period } : {}),
+    async getProductAnalytics(productId: string, period?: AnalyticsPeriod) {
+        return this.client.get<any>(`/analytics/products/${productId}`, period ? { params: period } : {});
+    }
 
-  getActiveUsers: (period: AnalyticsPeriod) =>
-    defaultClient.get<{ date: string; count: number }[]>('/analytics/active-users', { params: period }),
+    async getActiveUsers(period: AnalyticsPeriod) {
+        return this.client.get<{ date: string; count: number }[]>('/analytics/active-users', { params: period });
+    }
 
-  getConversionRates: (period: AnalyticsPeriod) =>
-    defaultClient.get<any>('/analytics/conversion-rates', { params: period }),
+    async getConversionRates(period: AnalyticsPeriod) {
+        return this.client.get<any>('/analytics/conversion-rates', { params: period });
+    }
 
-  getTopReferrers: (period: AnalyticsPeriod) =>
-    defaultClient.get<Array<{ referrer: string; count: number; percentage: number }>>(
-      '/analytics/top-referrers',
-      { params: period }
-    ),
+    async getTopReferrers(period: AnalyticsPeriod) {
+        return this.client.get<Array<{ referrer: string; count: number; percentage: number }>>(
+            '/analytics/top-referrers',
+            { params: period }
+        );
+    }
 
-  trackEvent: (event: string, data?: any) =>
-    defaultClient.post('/analytics/events', { event, data })
-};
+    async trackEvent(event: string, data?: any) {
+        return this.client.post('/analytics/events', { event, data });
+    }
+}

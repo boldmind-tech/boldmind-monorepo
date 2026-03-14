@@ -1,7 +1,6 @@
 // PACKAGES/api-client/src/client.ts - Updated with service URLs
 
 import axios, { AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
-import { getSupabaseClient, getSupabaseServer } from '@boldmind/auth/server';
 
 export default class APIClient {
   private client: AxiosInstance;
@@ -16,66 +15,19 @@ export default class APIClient {
       timeout: 30000, // 30 seconds
     });
 
-    this.setupAuthInterceptor();
     this.setupErrorInterceptor();
     this.setupRetryInterceptor();
-  }
-
-  private setupAuthInterceptor() {
-    this.client.interceptors.request.use(
-      async (config: InternalAxiosRequestConfig) => {
-        try {
-          const isServer = typeof window === 'undefined';
-          const supabase = isServer ? getSupabaseServer() : getSupabaseClient();
-          const { data: { session } } = await supabase.auth.getSession();
-
-          if (session?.access_token) {
-            config.headers.Authorization = `Bearer ${session.access_token}`;
-          }
-        } catch (error) {
-          // Log only in non-production or if it's a real error (not just missing request context)
-          if (process.env['NODE_ENV'] !== 'production') {
-            console.debug('[APIClient] Auth interceptor skipping token (likely no session or request context):', error instanceof Error ? error.message : error);
-          }
-        }
-
-        return config;
-      },
-      (error) => {
-        return Promise.reject(error);
-      }
-    );
   }
 
   private setupErrorInterceptor() {
     this.client.interceptors.response.use(
       (response) => response,
       async (error) => {
-        const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
-
-        if (error.response?.status === 401 && !originalRequest._retry) {
-          originalRequest._retry = true;
-
-          try {
-            const isServer = typeof window === 'undefined';
-            const supabase = isServer ? getSupabaseServer() : getSupabaseClient();
-            const { data: { session }, error: refreshError } = await supabase.auth.refreshSession();
-
-            if (refreshError || !session) {
-              if (typeof window !== 'undefined') {
-                window.location.href = '/login';
-              }
-              return Promise.reject(error);
-            }
-
-            originalRequest.headers.Authorization = `Bearer ${session.access_token}`;
-            return this.client(originalRequest);
-          } catch (refreshError) {
-            console.error('Token refresh failed:', refreshError);
-            return Promise.reject(error);
+        if (error.response?.status === 401) {
+          if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/login')) {
+             window.location.href = '/login';
           }
         }
-
         return Promise.reject(error);
       }
     );
@@ -135,4 +87,4 @@ export default class APIClient {
     const response = await this.client.delete<T>(url, config);
     return response.data;
   }
-}
+}

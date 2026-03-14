@@ -1,0 +1,394 @@
+{
+    "name": "WhatsApp Business - Customer Service Automation",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "/webhook/whatsapp-message-received",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "name": "Webhook - WhatsApp Message",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                250,
+                300
+            ],
+            "webhookId": "whatsapp-received"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Extract WhatsApp message\nconst change = $input.body.entry[0].changes[0];\nconst message = change.value.messages?.[0];\n\nif (!message) {\n  // Handle status update\n  const status = change.value.statuses?.[0];\n  if (status) {\n    return [{\n      type: 'status',\n      messageId: status.id,\n      status: status.status,\n      timestamp: status.timestamp\n    }];\n  }\n  return [];\n}\n\nconst contact = change.value.contacts?.[0];\n\nreturn [{\n  type: 'message',\n  messageId: message.id,\n  from: message.from,\n  timestamp: message.timestamp,\n  messageType: message.type,\n  text: message.text?.body,\n  image: message.image,\n  document: message.document,\n  interactive: message.interactive,\n  button: message.button,\n  contactName: contact?.profile?.name,\n  phoneNumberId: change.value.metadata.phone_number_id\n}];"
+            },
+            "name": "Extract Message Data",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                450,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "string": [
+                        {
+                            "value1": "={{ $json.type }}",
+                            "operation": "equals",
+                            "value2": "message"
+                        }
+                    ]
+                }
+            },
+            "name": "Is Message?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 1,
+            "position": [
+                650,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "select",
+                "query": "SELECT * FROM customers WHERE phone = '{{ $json.from }}' LIMIT 1"
+            },
+            "name": "Check Existing Customer",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 2,
+            "position": [
+                850,
+                250
+            ]
+        },
+        {
+            "parameters": {
+                "model": "gpt-4",
+                "messages": {
+                    "values": [
+                        {
+                            "role": "system",
+                            "content": "You are a customer service AI for BoldMind. Analyze the message and classify intent: greeting, question, complaint, order_status, support_request, other. Also determine if human handoff is needed. Return JSON: {intent, needsHuman, suggestedResponse}"
+                        },
+                        {
+                            "role": "user",
+                            "content": "Customer: {{ $node['Extract Message Data'].json.contactName }}\nMessage: {{ $node['Extract Message Data'].json.text }}"
+                        }
+                    ]
+                }
+            },
+            "name": "AI - Classify Intent",
+            "type": "n8n-nodes-base.openAi",
+            "typeVersion": 1,
+            "position": [
+                1050,
+                250
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "string": [
+                        {
+                            "value1": "={{ $json.needsHuman }}",
+                            "operation": "equals",
+                            "value2": "true"
+                        }
+                    ]
+                }
+            },
+            "name": "Needs Human?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 1,
+            "position": [
+                1250,
+                250
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://graph.facebook.com/v19.0/={{ $node['Extract Message Data'].json.phoneNumberId }}/messages",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": {
+                    "Authorization": "Bearer {{ $env.WHATSAPP_ACCESS_TOKEN }}"
+                },
+                "method": "POST",
+                "sendBody": true,
+                "bodyParameters": {
+                    "messaging_product": "whatsapp",
+                    "to": "={{ $node['Extract Message Data'].json.from }}",
+                    "type": "text",
+                    "text": {
+                        "body": "={{ $node['AI - Classify Intent'].json.suggestedResponse }}"
+                    }
+                },
+                "options": {}
+            },
+            "name": "Send Auto-Reply",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                1450,
+                150
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://graph.facebook.com/v19.0/={{ $node['Extract Message Data'].json.phoneNumberId }}/messages",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": {
+                    "Authorization": "Bearer {{ $env.WHATSAPP_ACCESS_TOKEN }}"
+                },
+                "method": "POST",
+                "sendBody": true,
+                "bodyParameters": {
+                    "messaging_product": "whatsapp",
+                    "to": "={{ $node['Extract Message Data'].json.from }}",
+                    "type": "interactive",
+                    "interactive": {
+                        "type": "button",
+                        "body": {
+                            "text": "I'll connect you with a team member. Please select your preferred contact method:"
+                        },
+                        "action": {
+                            "buttons": [
+                                {
+                                    "type": "reply",
+                                    "reply": {
+                                        "id": "call_me",
+                                        "title": "Call Me"
+                                    }
+                                },
+                                {
+                                    "type": "reply",
+                                    "reply": {
+                                        "id": "continue_chat",
+                                        "title": "Continue Chat"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                "options": {}
+            },
+            "name": "Send Handoff Options",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                1450,
+                350
+            ]
+        },
+        {
+            "parameters": {
+                "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+                "sendBody": true,
+                "bodyParameters": {
+                    "text": "*🆘 HUMAN HANDOFF NEEDED*\n\n*Customer:* {{ $node['Extract Message Data'].json.contactName }}\n*Phone:* {{ $node['Extract Message Data'].json.from }}\n*Intent:* {{ $node['AI - Classify Intent'].json.intent }}\n*Message:* {{ $node['Extract Message Data'].json.text }}\n\n*Action Required:* Please respond via WhatsApp"
+                },
+                "options": {}
+            },
+            "name": "Alert Team - Slack",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                1650,
+                350
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "insert",
+                "table": "whatsapp_messages",
+                "columns": "message_id,phone_number_id,from_number,message_type,message_text,intent,needs_human,auto_reply,created_at",
+                "values": "={{ $node['Extract Message Data'].json.messageId }},={{ $node['Extract Message Data'].json.phoneNumberId }},={{ $node['Extract Message Data'].json.from }},={{ $node['Extract Message Data'].json.messageType }},={{ $node['Extract Message Data'].json.text }},={{ $node['AI - Classify Intent'].json.intent }},={{ $node['AI - Classify Intent'].json.needsHuman }},={{ $node['AI - Classify Intent'].json.suggestedResponse }},NOW()"
+            },
+            "name": "Log Conversation",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 2,
+            "position": [
+                1850,
+                250
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://graph.facebook.com/v19.0/={{ $node['Extract Message Data'].json.phoneNumberId }}/messages",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": {
+                    "Authorization": "Bearer {{ $env.WHATSAPP_ACCESS_TOKEN }}"
+                },
+                "method": "POST",
+                "sendBody": true,
+                "bodyParameters": {
+                    "messaging_product": "whatsapp",
+                    "status": "read",
+                    "message_id": "={{ $node['Extract Message Data'].json.messageId }}"
+                },
+                "options": {}
+            },
+            "name": "Mark as Read",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                2050,
+                250
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ JSON.stringify({ success: true }) }}"
+            },
+            "name": "Respond to WhatsApp",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1,
+            "position": [
+                2250,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook - WhatsApp Message": {
+            "main": [
+                [
+                    {
+                        "node": "Extract Message Data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract Message Data": {
+            "main": [
+                [
+                    {
+                        "node": "Is Message?",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Is Message?": {
+            "main": [
+                [
+                    {
+                        "node": "Check Existing Customer",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Respond to WhatsApp",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Check Existing Customer": {
+            "main": [
+                [
+                    {
+                        "node": "AI - Classify Intent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI - Classify Intent": {
+            "main": [
+                [
+                    {
+                        "node": "Needs Human?",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Needs Human?": {
+            "main": [
+                [
+                    {
+                        "node": "Send Handoff Options",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Send Auto-Reply",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Send Auto-Reply": {
+            "main": [
+                [
+                    {
+                        "node": "Log Conversation",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Send Handoff Options": {
+            "main": [
+                [
+                    {
+                        "node": "Alert Team - Slack",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Alert Team - Slack": {
+            "main": [
+                [
+                    {
+                        "node": "Log Conversation",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Log Conversation": {
+            "main": [
+                [
+                    {
+                        "node": "Mark as Read",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Mark as Read": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to WhatsApp",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

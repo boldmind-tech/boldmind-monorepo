@@ -13,6 +13,11 @@ export { SuperFooter, type FooterLink, type FooterSection, type SuperFooterProps
 export { ParticleBackground } from './components/ParticleBackground';
 export { Confetti } from './components/Confetti';
 export { TypewriterEffect } from './components/TypewriterEffect';
+export { FacebookSDK } from './components/analytics/FacebookSDK';
+export { FacebookLoginButton } from './components/analytics/FacebookLoginButton';
+export { FontProvider } from './components/FontProvider';
+export { DyslexiaToggle } from './components/DyslexiaToggle';
+
 
 // ============================================
 // BASIC UI COMPONENTS
@@ -28,11 +33,19 @@ export { LoadingSpinner } from './components/LoadingSpinner';
 export { ErrorBoundary } from './components/ErrorBoundary';
 
 // ============================================
-// LAYOUT COMPONENTS
+// LEGAL & COOKIE CONSENT COMPONENTS
 // ============================================
-export { default as ProductLayout } from './components/ProductLayout';
-// export { default as Navbar } from './components/';
-// export { default as Footer } from './components/Footer';
+export { PrivacyPolicy, type PrivacyPolicyProps, type PrivacyPolicySection } from './components/PrivacyPolicy';
+export { TermsAndConditions, type TermsAndConditionsProps, type TermsSection } from './components/TermsAndConditions';
+export { CookieConsent, type CookieConsentProps } from './components/CookieConsent';
+export { useCookieConsent, type CookiePreferences, type UseCookieConsentReturn } from './hooks/useCookieConsent';
+
+// ============================================
+// LAYOUT & PAGE COMPONENTS
+// ============================================
+// export { default as ProductLayout } from './components/ProductLayout';
+export { PricingContent, type PricingContentProps } from './components/PricingContent';
+
 
 // ============================================
 // PROVIDERS & CONTEXT
@@ -41,12 +54,13 @@ export {
   ThemeProvider,
   useTheme,
   ThemeToggle,
-  DyslexiaModeToggle,
   useProductTheme,
   type ThemeContextType,
   type ProductThemeType,
   type Theme
 } from './providers/theme-provider';
+
+export { AppLayout } from './providers/AppLayout';
 
 // ============================================
 // CUSTOM HOOKS

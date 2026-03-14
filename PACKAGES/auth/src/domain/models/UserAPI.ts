@@ -1,3 +1,5 @@
+// PACKAGES/auth/src/domain/models/UserAPI.ts
+
 import { User } from './User';
 
 export interface UserAPI {

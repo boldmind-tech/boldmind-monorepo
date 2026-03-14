@@ -12,6 +12,6 @@ export default defineConfig({
     'cookie',
     'date-fns'
   ],
-  platform: 'neutral',
+  platform: 'node',
   treeshake: true,
 });
