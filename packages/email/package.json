@@ -1,0 +1,30 @@
+{
+  "name": "@boldmind/email",
+  "version": "1.0.0",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@types/react": "^18.3.27",
+    "@types/react-dom": "^18.3.7",
+    "cookie": "^1.1.1",
+    "next": "^14.2.35",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-email": "^2.0.0",
+    "resend": "^2.0.0",
+    "@types/cookie": "^1.0.0",
+    "@types/node": "20.19.30",
+    "autoprefixer": "^10.4.19",
+    "dotenv": "^17.2.3",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.0",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.4.5"
+  },
+  "devDependencies": {}
+}

@@ -1,0 +1,35 @@
+{
+  "extends": "../../tsconfig.frontend.json",
+  "compilerOptions": {
+    "composite": true,
+    "jsx": "react-jsx", // ✅ Correct for React
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "baseUrl": ".",
+    "outDir": "./dist",
+    "rootDir": ".",
+    "types": [
+      "node"
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@boldmind/*": [
+        "../*/src"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*",
+    "scripts/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    ".turbo"
+  ]
+}
