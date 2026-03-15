@@ -78,7 +78,18 @@ export class AmebogistEndpoints {
     }
 
     // Author Stats
-    async getMyStats() {
-        return this.client.get('/amebogist/me/stats');
+    async getMyStats(): Promise<AmebogistResponse<any>> {
+        return this.client.get<AmebogistResponse<any>>('/amebogist/me/stats');
+    }
+
+    async getCreatorArticles(params?: { 
+        page?: number; 
+        status?: 'draft' | 'published' | 'archived' 
+    }): Promise<AmebogistResponse<AmebogistArticle[]>> {
+        return this.client.get<AmebogistResponse<AmebogistArticle[]>>('/amebogist/creator/my-articles', { params });
+    }
+
+    async getCreatorStats(): Promise<AmebogistResponse<any>> {
+        return this.client.get<AmebogistResponse<any>>('/amebogist/creator/stats');
     }
 }

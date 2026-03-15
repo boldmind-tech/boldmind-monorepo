@@ -1,14 +1,14 @@
 [build]
-  builder = "NIXPACKS"
-  buildCommand = "pnpm install --frozen-lockfile && pnpm build"
+builder = "dockerfile"
+dockerfilePath = "service/Dockerfile"
+buildContext = "."
 
 [deploy]
-  startCommand = "node dist/main"
-  healthcheckPath = "/health"
-  healthcheckTimeout = 30
-  restartPolicyType = "ON_FAILURE"
-  restartPolicyMaxRetries = 3
+startCommand = "node dist/main"
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
 
-[[deploy.envs]]
-  name = "NODE_ENV"
-  value = "production"
+[deploy.healthcheck]
+path = "/health"
+timeout = 30
+interval = 10

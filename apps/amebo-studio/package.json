@@ -17,11 +17,13 @@
         "@boldmind/pwa": "workspace:*",
         "next": "14.2.35",
         "react": "18.3.1",
-        "react-dom": "18.3.1"
+        "react-dom": "18.3.1",
+        "cookie": "^1.1.1"
     },
     "devDependencies": {
         "@types/react": "18.3.27",
         "@types/react-dom": "18.3.7",
+        "@types/cookie": "^1.0.0",
         "typescript": "^5.3.3"
     }
 }

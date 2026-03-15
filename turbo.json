@@ -1,39 +1,53 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": [
-    "tsconfig.json",
-    "tailwind.config.js",
-    "postcss.config.js",
-    "package.json",
-    "pnpm-lock.yaml"
+    "**/.env.*local",
+    ".env"
+  ],
+  "globalEnv": [
+    "NODE_ENV",
+    "NEXT_PUBLIC_API_URL",
+    "NEXT_PUBLIC_HUB_URL",
+    "NEXT_PUBLIC_APP_URL",
+    "NEXT_PUBLIC_FACEBOOK_APP_ID",
+    "NEXT_PUBLIC_FACEBOOK_PIXEL_ID",
+    "NEXT_PUBLIC_GOOGLE_SITE_VERIFY"
   ],
   "pipeline": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "outputs": [
         ".next/**",
         "!.next/cache/**",
-        "dist/**"
+        "dist/**",
+        "build/**"
       ],
-      "cache": true
+      "env": [
+        "NODE_ENV",
+        "NEXT_PUBLIC_API_URL",
+        "NEXT_PUBLIC_HUB_URL",
+        "NEXT_PUBLIC_APP_URL",
+        "NEXT_PUBLIC_FACEBOOK_APP_ID",
+        "NEXT_PUBLIC_FACEBOOK_PIXEL_ID",
+        "NEXT_PUBLIC_GOOGLE_SITE_VERIFY"
+      ]
     },
     "dev": {
-      "dependsOn": [
-        "^build"
-      ],
       "cache": false,
       "persistent": true
     },
     "lint": {
-      "outputs": []
-    },
-    "test": {
+      "dependsOn": ["^build"],
       "outputs": []
     },
     "type-check": {
+      "dependsOn": ["^build"],
       "outputs": []
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"],
+      "cache": false
     },
     "clean": {
       "cache": false

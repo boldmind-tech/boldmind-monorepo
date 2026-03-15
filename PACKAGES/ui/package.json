@@ -36,6 +36,7 @@
     "@types/node": "^20.11.5",
     "@types/react": "^18.2.61",
     "@types/react-dom": "^18.2.19",
+    "@types/cookie": "^1.0.0",
     "autoprefixer": "^10.4.16",
     "clsx": "^2.1.1",
     "cookie": "^1.1.1",
