@@ -44,28 +44,18 @@
     "test": "turbo run test",
     "type-check": "turbo run type-check",
     "format": "prettier --write \"**/*.{ts,tsx,md,json}\" --ignore-path .gitignore",
-    "install:all": "pnpm install && pnpm -r install",
-    "update:deps": "pnpm update --latest --recursive --workspace-root",
-    "check:deps": "pnpm -r exec npm outdated",
-    "audit:deps": "pnpm audit --recursive",
-    "fix:deps": "pnpm dedupe",
     "clean": "rimraf node_modules **/node_modules",
-    "stats": "turbo run stats",
-    "graph": "turbo run build --graph",
-    "new-service": "tsx ./tooling/generators/new-service/index.ts",
-    "health": "echo 'Checking monorepo health...' && pnpm run type-check && pnpm run lint && echo '✅ All checks passed'",
-    "prisma:upgrade": "pnpm add -D prisma@7.3.0 @prisma/client@7.3.0 --filter='./service'",
-    "prisma:downgrade": "pnpm add -D prisma@5.22.0 @prisma/client@5.22.0 --filter='./service'",
-    "prisma:check-versions": "pnpm -r exec 'if [ -f \"package.json\" ]; then echo \"$PWD:\"; grep -E \"(prisma|@prisma/client)\" package.json || echo \"No Prisma\"; fi'",
-    "prisma:regenerate-all": "pnpm run prisma:generate"
+    "health": "echo 'Checking monorepo health...' && pnpm run type-check && pnpm run lint && echo '✅ All checks passed'"
+  },
+  "dependencies": {
+    "tsdown": "^0.20.1"
   },
   "devDependencies": {
-    "framer-motion": "^12.34.3",
     "@types/cookie": "^1.0.0",
     "@types/node": "20.19.30",
+    "framer-motion": "^12.34.3",
     "prettier": "^3.2.5",
     "rimraf": "^6.1.3",
-    "tsdown": "^0.20.1",
     "turbo": "^1.13.2",
     "typescript": "^5.3.3"
   },

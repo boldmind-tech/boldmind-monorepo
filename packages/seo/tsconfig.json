@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.frontend.json", // or tsconfig.base.json / tsconfig.json
+  "extends": "../../tsconfig.base.json", // or tsconfig.base.json / tsconfig.json
   "compilerOptions": {
     "composite": true, // required for project references
     "jsx": "react-jsx", // only if this package has JSX

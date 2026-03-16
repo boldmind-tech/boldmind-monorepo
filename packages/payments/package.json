@@ -30,7 +30,8 @@
   },
   "dependencies": {
     "@boldmind/api-client": "workspace:*",
-    "axios": "^1.6.0"
+    "axios": "^1.6.0",
+    "tsdown": "^0.20.1"
   },
   "devDependencies": {
     "@types/node": "^20.19.28",
@@ -39,7 +40,6 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8",
-    "tsdown": "^0.20.1",
     "typescript": "^5.4.5"
   },
   "peerDependencies": {
