@@ -221,44 +221,6 @@ export class SupabaseAuthProvider {
         }
     }
 
-    async verifyOtp(email: string, token: string, type: 'signup' | 'invite' | 'magiclink' | 'recovery' | 'email_change' | 'email'): Promise<AuthResponse> {
-        try {
-            const { data, error } = await this.client.auth.verifyOtp({
-                email,
-                token,
-                type,
-            });
-
-            if (error) {
-                return {
-                    session: null,
-                    user: null,
-                    error: {
-                        message: error.message,
-                        status: error.status ?? undefined,
-                        code: error.code ?? undefined,
-                    },
-                };
-            }
-
-            return {
-                session: data.session as Session,
-                user: null,
-                error: null,
-            };
-        } catch (error: any) {
-            return {
-                session: null,
-                user: null,
-                error: {
-                    message: error.message || 'Failed to verify OTP',
-                    status: undefined,
-                    code: undefined,
-                },
-            };
-        }
-    }
-
     async verifyUserById(userId: string): Promise<{ id: string; email: string; role?: string } | null> {
         try {
             const { data: { user }, error } = await this.client.auth.admin.getUserById(userId);
@@ -281,26 +243,6 @@ export class SupabaseAuthProvider {
     // ──────────────────────────────────────────────
     // ADMIN METHODS
     // ──────────────────────────────────────────────
-
-    async resendVerification(email: string): Promise<{ success: boolean; error?: string }> {
-        try {
-            const { error } = await this.client.auth.resend({
-                type: 'signup',
-                email: email,
-                options: {
-                    emailRedirectTo: `${window.location.origin}/auth/callback`,
-                }
-            });
-
-            if (error) {
-                return { success: false, error: error.message };
-            }
-
-            return { success: true };
-        } catch (error: any) {
-            return { success: false, error: error.message || 'Failed to resend verification email' };
-        }
-    }
 
     async deleteUser(userId: string): Promise<{ success: boolean; error?: string }> {
         try {

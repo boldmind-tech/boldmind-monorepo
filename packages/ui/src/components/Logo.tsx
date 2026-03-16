@@ -3,15 +3,15 @@
 
 import React from 'react';
 
-export interface LogoProps {
+interface LogoProps {
   src?: string;
   size?: 'sm' | 'md' | 'lg' | 'xl' | number;
   className?: string;
   alt?: string;
 }
 
-export const Logo: React.FC<LogoProps> = ({
-  src,
+const Logo: React.FC<LogoProps> = ({ 
+  src, 
   size = 'md',
   className = '',
   alt = 'BoldMind Logo'
@@ -19,7 +19,7 @@ export const Logo: React.FC<LogoProps> = ({
   // Handle both string sizes and numeric sizes
   const getSize = () => {
     if (typeof size === 'number') return size;
-
+    
     const sizeMap = {
       sm: 32,
       md: 48,
@@ -35,7 +35,7 @@ export const Logo: React.FC<LogoProps> = ({
   if (src) {
     return (
       <div className={`inline-block ${className}`}>
-        <img
+        <img 
           src={src}
           alt={alt}
           width={pixelSize}
@@ -50,17 +50,14 @@ export const Logo: React.FC<LogoProps> = ({
   // Fallback to styled text logo if no image
   return (
     <div className={`flex items-center ${className}`}>
-      <div
-        className="rounded-full flex items-center justify-center font-bold"
-        style={{
-          width: pixelSize,
-          height: pixelSize,
-          background: 'linear-gradient(to bottom right, var(--product-primary), var(--product-accent))',
-          color: 'var(--product-background)',
-        }}
+      <div 
+        className="rounded-full bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center text-white font-bold"
+        style={{ width: pixelSize, height: pixelSize }}
       >
         {size === 'sm' || pixelSize <= 32 ? 'BM' : 'BM'}
       </div>
     </div>
   );
 };
+
+export default Logo;

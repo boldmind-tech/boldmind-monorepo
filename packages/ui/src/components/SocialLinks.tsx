@@ -1,19 +1,19 @@
-// PACKAGES/ui/src/components/SocialLinks.tsx
+// packages/ui/src/components/SocialLinks.tsx
 "use client";
 
 import React, { useState } from 'react';
 
-export interface SocialLink {
+interface SocialLink {
   href: string;
   icon: React.ReactNode;
   ariaLabel: string;
 }
 
-export interface SocialLinksProps {
+interface SocialLinksProps {
   links: SocialLink[];
 }
 
-export const SocialLinks: React.FC<SocialLinksProps> = ({ links }) => {
+const SocialLinks: React.FC<SocialLinksProps> = ({ links }) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const containerStyle: React.CSSProperties = {
@@ -26,8 +26,8 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({ links }) => {
       {links.map((link, index) => {
         const isHovered = hoveredIndex === index;
         const linkStyle: React.CSSProperties = {
-          color: isHovered ? 'var(--product-accent)' : 'var(--neutral-500)',
-          transition: 'color var(--transition-quick)',
+          color: isHovered ? '#FFC800' : '#6B7280',
+          transition: 'color 0.2s',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -51,3 +51,5 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({ links }) => {
     </div>
   );
 };
+
+export default SocialLinks;

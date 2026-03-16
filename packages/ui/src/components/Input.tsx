@@ -10,16 +10,16 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   icon?: React.ReactNode;
 }
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, label, error, icon, ...props }, ref) => {
     return (
       <div style={{ width: '100%' }}>
         {label && (
-          <label style={{
-            display: 'block',
+          <label style={{ 
+            display: 'block', 
             marginBottom: '0.5rem',
             fontWeight: 500,
-            color: 'var(--product-primary)'
+            color: '#00143C'
           }}>
             {label}
           </label>
@@ -31,7 +31,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               left: '1rem',
               top: '50%',
               transform: 'translateY(-50%)',
-              color: 'var(--neutral-500)',
+              color: '#6B7280',
               pointerEvents: 'none' as const,
             }}>
               {icon}
@@ -41,33 +41,31 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             style={{
               width: '100%',
-              padding: icon ? '0.875rem 1.25rem 0.875rem 3rem' : '0.875rem 1.25rem',
-              border: `2px solid ${error ? 'var(--color-error)' : 'var(--product-muted)'}`,
-              borderRadius: 'var(--radius-md)',
-              fontFamily: 'var(--font-primary)',
+              padding: icon ? '0.75rem 1rem 0.75rem 3rem' : '0.75rem 1rem',
+              border: `1px solid ${error ? '#EF4444' : '#D1D5DB'}`,
+              borderRadius: '0.5rem',
               fontSize: '1rem',
-              lineHeight: '1.5',
-              color: 'var(--product-foreground)',
-              backgroundColor: 'var(--product-background)',
-              transition: 'all var(--transition-quick)',
+              color: '#00143C',
+              backgroundColor: 'white',
+              transition: 'all 0.2s',
               outline: 'none',
               boxShadow: 'none',
             }}
             className={cn(className)}
             onFocus={(e) => {
-              e.currentTarget.style.borderColor = 'var(--product-primary)';
-              e.currentTarget.style.boxShadow = '0 0 0 3px var(--product-highlight)';
+              e.currentTarget.style.borderColor = '#00143C';
+              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(0, 20, 60, 0.1)';
             }}
             onBlur={(e) => {
-              e.currentTarget.style.borderColor = error ? 'var(--color-error)' : 'var(--product-muted)';
+              e.currentTarget.style.borderColor = error ? '#EF4444' : '#D1D5DB';
               e.currentTarget.style.boxShadow = 'none';
             }}
             {...props}
           />
         </div>
         {error && (
-          <p style={{
-            color: 'var(--color-error)',
+          <p style={{ 
+            color: '#EF4444',
             fontSize: '0.875rem',
             marginTop: '0.25rem'
           }}>
@@ -81,3 +79,4 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
 Input.displayName = 'Input';
 
+export default Input;

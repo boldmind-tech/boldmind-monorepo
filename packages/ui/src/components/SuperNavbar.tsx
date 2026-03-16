@@ -1,28 +1,31 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// packages/ui/src/components/SuperNavbar.tsx
-// ─────────────────────────────────────────────────────────────────────────────
-// FIX: Mobile menu was rendering on desktop when open.
-// Root cause: Framer Motion applies inline style={{ height, opacity }} which
-// does NOT override display:none from md:hidden — BUT the issue was the
-// AnimatePresence wrapper itself had no md:hidden. Added a portal wrapper
-// div with `md:hidden` class AROUND the AnimatePresence so on ≥md screens
-// the entire mobile nav section is removed from layout flow.
-//
-// FIX 2: Desktop nav ThemeToggle was duplicated (appeared in both mobile
-// and desktop sections). Consolidated into single render per breakpoint.
-// ─────────────────────────────────────────────────────────────────────────────
-
-'use client';
-
-import React, { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Sparkles, Zap, Rocket, ExternalLink } from 'lucide-react';
-import { useTheme, ThemeToggle } from '../providers/theme-provider';
-import { DyslexiaToggle } from './DyslexiaToggle';
-import { cn } from '../lib/utils';
-import { BOLDMIND_PRODUCTS, getProductBySlug } from '@boldmind/utils';
+"use client";
+import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Menu,
+  X,
+  // ChevronDown,
+  Sparkles,
+  Zap,
+  Rocket,
+  // Moon,
+  // Sun,
+  // Eye,
+  ExternalLink,
+} from "lucide-react";
+import {
+  useTheme,
+  ThemeToggle,
+  DyslexiaModeToggle,
+} from "../providers/theme-provider";
+import { cn } from "../lib/utils";
+import {
+  BOLDMIND_PRODUCTS,
+  getProductBySlug,
+  // getProductsByStatus
+} from "@boldmind/utils";
 
 export interface NavLink {
   href: string;
@@ -38,29 +41,33 @@ export interface SuperNavbarProps {
   cta?: {
     href: string;
     label: string;
-    variant?: 'primary' | 'secondary' | 'glow' | 'gradient';
+    variant?: "primary" | "secondary" | "glow" | "gradient";
     icon?: React.ReactNode;
   };
-  /** Controls navbar background style */
-  theme?: 'dark' | 'light' | 'transparent';
+  theme?: "dark" | "light" | "transparent";
   sticky?: boolean;
   animated?: boolean;
+  showParticles?: boolean;
   showThemeControls?: boolean;
-  showFontToggle?: boolean;
   className?: string;
+  user?: {
+    name: string;
+    role: string;
+  };
   onLinkClick?: (href: string) => void;
 }
 
 export function SuperNavbar({
-  logoSrc = '/logo.png',
+  logoSrc = "/logo.png",
   links,
   cta,
-  theme = 'dark',
+  theme = "dark",
   sticky = true,
   animated = true,
+  showParticles = false,
   showThemeControls = true,
-  showFontToggle = false,
-  className = '',
+  className = "",
+  // user,
   onLinkClick,
 }: SuperNavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -68,350 +75,587 @@ export function SuperNavbar({
   const [imageError, setImageError] = useState(false);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const [hoveredCta, setHoveredCta] = useState(false);
-  const [activeLink, setActiveLink] = useState('');
+  const [activeLink, setActiveLink] = useState("");
+  const [showSparkles, setShowSparkles] = useState(false);
 
   const { productTheme } = useTheme();
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
-  const currentProduct = getProductBySlug(productTheme.slug) || BOLDMIND_PRODUCTS[0]!;
+  const currentProduct =
+    getProductBySlug(productTheme.slug) || BOLDMIND_PRODUCTS[0];
+  const productInitial = currentProduct?.name.charAt(0);
   const productColor = productTheme.colors.primary;
 
-  // ── Default nav links ─────────────────────────────────────────────────────
+  // Default links if none provided
   const defaultLinks: NavLink[] = [
-    { href: '/', label: 'Home' },
-    { href: '/features', label: 'Features' },
-    { href: '/pricing', label: 'Pricing' },
-    { href: '/docs', label: 'Docs' },
-    { href: '/contact', label: 'Contact' },
+    { href: "/", label: "Home", icon: "🏠" },
+    { href: "/features", label: "Features", icon: "✨" },
+    { href: "/pricing", label: "Pricing", icon: "💰" },
+    { href: "/docs", label: "Docs", icon: "📚" },
+    { href: "/contact", label: "Contact", icon: "✉️" },
   ];
+
   const navLinks = links || defaultLinks;
-
-  const navCTA = cta ?? {
-    href: 'https://wa.me/2349138349271',
-    label: 'Get Started',
-    variant: 'primary' as const,
-    icon: <Zap className="w-4 h-4" />,
-  };
-
-  // ── Theme colors ──────────────────────────────────────────────────────────
-  const getThemeColors = () => {
-    const hex = productColor.replace('#', '');
-    const r = parseInt(hex.slice(0, 2), 16);
-    const g = parseInt(hex.slice(2, 4), 16);
-    const b = parseInt(hex.slice(4, 6), 16);
-
-    if (theme === 'light') {
+  // Get product-specific CTA
+  const getDefaultCTA = () => {
+    if (
+      currentProduct?.status === ("LIVE") &&
+      currentProduct?.links?.website
+    ) {
       return {
-        bg: scrolled ? 'var(--product-background)' : 'rgba(255,255,255,0.97)',
-        text: 'var(--product-foreground)',
-        border: 'var(--product-muted)',
+        href: currentProduct?.links.website,
+        label: "Visit Website",
+        variant: "primary" as const,
+        icon: <ExternalLink className="w-4 h-4" />,
       };
     }
-    if (theme === 'transparent') {
-      return {
-        bg: scrolled ? `rgba(${r},${g},${b},0.97)` : 'transparent',
-        text: 'var(--product-background)',
-        border: 'transparent',
-      };
-    }
+
     return {
-      bg: scrolled ? productColor : `rgba(${r},${g},${b},0.97)`,
-      text: 'var(--product-background)',
-      border: 'rgba(255,255,255,0.1)',
+      href: "https://wa.me/2349138349271",
+      label: "Get Started",
+      variant: "primary" as const,
+      icon: <Zap className="w-4 h-4" />,
     };
   };
-  const colors = getThemeColors();
-  const textColor = theme === 'light' ? 'var(--product-foreground)' : 'var(--product-background)';
 
-  // ── Scroll handler ────────────────────────────────────────────────────────
+  const navCTA = cta || getDefaultCTA();
+
+  // Theme colors - FIXED VERSION
+  const getThemeColors = () => {
+    const baseColor = productColor;
+    const rgbMatch = baseColor.match(
+      /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i,
+    );
+
+    if (rgbMatch) {
+      const r = parseInt(rgbMatch[1]!, 16);
+      const g = parseInt(rgbMatch[2]!, 16);
+      const b = parseInt(rgbMatch[3]!, 16);
+
+      switch (theme) {
+        case "light":
+          return {
+            bg: scrolled ? baseColor : `rgba(${r}, ${g}, ${b}, 0.95)`,
+            text: "#FFFFFF",
+            border: "#E5E7EB",
+          };
+        case "transparent":
+          return {
+            bg: scrolled ? `rgba(${r}, ${g}, ${b}, 0.95)` : "transparent",
+            text: "#FFFFFF",
+            border: "transparent",
+          };
+        default: // dark
+          return {
+            bg: scrolled ? baseColor : `rgba(${r}, ${g}, ${b}, 0.95)`,
+            text: "#FFFFFF",
+            border: "#374151",
+          };
+      }
+    }
+
+    // Fallback colors
+    return {
+      bg: scrolled ? "#00143C" : "rgba(0, 20, 60, 0.95)",
+      text: "#FFFFFF",
+      border: "#374151",
+    };
+  };
+
+  const currentNavTheme = getThemeColors();
+
+  // Scroll effect
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+      if (window.scrollY > 100) {
+        setShowSparkles(true);
+        setTimeout(() => setShowSparkles(false), 1000);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // ── Close on outside click ────────────────────────────────────────────────
+  // Close mobile menu when clicking outside
   useEffect(() => {
-    const handler = (e: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent) => {
       if (
         isOpen &&
         mobileMenuRef.current &&
         menuButtonRef.current &&
-        !mobileMenuRef.current.contains(e.target as Node) &&
-        !menuButtonRef.current.contains(e.target as Node)
+        !mobileMenuRef.current.contains(event.target as Node) &&
+        !menuButtonRef.current.contains(event.target as Node)
       ) {
         setIsOpen(false);
       }
     };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
-  // ── Close mobile menu on resize to desktop ────────────────────────────────
-  useEffect(() => {
-    const onResize = () => { if (window.innerWidth >= 768) setIsOpen(false); };
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
-
+  // FIXED: Proper navigation handling
   const handleNavClick = (href: string, isExternal?: boolean) => {
     setActiveLink(href);
     setIsOpen(false);
     onLinkClick?.(href);
-    if (!isExternal && href.startsWith('#')) {
-      document.getElementById(href.slice(1))?.scrollIntoView({ behavior: 'smooth' });
+
+    // If it's an external link, let the anchor tag handle it
+    if (isExternal || href.startsWith("http")) {
+      return; // Let browser handle external links
+    }
+
+    // If it's a hash link (same page anchor)
+    if (href.startsWith("#")) {
+      const element = document.getElementById(href.substring(1));
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+        // Update URL without page reload
+        window.history.pushState(null, "", href);
+      }
+      return;
     }
   };
 
-  // ── CTA style ─────────────────────────────────────────────────────────────
-  const ctaStyle: React.CSSProperties = (() => {
-    const base: React.CSSProperties = {
-      padding: '0.625rem 1.25rem',
-      borderRadius: 'var(--radius-lg)',
-      fontWeight: 700,
-      fontSize: '0.875rem',
-      transition: 'all 0.2s',
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: '0.5rem',
-      cursor: 'pointer',
-      textDecoration: 'none',
-      whiteSpace: 'nowrap',
-    };
-    if (navCTA.variant === 'secondary') {
-      return { ...base, background: 'var(--product-background)', color: productColor };
+  const getCtaStyles = () => {
+    const baseStyles =
+      "px-6 py-3 rounded-xl font-bold transition-all duration-300 flex items-center gap-2";
+
+    switch (navCTA.variant) {
+      case "secondary":
+        return `${baseStyles} bg-white text-blue-600 hover:bg-gray-100 hover:scale-105`;
+      case "glow":
+        return `${baseStyles} bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] hover:scale-105`;
+      case "gradient":
+        return `${baseStyles} bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white hover:shadow-xl hover:scale-105`;
+      default:
+        return `${baseStyles} bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 hover:shadow-lg hover:scale-105`;
     }
-    return {
-      ...base,
-      background: `linear-gradient(135deg, var(--product-secondary), var(--product-accent))`,
-      color: 'var(--product-foreground)',
-    };
-  })();
-
-  // ── Nav link component ────────────────────────────────────────────────────
-  const NavItem = ({ link, mobile = false }: { link: NavLink; mobile?: boolean }) => {
-    const isExternal = link.isExternal || link.href.startsWith('http');
-    const isActive = activeLink === link.href;
-
-    const cls = mobile
-      ? cn(
-          'flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all w-full',
-          isActive ? 'font-bold' : 'opacity-80 hover:opacity-100',
-        )
-      : cn(
-          'flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all',
-          isActive ? 'font-bold' : 'opacity-80 hover:opacity-100',
-        );
-
-    const style: React.CSSProperties = {
-      color: textColor,
-      backgroundColor: isActive ? 'rgba(255,255,255,0.12)' : undefined,
-    };
-
-    const content = (
-      <>
-        {link.icon && <span>{link.icon}</span>}
-        <span>{link.label}</span>
-        {link.badge && (
-          <span className="px-2 py-0.5 text-[10px] font-black bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full uppercase tracking-wider">
-            {link.badge}
-          </span>
-        )}
-        {isExternal && <ExternalLink className="w-3 h-3 opacity-60" />}
-      </>
-    );
-
-    if (isExternal) {
-      return (
-        <a href={link.href} target="_blank" rel="noopener noreferrer"
-           className={cls} style={style}
-           onClick={() => handleNavClick(link.href, true)}>
-          {content}
-        </a>
-      );
-    }
-
-    return (
-      <Link href={link.href} className={cls} style={style}
-            onClick={() => handleNavClick(link.href)}>
-        {content}
-      </Link>
-    );
   };
 
+  // Helper to get icon component
+  const getIconComponent = (icon: React.ReactNode) => {
+    if (typeof icon !== 'string') {
+      return icon;
+    }
+
+    const iconMap: Record<string, React.ReactNode> = {
+      "🏠": <div>🏠</div>,
+      "✨": <div>✨</div>,
+      "💰": <div>💰</div>,
+      "📚": <div>📚</div>,
+      "✉️": <div>✉️</div>,
+      "🚀": <Rocket className="w-4 h-4" />,
+      "🤖": <div>🤖</div>,
+      "🎓": <div>🎓</div>,
+      "📰": <div>📰</div>,
+    };
+    return iconMap[icon] || <Sparkles className="w-4 h-4" />;
+  };
   return (
     <>
+      {/* Floating Particles (Optional) */}
+      {showParticles && animated && (
+        <div className="fixed inset-0 pointer-events-none z-40">
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 bg-blue-400 rounded-full"
+              initial={{
+                x: Math.random() * window.innerWidth,
+                y: -10,
+                opacity: 0,
+              }}
+              animate={{
+                y: window.innerHeight,
+                opacity: [0, 1, 0],
+              }}
+              transition={{
+                duration: Math.random() * 3 + 2,
+                repeat: Infinity,
+                delay: Math.random() * 5,
+              }}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Sparkles Animation */}
+      <AnimatePresence>
+        {showSparkles && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed top-4 right-4 z-50"
+          >
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            >
+              <Sparkles className="w-6 h-6 text-yellow-400" />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Main Navbar */}
       <motion.nav
-        initial={animated ? { y: -100 } : false}
+        initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ type: 'spring', stiffness: 120, damping: 20 }}
+        transition={{ type: "spring", stiffness: 100, damping: 20 }}
         style={{
-          backgroundColor: colors.bg,
-          color: colors.text,
-          borderBottom: `1px solid ${colors.border}`,
+          backgroundColor: currentNavTheme.bg,
+          color: currentNavTheme.text,
+          borderBottom: `1px solid ${currentNavTheme.border}`,
         }}
         className={cn(
-          'w-full z-50 transition-all duration-300 backdrop-blur-lg',
-          sticky && 'fixed top-0 left-0 right-0',
+          "w-full z-50 transition-all duration-300 backdrop-blur-lg",
+          sticky && "fixed top-0",
           className,
         )}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16 sm:h-20">
-
+          <div className="flex justify-between items-center h-20">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 flex-shrink-0"
-                  onClick={() => handleNavClick('/')}>
-              <div className="relative w-9 h-9 flex-shrink-0">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="flex items-center space-x-3"
+            >
+              <Link
+                href="/"
+                className="flex items-center space-x-3 no-underline"
+                onClick={() => handleNavClick("/")}
+              >
                 {!imageError ? (
-                  <Image src={logoSrc} alt={currentProduct.name} fill
-                         className="object-contain" onError={() => setImageError(true)} priority />
+                  <div className="relative w-12 h-12">
+                    <Image
+                      src={logoSrc}
+                      alt={`${currentProduct?.name} Logo`}
+                      fill
+                      className="object-contain"
+                      onError={() => setImageError(true)}
+                      priority
+                    />
+                    {animated && (
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{
+                          duration: 20,
+                          repeat: Infinity,
+                          ease: "linear",
+                        }}
+                        className="absolute inset-0 border-2 border-transparent border-t-blue-500 border-r-purple-500 rounded-full"
+                      />
+                    )}
+                  </div>
                 ) : (
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center"
-                       style={{ backgroundColor: productColor }}>
-                    <span className="text-white font-black text-base">
-                      {currentProduct.name.charAt(0)}
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center"
+                    style={{ backgroundColor: productColor }}
+                  >
+                    <span className="text-white font-black text-xl">
+                      {productInitial}
                     </span>
                   </div>
                 )}
-              </div>
-              <span className="text-lg font-black tracking-tight" style={{ color: textColor }}>
-                {currentProduct.name}
-              </span>
-            </Link>
 
-            {/* ── DESKTOP nav — hidden below md ─────────────────────────── */}
-            <div className="hidden md:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <div key={link.href} className="relative">
-                  <NavItem link={link} />
-                  {hoveredLink === link.href && (
-                    <motion.div layoutId="nav-underline"
-                      className="absolute bottom-1 left-3 right-3 h-0.5 rounded-full"
-                      style={{ background: 'var(--product-secondary)' }} />
-                  )}
+                <div>
+                  <span className="text-2xl font-black">
+                    {currentProduct?.name}
+                  </span>
+                  <motion.p
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-xs text-gray-400 -mt-1"
+                  >
+
+                    {/* {currentProduct.status === ('LIVE' as ProductStatus) ? '🚀 LIVE' : 
+                     currentProduct.status === ('BUILDING' as ProductStatus) ? '🔨 BUILDING' :
+                     currentProduct.status === ('PLANNED' as ProductStatus) ? '📅 PLANNED' : '💡 CONCEPT'} */}
+                  </motion.p>
                 </div>
-              ))}
-            </div>
+              </Link>
+            </motion.div>
 
-            {/* ── DESKTOP right controls — hidden below md ───────────────── */}
-            <div className="hidden md:flex items-center gap-2">
-              {showThemeControls && <ThemeToggle />}
-              {showFontToggle && <DyslexiaToggle variant="compact" />}
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-2">
+              {navLinks.map((link) => {
+                const isExternal =
+                  link.isExternal || link.href.startsWith("http");
+                const isHashLink = link.href.startsWith("#");
+                const isActive = activeLink === link.href;
+
+                return (
+                  <div key={link.href} className="relative">
+                    {isExternal || isHashLink ? (
+                      // External or hash links use anchor tags
+                      <motion.a
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        href={link.href}
+                        target={isExternal ? "_blank" : undefined}
+                        rel={isExternal ? "noopener noreferrer" : undefined}
+                        onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                          if (isHashLink) {
+                            e.preventDefault();
+                            handleNavClick(link.href, isExternal);
+                          }
+                        }}
+                        onMouseEnter={() => setHoveredLink(link.href)}
+                        onMouseLeave={() => setHoveredLink(null)}
+                        className={cn(
+                          "flex items-center gap-2 px-4 py-3 rounded-lg transition-all",
+                          isActive
+                            ? "bg-blue-500/20 text-blue-400"
+                            : "hover:bg-white/10",
+                        )}
+                      >
+                        {getIconComponent(link.icon)}
+                        <span className="font-medium">{link.label}</span>
+                        {link.badge && (
+                          <span className="px-2 py-0.5 text-xs font-bold bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full">
+                            {link.badge}
+                          </span>
+                        )}
+                        {isExternal && <ExternalLink className="w-4 h-4" />}
+                      </motion.a>
+                    ) : (
+                      // Internal Next.js routes use Link component
+                      <Link href={link.href} passHref>
+                        <motion.div
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => handleNavClick(link.href)}
+                          onMouseEnter={() => setHoveredLink(link.href)}
+                          onMouseLeave={() => setHoveredLink(null)}
+                          className={cn(
+                            "flex items-center gap-2 px-4 py-3 rounded-lg transition-all cursor-pointer",
+                            isActive
+                              ? "bg-blue-500/20 text-blue-400"
+                              : "hover:bg-white/10",
+                          )}
+                        >
+                          {getIconComponent(link.icon)}
+                          <span className="font-medium">{link.label}</span>
+                          {link.badge && (
+                            <span className="px-2 py-0.5 text-xs font-bold bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full">
+                              {link.badge}
+                            </span>
+                          )}
+                        </motion.div>
+                      </Link>
+                    )}
+
+                    {/* Hover effect */}
+                    {hoveredLink === link.href && (
+                      <motion.div
+                        layoutId="navbar-hover"
+                        className="absolute bottom-2 left-4 right-4 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+                      />
+                    )}
+                  </div>
+                );
+              })}
+
+              {/* Theme Controls */}
+              {showThemeControls && (
+                <div className="flex items-center space-x-1 ml-2">
+                  <ThemeToggle />
+                  <DyslexiaModeToggle />
+                </div>
+              )}
+
+              {/* CTA Button */}
               {navCTA && (
-                <motion.a
-                  href={navCTA.href}
-                  target={navCTA.href.startsWith('http') ? '_blank' : '_self'}
-                  rel={navCTA.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  style={ctaStyle}
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.97 }}
-                  onHoverStart={() => setHoveredCta(true)}
-                  onHoverEnd={() => setHoveredCta(false)}
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  {navCTA.icon || <Rocket className="w-4 h-4" />}
-                  {navCTA.label}
-                  {hoveredCta && (
-                    <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 0.4 }}>
-                      →
-                    </motion.span>
-                  )}
-                </motion.a>
+                  <a
+                    href={navCTA.href}
+                    target={navCTA.href.startsWith("http") ? "_blank" : "_self"}
+                    className={getCtaStyles()}
+                    onMouseEnter={() => setHoveredCta(true)}
+                    onMouseLeave={() => setHoveredCta(false)}
+                    onClick={() => onLinkClick?.(navCTA.href)}
+                  >
+                    {navCTA.icon || <Rocket className="w-4 h-4" />}
+                    {navCTA.label}
+                    {hoveredCta && (
+                      <motion.span
+                        animate={{ x: [0, 5, 0] }}
+                        transition={{ duration: 0.5 }}
+                      >
+                        →
+                      </motion.span>
+                    )}
+                  </a>
+                </motion.div>
               )}
             </div>
 
-            {/* ── MOBILE controls — hidden at md+ ───────────────────────── */}
+            {/* Mobile Menu Button */}
             <div className="flex items-center gap-2 md:hidden">
-              {showThemeControls && <ThemeToggle />}
+              {showThemeControls && (
+                <div className="flex items-center space-x-1">
+                  <ThemeToggle />
+                  <DyslexiaModeToggle />
+                </div>
+              )}
+
               <button
                 ref={menuButtonRef}
                 onClick={() => setIsOpen(!isOpen)}
-                className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-                aria-label="Toggle navigation menu"
-                aria-expanded={isOpen}
+                className="p-3 rounded-lg hover:bg-white/10 transition-colors"
+                aria-label="Toggle menu"
               >
-                <AnimatePresence mode="wait" initial={false}>
+                <AnimatePresence mode="wait">
                   {isOpen ? (
-                    <motion.div key="close"
-                      initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
-                      <X className="w-5 h-5" style={{ color: textColor }} />
+                    <motion.div
+                      key="close"
+                      initial={{ rotate: -90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: 90, opacity: 0 }}
+                    >
+                      <X className="w-6 h-6" />
                     </motion.div>
                   ) : (
-                    <motion.div key="menu"
-                      initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
-                      <Menu className="w-5 h-5" style={{ color: textColor }} />
+                    <motion.div
+                      key="menu"
+                      initial={{ rotate: 90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: -90, opacity: 0 }}
+                    >
+                      <Menu className="w-6 h-6" />
                     </motion.div>
                   )}
                 </AnimatePresence>
               </button>
             </div>
-
           </div>
         </div>
 
-        {/* ── MOBILE menu panel ─────────────────────────────────────────────
-            IMPORTANT: This outer div uses md:hidden so the mobile menu is
-            completely excluded from layout on desktop (≥768px).
-            This prevents Framer Motion inline styles from accidentally
-            showing the mobile menu on desktop when isOpen=true.
-        ─────────────────────────────────────────────────────────────────── */}
-        <div className="md:hidden">
-          <AnimatePresence>
-            {isOpen && (
-              <motion.div
-                ref={mobileMenuRef}
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.2, ease: 'easeInOut' }}
-                style={{ backgroundColor: colors.bg, borderTop: `1px solid ${colors.border}` }}
-                className="overflow-hidden"
-              >
-                <div className="px-4 py-4 space-y-1">
-                  {navLinks.map((link, i) => (
-                    <motion.div key={link.href}
-                      initial={{ x: -16, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: i * 0.06 }}>
-                      <NavItem link={link} mobile />
-                    </motion.div>
-                  ))}
+        {/* Mobile Navigation */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              ref={mobileMenuRef}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              style={{ backgroundColor: currentNavTheme.bg }}
+              className="md:hidden overflow-hidden border-t"
+            >
+              <div className="px-4 py-6 space-y-2">
+                {navLinks.map((link, index) => {
+                  const isExternal =
+                    link.isExternal || link.href.startsWith("http");
+                  const isHashLink = link.href.startsWith("#");
+                  const isActive = activeLink === link.href;
 
-                  {showFontToggle && (
-                    <div className="px-4 pt-2">
-                      <DyslexiaToggle variant="default" />
-                    </div>
-                  )}
-
-                  {navCTA && (
+                  return (
                     <motion.div
-                      initial={{ scale: 0.95, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ delay: navLinks.length * 0.06 }}
-                      className="pt-3"
+                      key={link.href}
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: index * 0.1 }}
                     >
-                      <a href={navCTA.href}
-                         target={navCTA.href.startsWith('http') ? '_blank' : '_self'}
-                         rel={navCTA.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                         style={{ ...ctaStyle, width: '100%', justifyContent: 'center' }}
-                         onClick={() => { setIsOpen(false); onLinkClick?.(navCTA.href); }}>
-                        {navCTA.icon || <Zap className="w-4 h-4" />}
-                        {navCTA.label}
-                      </a>
+                      {isExternal || isHashLink ? (
+                        <a
+                          href={link.href}
+                          target={isExternal ? "_blank" : undefined}
+                          rel={isExternal ? "noopener noreferrer" : undefined}
+                          onClick={(e) => {
+                            if (isHashLink) {
+                              e.preventDefault();
+                              handleNavClick(link.href, isExternal);
+                            } else {
+                              handleNavClick(link.href, isExternal);
+                            }
+                          }}
+                          className={cn(
+                            "w-full flex items-center justify-between p-4 rounded-xl transition-all",
+                            isActive
+                              ? "bg-blue-500/20 text-blue-400"
+                              : "hover:bg-white/10",
+                          )}
+                        >
+                          <div className="flex items-center gap-3">
+                            {getIconComponent(link.icon)}
+                            <span className="font-medium">{link.label}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {link.badge && (
+                              <span className="px-2 py-1 text-xs font-bold bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full">
+                                {link.badge}
+                              </span>
+                            )}
+                            {isExternal && <ExternalLink className="w-4 h-4" />}
+                          </div>
+                        </a>
+                      ) : (
+                        <Link href={link.href} passHref>
+                          <div
+                            onClick={() => handleNavClick(link.href)}
+                            className={cn(
+                              "w-full flex items-center justify-between p-4 rounded-xl transition-all cursor-pointer",
+                              isActive
+                                ? "bg-blue-500/20 text-blue-400"
+                                : "hover:bg-white/10",
+                            )}
+                          >
+                            <div className="flex items-center gap-3">
+                              {getIconComponent(link.icon)}
+                              <span className="font-medium">{link.label}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              {link.badge && (
+                                <span className="px-2 py-1 text-xs font-bold bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full">
+                                  {link.badge}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </Link>
+                      )}
                     </motion.div>
-                  )}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+                  );
+                })}
+
+                {navCTA && (
+                  <motion.div
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: navLinks.length * 0.1 }}
+                    className="pt-4"
+                  >
+                    <a
+                      href={navCTA.href}
+                      target={
+                        navCTA.href.startsWith("http") ? "_blank" : "_self"
+                      }
+                      className={`block w-full text-center ${getCtaStyles()}`}
+                      onClick={() => {
+                        setIsOpen(false);
+                        onLinkClick?.(navCTA.href);
+                      }}
+                    >
+                      {navCTA.icon || <Zap className="w-4 h-4" />}
+                      {navCTA.label}
+                    </a>
+                  </motion.div>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.nav>
 
-      {/* Spacer so content isn't hidden under fixed nav */}
-      {sticky && <div className="h-16 sm:h-20" aria-hidden="true" />}
+      {/* Spacer for fixed navbar */}
+      {sticky && <div className="h-20" />}
     </>
   );
 }

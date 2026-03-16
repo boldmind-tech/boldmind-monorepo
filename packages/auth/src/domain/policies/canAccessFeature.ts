@@ -1,59 +1,80 @@
 // PACKAGES/auth/src/domain/policies/canAccessFeature.ts
 
 import { User } from '../models/User';
-import {
-  BOLDMIND_PRODUCTS,
-  BOLDMIND_PRICING,
-  ProductSlug as UtilsProductSlug
-} from '@boldmind/utils';
 
-// Re-export type for local use
-export type ProductSlug = UtilsProductSlug;
+export type ProductSlug =
+  | 'boldmind-hub'
+  | 'amebogist'
+  | 'educenter'
+  | 'boldmind-os'
+  | 'naija-fither'
+  | 'emailscraper-pro'
+  | 'safe-ai'
+  | 'social-factory'
+  | 'planai-suite';
+
 export type FeatureTier = 'free' | 'basic' | 'pro' | 'enterprise';
 
-/**
- * Maps all products to their tier-specific features.
- * This is derived from the source of truth in BOLDMIND_PRICING.
- */
-export const PRODUCT_FEATURES: Record<string, Record<FeatureTier, string[]>> = BOLDMIND_PRICING.reduce((acc, product) => {
-  const tierMap: Record<FeatureTier, string[]> = {
-    free: [],
-    basic: [],
-    pro: [],
-    enterprise: []
-  };
-
-  product.tiers.forEach(tier => {
-    tierMap[tier.name as FeatureTier] = tier.features;
-  });
-
-  // If enterprise tier is missing, give it wildcard or copy pro
-  if (tierMap.enterprise.length === 0) {
-    tierMap.enterprise = ['*'];
-  }
-
-  acc[product.productSlug] = tierMap;
-  return acc;
-}, {} as Record<string, Record<FeatureTier, string[]>>);
-
-/**
- * Special handling for products that might not be in the pricing list yet 
- * but are in the products list.
- */
-BOLDMIND_PRODUCTS.forEach(product => {
-  if (!PRODUCT_FEATURES[product.slug]) {
-    PRODUCT_FEATURES[product.slug] = {
-      free: [],
-      basic: [],
-      pro: [],
-      enterprise: ['*']
-    };
-  }
-});
+export const PRODUCT_FEATURES: Record<ProductSlug, Record<FeatureTier, string[]>> = {
+  'boldmind-hub': {
+    free: ['view_products', 'basic_analytics'],
+    basic: ['view_products', 'basic_analytics', 'product_management'],
+    pro: ['view_products', 'basic_analytics', 'product_management', 'advanced_analytics'],
+    enterprise: ['*'],
+  },
+  'educenter': {
+    free: ['view_courses', 'enroll_courses'],
+    basic: ['view_courses', 'enroll_courses', 'create_courses'],
+    pro: ['view_courses', 'enroll_courses', 'create_courses', 'analytics', 'certificates'],
+    enterprise: ['*'],
+  },
+  'amebogist': {
+    free: ['read_news', 'comment'],
+    basic: ['read_news', 'comment', 'create_posts'],
+    pro: ['read_news', 'comment', 'create_posts', 'trending_alerts', 'analytics'],
+    enterprise: ['*'],
+  },
+  'naija-fither': {
+    free: ['view_workouts', 'track_basic'],
+    basic: ['view_workouts', 'track_basic', 'custom_workouts'],
+    pro: ['view_workouts', 'track_basic', 'custom_workouts', 'nutrition_plans', 'analytics'],
+    enterprise: ['*'],
+  },
+  'emailscraper-pro': {
+    free: ['scrape_100_emails'],
+    basic: ['scrape_1000_emails', 'basic_validation'],
+    pro: ['scrape_10000_emails', 'advanced_validation', 'export_formats'],
+    enterprise: ['*'],
+  },
+  'safe-ai': {
+    free: ['report_incident'],
+    basic: ['report_incident', 'track_case'],
+    pro: ['report_incident', 'track_case', 'analytics', 'priority_support'],
+    enterprise: ['*'],
+  },
+  'social-factory': {
+    free: ['create_5_posts'],
+    basic: ['create_50_posts', 'schedule_posts'],
+    pro: ['create_unlimited_posts', 'schedule_posts', 'analytics', 'multi_account'],
+    enterprise: ['*'],
+  },
+  'planai-suite': {
+    free: ['basic_planning'],
+    basic: ['basic_planning', 'receptionist', 'credibility_hub'],
+    pro: ['basic_planning', 'receptionist', 'credibility_hub', 'business_planning', 'financial_forecasting'],
+    enterprise: ['*'],
+  },
+  'boldmind-os': {
+    free: ['basic_workspace'],
+    basic: ['basic_workspace', 'file_management'],
+    pro: ['basic_workspace', 'file_management', 'collaboration', 'integrations'],
+    enterprise: ['*'],
+  },
+};
 
 export function canAccessFeature(
   user: User | null,
-  productSlug: string,
+  productSlug: ProductSlug,
   feature: string
 ): boolean {
   if (!user) {
@@ -62,13 +83,10 @@ export function canAccessFeature(
 
   // Get user's tier for this product from metadata or default to free
   const userProductData = user.metadata?.['products']?.[productSlug];
-  const userTier: FeatureTier = (userProductData?.tier as FeatureTier) || 'free';
+  const userTier: FeatureTier = userProductData?.tier || 'free';
 
   const productFeatures = PRODUCT_FEATURES[productSlug];
-  if (!productFeatures) return false;
-
   const tierFeatures = productFeatures[userTier];
-  if (!tierFeatures) return false;
 
   if (tierFeatures.includes('*')) {
     return true;
@@ -77,18 +95,15 @@ export function canAccessFeature(
   return tierFeatures.includes(feature);
 }
 
-export function getUserTier(user: User | null, productSlug: string): FeatureTier {
+export function getUserTier(user: User | null, productSlug: ProductSlug): FeatureTier {
   if (!user) {
     return 'free';
   }
 
   const userProductData = user.metadata?.['products']?.[productSlug];
-  return (userProductData?.tier as FeatureTier) || 'free';
+  return userProductData?.tier || 'free';
 }
 
-export function canAccessProduct(user: User | null, _productSlug: string): boolean {
-  if (!user) return false;
-  // Basic logic: if they have any tier data or it's a public product
-  // For now, keeping it permissive as requested.
+export function canAccessProduct(_user: User | null, _productSlug: ProductSlug): boolean {
   return true;
 }

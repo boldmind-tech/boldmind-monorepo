@@ -1,190 +1,73 @@
 // PACKAGES/api-client/src/api.ts
 
 import APIClient from './client';
-import {
-  AdminEndpoints,
-  AfrocopyAiEndpoints,
-  AfrohustleOsEndpoints,
-  AiReceptionistEndpoints,
-  AiEndpoints,
-  AmebogistEndpoints,
-  AnalyticsEndpoints,
-  AnontruthMicEndpoints,
-  AuthEndpoints,
-  AutomationEndpoints,
-  BoldmindOsEndpoints,
-  BorderlessRemitEndpoints,
-  ContentEndpoints,
-  EducenterEndpoints,
-  EmailscraperEndpoints,
-  FarmgateDirectEndpoints,
-  HubEndpoints,
-  MediaEndpoints,
-  NaijaFitherEndpoints,
-  NotificationsEndpoints,
-  PaymentsEndpoints,
-  PlanaiSuiteEndpoints,
-  PowerAlertEndpoints,
-  ProductsEndpoints,
-  ReceiptGeniusEndpoints,
-  SafeaiEndpoints,
-  Skill2cashEndpoints,
-  SocialFactoryEndpoints,
-  UsersEndpoints,
-  DashboardEndpoints
-} from './endpoints';
-
-export interface BoldMindAPIConfig {
-  baseUrl?: string;
-}
+import { AuthEndpoints } from './endpoints/auth';
+import { UsersEndpoints } from './endpoints/users';
+import { PaymentsEndpoints } from './endpoints/payments';
+import { EducenterEndpoints } from './endpoints/educenter';
+import { ProductsEndpoints } from './endpoints/products';
+import { AdminEndpoints, DashboardEndpoints } from './endpoints/admin';
 
 export class BoldMindAPI {
-  public admin: AdminEndpoints;
-  public afrocopyAi: AfrocopyAiEndpoints;
-  public afrohustleOs: AfrohustleOsEndpoints;
-  public aiReceptionist: AiReceptionistEndpoints;
-  public ai: AiEndpoints;
-  public amebogist: AmebogistEndpoints;
-  public analytics: AnalyticsEndpoints;
-  public anontruthMic: AnontruthMicEndpoints;
   public auth: AuthEndpoints;
-  public automation: AutomationEndpoints;
-  public boldmindOs: BoldmindOsEndpoints;
-  public borderlessRemit: BorderlessRemitEndpoints;
-  public content: ContentEndpoints;
-  public educenter: EducenterEndpoints;
-  public emailscraper: EmailscraperEndpoints;
-  public farmgateDirect: FarmgateDirectEndpoints;
-  public hub: HubEndpoints;
-  public media: MediaEndpoints;
-  public naijaFither: NaijaFitherEndpoints;
-  public notifications: NotificationsEndpoints;
-  public payments: PaymentsEndpoints;
-  public planaiSuite: PlanaiSuiteEndpoints;
-  public powerAlert: PowerAlertEndpoints;
-  public products: ProductsEndpoints;
-  public receiptGenius: ReceiptGeniusEndpoints;
-  public safeai: SafeaiEndpoints;
-  public skill2cash: Skill2cashEndpoints;
-  public socialFactory: SocialFactoryEndpoints;
   public users: UsersEndpoints;
+  public payments: PaymentsEndpoints;
+  public educenter: EducenterEndpoints;
+  public products: ProductsEndpoints;
+  public admin: AdminEndpoints;
   public dashboard: DashboardEndpoints;
 
-  private client: APIClient;
+  constructor(config?: {
+    apiGatewayUrl?: string;
+    paymentServiceUrl?: string;
+    educenterServiceUrl?: string;
+    userServiceUrl?: string;
+    hubServiceUrl?: string;
+  }) {
+    const apiGatewayUrl = config?.apiGatewayUrl ||
+      process.env['NEXT_PUBLIC_API_GATEWAY_URL'] ||
+      'http://localhost:4001/api';
 
-  constructor(config?: BoldMindAPIConfig) {
-    const baseUrl = config?.baseUrl || 
-                    process.env['NEXT_PUBLIC_API_URL'] || 
-                    process.env['NEXT_PUBLIC_API_GATEWAY_URL'] ||
-                    'http://localhost:4001/api/v1';
+    const userServiceUrl = config?.userServiceUrl ||
+      process.env['NEXT_PUBLIC_USER_SERVICE_URL'] ||
+      'http://localhost:4000/api';
 
-    this.client = new APIClient(baseUrl);
+    const paymentServiceUrl = config?.paymentServiceUrl ||
+      process.env['NEXT_PUBLIC_PAYMENT_SERVICE_URL'] ||
+      'http://localhost:4002';
 
-    this.admin = new AdminEndpoints(this.client);
-    this.afrocopyAi = new AfrocopyAiEndpoints(this.client);
-    this.afrohustleOs = new AfrohustleOsEndpoints(this.client);
-    this.aiReceptionist = new AiReceptionistEndpoints(this.client);
-    this.ai = new AiEndpoints(this.client);
-    this.amebogist = new AmebogistEndpoints(this.client);
-    this.analytics = new AnalyticsEndpoints(this.client);
-    this.anontruthMic = new AnontruthMicEndpoints(this.client);
-    this.auth = new AuthEndpoints(this.client);
-    this.automation = new AutomationEndpoints(this.client);
-    this.boldmindOs = new BoldmindOsEndpoints(this.client);
-    this.borderlessRemit = new BorderlessRemitEndpoints(this.client);
-    this.content = new ContentEndpoints(this.client);
-    this.educenter = new EducenterEndpoints(this.client);
-    this.emailscraper = new EmailscraperEndpoints(this.client);
-    this.farmgateDirect = new FarmgateDirectEndpoints(this.client);
-    this.hub = new HubEndpoints(this.client);
-    this.media = new MediaEndpoints(this.client);
-    this.naijaFither = new NaijaFitherEndpoints(this.client);
-    this.notifications = new NotificationsEndpoints(this.client);
-    this.payments = new PaymentsEndpoints(this.client);
-    this.planaiSuite = new PlanaiSuiteEndpoints(this.client);
-    this.powerAlert = new PowerAlertEndpoints(this.client);
-    this.products = new ProductsEndpoints(this.client);
-    this.receiptGenius = new ReceiptGeniusEndpoints(this.client);
-    this.safeai = new SafeaiEndpoints(this.client);
-    this.skill2cash = new Skill2cashEndpoints(this.client);
-    this.socialFactory = new SocialFactoryEndpoints(this.client);
-    this.users = new UsersEndpoints(this.client);
-    this.dashboard = new DashboardEndpoints(this.client);
-  }
+    const educenterServiceUrl = config?.educenterServiceUrl ||
+      process.env['NEXT_PUBLIC_EDUCENTER_SERVICE_URL'] ||
+      'http://localhost:4003';
 
-  /**
-   * Reconfigure the API client with a new base URL
-   */
-  public setBaseUrl(url: string) {
-    this.client = new APIClient(url);
-    this.rebindEndpoints();
-  }
+    const hubServiceUrl = config?.hubServiceUrl ||
+      process.env['NEXT_PUBLIC_HUB_SERVICE_URL'] ||
+      'http://localhost:4005/api';
 
-  private rebindEndpoints() {
-    this.admin = new AdminEndpoints(this.client);
-    this.afrocopyAi = new AfrocopyAiEndpoints(this.client);
-    this.afrohustleOs = new AfrohustleOsEndpoints(this.client);
-    this.aiReceptionist = new AiReceptionistEndpoints(this.client);
-    this.ai = new AiEndpoints(this.client);
-    this.amebogist = new AmebogistEndpoints(this.client);
-    this.analytics = new AnalyticsEndpoints(this.client);
-    this.anontruthMic = new AnontruthMicEndpoints(this.client);
-    this.auth = new AuthEndpoints(this.client);
-    this.automation = new AutomationEndpoints(this.client);
-    this.boldmindOs = new BoldmindOsEndpoints(this.client);
-    this.borderlessRemit = new BorderlessRemitEndpoints(this.client);
-    this.content = new ContentEndpoints(this.client);
-    this.educenter = new EducenterEndpoints(this.client);
-    this.emailscraper = new EmailscraperEndpoints(this.client);
-    this.farmgateDirect = new FarmgateDirectEndpoints(this.client);
-    this.hub = new HubEndpoints(this.client);
-    this.media = new MediaEndpoints(this.client);
-    this.naijaFither = new NaijaFitherEndpoints(this.client);
-    this.notifications = new NotificationsEndpoints(this.client);
-    this.payments = new PaymentsEndpoints(this.client);
-    this.planaiSuite = new PlanaiSuiteEndpoints(this.client);
-    this.powerAlert = new PowerAlertEndpoints(this.client);
-    this.products = new ProductsEndpoints(this.client);
-    this.receiptGenius = new ReceiptGeniusEndpoints(this.client);
-    this.safeai = new SafeaiEndpoints(this.client);
-    this.skill2cash = new Skill2cashEndpoints(this.client);
-    this.socialFactory = new SocialFactoryEndpoints(this.client);
-    this.users = new UsersEndpoints(this.client);
-    this.dashboard = new DashboardEndpoints(this.client);
+    const gatewayClient = new APIClient(apiGatewayUrl);
+    const paymentClient = new APIClient(paymentServiceUrl);
+    const educenterClient = new APIClient(educenterServiceUrl);
+    const userClient = new APIClient(userServiceUrl);
+    const hubClient = new APIClient(hubServiceUrl);
+
+    this.auth = new AuthEndpoints(gatewayClient);
+    this.users = new UsersEndpoints(userClient);
+    this.payments = new PaymentsEndpoints(paymentClient);
+    this.educenter = new EducenterEndpoints(educenterClient);
+    this.products = new ProductsEndpoints(gatewayClient);
+    this.admin = new AdminEndpoints(userClient);
+    this.dashboard = new DashboardEndpoints(hubClient);
   }
 }
 
 // Export default instance
 export const boldMindAPI = new BoldMindAPI();
 
-// Re-export common classes and types
+// Export classes for custom instances
 export { APIClient };
-export * from './endpoints/auth';
-export * from './endpoints/users';
-export * from './endpoints/payments';
-export * from './endpoints/educenter';
-export * from './endpoints/products';
-export * from './endpoints/admin';
-export * from './endpoints/planai-suite';
-export * from './endpoints/power-alert';
-export * from './endpoints/farmgate-direct';
-export * from './endpoints/afrocopy-ai';
-export * from './endpoints/skill2cash';
-export * from './endpoints/anontruth-mic';
-export * from './endpoints/afrohustle-os';
-export * from './endpoints/notifications';
-export * from './endpoints/ai-receptionist';
-export * from './endpoints/amebogist';
-export * from './endpoints/boldmind-os';
-export * from './endpoints/hub';
-export * from './endpoints/social-factory';
-export * from './endpoints/emailscraper';
-export * from './endpoints/naija-fither';
-export * from './endpoints/safeai';
-export * from './endpoints/ai';
-export * from './endpoints/media';
-export * from './endpoints/borderless-remit';
-export * from './endpoints/receipt-genius';
-export * from './endpoints/automation';
-export * from './endpoints/content';
-export * from './endpoints/analytics';
+export { AuthEndpoints } from './endpoints/auth';
+export { UsersEndpoints } from './endpoints/users';
+export { PaymentsEndpoints } from './endpoints/payments';
+export { EducenterEndpoints } from './endpoints/educenter';
+export { ProductsEndpoints } from './endpoints/products';
+export { AdminEndpoints, DashboardEndpoints } from './endpoints/admin';

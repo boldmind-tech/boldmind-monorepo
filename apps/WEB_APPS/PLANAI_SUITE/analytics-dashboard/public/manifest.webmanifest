@@ -1,0 +1,21 @@
+{
+  "name": "Analytics Dashboard",
+  "short_name": "Analytics Dashboard",
+  "description": "Cross-platform business intelligence",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#6366F1",
+  "theme_color": "#818CF8",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

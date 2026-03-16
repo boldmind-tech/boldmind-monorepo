@@ -1,0 +1,35 @@
+{
+    "extends": "../../tsconfig.frontend.json", // or tsconfig.base.json / tsconfig.json
+    "compilerOptions": {
+        "composite": true, // required for project references
+        "jsx": "react-jsx", // only if this package has JSX
+        "declaration": true, // generate .d.ts (add if missing)
+        "declarationMap": true, // optional but nice
+        "emitDeclarationOnly": true, // only .d.ts, no .js (common for libs)
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "noEmit": false, // must be false for composite libs
+        "incremental": true, // speeds up rebuilds
+        "types": [],
+        // paths only for things inside monorepo that this lib depends on
+        "paths": {
+            "@boldmind/ui": [
+                "../ui/src"
+            ]
+            // add others ONLY if this lib depends on them
+        }
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        "dist",
+        "node_modules"
+    ]
+}

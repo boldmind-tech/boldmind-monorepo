@@ -10,7 +10,7 @@ interface ModalProps {
   title?: string;
 }
 
-export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -31,22 +31,19 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 1040,
+    zIndex: 50,
     padding: '1rem',
-    backdropFilter: 'blur(4px)',
   };
 
   const modalStyle: React.CSSProperties = {
-    backgroundColor: 'var(--product-background)',
-    color: 'var(--product-foreground)',
-    padding: '1.75rem',
-    borderRadius: 'var(--radius-lg)',
+    backgroundColor: 'white',
+    padding: '1.5rem',
+    borderRadius: '0.5rem',
     maxWidth: '28rem',
     width: '100%',
     maxHeight: '90vh',
     overflowY: 'auto',
-    boxShadow: 'var(--shadow-xl)',
-    border: '1px solid var(--product-muted)',
+    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
   };
 
   const headerStyle: React.CSSProperties = {
@@ -55,13 +52,13 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }
     alignItems: 'center',
     marginBottom: '1rem',
     paddingBottom: '0.75rem',
-    borderBottom: '1px solid var(--product-muted)',
+    borderBottom: '1px solid #E5E7EB',
   };
 
   const titleStyle: React.CSSProperties = {
     fontSize: '1.25rem',
     fontWeight: 600,
-    color: 'var(--product-primary)',
+    color: '#00143C',
     margin: 0,
   };
 
@@ -69,11 +66,11 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }
     background: 'none',
     border: 'none',
     fontSize: '1.5rem',
-    color: 'var(--neutral-500)',
+    color: '#6B7280',
     cursor: 'pointer',
     padding: '0.25rem',
-    borderRadius: 'var(--radius-xs)',
-    transition: 'color var(--transition-quick)',
+    borderRadius: '0.25rem',
+    transition: 'color 0.2s',
   };
 
   return (
@@ -81,11 +78,11 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }
       <div style={modalStyle} onClick={e => e.stopPropagation()}>
         <div style={headerStyle}>
           {title && <h2 style={titleStyle}>{title}</h2>}
-          <button
+          <button 
             onClick={onClose}
             style={closeButtonStyle}
-            onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--product-foreground)')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--neutral-500)')}
+            onMouseEnter={(e) => (e.currentTarget.style.color = '#374151')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = '#6B7280')}
           >
             &times;
           </button>
@@ -96,3 +93,4 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }
   );
 };
 
+export default Modal;

@@ -1,5 +1,7 @@
-// PACKAGES/auth/src/domain/entities/Role.ts
-
-import { UserRole } from '@boldmind/utils';
-
-export type Role = UserRole;
+export type Role =
+  | "user"
+  | "admin"
+  | "superadmin"
+  | "moderator"
+  | "instructor"
+  | "support";

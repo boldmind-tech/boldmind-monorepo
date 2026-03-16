@@ -1,0 +1,21 @@
+{
+  "name": "Social Media Content Factory",
+  "short_name": "Social Media Content Factory",
+  "description": "Automated video content generation and multi-channel publishing",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#9C27B0",
+  "theme_color": "#3B82F6",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

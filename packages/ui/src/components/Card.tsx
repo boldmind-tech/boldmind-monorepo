@@ -12,37 +12,37 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
 
     const variantStyles = {
       default: {
-        backgroundColor: 'var(--product-background)',
-        border: '1px solid var(--product-muted)',
-        boxShadow: 'var(--shadow-xs)',
+        backgroundColor: 'white',
+        border: '1px solid #E5E7EB',
+        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
       },
       elevated: {
-        backgroundColor: 'var(--product-background)',
+        backgroundColor: 'white',
         border: 'none',
-        boxShadow: 'var(--shadow-lg)',
+        boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
       },
       outline: {
         backgroundColor: 'transparent',
-        border: '2px solid var(--product-primary)',
+        border: '2px solid #00143C',
         boxShadow: 'none',
       },
       premium: {
-        backgroundColor: 'var(--product-primary)',
+        backgroundColor: '#00143C',
         border: 'none',
-        boxShadow: 'var(--shadow-lg)',
+        boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
       },
     };
 
     const paddingStyles = {
       none: { padding: 0 },
       sm: { padding: '1rem' },
-      md: { padding: '1.75rem' },
+      md: { padding: '1.5rem' },
       lg: { padding: '2rem' },
     };
 
     const styles = {
-      borderRadius: 'var(--radius-lg)',
-      transition: 'all var(--transition-base)',
+      borderRadius: '0.75rem',
+      transition: 'all 0.2s',
       ...variantStyles[variant],
       ...paddingStyles[padding],
     };
@@ -90,7 +90,7 @@ const CardTitle = React.forwardRef<
     style={{
       fontSize: '1.25rem',
       fontWeight: 700,
-      color: 'var(--product-primary)',
+      color: '#00143C',
       margin: 0
     }}
     className={cn(className)}
@@ -106,8 +106,8 @@ const CardDescription = React.forwardRef<
   <p
     ref={ref}
     style={{
-      fontSize: '0.9375rem',
-      color: 'var(--neutral-500)',
+      fontSize: '0.875rem',
+      color: '#6B7280',
       margin: 0
     }}
     className={cn(className)}
@@ -140,7 +140,7 @@ const CardFooter = React.forwardRef<
       alignItems: 'center',
       justifyContent: 'space-between',
       paddingTop: '1rem',
-      borderTop: '1px solid var(--product-muted)'
+      borderTop: '1px solid #E5E7EB'
     }}
     className={cn(className)}
     {...props}

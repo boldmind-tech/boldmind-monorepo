@@ -1,12 +1,23 @@
+
 // PACKAGES/api-client/src/interceptors/auth.ts
 
 import { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+import { getSupabaseClient } from '@boldmind/auth/server';
 
 export const setupAuthInterceptor = (client: AxiosInstance) => {
     client.interceptors.request.use(
         async (config: InternalAxiosRequestConfig) => {
-            // Note: withCredentials is set to true in the client constructor,
-            // so cookies (like boldmind_sso) will be sent automatically.
+            try {
+                const supabase = getSupabaseClient();
+                const { data: { session } } = await supabase.auth.getSession();
+
+                if (session?.access_token) {
+                    config.headers.Authorization = `Bearer ${session.access_token}`;
+                }
+            } catch (error) {
+                console.error('Failed to get session:', error);
+            }
+
             return config;
         },
         (error) => {
@@ -20,20 +31,27 @@ export const setupAuthInterceptor = (client: AxiosInstance) => {
             const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
             if (error.response?.status === 401 && !originalRequest._retry) {
-                // If it's a 401 Unauthorized, we might want to redirect to login
-                // but only if we are in a browser environment.
-                if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/login')) {
-                    // Avoid redirecting if the request itself was to a login/refresh endpoint
-                    const isAuthRequest = originalRequest.url?.includes('/auth/login') || 
-                                        originalRequest.url?.includes('/auth/refresh');
-                    
-                    if (!isAuthRequest) {
+                originalRequest._retry = true;
+
+                try {
+                    const supabase = getSupabaseClient();
+                    const { data: { session }, error: refreshError } = await supabase.auth.refreshSession();
+
+                    if (refreshError || !session) {
+                        throw new Error('Session refresh failed');
+                    }
+
+                    originalRequest.headers.Authorization = `Bearer ${session.access_token}`;
+                    return client(originalRequest);
+                } catch (refreshError) {
+                    if (typeof window !== 'undefined') {
                         window.location.href = '/login';
                     }
+                    return Promise.reject(error);
                 }
             }
 
             return Promise.reject(error);
         }
     );
-};
+};

@@ -1,4 +1,4 @@
-// PACKAGES/ui/src/index.ts - FIXED WITH ProductThemeType EXPORT
+// PACKAGES/ui/src/index.ts
 'use client';
 
 // ============================================
@@ -13,39 +13,26 @@ export { SuperFooter, type FooterLink, type FooterSection, type SuperFooterProps
 export { ParticleBackground } from './components/ParticleBackground';
 export { Confetti } from './components/Confetti';
 export { TypewriterEffect } from './components/TypewriterEffect';
-export { FacebookSDK } from './components/analytics/FacebookSDK';
-export { FacebookLoginButton } from './components/analytics/FacebookLoginButton';
-export { FontProvider } from './components/FontProvider';
-export { DyslexiaToggle } from './components/DyslexiaToggle';
-
 
 // ============================================
 // BASIC UI COMPONENTS
 // ============================================
-export { Button, type ButtonProps } from './components/Button';
-export { Input, type InputProps } from './components/Input';
+export { default as Button, type ButtonProps } from './components/Button';
+export { default as Input, type InputProps } from './components/Input';
 export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from './components/Card';
-export { Modal } from './components/Modal';
-export { Logo } from './components/Logo';
-export { SocialLinks } from './components/SocialLinks';
-export { StatusBadge } from './components/StatusBadge';
-export { LoadingSpinner } from './components/LoadingSpinner';
+export { default as Modal } from './components/Modal';
+export { default as Logo } from './components/Logo';
+export { default as SocialLinks } from './components/SocialLinks';
+export { default as StatusBadge } from './components/StatusBadge';
+export { default as LoadingSpinner } from './components/LoadingSpinner';
 export { ErrorBoundary } from './components/ErrorBoundary';
 
 // ============================================
-// LEGAL & COOKIE CONSENT COMPONENTS
+// LAYOUT COMPONENTS
 // ============================================
-export { PrivacyPolicy, type PrivacyPolicyProps, type PrivacyPolicySection } from './components/PrivacyPolicy';
-export { TermsAndConditions, type TermsAndConditionsProps, type TermsSection } from './components/TermsAndConditions';
-export { CookieConsent, type CookieConsentProps } from './components/CookieConsent';
-export { useCookieConsent, type CookiePreferences, type UseCookieConsentReturn } from './hooks/useCookieConsent';
-
-// ============================================
-// LAYOUT & PAGE COMPONENTS
-// ============================================
-// export { default as ProductLayout } from './components/ProductLayout';
-export { PricingContent, type PricingContentProps } from './components/PricingContent';
-
+export { default as ProductLayout } from './components/ProductLayout';
+// export { default as Navbar } from './components/';
+// export { default as Footer } from './components/Footer';
 
 // ============================================
 // PROVIDERS & CONTEXT
@@ -54,13 +41,10 @@ export {
   ThemeProvider,
   useTheme,
   ThemeToggle,
+  DyslexiaModeToggle,
   useProductTheme,
-  type ThemeContextType,
-  type ProductThemeType,
-  type Theme
+  type ThemeContextType
 } from './providers/theme-provider';
-
-export { AppLayout } from './providers/AppLayout';
 
 // ============================================
 // CUSTOM HOOKS

@@ -1,4 +1,4 @@
-// PACKAGES/analytics/src/index.ts
+// packages/analytics/src/index.ts
 
 // ===================================
 // GOOGLE ANALYTICS 4

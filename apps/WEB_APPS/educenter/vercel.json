@@ -1,0 +1,6 @@
+{
+    "buildCommand": "next build",
+    "outputDirectory": ".next",
+    "framework": "nextjs",
+    "installCommand": "cd ../../../ && corepack enable && pnpm install --frozen-lockfile --prefer-offline --shamefully-hoist"
+}

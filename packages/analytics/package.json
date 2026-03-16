@@ -22,20 +22,19 @@
     "dist/**"
   ],
   "scripts": {
-    "build": "rimraf dist && tsdown",
+    "build": "rm -rf dist && tsdown",
     "dev": "tsdown --watch",
-    "clean": "rimraf dist node_modules",
+    "clean": "rm -rf dist node_modules",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@boldmind/utils": "workspace:*",
-    "cookie": "^1.1.1",
-    "mixpanel-browser": "^2.0.0",
     "posthog-js": "^1.0.0",
-    "tsdown": "^0.20.1"
+    "mixpanel-browser": "^2.0.0",
+    "@boldmind/utils": "workspace:*"
   },
   "devDependencies": {
+    "typescript": "^5.3.3",
     "@types/node": "^20.11.5",
-    "typescript": "^5.3.3"
+    "tsdown": "^0.20.1"
   }
 }

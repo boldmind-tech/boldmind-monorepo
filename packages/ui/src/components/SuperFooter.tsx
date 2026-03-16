@@ -3,7 +3,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import Image from "next/image";
+// import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   Mail,
@@ -48,14 +48,14 @@ import {
   BOLDMIND_PRODUCTS,
   getProductBySlug,
   getLiveProducts,
-  // getProductsByCategory,w
+  // getProductsByCategory,
 } from "@boldmind/utils";
 
 export interface FooterLink {
   href: string;
   label: string;
   icon?: React.ReactNode;
-  isExternal?: boolean
+  isExternal?: boolean;
   badge?: string;
 }
 
@@ -88,7 +88,7 @@ export interface SuperFooterProps {
 }
 
 export function SuperFooter({
-  logoSrc = "/logo.png",
+  // logoSrc = "/logo.png",
   sections = [],
   // contactInfo,
   socialLinks = [],
@@ -99,11 +99,9 @@ export function SuperFooter({
   copyright,
   variant = "default",
 }: SuperFooterProps) {
-  /* eslint-disable @typescript-eslint/no-unused-vars */
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [imageError, setImageError] = useState(false);
   const { productTheme } = useTheme();
 
   const currentYear = new Date().getFullYear();
@@ -335,9 +333,16 @@ export function SuperFooter({
   // Get the first letter of product name for logo
   const productInitial = currentProduct?.name.charAt(0);
 
-  // Get product-specific color from theme system
+  // Get product-specific color
   const getProductColor = () => {
-    return productTheme.colors.primary;
+    const colorMap: Record<string, string> = {
+      amebogist: "#10B981", // Green
+      educenter: "#3B82F6", // Blue
+      "boldmind-hub": "#F59E0B", // Amber
+      "ai-receptionist": "#8B5CF6", // Purple
+      "boldmind-os": "#EC4899", // Pink
+    };
+    return colorMap[productTheme.slug] || productTheme.colors.primary;
   };
 
   const productColor = getProductColor();
@@ -359,28 +364,21 @@ export function SuperFooter({
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             {/* Dynamic Logo */}
             <div className="flex items-center gap-3">
-              {!imageError && logoSrc ? (
-                <div className="relative w-8 h-8 flex-shrink-0">
-                  <Image
-                    src={logoSrc}
-                    alt={`${currentProduct?.name} Logo`}
-                    fill
-                    className="object-contain"
-                    onError={() => setImageError(true)}
-                  />
-                </div>
-              ) : (
-                <div
-                  className="w-8 h-8 rounded-lg flex items-center justify-center transition-transform hover:scale-110 flex-shrink-0"
-                  style={{ backgroundColor: productColor }}
-                >
-                  <span className="text-white font-bold text-sm">
-                    {productInitial}
-                  </span>
-                </div>
-              )}
-              <div className="flex flex-col justify-center">
-                <span className="text-lg font-bold leading-tight">{currentProduct?.name}</span>
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform hover:scale-110"
+                style={{ backgroundColor: productColor }}
+              >
+                <span className="text-white font-bold text-lg">
+                  {productInitial}
+                </span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-lg font-bold">{currentProduct?.name}</span>
+                <span className="text-xs text-gray-400">
+                  {currentProduct?.status === ("LIVE" as any)
+                    ? "🚀 LIVE"
+                    : "🔨 BUILDING"}
+                </span>
               </div>
             </div>
 
@@ -419,28 +417,19 @@ export function SuperFooter({
             {/* Logo and description */}
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                {!imageError && logoSrc ? (
-                  <div className="relative w-10 h-10 flex-shrink-0">
-                    <Image
-                      src={logoSrc}
-                      alt={`${currentProduct?.name} Logo`}
-                      fill
-                      className="object-contain"
-                      onError={() => setImageError(true)}
-                    />
-                  </div>
-                ) : (
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center text-black"
-                    style={{ backgroundColor: productColor }}
-                  >
-                    <span className="text-white font-black text-lg">
-                      {productInitial}
-                    </span>
-                  </div>
-                )}
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{ backgroundColor: productColor }}
+                >
+                  <span className="text-white font-black text-xl">
+                    {productInitial}
+                  </span>
+                </div>
                 <div>
                   <h3 className="text-xl font-bold">{currentProduct?.name}</h3>
+                  <p className="text-sm text-gray-400 mt-1">
+                    {currentProduct?.category}
+                  </p>
                 </div>
               </div>
               <p className="text-gray-300 text-sm">
@@ -578,29 +567,19 @@ export function SuperFooter({
           {/* Brand Section */}
           <div className="lg:col-span-4">
             <div className="flex items-center gap-3 mb-6">
-              {!imageError && logoSrc ? (
-                <div className="relative w-12 h-12 flex-shrink-0">
-                  <Image
-                    src={logoSrc}
-                    alt={`${currentProduct?.name} Logo`}
-                    fill
-                    className="object-contain"
-                    onError={() => setImageError(true)}
-                  />
-                </div>
-              ) : (
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center transition-transform hover:scale-105 flex-shrink-0"
-                  style={{ backgroundColor: productColor }}
-                >
-                  <span className="text-white font-bold text-xl">
-                    {productInitial}
-                  </span>
-                </div>
-              )}
-
-              <div className="flex flex-col justify-center">
-                <h2 className="text-xl font-bold leading-tight text-white">{currentProduct?.name}</h2>
+              <div
+                className="w-14 h-14 rounded-xl flex items-center justify-center transition-transform hover:scale-105"
+                style={{ backgroundColor: productColor }}
+              >
+                <span className="text-white font-black text-2xl">
+                  {productInitial}
+                </span>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold">{currentProduct?.name}</h2>
+                <p className="text-gray-400">
+                  {currentProduct?.category.toUpperCase()}
+                </p>
               </div>
             </div>
             <p className="text-gray-300 mb-6">{currentProduct?.description}</p>
@@ -622,40 +601,38 @@ export function SuperFooter({
             </div>
           </div>
 
-          {/* Links Sections - Using flex for better responsiveness and avoidance of overflow */}
-          <div className="lg:col-span-4 grid grid-cols-2 sm:grid-cols-3 gap-6">
-            {footerSections.map((section, index) => (
-              <div key={index}>
-                <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                  {section.title}
-                </h3>
-                <ul className="space-y-3">
-                  {section.links.map((link, linkIndex) => (
-                    <li key={linkIndex}>
-                      <Link
-                        href={link.href}
-                        target={link.isExternal ? "_blank" : undefined}
-                        className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
-                      >
-                        <span className="opacity-60 group-hover:opacity-100 flex-shrink-0">
-                          {getIconComponent(link.icon as string)}
+          {/* Links Sections */}
+          {footerSections.map((section, index) => (
+            <div key={index} className="lg:col-span-2">
+              <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                {section.title}
+              </h3>
+              <ul className="space-y-3">
+                {section.links.map((link, linkIndex) => (
+                  <li key={linkIndex}>
+                    <Link
+                      href={link.href}
+                      target={link.isExternal ? "_blank" : undefined}
+                      className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
+                    >
+                      <span className="opacity-60 group-hover:opacity-100">
+                        {getIconComponent(link.icon as string)}
+                      </span>
+                      <span>{link.label}</span>
+                      {link.badge && (
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-white/10">
+                          {link.badge}
                         </span>
-                        <span className="text-sm sm:text-base">{link.label}</span>
-                        {link.badge && (
-                          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-white/10">
-                            {link.badge}
-                          </span>
-                        )}
-                        {link.isExternal && (
-                          <ExternalLink className="w-3 h-3 opacity-50 flex-shrink-0" />
-                        )}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+                      )}
+                      {link.isExternal && (
+                        <ExternalLink className="w-3 h-3 opacity-50" />
+                      )}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
 
           {/* Newsletter Section */}
           {newsletter && (

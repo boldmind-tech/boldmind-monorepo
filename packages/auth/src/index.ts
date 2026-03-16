@@ -25,12 +25,7 @@ export {
   getUserTier,
   PRODUCT_FEATURES
 } from './domain/policies/canAccessFeature';
-export {
-  hasPermission,
-  hasAnyPermission,
-  hasAllPermissions,
-} from './domain/policies/permissions';
-export type { Permission, Role } from './domain/policies/permissions';
+export type { ProductSlug, FeatureTier } from './domain/policies/canAccessFeature';
 
 // providers - ONLY export the class, not the instance
 // export { SupabaseAuthProvider } from './providers/supabase/auth';
@@ -40,6 +35,5 @@ export { getSupabaseAuthProvider, resetSupabaseAuthProvider } from './providers/
 // domain models
 export type { User, Session, AuthState, AuthError, AuthResponse } from './domain/models/index';
 
-export type { AuthContextValue } from './delivery/react/AuthProvider';
-export type { UserAPI } from './domain/models/UserAPI';
+export type { AuthContextValue, UserAPI } from './delivery/react/AuthProvider';
 export * from './middleware'
