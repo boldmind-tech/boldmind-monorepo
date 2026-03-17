@@ -967,37 +967,37 @@ importers:
 
   packages/auth:
     dependencies:
-      '@boldmind/config':
+      '@boldmind/utils':
         specifier: workspace:*
-        version: link:../config
-      '@supabase/ssr':
-        specifier: ^0.8.0
-        version: 0.8.0(@supabase/supabase-js@2.99.1)
-      '@supabase/supabase-js':
-        specifier: ^2.91.1
-        version: 2.99.1
+        version: link:../utils
       '@types/cookie':
         specifier: ^1.0.0
         version: 1.0.0
-      '@types/react':
-        specifier: 18.3.27
-        version: 18.3.27
       cookie:
         specifier: ^1.1.1
         version: 1.1.1
+      jose:
+        specifier: ^5.9.6
+        version: 5.10.0
+      js-cookie:
+        specifier: ^3.0.5
+        version: 3.0.5
+      zustand:
+        specifier: ^5.0.3
+        version: 5.0.12(@types/react@18.3.27)(react@18.3.1)
+    devDependencies:
+      '@types/js-cookie':
+        specifier: ^3.0.6
+        version: 3.0.6
+      '@types/react':
+        specifier: 18.3.27
+        version: 18.3.27
       next:
         specifier: 14.2.35
         version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
       react:
         specifier: 18.3.1
         version: 18.3.1
-    devDependencies:
-      '@types/node':
-        specifier: 20.19.30
-        version: 20.19.30
-      tsdown:
-        specifier: ^0.20.1
-        version: 0.20.3(typescript@5.9.3)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -6358,15 +6358,6 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@supabase/ssr@0.8.0(@supabase/supabase-js@2.99.1):
-    resolution: {integrity: sha512-/PKk8kNFSs8QvvJ2vOww1mF5/c5W8y42duYtXvkOSe+yZKRgTTZywYG2l41pjhNomqESZCpZtXuWmYjFRMV+dw==}
-    peerDependencies:
-      '@supabase/supabase-js': ^2.76.1
-    dependencies:
-      '@supabase/supabase-js': 2.99.1
-      cookie: 1.1.1
-    dev: false
-
   /@supabase/storage-js@2.99.1:
     resolution: {integrity: sha512-mf7zPfqofI62SOoyQJeNUVxe72E4rQsbWim6lTDPeLu3lHija/cP5utlQADGrjeTgOUN6znx/rWn7SjrETP1dw==}
     engines: {node: '>=20.0.0'}
@@ -7030,6 +7021,10 @@ packages:
 
   /@types/http-errors@2.0.5:
     resolution: {integrity: sha512-r8Tayk8HJnX0FztbZN7oVqGccWgw98T/0neJphO91KkmOzug1KkofZURD4UaD5uH8AqcFLfdPErnBod0u71/qg==}
+    dev: true
+
+  /@types/js-cookie@3.0.6:
+    resolution: {integrity: sha512-wkw9yd1kEXOPnvEeEV1Go1MmxtBJL0RR79aOTAApecWFVu7w0NNXNqhcWgvw2YgZDYadliXkl14pa3WXw5jlCQ==}
     dev: true
 
   /@types/jsesc@2.5.1:
@@ -11456,6 +11451,10 @@ packages:
     resolution: {integrity: sha512-1vUQX+IdDMVPj4k8kOxgUqlcK518yluMuGZwqlr44FS1ppZB/5GWh4rZG89erpOBOJjU/OBsnCVFfapsRz6nEA==}
     dev: false
 
+  /jose@5.10.0:
+    resolution: {integrity: sha512-s+3Al/p9g32Iq+oqXxkW//7jk2Vig6FF1CFqzVXoTUXt2qz89YWbL+OwS17NFYEvxC35n0FKeGO2LGYSxeM2Gg==}
+    dev: false
+
   /jose@6.2.1:
     resolution: {integrity: sha512-jUaKr1yrbfaImV7R2TN/b3IcZzsw38/chqMpo2XJ7i2F8AfM/lA4G1goC3JVEwg0H7UldTmSt3P68nt31W7/mw==}
     dev: false
@@ -15809,4 +15808,26 @@ packages:
 
   /zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
+    dev: false
+
+  /zustand@5.0.12(@types/react@18.3.27)(react@18.3.1):
+    resolution: {integrity: sha512-i77ae3aZq4dhMlRhJVCYgMLKuSiZAaUPAct2AksxQ+gOtimhGMdXljRT21P5BNpeT4kXlLIckvkPM029OljD7g==}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@types/react': 18.3.27
+      immer: '>=9.0.6'
+      react: 18.3.1
+      use-sync-external-store: '>=1.2.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+      use-sync-external-store:
+        optional: true
+    dependencies:
+      '@types/react': 18.3.27
+      react: 18.3.1
     dev: false
