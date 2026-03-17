@@ -13,31 +13,31 @@ import { RolesGuard } from './roles.guard';
 import { PermissionsGuard } from './permissions.guard';
 import { PrismaService } from '../../database/prisma.service';
 import { RedisService } from '../../database/redis.service';
-
+ 
 @Module({
-    imports: [
-        PassportModule.register({ defaultStrategy: 'jwt' }),
-        JwtModule.registerAsync({
-            imports: [ConfigModule],
-            inject: [ConfigService],
-            useFactory: (config: ConfigService) => ({
-                secret: config.getOrThrow<string>('JWT_SECRET'),
-                signOptions: { expiresIn: config.get('JWT_EXPIRES_IN', '15m') },
-            }),
-        }),
-    ],
-    controllers: [AuthController],
-    providers: [
-        AuthService,
-        SsoService,
-        JwtStrategy,
-        GoogleStrategy,
-        JwtAuthGuard,
-        RolesGuard,
-        PermissionsGuard,
-        PrismaService,
-        RedisService,
-    ],
-    exports: [AuthService, JwtAuthGuard, RolesGuard, PermissionsGuard, JwtModule],
+  imports: [
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.getOrThrow<string>('JWT_SECRET'),
+        signOptions: { expiresIn: config.get('JWT_EXPIRES_IN', '15m') },
+      }),
+    }),
+  ],
+  controllers: [AuthController],
+  providers: [
+    AuthService,
+    SsoService,
+    JwtStrategy,
+    GoogleStrategy,
+    JwtAuthGuard,
+    RolesGuard,
+    PermissionsGuard,
+    PrismaService,
+    RedisService,
+  ],
+  exports: [AuthService, JwtAuthGuard, RolesGuard, PermissionsGuard, JwtModule],
 })
-export class AuthModule { }
+export class AuthModule {}

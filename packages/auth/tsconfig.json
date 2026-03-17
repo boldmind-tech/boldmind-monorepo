@@ -1,34 +1,22 @@
 {
-  "extends": "../../tsconfig.frontend.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "composite": true,
-    "declaration": true,
-    "declarationMap": true,
+    "noEmit": false,
+    "jsx": "react-jsx",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "outDir": "./dist",
     "rootDir": "./src",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "incremental": true,
-    "jsx": "react-jsx",
-    "lib": [
-      "ES2022",
-      "DOM",
-      "DOM.Iterable"
-    ],
-    "skipLibCheck": true
-  },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "**/*.test.ts",
-    "**/*.spec.ts",
-    "dist",
-    "node_modules"
-  ],
-  "references": [
-    {
-      "path": "../config"
+    "declaration": true,
+    "declarationMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@boldmind/config": ["../config/src"]
     }
-  ]
+  },
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../config" }
+  ],
+  "exclude": ["node_modules", "dist", ".turbo", "**/*.test.ts", "**/*.spec.ts"]
 }

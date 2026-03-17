@@ -1,17 +1,26 @@
 import { defineConfig } from 'tsdown';
 
 export default defineConfig({
-  entry: ['src/index.ts', 'src/server.ts'],
+  entry: {
+    index:  'src/index.ts',   // React AuthProvider, useAuth, SSO helpers
+    server: 'src/server.ts',  // Edge middleware guard (no React imports)
+  },
   format: ['cjs', 'esm'],
-  dts: { build: false },
+  dts: true,
   clean: true,
+  sourcemap: true,
   minify: false,
-  external: [
-    '@supabase/supabase-js',
-    '@supabase/auth-js',
-    'react',
-    'next'
-  ],
   platform: 'neutral',
   treeshake: true,
+  external: [
+    '@boldmind/config',
+    '@supabase/ssr',
+    '@supabase/supabase-js',
+    'cookie',
+    'react',
+    'react-dom',
+    'next',
+    'next/server',
+    'next/headers',
+  ],
 });
