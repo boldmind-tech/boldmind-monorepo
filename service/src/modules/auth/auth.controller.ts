@@ -1,126 +1,116 @@
-
 import {
-  Controller, Post, Get, Body, Req, Res, UseGuards,
-  HttpCode, HttpStatus, Ip, Patch, Param,
+  Controller, Post, Get, Body, Req, Res, HttpCode, HttpStatus, UseGuards, Ip,
 } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { Request, Response } from 'express';
-import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
-import { SsoService } from './sso.service';
-import { JwtAuthGuard } from './auth.guard';
-import { RolesGuard } from './roles.guard';
-import { Roles } from '../../common/decorators/roles.decorator';
-import { CurrentUser } from '../../common/decorators/user.decorator';
-import { JwtPayload } from './auth.service';
+import { JwtAuthGuard } from './jwt-auth.guard';
+import { Public, CurrentUser } from '../../common/decorators';
 import {
-  RegisterDto, LoginDto, RefreshTokenDto, ForgotPasswordDto,
-  ResetPasswordDto, VerifyOtpDto, ChangePasswordDto, UpdateRoleDto,
+  RegisterDto, LoginDto, RefreshTokenDto,
+  ForgotPasswordDto, ResetPasswordDto,
 } from './dto/auth.dto';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly ssoService: SsoService,
-  ) { }
+  constructor(private readonly authService: AuthService) {}
 
+  // ── POST /auth/register ───────────────────────────────────
+  @Public()
   @Post('register')
-  async register(@Body() dto: RegisterDto, @Ip() ip: string, @Res({ passthrough: true }) res: Response) {
-    const tokens = await this.authService.register(dto, ip);
-    this.ssoService.setSsoCookie(res, tokens.accessToken);
-    return tokens;
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Register a new BoldMind user' })
+  async register(@Body() dto: RegisterDto, @Req() req: Request) {
+    return this.authService.register(dto, req.ip, req.headers['user-agent']);
   }
 
+  // ── POST /auth/login ──────────────────────────────────────
+  @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(@Body() dto: LoginDto, @Ip() ip: string, @Res({ passthrough: true }) res: Response) {
-    const tokens = await this.authService.login(dto, ip);
-    this.ssoService.setSsoCookie(res, tokens.accessToken);
-    return tokens;
+  @ApiOperation({ summary: 'Login — returns access + refresh token pair' })
+  async login(@Body() dto: LoginDto, @Req() req: Request) {
+    return this.authService.login(dto, req.ip, req.headers['user-agent']);
   }
 
+  // ── POST /auth/refresh ────────────────────────────────────
+  @Public()
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
-  refresh(@Body() dto: RefreshTokenDto) {
-    return this.authService.refreshToken(dto);
+  @ApiOperation({ summary: 'Rotate refresh token — returns new token pair' })
+  async refresh(@Body() dto: RefreshTokenDto, @Req() req: Request) {
+    return this.authService.refresh(dto.refreshToken, req.ip, req.headers['user-agent']);
   }
 
+  // ── POST /auth/logout ─────────────────────────────────────
+  @UseGuards(JwtAuthGuard)
   @Post('logout')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async logout(@Body() dto: RefreshTokenDto, @Res({ passthrough: true }) res: Response) {
+  @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Revoke current refresh token' })
+  async logout(@Body() dto: RefreshTokenDto) {
     await this.authService.logout(dto.refreshToken);
-    this.ssoService.clearSsoCookie(res);
+    return { message: 'Logged out successfully' };
   }
 
+  // ── POST /auth/logout-all ─────────────────────────────────
   @UseGuards(JwtAuthGuard)
   @Post('logout-all')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async logoutAll(@CurrentUser() user: JwtPayload, @Res({ passthrough: true }) res: Response) {
-    await this.authService.logoutAll(user.sub);
-    this.ssoService.clearSsoCookie(res);
+  @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Revoke all sessions for current user' })
+  async logoutAll(@CurrentUser('sub') userId: string) {
+    await this.authService.logoutAll(userId);
+    return { message: 'All sessions revoked' };
   }
 
+  // ── GET /auth/me ──────────────────────────────────────────
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  getMe(@CurrentUser() user: JwtPayload) {
-    return this.authService.getMe(user.sub);
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Get current authenticated user' })
+  async me(@CurrentUser() user: any) {
+    return { data: user };
   }
 
-  @Post('verify-email')
-  @HttpCode(HttpStatus.OK)
-  verifyEmail(@Body() dto: VerifyOtpDto) {
-    return this.authService.verifyOtp({ ...dto, purpose: 'email_verify' });
-  }
-
-  @Post('resend-verification')
-  @HttpCode(HttpStatus.OK)
-  resendVerification(@Body('email') email: string) {
-    return this.authService.resendVerification(email);
-  }
-
+  // ── POST /auth/forgot-password ────────────────────────────
+  @Public()
   @Post('forgot-password')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  forgotPassword(@Body() dto: ForgotPasswordDto) {
-    return this.authService.forgotPassword(dto);
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Send password reset email' })
+  async forgotPassword(@Body() dto: ForgotPasswordDto) {
+    await this.authService.forgotPassword(dto.email);
+    return { message: 'If that email exists, a reset link has been sent' };
   }
 
+  // ── POST /auth/reset-password ─────────────────────────────
+  @Public()
   @Post('reset-password')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  resetPassword(@Body() dto: ResetPasswordDto) {
-    return this.authService.resetPassword(dto);
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Reset password using OTP token' })
+  async resetPassword(@Body() dto: ResetPasswordDto) {
+    await this.authService.resetPassword(dto.token, dto.newPassword);
+    return { message: 'Password updated successfully. Please log in again.' };
   }
 
+  // ── POST /auth/sso/token ──────────────────────────────────
   @UseGuards(JwtAuthGuard)
-  @Patch('change-password')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  changePassword(@CurrentUser() user: JwtPayload, @Body() dto: ChangePasswordDto) {
-    return this.authService.changePassword(user.sub, dto);
+  @Post('sso/token')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Generate a short-lived SSO token for cross-app login' })
+  async createSSOToken(@CurrentUser('sub') userId: string) {
+    const token = await this.authService.createSSOToken(userId);
+    return { data: { token, expiresIn: 300 } };
   }
 
-  // ── OAuth — Google ──────────────────────────────────────────────────────────
-
-  @Get('google')
-  @UseGuards(AuthGuard('google'))
-  googleAuth() { /* Passport redirects */ }
-
-  @Get('google/callback')
-  @UseGuards(AuthGuard('google'))
-  async googleCallback(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-    const tokens = req.user as { accessToken: string; refreshToken: string; expiresIn: number };
-    this.ssoService.setSsoCookie(res, tokens.accessToken);
-    return tokens;
-  }
-
-  // ── Admin: Role Management ──────────────────────────────────────────────────
-
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin', 'super_admin')
-  @Patch('users/:id/role')
-  updateRole(
-    @Param('id') userId: string,
-    @Body() dto: UpdateRoleDto,
-    @CurrentUser() admin: JwtPayload,
-  ) {
-    return this.authService.updateUserRole(userId, dto.role as never, admin.sub);
+  // ── POST /auth/sso/consume ────────────────────────────────
+  @Public()
+  @Post('sso/consume')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Exchange SSO token for full session (cross-app)' })
+  async consumeSSOToken(@Body() dto: SSOTokenDto) {
+    return this.authService.consumeSSOToken(dto.token);
   }
 }

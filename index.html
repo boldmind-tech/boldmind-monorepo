@@ -1,0 +1,2250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BoldMind Q1 Sprint — March 5 to May 31, 2026</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+        :root {
+            --gold: #FFC800;
+            --navy: #00143C;
+            --green: #065F46;
+            --amber: #D97706;
+            --red: #DC2626;
+            --purple: #7C3AED;
+            --cyan: #0891B2;
+            --bg: #FAFAF8;
+            --surface: #fff;
+            --border: #E5E7EB;
+            --text: #111827;
+            --muted: #6B7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .syn {
+            font-family: 'Syne', sans-serif;
+        }
+
+        /* PAGE HEADER */
+        .doc-header {
+            background: var(--navy);
+            color: #fff;
+            padding: 52px 60px 44px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .doc-header::before {
+            content: '';
+            position: absolute;
+            right: -80px;
+            top: -80px;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 200, 0, 0.06);
+            border-radius: 50%;
+        }
+
+        .doc-header::after {
+            content: '';
+            position: absolute;
+            left: -40px;
+            bottom: -60px;
+            width: 280px;
+            height: 280px;
+            background: rgba(255, 200, 0, 0.04);
+            border-radius: 50%;
+        }
+
+        .doc-header .eyebrow {
+            font-size: 10px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: rgba(255, 200, 0, 0.7);
+            margin-bottom: 14px;
+        }
+
+        .doc-header h1 {
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+
+        .doc-header h1 span {
+            color: var(--gold);
+        }
+
+        .doc-header .subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 620px;
+            font-weight: 300;
+            margin-bottom: 32px;
+        }
+
+        .meta-pills {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .meta-pill {
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            border: 1px solid;
+        }
+
+        .pill-gold {
+            background: rgba(255, 200, 0, 0.1);
+            color: var(--gold);
+            border-color: rgba(255, 200, 0, 0.3);
+        }
+
+        .pill-green {
+            background: rgba(6, 95, 70, 0.4);
+            color: #6EE7B7;
+            border-color: rgba(110, 231, 183, 0.3);
+        }
+
+        .pill-white {
+            background: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.6);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* STAT BAR */
+        .stat-bar {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            background: var(--navy);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .stat-item {
+            padding: 20px 24px;
+            text-align: center;
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .stat-item:last-child {
+            border-right: none;
+        }
+
+        .stat-n {
+            font-family: 'Syne', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--gold);
+            line-height: 1;
+        }
+
+        .stat-l {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 4px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        /* LAYOUT */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 48px 40px;
+        }
+
+        .section {
+            margin-bottom: 52px;
+        }
+
+        .section-label {
+            font-size: 10px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        h2.section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .card-sm {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 18px;
+        }
+
+        .card-gold {
+            border-color: rgba(255, 200, 0, 0.3);
+            background: rgba(255, 200, 0, 0.03);
+        }
+
+        .card-green {
+            border-color: rgba(6, 95, 70, 0.25);
+            background: rgba(6, 95, 70, 0.04);
+        }
+
+        .card-red {
+            border-color: rgba(220, 38, 38, 0.2);
+            background: rgba(220, 38, 38, 0.03);
+        }
+
+        .card-purple {
+            border-color: rgba(124, 58, 237, 0.25);
+            background: rgba(124, 58, 237, 0.04);
+        }
+
+        .card-cyan {
+            border-color: rgba(8, 145, 178, 0.25);
+            background: rgba(8, 145, 178, 0.04);
+        }
+
+        .card-navy {
+            border-color: rgba(0, 20, 60, 0.2);
+            background: rgba(0, 20, 60, 0.04);
+        }
+
+        /* GRIDS */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        /* STATUS BADGES */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            padding: 3px 10px;
+            border-radius: 20px;
+            border: 1px solid;
+        }
+
+        .badge-live {
+            background: rgba(6, 95, 70, 0.1);
+            color: #065F46;
+            border-color: rgba(6, 95, 70, 0.3);
+        }
+
+        .badge-building {
+            background: rgba(255, 200, 0, 0.1);
+            color: #92400E;
+            border-color: rgba(255, 200, 0, 0.35);
+        }
+
+        .badge-planned {
+            background: rgba(124, 58, 237, 0.1);
+            color: #7C3AED;
+            border-color: rgba(124, 58, 237, 0.3);
+        }
+
+        .badge-concept {
+            background: rgba(107, 114, 128, 0.1);
+            color: #6B7280;
+            border-color: rgba(107, 114, 128, 0.3);
+        }
+
+        .badge-hot {
+            background: rgba(220, 38, 38, 0.1);
+            color: #DC2626;
+            border-color: rgba(220, 38, 38, 0.3);
+        }
+
+        .badge-twa {
+            background: rgba(8, 145, 178, 0.1);
+            color: #0891B2;
+            border-color: rgba(8, 145, 178, 0.3);
+        }
+
+        /* WEEK SPRINT CARDS */
+        .sprint-week {
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .week-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 22px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .week-num {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--navy);
+            color: var(--gold);
+            font-family: 'Syne', sans-serif;
+            font-size: 14px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .week-info {
+            flex: 1;
+        }
+
+        .week-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .week-dates {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .week-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0;
+        }
+
+        .week-col {
+            padding: 18px 20px;
+            border-right: 1px solid var(--border);
+        }
+
+        .week-col:last-child {
+            border-right: none;
+        }
+
+        .week-col-title {
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .task-item {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 7px;
+            align-items: flex-start;
+        }
+
+        .task-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+
+        .dot-dev {
+            background: #7C3AED;
+        }
+
+        .dot-ops {
+            background: #0891B2;
+        }
+
+        .dot-biz {
+            background: #065F46;
+        }
+
+        .dot-social {
+            background: #D97706;
+        }
+
+        .dot-revenue {
+            background: #DC2626;
+        }
+
+        .task-text {
+            font-size: 13px;
+            color: #374151;
+            line-height: 1.5;
+        }
+
+        .task-text strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        /* PRODUCT TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 10px 14px;
+            border-bottom: 2px solid var(--border);
+            font-weight: 700;
+        }
+
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #F3F4F6;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #F9FAFB;
+        }
+
+        .product-icon {
+            font-size: 20px;
+        }
+
+        .revenue-cell {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            color: var(--green);
+        }
+
+        .priority-cell {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: var(--navy);
+            color: var(--gold);
+            font-size: 11px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* SOCIAL CARDS */
+        .platform-card {
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        .platform-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .platform-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .platform-handle {
+            font-size: 11px;
+            color: var(--muted);
+            font-family: monospace;
+            margin-bottom: 10px;
+        }
+
+        .platform-stat {
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 12px;
+        }
+
+        .content-pill {
+            display: inline-block;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: #F3F4F6;
+            color: #374151;
+            margin: 2px;
+        }
+
+        /* SCRAPING TABLE */
+        .target-row {
+            display: grid;
+            grid-template-columns: 28px 1fr 120px 100px 100px;
+            gap: 12px;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .target-row:last-child {
+            border-bottom: none;
+        }
+
+        .target-row:first-child {
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--muted);
+            font-weight: 700;
+            padding: 10px 16px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        /* REVENUE TARGETS */
+        .revenue-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: #E5E7EB;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+
+        .revenue-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--green), #10B981);
+        }
+
+        /* CROWDFUNDING */
+        .cf-tier {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .cf-amount {
+            font-family: 'Syne', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--navy);
+        }
+
+        .cf-name {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .cf-perks {
+            list-style: none;
+            margin-top: 12px;
+            text-align: left;
+        }
+
+        .cf-perks li {
+            font-size: 12px;
+            color: #374151;
+            padding: 4px 0;
+            display: flex;
+            gap: 6px;
+        }
+
+        .cf-perks li::before {
+            content: '✓';
+            color: var(--green);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* DAILY DROP TEMPLATE */
+        .drop-card {
+            background: var(--navy);
+            color: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 380px;
+        }
+
+        .drop-proverb {
+            font-style: italic;
+            font-size: 14px;
+            color: rgba(255, 200, 0, 0.85);
+            border-left: 3px solid var(--gold);
+            padding-left: 14px;
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+
+        .drop-fact {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 14px;
+            line-height: 1.65;
+        }
+
+        .drop-question {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .drop-tag {
+            display: inline-block;
+            margin-top: 12px;
+            font-size: 11px;
+            color: var(--gold);
+            letter-spacing: 0.12em;
+        }
+
+        /* MILESTONES */
+        .milestone-row {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            padding: 16px 0;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .milestone-row:last-child {
+            border-bottom: none;
+        }
+
+        .milestone-date {
+            width: 90px;
+            flex-shrink: 0;
+        }
+
+        .milestone-date-main {
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .milestone-date-sub {
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        .milestone-content {
+            flex: 1;
+        }
+
+        .milestone-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .milestone-desc {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .milestone-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        /* PAGE BREAKS */
+        .page-break {
+            border: none;
+            border-top: 2px dashed #E5E7EB;
+            margin: 48px 0;
+        }
+
+        /* RISK BOX */
+        .risk-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .risk-high {
+            background: rgba(220, 38, 38, 0.06);
+            border: 1px solid rgba(220, 38, 38, 0.15);
+        }
+
+        .risk-med {
+            background: rgba(245, 158, 11, 0.06);
+            border: 1px solid rgba(245, 158, 11, 0.15);
+        }
+
+        .risk-low {
+            background: rgba(6, 95, 70, 0.06);
+            border: 1px solid rgba(6, 95, 70, 0.15);
+        }
+
+        .risk-label {
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.18em;
+            padding: 2px 7px;
+            border-radius: 10px;
+            white-space: nowrap;
+            align-self: flex-start;
+            margin-top: 2px;
+        }
+
+        .risk-high .risk-label {
+            background: rgba(220, 38, 38, 0.15);
+            color: #DC2626;
+        }
+
+        .risk-med .risk-label {
+            background: rgba(245, 158, 11, 0.15);
+            color: #B45309;
+        }
+
+        .risk-low .risk-label {
+            background: rgba(6, 95, 70, 0.15);
+            color: #065F46;
+        }
+
+        /* PRINT */
+        @media print {
+            body {
+                font-size: 12px;
+            }
+
+            .doc-header {
+                -webkit-print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ─── HEADER ─── -->
+    <div class="doc-header">
+        <p class="eyebrow">🚀 BoldMind Technology Solution Enterprise</p>
+        <h1 class="syn">Q1 Sprint 2026<br><span>March 5 → May 31</span></h1>
+        <p class="subtitle">Complete execution plan: 32 products · 10 apps · 1 monolith. From test & fix to first ₦1M
+            revenue month. Crowdfunding + customer scraping + social growth aligned to the 5 Rivers Cycle.</p>
+        <div class="meta-pills">
+            <span class="meta-pill pill-gold">⚡ Sprint Starts Thursday 5 March</span>
+            <span class="meta-pill pill-green">13 Weeks · 91 Days</span>
+            <span class="meta-pill pill-white">4 LIVE · 12 BUILDING · 11 CONCEPT · 5 TWA</span>
+            <span class="meta-pill pill-white">Revenue Target: ₦1,000,000/month by May 31</span>
+            <span class="meta-pill pill-white">#ReturnToTheCircle</span>
+        </div>
+    </div>
+
+    <div class="stat-bar">
+        <div class="stat-item">
+            <div class="stat-n">₦95k</div>
+            <div class="stat-l">Current MRR</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-n">32,020</div>
+            <div class="stat-l">Total Users</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-n">32</div>
+            <div class="stat-l">Products</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-n">10</div>
+            <div class="stat-l">Next.js Apps</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-n">₦1M</div>
+            <div class="stat-l">May 31 Target</div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- ─── SECTION 1: PRODUCT CATALOG ─── -->
+        <div class="section">
+            <p class="section-label">01 — Full Product Catalog Aligned to Monorepo</p>
+            <h2 class="section-title">All 32 Products · Priority Stack</h2>
+
+            <div style="overflow-x:auto; border-radius:16px; border:1px solid var(--border);">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Icon</th>
+                            <th>Product</th>
+                            <th>App Host</th>
+                            <th>Domain</th>
+                            <th>Service Module</th>
+                            <th>Status</th>
+                            <th>Sprint MRR Target</th>
+                            <th>DB</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- LIVE -->
+                        <tr style="background:#F0FDF4">
+                            <td>
+                                <div class="priority-cell">0</div>
+                            </td>
+                            <td class="product-icon">🚀</td>
+                            <td><strong>BoldMind Hub</strong><br><span
+                                    style="color:var(--muted);font-size:11px">boldmind.ng · AdminModule</span></td>
+                            <td>boldmind-hub</td>
+                            <td>boldmind.ng</td>
+                            <td>AdminModule</td>
+                            <td><span class="badge badge-live">● LIVE</span></td>
+                            <td class="revenue-cell">Gateway</td>
+                            <td>PG</td>
+                        </tr>
+                        <tr style="background:#F0FDF4">
+                            <td>
+                                <div class="priority-cell">1</div>
+                            </td>
+                            <td class="product-icon">📰</td>
+                            <td><strong>AmeboGist</strong><br><span
+                                    style="color:var(--muted);font-size:11px">amebogist.ng · ContentModule</span></td>
+                            <td>amebogist</td>
+                            <td>amebogist.ng</td>
+                            <td>ContentModule</td>
+                            <td><span class="badge badge-live">● LIVE</span></td>
+                            <td class="revenue-cell">₦40k → ₦80k</td>
+                            <td>Mongo</td>
+                        </tr>
+                        <tr style="background:#F0FDF4">
+                            <td>
+                                <div class="priority-cell">2</div>
+                            </td>
+                            <td class="product-icon">🎓</td>
+                            <td><strong>EduCenter</strong><br><span
+                                    style="color:var(--muted);font-size:11px">educenter.com.ng · EduCenterModule</span>
+                            </td>
+                            <td>educenter</td>
+                            <td>educenter.com.ng</td>
+                            <td>EduCenterModule</td>
+                            <td><span class="badge badge-live">● LIVE</span></td>
+                            <td class="revenue-cell">₦60k → ₦200k</td>
+                            <td>PG</td>
+                        </tr>
+                        <tr style="background:#F0FDF4">
+                            <td>
+                                <div class="priority-cell">3</div>
+                            </td>
+                            <td class="product-icon">🤖</td>
+                            <td><strong>AI Receptionist</strong><br><span
+                                    style="color:var(--muted);font-size:11px">planai.boldmind.ng/receptionist</span>
+                            </td>
+                            <td>planai-suite</td>
+                            <td>planai.boldmind.ng</td>
+                            <td>PlanAIModule</td>
+                            <td><span class="badge badge-live">● LIVE</span></td>
+                            <td class="revenue-cell">₦20k → ₦150k</td>
+                            <td>PG</td>
+                        </tr>
+                        <!-- BUILDING -->
+                        <tr>
+                            <td>
+                                <div class="priority-cell" style="background:#78350F;color:var(--gold)">4</div>
+                            </td>
+                            <td class="product-icon">🎬</td>
+                            <td><strong>Social Content Factory</strong><br><span
+                                    style="color:var(--muted);font-size:11px">tools.boldmind.ng/social</span></td>
+                            <td>boldmind-tools</td>
+                            <td>tools.boldmind.ng</td>
+                            <td>AutomationModule</td>
+                            <td><span class="badge badge-building">⚒ BUILDING</span></td>
+                            <td class="revenue-cell">₦0 → ₦50k</td>
+                            <td>Mongo</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="priority-cell" style="background:#78350F;color:var(--gold)">5</div>
+                            </td>
+                            <td class="product-icon">🧠</td>
+                            <td><strong>BoldMind OS</strong><br><span
+                                    style="color:var(--muted);font-size:11px">os.boldmind.ng</span></td>
+                            <td>boldmind-os</td>
+                            <td>os.boldmind.ng</td>
+                            <td>UserModule</td>
+                            <td><span class="badge badge-building">⚒ BUILDING</span></td>
+                            <td class="revenue-cell">₦0 → ₦25k</td>
+                            <td>PG</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="priority-cell" style="background:#78350F;color:var(--gold)">6</div>
+                            </td>
+                            <td class="product-icon">💪</td>
+                            <td><strong>NaijaFit</strong><br><span
+                                    style="color:var(--muted);font-size:11px">fit.boldmind.ng</span></td>
+                            <td>naija-fit</td>
+                            <td>fit.boldmind.ng</td>
+                            <td>FitnessModule</td>
+                            <td><span class="badge badge-building">⚒ BUILDING</span></td>
+                            <td class="revenue-cell">₦0 → ₦30k</td>
+                            <td>PG</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="priority-cell" style="background:#78350F;color:var(--gold)">7</div>
+                            </td>
+                            <td class="product-icon">🔍</td>
+                            <td><strong>EmailScraper Pro</strong><br><span
+                                    style="color:var(--muted);font-size:11px">tools.boldmind.ng/emailscraper</span></td>
+                            <td>boldmind-tools</td>
+                            <td>tools.boldmind.ng</td>
+                            <td>PlanAIModule</td>
+                            <td><span class="badge badge-building">⚒ BUILDING</span></td>
+                            <td class="revenue-cell">₦0 → ₦75k</td>
+                            <td>Mongo</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="priority-cell" style="background:#78350F;color:var(--gold)">8</div>
+                            </td>
+                            <td class="product-icon">💼</td>
+                            <td><strong>Credibility Hubs</strong><br><span
+                                    style="color:var(--muted);font-size:11px">planai.boldmind.ng/credibility</span></td>
+                            <td>planai-suite</td>
+                            <td>planai.boldmind.ng</td>
+                            <td>PlanAIModule</td>
+                            <td><span class="badge badge-building">⚒ BUILDING</span></td>
+                            <td class="revenue-cell">₦0 → ₦30k</td>
+                            <td>PG</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="priority-cell" style="background:#78350F;color:var(--gold)">12</div>
+                            </td>
+                            <td class="product-icon">🎨</td>
+                            <td><strong>Branding & Design</strong><br><span
+                                    style="color:var(--muted);font-size:11px">planai.boldmind.ng/design</span></td>
+                            <td>planai-suite</td>
+                            <td>planai.boldmind.ng</td>
+                            <td>PlanAIModule</td>
+                            <td><span class="badge badge-building">⚒ BUILDING</span></td>
+                            <td class="revenue-cell">₦0 → ₦24k</td>
+                            <td>Mongo</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="priority-cell" style="background:#78350F;color:var(--gold)">13</div>
+                            </td>
+                            <td class="product-icon">🛍️</td>
+                            <td><strong>Digital Storefronts</strong><br><span
+                                    style="color:var(--muted);font-size:11px">planai.boldmind.ng/store</span></td>
+                            <td>planai-suite</td>
+                            <td>planai.boldmind.ng</td>
+                            <td>PlanAIModule</td>
+                            <td><span class="badge badge-building">⚒ BUILDING</span></td>
+                            <td class="revenue-cell">₦0 → ₦20k</td>
+                            <td>PG</td>
+                        </tr>
+                        <!-- TWA HIGH PRIORITY -->
+                        <tr style="background:#EFF6FF">
+                            <td>
+                                <div class="priority-cell" style="background:#1D4ED8">27</div>
+                            </td>
+                            <td class="product-icon">📱</td>
+                            <td><strong>AmeboGist TWA</strong><br><span style="color:var(--muted);font-size:11px">Play
+                                    Store · 12k users → app</span></td>
+                            <td>amebogist</td>
+                            <td>amebogist.ng</td>
+                            <td>ContentModule</td>
+                            <td><span class="badge badge-twa">📱 TWA · HIGH</span></td>
+                            <td class="revenue-cell">Mobile AdSense</td>
+                            <td>Mongo</td>
+                        </tr>
+                        <tr style="background:#EFF6FF">
+                            <td>
+                                <div class="priority-cell" style="background:#1D4ED8">28</div>
+                            </td>
+                            <td class="product-icon">📚</td>
+                            <td><strong>EduCenter TWA</strong><br><span style="color:var(--muted);font-size:11px">Play
+                                    Store · Students on mobile</span></td>
+                            <td>educenter</td>
+                            <td>educenter.com.ng</td>
+                            <td>EduCenterModule</td>
+                            <td><span class="badge badge-twa">📱 TWA · HIGH</span></td>
+                            <td class="revenue-cell">In-app subs</td>
+                            <td>PG</td>
+                        </tr>
+                        <!-- CONCEPTS - abbreviated -->
+                        <tr style="color:var(--muted)">
+                            <td colspan="9"
+                                style="padding:10px 14px; font-size:12px; background:#F9FAFB; font-style:italic;">
+                                🏗️ Concept Hub (concept.boldmind.ng) → 11 concept products · All hosted in
+                                boldmind-concepts app · ConceptModule = waitlist only ·
+                                KoloAI · SAFE AI · AfroHustle OS · NaijaGig · BorderlessRemit · ReceiptGenius ·
+                                PowerAlert · FarmGate · AfroCopy · Skill2Cash · AnonTruth Mic
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ─── SECTION 2: PRICING ALIGNED ─── -->
+        <div class="section">
+            <p class="section-label">02 — Pricing Aligned to Products.ts + Pricing.ts</p>
+            <h2 class="section-title">Revenue Model Per Product</h2>
+
+            <div class="grid-3">
+                <div class="card card-gold">
+                    <span style="font-size:20px">🤖</span>
+                    <h3 style="margin-top:8px">AI Receptionist</h3>
+                    <p style="font-size:11px;color:var(--muted);margin-bottom:12px">planai.boldmind.ng/receptionist ·
+                        PlanAIModule</p>
+                    <div style="display:flex;flex-direction:column;gap:6px;">
+                        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Basic (500
+                                leads)</span><strong>₦20k/mo</strong></div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Pro (2k
+                                leads)</span><strong>₦35k/mo</strong></div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Enterprise
+                                (∞)</span><strong>₦50k/mo</strong></div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted);">
+                            <span>Setup fee</span><strong style="color:var(--muted)">₦10k once</strong>
+                        </div>
+                    </div>
+                    <div
+                        style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,200,0,0.2);font-size:11px;color:var(--muted);">
+                        Target: 3 clients by April 30 = ₦150k/mo
+                    </div>
+                </div>
+
+                <div class="card card-green">
+                    <span style="font-size:20px">🎓</span>
+                    <h3 style="margin-top:8px">EduCenter</h3>
+                    <p style="font-size:11px;color:var(--muted);margin-bottom:12px">educenter.com.ng · EduCenterModule ·
+                        ALOC API</p>
+                    <div style="display:flex;flex-direction:column;gap:6px;">
+                        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Free
+                                (5Q/day)</span><strong>₦0</strong></div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Basic
+                                (unlimited)</span><strong>₦3k/mo</strong></div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Pro (+
+                                courses)</span><strong>₦5k/mo</strong></div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted);">
+                            <span>TWA in-app billing</span><strong style="color:var(--muted)">Google Play</strong>
+                        </div>
+                    </div>
+                    <div
+                        style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(6,95,70,0.2);font-size:11px;color:var(--muted);">
+                        Target: 50 paid subs by April = ₦150k/mo
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span style="font-size:20px">📰</span>
+                    <h3 style="margin-top:8px">AmeboGist</h3>
+                    <p style="font-size:11px;color:var(--muted);margin-bottom:12px">amebogist.ng · ContentModule · 12k
+                        users</p>
+                    <div style="display:flex;flex-direction:column;gap:6px;">
+                        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Reader
+                                (free)</span><strong>₦0</strong></div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Creator
+                                Basic</span><strong>₦1k/mo</strong></div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Pro Creator (60%
+                                rev)</span><strong>₦3k/mo</strong></div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted);">
+                            <span>AdSense passive</span><strong style="color:var(--muted)">₦15k now</strong>
+                        </div>
+                    </div>
+                    <div
+                        style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);">
+                        Target: 30 paid creators + AdSense → ₦80k/mo
+                    </div>
+                </div>
+
+                <div class="card card-cyan">
+                    <span style="font-size:20px">🔍</span>
+                    <h3 style="margin-top:8px">EmailScraper Pro</h3>
+                    <p style="font-size:11px;color:var(--muted);margin-bottom:12px">tools.boldmind.ng/emailscraper ·
+                        PlanAIModule</p>
+                    <div style="display:flex;flex-direction:column;gap:6px;">
+                        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Free
+                                (100/mo)</span><strong>₦0</strong></div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Basic
+                                (1k/mo)</span><strong>₦5k/mo</strong></div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Pro
+                                (10k/mo)</span><strong>₦15k/mo</strong></div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Enterprise (∞ +
+                                API)</span><strong>₦50k/mo</strong></div>
+                    </div>
+                    <div
+                        style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(8,145,178,0.2);font-size:11px;color:var(--muted);">
+                        Target: 5 Pro accounts = ₦75k/mo by May
+                    </div>
+                </div>
+
+                <div class="card card-purple">
+                    <span style="font-size:20px">🎬</span>
+                    <h3 style="margin-top:8px">Social Content Factory</h3>
+                    <p style="font-size:11px;color:var(--muted);margin-bottom:12px">tools.boldmind.ng/social ·
+                        AutomationModule</p>
+                    <div style="display:flex;flex-direction:column;gap:6px;">
+                        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Free (5
+                                videos/mo)</span><strong>₦0</strong></div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Basic
+                                (50/mo)</span><strong>₦10k/mo</strong></div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Pro
+                                (200/mo)</span><strong>₦25k/mo</strong></div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Agency
+                                (∞)</span><strong>₦50k/mo</strong></div>
+                    </div>
+                    <div
+                        style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(124,58,237,0.2);font-size:11px;color:var(--muted);">
+                        Target: 2 Agency + 5 Pro = ₦225k/mo by May
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span style="font-size:20px">🧠</span>
+                    <h3 style="margin-top:8px">BoldMind OS</h3>
+                    <p style="font-size:11px;color:var(--muted);margin-bottom:12px">os.boldmind.ng · UserModule ·
+                        ADHD-first</p>
+                    <div style="display:flex;flex-direction:column;gap:6px;">
+                        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Free (50
+                                notes/mo)</span><strong>₦0</strong></div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Basic
+                                (unlimited)</span><strong>₦5k/mo</strong></div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Pro (+ teams +
+                                n8n)</span><strong>₦15k/mo</strong></div>
+                    </div>
+                    <div
+                        style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);">
+                        Target: 5 Pro + 20 Basic = ₦175k/mo by May
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenue target summary -->
+            <div class="card" style="margin-top:20px; border:2px solid var(--navy);">
+                <h3 style="margin-bottom:16px;">💰 May 31 Revenue Target: ₦1,000,000/month</h3>
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                    <div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:13px;">
+                            <span>AI Receptionist (3-6 clients @ avg ₦30k)</span><strong>₦150k</strong>
+                        </div>
+                        <div class="revenue-bar">
+                            <div class="revenue-fill" style="width:15%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:13px;">
+                            <span>EduCenter (50 paid subs + TWA in-app)</span><strong>₦200k</strong>
+                        </div>
+                        <div class="revenue-bar">
+                            <div class="revenue-fill" style="width:20%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:13px;">
+                            <span>Social Factory (2 Agency + 5 Pro)</span><strong>₦225k</strong>
+                        </div>
+                        <div class="revenue-bar">
+                            <div class="revenue-fill" style="width:22.5%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:13px;">
+                            <span>EmailScraper Pro (5 Pro accounts)</span><strong>₦75k</strong>
+                        </div>
+                        <div class="revenue-bar">
+                            <div class="revenue-fill" style="width:7.5%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:13px;">
+                            <span>BoldMind OS (25 paid subscribers)</span><strong>₦175k</strong>
+                        </div>
+                        <div class="revenue-bar">
+                            <div class="revenue-fill" style="width:17.5%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:13px;">
+                            <span>AmeboGist (AdSense + 30 creators)</span><strong>₦80k</strong>
+                        </div>
+                        <div class="revenue-bar">
+                            <div class="revenue-fill" style="width:8%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:13px;">
+                            <span>Branding, Storefronts, Credibility (misc)</span><strong>₦95k</strong>
+                        </div>
+                        <div class="revenue-bar">
+                            <div class="revenue-fill" style="width:9.5%"></div>
+                        </div>
+                    </div>
+                    <div
+                        style="border-top:2px solid var(--navy);padding-top:10px;margin-top:4px;display:flex;justify-content:space-between;">
+                        <span style="font-family:'Syne',sans-serif;font-size:15px;font-weight:800;">TOTAL TARGET</span>
+                        <span
+                            style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--green)">₦1,000,000/mo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="page-break">
+
+        <!-- ─── SECTION 3: 13-WEEK SPRINT ─── -->
+        <div class="section">
+            <p class="section-label">03 — 13-Week Execution Plan</p>
+            <h2 class="section-title">Sprint Breakdown: March 5 → May 31, 2026</h2>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:24px;">
+                <div class="card card-red" style="border-left:4px solid var(--red)">
+                    <p
+                        style="font-size:11px;font-weight:800;color:var(--red);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;">
+                        Phase 1 · Weeks 1–3</p>
+                    <p style="font-weight:700;font-size:15px;">Fix, Test & Stabilise</p>
+                    <p style="font-size:12px;color:var(--muted);margin-top:4px;">March 5–22 · All 4 live products
+                        bulletproof. Middleware, auth, payments verified. Customer outreach begins.</p>
+                </div>
+                <div class="card" style="border-left:4px solid var(--amber)">
+                    <p
+                        style="font-size:11px;font-weight:800;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;">
+                        Phase 2 · Weeks 4–8</p>
+                    <p style="font-weight:700;font-size:15px;">Ship & Acquire</p>
+                    <p style="font-size:12px;color:var(--muted);margin-top:4px;">March 23 – April 26 · TWAs live.
+                        Building products launch. 100+ ICP contacts scraped. First paid customers.</p>
+                </div>
+                <div class="card card-green" style="border-left:4px solid var(--green)">
+                    <p
+                        style="font-size:11px;font-weight:800;color:var(--green);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;">
+                        Phase 3 · Weeks 9–13</p>
+                    <p style="font-weight:700;font-size:15px;">Scale & Crowdfund</p>
+                    <p style="font-size:12px;color:var(--muted);margin-top:4px;">April 27 – May 31 · Crowdfunding live.
+                        Social flywheel. ₦1M target. Friends + community campaign.</p>
+                </div>
+            </div>
+
+            <!-- WEEK 1 -->
+            <div class="sprint-week">
+                <div class="week-header">
+                    <div class="week-num">W1</div>
+                    <div class="week-info">
+                        <div class="week-title">🔧 Foundation Sprint — Fix Everything Broken</div>
+                        <div class="week-dates">Thursday March 5 – Sunday March 8 · Days 1–4</div>
+                    </div>
+                    <span class="badge badge-hot">🔥 PHASE 1 KICKOFF</span>
+                </div>
+                <div class="week-body">
+                    <div class="week-col">
+                        <div class="week-col-title">⚡ Dev (apps/)</div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span class="task-text"><strong>Hub
+                                    auth middleware</strong> — test login/register/redirect on all 4 live apps</span>
+                        </div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span class="task-text"><strong>SSO
+                                    cookie</strong> — verify boldmind_session shares across all *.boldmind.ng
+                                subdomains</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span class="task-text"><strong>SSO
+                                    token exchange</strong> — test educenter.com.ng + amebogist.ng external
+                                domains</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>Paystack webhooks</strong> — verify charge.success fires +
+                                subscription activates correctly</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>ALOC API cache</strong> — confirm Redis TTL 24h for questions,
+                                1h for random sets</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>EduCenter CBT</strong> — test JAMB/WAEC/NECO simulator
+                                end-to-end</span></div>
+                    </div>
+                    <div class="week-col">
+                        <div class="week-col-title">🏗️ Service (service/)</div>
+                        <div class="task-item"><span class="task-dot dot-ops"></span><span
+                                class="task-text"><strong>Railway health check</strong> — /health endpoint returning 200
+                                on all Railway services</span></div>
+                        <div class="task-item"><span class="task-dot dot-ops"></span><span class="task-text"><strong>All
+                                    Prisma migrations</strong> — apply schema for User, Payment, EduCenter, PlanAI
+                                modules</span></div>
+                        <div class="task-item"><span class="task-dot dot-ops"></span><span
+                                class="task-text"><strong>Receptionist webhook</strong> — test Meta POST /webhook/meta
+                                with real Facebook page</span></div>
+                        <div class="task-item"><span class="task-dot dot-ops"></span><span
+                                class="task-text"><strong>AmeboGist ContentModule</strong> — confirm Mongoose CRUD + RSS
+                                feed working</span></div>
+                        <div class="task-item"><span class="task-dot dot-ops"></span><span
+                                class="task-text"><strong>@boldmind/ui components</strong> — integrate into all 4 live
+                                apps, test Tailwind tokens</span></div>
+                    </div>
+                    <div class="week-col">
+                        <div class="week-col-title">📢 Socials + Reach</div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>Create all social accounts</strong> — TikTok, IG, X, LinkedIn,
+                                YouTube, WhatsApp Channel for BoldMind</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>First TikTok</strong> — "Building 32 products alone" origin
+                                story (raw, no edit)</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>First 8:30 AM daily drop</strong> — WhatsApp + TikTok + IG
+                                simultaneously</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>Friends list</strong> — DM 50 contacts for crowdfunding
+                                preview + beta testers</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>Start lead scraping</strong> — Lagos/Abuja SME owners on
+                                LinkedIn using EmailScraper</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WEEK 2-3 -->
+            <div class="sprint-week">
+                <div class="week-header">
+                    <div class="week-num">W2-3</div>
+                    <div class="week-info">
+                        <div class="week-title">🧪 Full System Test + First Customer Calls</div>
+                        <div class="week-dates">March 9 – March 22 · Days 5–18</div>
+                    </div>
+                    <span class="badge badge-building">⚒ FIX + SELL</span>
+                </div>
+                <div class="week-body">
+                    <div class="week-col">
+                        <div class="week-col-title">⚡ Dev (apps/)</div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>Middleware PUBLIC_PATHS</strong> — verify all 10 apps have
+                                correct public/protected route split</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>@boldmind/auth package</strong> — useAuth hook + withAuth HOC
+                                working in all apps</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>@boldmind/api-client</strong> — all API modules returning
+                                correctly typed responses</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>EduCenter TWA</strong> — Bubblewrap build + test on Android
+                                device (HIGH PRIORITY)</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>AmeboGist TWA</strong> — Bubblewrap build + Google Play
+                                Console alpha track upload</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span class="task-text"><strong>PWA
+                                    manifests</strong> — test all 10 apps installable on Android Chrome</span></div>
+                    </div>
+                    <div class="week-col">
+                        <div class="week-col-title">🏗️ Infrastructure</div>
+                        <div class="task-item"><span class="task-dot dot-ops"></span><span
+                                class="task-text"><strong>Cloudflare DNS</strong> — verify all 10 subdomains + external
+                                domains pointing correctly</span></div>
+                        <div class="task-item"><span class="task-dot dot-ops"></span><span
+                                class="task-text"><strong>Upstash Redis</strong> — ALOC cache + Receptionist page cache
+                                + rate limits live</span></div>
+                        <div class="task-item"><span class="task-dot dot-ops"></span><span class="task-text"><strong>n8n
+                                    Railway deploy</strong> — social-factory-post.json + email-campaigns.json workflows
+                                active</span></div>
+                        <div class="task-item"><span class="task-dot dot-ops"></span><span
+                                class="task-text"><strong>Resend email</strong> — confirm transactional emails firing
+                                (welcome, payment, receipt)</span></div>
+                        <div class="task-item"><span class="task-dot dot-ops"></span><span
+                                class="task-text"><strong>Load test</strong> — artillery.io run 1000 concurrent users on
+                                api.boldmind.ng</span></div>
+                    </div>
+                    <div class="week-col">
+                        <div class="week-col-title">💰 First Sales</div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>Receptionist demo calls</strong> — book 10 discovery calls
+                                with Nigerian business owners from scraped list</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>EduCenter schools</strong> — reach 5 secondary schools in
+                                Lagos for B2B pilot (group subscription)</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>AmeboGist creators</strong> — DM 20 Nigerian bloggers on X
+                                about pro creator plan</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>Crowdfunding setup</strong> — Paystack crowdfunding page live
+                                (target ₦500k from friends/community)</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>Social: 3 posts/day</strong> — TikTok + IG Reels + X +
+                                WhatsApp drops (8:30 AM, 12 PM, 6 PM)</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WEEK 4-5 -->
+            <div class="sprint-week">
+                <div class="week-header">
+                    <div class="week-num">W4-5</div>
+                    <div class="week-info">
+                        <div class="week-title">🚀 TWA Launch + First Building Product Releases</div>
+                        <div class="week-dates">March 23 – April 5 · Days 19–32</div>
+                    </div>
+                    <span class="badge badge-twa">📱 TWA LAUNCH</span>
+                </div>
+                <div class="week-body">
+                    <div class="week-col">
+                        <div class="week-col-title">⚡ Dev Deliverables</div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>EduCenter TWA → Play Store LIVE</strong> — production release
+                                with in-app Paystack billing</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>AmeboGist TWA → Play Store LIVE</strong> — push notifications
+                                + mobile AdSense activated</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>BoldMind OS MVP</strong> — os.boldmind.ng: Pomodoro + capture
+                                + basic knowledge graph live</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>EmailScraper beta</strong> — tools.boldmind.ng/emailscraper:
+                                LinkedIn + CAC scraping live for 10 beta users</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>Concept Hub</strong> — concept.boldmind.ng live: all 11
+                                concepts with waitlist forms</span></div>
+                    </div>
+                    <div class="week-col">
+                        <div class="week-col-title">📢 Marketing Push</div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>TWA launch TikTok</strong> — "BoldMind app on Play Store"
+                                video, raw phone footage</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>EduCenter push</strong> — DM every JAMB students WhatsApp
+                                group admin (100 groups)</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>EmailScraper beta invite</strong> — 50 Nigerian sales reps +
+                                recruitment agencies scraped</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>AmeboGist reader push</strong> — "Download the app" popup +
+                                WhatsApp blast to all 12k users</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>First ₦200k month</strong> — target by April 5: Receptionist
+                                (2 clients) + EduCenter (30 subs)</span></div>
+                    </div>
+                    <div class="week-col">
+                        <div class="week-col-title">🤝 Crowdfunding</div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>Crowdfunding video</strong> — 3-min founder story: why
+                                BoldMind exists, the 5 Rivers, what funds do</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>Friends & family ask</strong> — personal DMs to 100 contacts
+                                with crowdfunding link + WhatsApp voice note</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>Tiers set</strong> — ₦5k (Supporter), ₦25k (Partner), ₦100k
+                                (Circle Member) — see tier card below</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>Target W4-5</strong> — ₦150k raised from friends & family.
+                                Every donor gets 3-month free Pro on any product</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WEEK 6-8 -->
+            <div class="sprint-week">
+                <div class="week-header">
+                    <div class="week-num">W6-8</div>
+                    <div class="week-info">
+                        <div class="week-title">⚡ Scale Live Products + Ship Social Factory & NaijaFit</div>
+                        <div class="week-dates">April 6 – April 26 · Days 33–53</div>
+                    </div>
+                    <span class="badge badge-building">⚒ BUILDING SHIPS</span>
+                </div>
+                <div class="week-body">
+                    <div class="week-col">
+                        <div class="week-col-title">⚡ Dev Deliverables</div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>Social Content Factory BETA</strong> —
+                                tools.boldmind.ng/social: caption gen + 6 platforms schedule live</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>NaijaFit MVP</strong> — fit.boldmind.ng: Nigerian meal tracker
+                                + home workouts + community live</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>Receptionist v1.1</strong> — add Pidgin mode, voice note
+                                reply, WhatsApp broadcast campaigns</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>Branding & Design beta</strong> — planai.boldmind.ng/design:
+                                FLUX logo gen + brand kit PDF export</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>Analytics package</strong> — @boldmind/analytics: PostHog +
+                                Meta Pixel + TikTok Pixel across all apps</span></div>
+                    </div>
+                    <div class="week-col">
+                        <div class="week-col-title">💰 Revenue Focus</div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>Receptionist 3rd client</strong> — close 1 more at ₦35k/mo =
+                                ₦105k from Receptionist alone</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>Social Factory first sale</strong> — convert 2 beta users to
+                                paid (₦10k Basic minimum)</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>EmailScraper first sale</strong> — convert 3 beta users to Pro
+                                (₦15k × 3 = ₦45k)</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>EduCenter TWA</strong> — Google Play approved + 100 installs
+                                first week → 10% convert to paid</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>April revenue target: ₦500k</strong></span></div>
+                    </div>
+                    <div class="week-col">
+                        <div class="week-col-title">📢 Social Acceleration</div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>"Build in public" series</strong> — weekly TikTok: show
+                                revenue dashboard, user count, what broke this week</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>NaijaFit launch video</strong> — "Nigerian meal calorie
+                                tracker" — suya, jollof, egusi breakdowns go viral</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>EduCenter JAMB countdown</strong> — daily JAMB practice
+                                question posts on TikTok (educational content)</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>Crowdfunding milestone</strong> — post ₦250k raised update to
+                                all channels. Thank supporters publicly.</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>LinkedIn article</strong> — "Why I'm building 32 products for
+                                Nigeria" — professional outreach</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WEEK 9-11 -->
+            <div class="sprint-week">
+                <div class="week-header">
+                    <div class="week-num">W9-11</div>
+                    <div class="week-info">
+                        <div class="week-title">🎯 ₦700k Month + Crowdfund Push + Viral Content</div>
+                        <div class="week-dates">April 27 – May 17 · Days 54–74</div>
+                    </div>
+                    <span class="badge badge-planned">📈 SCALE PHASE</span>
+                </div>
+                <div class="week-body">
+                    <div class="week-col">
+                        <div class="week-col-title">⚡ Dev Deliverables</div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>Digital Storefronts MVP</strong> — planai.boldmind.ng/store:
+                                store in 5 min + Paystack + WhatsApp orders</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>Business Planning MVP</strong> — planai.boldmind.ng/planning:
+                                GPT-4o plan + PDF export live</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>AmeboGist Studio</strong> — studio.amebogist.ng: full creator
+                                dashboard + editor + earnings live</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span class="task-text"><strong>OS
+                                    TWA</strong> — Bubblewrap build for os.boldmind.ng → Play Store alpha track</span>
+                        </div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>SkillGig MVP</strong> — skills.educenter.com.ng: video profile
+                                + booking + Paystack escrow</span></div>
+                    </div>
+                    <div class="week-col">
+                        <div class="week-col-title">💰 Revenue Operations</div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>Scale Receptionist to 5 clients</strong> — system prompt: use
+                                EduCenter + AmeboGist testimonials as social proof</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>Social Factory Agency deal</strong> — target 1 Nigerian
+                                digital agency at ₦50k/mo</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>EduCenter school deal</strong> — close 1 secondary school at
+                                group rate (₦500 × 200 students = ₦100k)</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>Creator monetisation</strong> — 20 AmeboGist Pro creators
+                                active (₦3k × 20 = ₦60k)</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>Crowdfunding: ₦400k raised</strong> — mid-campaign push to
+                                Nigerian Twitter + LinkedIn diaspora</span></div>
+                    </div>
+                    <div class="week-col">
+                        <div class="week-col-title">📢 Content Virality</div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>"Solo founder" viral content</strong> — "I built 32 products
+                                in 6 months with no team" TikTok series</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>AmeboGist Pidgin drops</strong> — daily 280-char proverb +
+                                fact + question drops at 8:30 AM on all platforms</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>JAMB countdown TikTok</strong> — EduCenter study tips, exam
+                                calendar, past question breakdowns</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>Receptionist case study</strong> — client permission video:
+                                "how AI Receptionist got me 45 leads in 7 days"</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>NaijaFit challenge</strong> — 30-day challenge launch:
+                                #NaijaFitChallenge with daily workout videos</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WEEK 12-13 -->
+            <div class="sprint-week">
+                <div class="week-header">
+                    <div class="week-num">W12-13</div>
+                    <div class="week-info">
+                        <div class="week-title">🏆 Final Push → ₦1M Revenue Month</div>
+                        <div class="week-dates">May 18 – May 31 · Days 75–91</div>
+                    </div>
+                    <span class="badge badge-live">● FINISH LINE</span>
+                </div>
+                <div class="week-body">
+                    <div class="week-col">
+                        <div class="week-col-title">⚡ Dev (final polish)</div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>Admin command centre</strong> — Hub admin page shows all 32
+                                products, MRR, user counts, live metrics</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>Referral system</strong> — BoldMind referral codes live (earn
+                                20% on month 1 of any referred subscription)</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>Performance audit</strong> — Lighthouse scores > 90 on all 10
+                                apps</span></div>
+                        <div class="task-item"><span class="task-dot dot-dev"></span><span
+                                class="task-text"><strong>Error monitoring</strong> — Sentry live across all apps +
+                                Railway alerts configured</span></div>
+                    </div>
+                    <div class="week-col">
+                        <div class="week-col-title">💰 Revenue Closes</div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>Receptionist 6 clients</strong> — 6 × avg ₦25k = ₦150k/mo
+                                locked in</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>EduCenter 50 paid</strong> — 50 × ₦3k = ₦150k + school
+                                deals</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>Social Factory agency</strong> — 1 agency × ₦50k + 5 Pro ×
+                                ₦25k = ₦175k</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>Crowdfunding close</strong> — ₦500k raised target. All backers
+                                given lifetime discount codes.</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text"><strong>₦1M MRR announcement</strong> — public TikTok/IG: "We hit
+                                ₦1M/month. This is what Pan-African tech looks like."</span></div>
+                    </div>
+                    <div class="week-col">
+                        <div class="week-col-title">📢 Q2 Setup</div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>Press release</strong> — reach out to TechCabal, Techpoint,
+                                BusinessDay about BoldMind milestone</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>Investor deck</strong> — use Hub admin stats to auto-generate
+                                investor deck for Q2 angel outreach</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>Q2 sprint plan</strong> — concept products roadmap: KoloAI,
+                                NaijaGig, Storefronts scale</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text"><strong>Team plan</strong> — hire 1 developer + 1 community manager
+                                with Q1 revenue</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="page-break">
+
+        <!-- ─── SECTION 4: CUSTOMER SCRAPING ─── -->
+        <div class="section">
+            <p class="section-label">04 — Ideal Customer Profile + Scraping Strategy</p>
+            <h2 class="section-title">Who to Reach & How to Find Them</h2>
+
+            <div class="grid-2" style="margin-bottom:20px">
+                <div>
+                    <h3 style="margin-bottom:14px">🎯 ICP by Product</h3>
+
+                    <div class="card-sm" style="margin-bottom:8px; border-left:4px solid var(--gold)">
+                        <div
+                            style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+                            <strong>AI Receptionist</strong>
+                            <span class="badge badge-live">Priority 1</span>
+                        </div>
+                        <p style="font-size:12px;color:var(--muted)">Nigerian SME owners with active Instagram/Facebook
+                            pages · Beauty salons, restaurants, clothing brands, real estate agents, event planners,
+                            hotels · 1–50 employees · Actively running ads · Comments on posts daily but overwhelmed by
+                            DMs</p>
+                        <p style="font-size:11px;color:var(--amber);margin-top:6px;font-weight:600">Scrape: Instagram
+                            business pages in Lagos/Abuja/Port Harcourt with 1k-50k followers + active comments</p>
+                    </div>
+
+                    <div class="card-sm" style="margin-bottom:8px; border-left:4px solid var(--green)">
+                        <div
+                            style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+                            <strong>EduCenter</strong>
+                            <span class="badge badge-live">Priority 2</span>
+                        </div>
+                        <p style="font-size:12px;color:var(--muted)">SS3 students preparing for JAMB/WAEC (16–19) ·
+                            Parents paying for exam prep services · Secondary school teachers and proprietors · Private
+                            tutorial centres</p>
+                        <p style="font-size:11px;color:var(--amber);margin-top:6px;font-weight:600">Scrape: Facebook
+                            JAMB 2026 groups (100k+ members each) · WhatsApp group admins · Tutors on Instagram</p>
+                    </div>
+
+                    <div class="card-sm" style="margin-bottom:8px; border-left:4px solid var(--cyan)">
+                        <div
+                            style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+                            <strong>EmailScraper Pro</strong>
+                            <span class="badge badge-building">Priority 3</span>
+                        </div>
+                        <p style="font-size:12px;color:var(--muted)">Nigerian sales reps at SaaS companies · Recruitment
+                            agencies · Marketing agencies · Real estate firms · Insurance agents with sales quotas · B2B
+                            founders doing outbound</p>
+                        <p style="font-size:11px;color:var(--amber);margin-top:6px;font-weight:600">Scrape: LinkedIn
+                            "Sales Representative Nigeria" + "Business Development Nigeria" · VConnect business
+                            directory</p>
+                    </div>
+
+                    <div class="card-sm" style="border-left:4px solid var(--purple)">
+                        <div
+                            style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+                            <strong>Social Content Factory</strong>
+                            <span class="badge badge-building">Priority 4</span>
+                        </div>
+                        <p style="font-size:12px;color:var(--muted)">Nigerian digital marketing agencies (10-50 staff) ·
+                            Brand managers at Nigerian companies · Content creators with 10k-500k followers · SME owners
+                            running their own social media</p>
+                        <p style="font-size:11px;color:var(--amber);margin-top:6px;font-weight:600">Scrape: LinkedIn
+                            "Digital Marketing Manager Nigeria" · Instagram creators with business accounts · Twitter/X
+                            Nigerian marketing communities</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="margin-bottom:14px">🕷️ Scraping Execution Plan</h3>
+
+                    <div class="card" style="margin-bottom:12px">
+                        <p
+                            style="font-size:11px;font-weight:800;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;margin-bottom:12px">
+                            Week 1-2 Scraping Targets</p>
+
+                        <div class="target-row"
+                            style="font-weight:700;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:8px 0;border-bottom:2px solid var(--border);display:grid;grid-template-columns:1fr 80px 80px 80px;gap:8px">
+                            <span>Source</span><span>Volume</span><span>Product</span><span>Method</span>
+                        </div>
+
+                        <div
+                            style="display:grid;grid-template-columns:1fr 80px 80px 80px;gap:8px;padding:9px 0;border-bottom:1px solid #F3F4F6;align-items:center;font-size:12px">
+                            <span>LinkedIn "Sales Nigeria" + "BD Nigeria"</span>
+                            <span style="font-weight:700;color:var(--navy)">500</span>
+                            <span>EmailScraper</span>
+                            <span style="font-size:10px;color:var(--muted)">Chrome ext</span>
+                        </div>
+                        <div
+                            style="display:grid;grid-template-columns:1fr 80px 80px 80px;gap:8px;padding:9px 0;border-bottom:1px solid #F3F4F6;align-items:center;font-size:12px">
+                            <span>Facebook JAMB 2026 group admins</span>
+                            <span style="font-weight:700;color:var(--navy)">200</span>
+                            <span>EduCenter</span>
+                            <span style="font-size:10px;color:var(--muted)">Manual DM</span>
+                        </div>
+                        <div
+                            style="display:grid;grid-template-columns:1fr 80px 80px 80px;gap:8px;padding:9px 0;border-bottom:1px solid #F3F4F6;align-items:center;font-size:12px">
+                            <span>IG Lagos salons/restaurants (1k-50k followers)</span>
+                            <span style="font-weight:700;color:var(--navy)">300</span>
+                            <span>Receptionist</span>
+                            <span style="font-size:10px;color:var(--muted)">IG search</span>
+                        </div>
+                        <div
+                            style="display:grid;grid-template-columns:1fr 80px 80px 80px;gap:8px;padding:9px 0;border-bottom:1px solid #F3F4F6;align-items:center;font-size:12px">
+                            <span>VConnect.ng "Lagos businesses"</span>
+                            <span style="font-weight:700;color:var(--navy)">400</span>
+                            <span>Receptionist</span>
+                            <span style="font-size:10px;color:var(--muted)">Puppeteer</span>
+                        </div>
+                        <div
+                            style="display:grid;grid-template-columns:1fr 80px 80px 80px;gap:8px;padding:9px 0;border-bottom:1px solid #F3F4F6;align-items:center;font-size:12px">
+                            <span>ConnectNigeria marketing agencies</span>
+                            <span style="font-weight:700;color:var(--navy)">150</span>
+                            <span>Social Factory</span>
+                            <span style="font-size:10px;color:var(--muted)">Puppeteer</span>
+                        </div>
+                        <div
+                            style="display:grid;grid-template-columns:1fr 80px 80px 80px;gap:8px;padding:9px 0;align-items:center;font-size:12px">
+                            <span>Nigerian Twitter creators 10k-500k</span>
+                            <span style="font-weight:700;color:var(--navy)">100</span>
+                            <span>Social Factory</span>
+                            <span style="font-size:10px;color:var(--muted)">X API</span>
+                        </div>
+                    </div>
+
+                    <div class="card card-gold" style="margin-top:12px">
+                        <p style="font-size:12px;font-weight:700;margin-bottom:8px">📩 Cold Outreach Template
+                            (WhatsApp/Email)</p>
+                        <div
+                            style="background:rgba(0,0,0,0.05);border-radius:8px;padding:12px;font-size:12px;color:#374151;font-style:italic;line-height:1.7">
+                            "Hello [Name], I dey build AI tools specifically for Nigerian businesses like [Business
+                            Name]. One of my tools — AI Receptionist — go automatically reply your Instagram comments
+                            and capture leads 24/7. You fit try am free for 7 days. I go set am up personally for your
+                            page. Reply YES and I go reach out."
+                        </div>
+                        <p style="font-size:11px;color:var(--muted);margin-top:8px">Pidgin version converts 3x better
+                            than English based on AmeboGist audience data.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="page-break">
+
+        <!-- ─── SECTION 5: SOCIAL STRATEGY ─── -->
+        <div class="section">
+            <p class="section-label">05 — Social Media Strategy · 5 Rivers Daily Content</p>
+            <h2 class="section-title">Content Calendar Aligned to BoldMind Philosophy</h2>
+
+            <div class="grid-3" style="margin-bottom:24px">
+                <div class="platform-card" style="border-color:rgba(239,68,68,0.3)">
+                    <div class="platform-icon">🎵</div>
+                    <div class="platform-name">TikTok</div>
+                    <div class="platform-handle">@boldmindng</div>
+                    <div class="platform-stat">🎯 Primary growth engine · Fastest to 10k</div>
+                    <p style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px">Raw founder videos,
+                        build-in-public, product demos, JAMB tips, Nigerian tech takes. No polish. Authentic. Post
+                        2x/day.</p>
+                    <div>
+                        <span class="content-pill">Build in public</span>
+                        <span class="content-pill">Revenue reveals</span>
+                        <span class="content-pill">JAMB tips</span>
+                        <span class="content-pill">Naija tech</span>
+                        <span class="content-pill">Product demos</span>
+                        <span class="content-pill">Hustle stories</span>
+                    </div>
+                </div>
+
+                <div class="platform-card" style="border-color:rgba(168,85,247,0.3)">
+                    <div class="platform-icon">📸</div>
+                    <div class="platform-name">Instagram</div>
+                    <div class="platform-handle">@boldmindng</div>
+                    <div class="platform-stat">🎯 Brand building · Product screenshots · Community</div>
+                    <p style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px">Reels (repurpose
+                        TikTok), product UI carousels, creator spotlights, daily drop graphics. 1-2 posts/day + Stories.
+                    </p>
+                    <div>
+                        <span class="content-pill">Product carousels</span>
+                        <span class="content-pill">Reels (TikTok repurpose)</span>
+                        <span class="content-pill">Creator stories</span>
+                        <span class="content-pill">Behind the build</span>
+                    </div>
+                </div>
+
+                <div class="platform-card" style="border-color:rgba(14,165,233,0.3)">
+                    <div class="platform-icon">🐦</div>
+                    <div class="platform-name">Twitter / X</div>
+                    <div class="platform-handle">@boldmindng</div>
+                    <div class="platform-stat">🎯 Naija tech community · Developer audience</div>
+                    <p style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px">Threads about
+                        building in Nigeria, product stats, hot takes on Naija tech, revenue transparency. 5-8
+                        tweets/day.</p>
+                    <div>
+                        <span class="content-pill">Build threads</span>
+                        <span class="content-pill">Revenue numbers</span>
+                        <span class="content-pill">Hot takes</span>
+                        <span class="content-pill">Ecosystem updates</span>
+                    </div>
+                </div>
+
+                <div class="platform-card" style="border-color:rgba(34,197,94,0.3)">
+                    <div class="platform-icon">💬</div>
+                    <div class="platform-name">WhatsApp Channel</div>
+                    <div class="platform-handle">BoldMind Updates</div>
+                    <div class="platform-stat">🎯 HIGHEST engagement · Direct to phones</div>
+                    <p style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px">8:30 AM daily drops
+                        (proverb + fact + question). Product launches. Special offers. Crowdfunding updates. 280 chars
+                        max.</p>
+                    <div>
+                        <span class="content-pill">8:30 AM daily drop</span>
+                        <span class="content-pill">Product launches</span>
+                        <span class="content-pill">Crowdfunding</span>
+                        <span class="content-pill">Special offers</span>
+                    </div>
+                </div>
+
+                <div class="platform-card" style="border-color:rgba(59,130,246,0.3)">
+                    <div class="platform-icon">💼</div>
+                    <div class="platform-name">LinkedIn</div>
+                    <div class="platform-handle">BoldMind Technology</div>
+                    <div class="platform-stat">🎯 B2B leads · Enterprise · Investors</div>
+                    <p style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px">Founder articles,
+                        product case studies, revenue milestones, thought leadership on Nigerian tech. 3x/week.</p>
+                    <div>
+                        <span class="content-pill">Founder articles</span>
+                        <span class="content-pill">Case studies</span>
+                        <span class="content-pill">Milestones</span>
+                        <span class="content-pill">B2B reach</span>
+                    </div>
+                </div>
+
+                <div class="platform-card" style="border-color:rgba(239,68,68,0.3)">
+                    <div class="platform-icon">▶️</div>
+                    <div class="platform-name">YouTube</div>
+                    <div class="platform-handle">BoldMind</div>
+                    <div class="platform-stat">🎯 Long-form · SEO · Tutorials</div>
+                    <p style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px">Weekly product
+                        builds, JAMB study guides (EduCenter SEO), "How I built X" series, monthly ecosystem updates.
+                    </p>
+                    <div>
+                        <span class="content-pill">Product builds</span>
+                        <span class="content-pill">JAMB guides</span>
+                        <span class="content-pill">Tutorials</span>
+                        <span class="content-pill">Monthly recap</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAILY DROP TEMPLATE -->
+            <h3 style="margin-bottom:16px">📋 Daily 8:30 AM Drop Template — Village Circle Format</h3>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+                <div class="drop-card">
+                    <div class="drop-proverb">"Ọ bụ onye wetara oji wetara ndụ." — He who brings kola brings life.
+                        Today's kola: your idea that scares you.</div>
+                    <div class="drop-fact">💡 1 in 3 Nigerian businesses that fail cite "no customers" — but 90% never
+                        built a system to capture leads. The system is the business.</div>
+                    <div class="drop-question">🔥 If your Instagram went silent tonight, how many leads would you lose?
+                        And what's your backup?</div>
+                    <div class="drop-tag">#ReturnToTheCircle · @boldmindng</div>
+                </div>
+
+                <div class="drop-card">
+                    <div class="drop-proverb">"Awọ tí bá ńsá kọjá ojúmọ́ ìjókòó rẹ̀, a máa ń padà délé ahọn." — The frog
+                        that jumps past its sitting spot always returns tongue-first.</div>
+                    <div class="drop-fact">💡 Nigerian e-commerce grew 22% last year. Yet 70% of SME sales still happen
+                        in WhatsApp DMs with no invoice, no record, no repeat follow-up.</div>
+                    <div class="drop-question">🔥 What's one process in your business that a 10-year-old could automate
+                        if they had a phone? Start there today.</div>
+                    <div class="drop-tag">#ReturnToTheCircle · #EconomicLiberation</div>
+                </div>
+
+                <div class="drop-card">
+                    <div class="drop-proverb">"Knowledge is like a garden: if it is not cultivated, it cannot be
+                        harvested." — African Proverb</div>
+                    <div class="drop-fact">💡 JAMB 2025: 1.9M candidates. Only 26% scored above 200. The pass rate isn't
+                        a student problem — it's a preparation infrastructure problem.</div>
+                    <div class="drop-question">🔥 If every Nigerian student had 10,000 past questions in their pocket
+                        from SS1, would the statistics look different? Yes. Build it.</div>
+                    <div class="drop-tag">#ReturnToTheCircle · #HistoryAsWeapon</div>
+                </div>
+            </div>
+
+            <!-- CONTENT CALENDAR WEEK VIEW -->
+            <div style="margin-top:28px">
+                <h3 style="margin-bottom:14px">📅 Weekly Content Mix (Sample Week)</h3>
+                <div style="overflow-x:auto;border-radius:16px;border:1px solid var(--border)">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Day</th>
+                                <th>8:30 AM Drop</th>
+                                <th>TikTok (2/day)</th>
+                                <th>Instagram</th>
+                                <th>X/Twitter</th>
+                                <th>WhatsApp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Mon</strong></td>
+                                <td>Tech + AI River proverb</td>
+                                <td>Build-in-public: revenue dashboard reveal</td>
+                                <td>Product UI carousel (EduCenter)</td>
+                                <td>Thread: "3 lessons building EdTech in Nigeria"</td>
+                                <td>8:30 AM daily drop</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tue</strong></td>
+                                <td>Economic Liberation River</td>
+                                <td>Receptionist demo: real client comment capture</td>
+                                <td>Reel: AI replies to comments in real-time</td>
+                                <td>"Our Receptionist just hit 1000 leads captured"</td>
+                                <td>Special offer: 7-day free Receptionist trial</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Wed</strong></td>
+                                <td>History River (Berlin, Awolowo)</td>
+                                <td>NaijaFit: Jollof rice calorie breakdown</td>
+                                <td>Food calorie graphic (viral bait)</td>
+                                <td>Hot take: Nigerian apps don't localize enough</td>
+                                <td>Crowdfunding update: ₦100k raised!</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Thu</strong></td>
+                                <td>Religion + Culture River (Ifá)</td>
+                                <td>JAMB past question speed run video</td>
+                                <td>EduCenter student success story</td>
+                                <td>JAMB 2026 exam date reminder thread</td>
+                                <td>EduCenter: Try 5 free questions today</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fri</strong></td>
+                                <td>Pan-African Governance River</td>
+                                <td>"How we built 32 products" founder story</td>
+                                <td>BoldMind ecosystem grid visual</td>
+                                <td>Revenue transparency post: this week's MRR</td>
+                                <td>Weekly recap + next week preview</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sat</strong></td>
+                                <td>Culture + creativity</td>
+                                <td>AmeboGist Pidgin article dramatic reading</td>
+                                <td>AmeboGist creator spotlight</td>
+                                <td>Weekend Pidgin Twitter thread (culture commentary)</td>
+                                <td>Weekend drop: community question</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sun</strong></td>
+                                <td>Village Circle reflection</td>
+                                <td>Sunday build: what we shipped this week</td>
+                                <td>Story poll: what to build next?</td>
+                                <td>#BuildingInNigeria recap thread</td>
+                                <td>Coming week preview + motivational</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <hr class="page-break">
+
+        <!-- ─── SECTION 6: CROWDFUNDING ─── -->
+        <div class="section">
+            <p class="section-label">06 — Crowdfunding Strategy · ₦500k Target</p>
+            <h2 class="section-title">Friends, Community & Early Believers</h2>
+
+            <div class="grid-2" style="margin-bottom:20px">
+                <div>
+                    <h3 style="margin-bottom:14px">🎯 Crowdfunding Tiers</h3>
+                    <div style="display:flex;flex-direction:column;gap:12px">
+                        <div class="cf-tier card-gold">
+                            <div class="cf-amount">₦5,000</div>
+                            <div class="cf-name">Village Supporter · Target: 50 people = ₦250k</div>
+                            <ul class="cf-perks">
+                                <li>3 months free Pro on any 1 product</li>
+                                <li>Supporter badge on BoldMind Hub</li>
+                                <li>Name in "Our Village" credits page</li>
+                                <li>Early access to new features</li>
+                            </ul>
+                        </div>
+                        <div class="cf-tier" style="border-color:rgba(0,20,60,0.3);background:rgba(0,20,60,0.04)">
+                            <div class="cf-amount" style="color:var(--navy)">₦25,000</div>
+                            <div class="cf-name">Circle Partner · Target: 8 people = ₦200k</div>
+                            <ul class="cf-perks">
+                                <li>6 months free Pro on ALL products</li>
+                                <li>Monthly 1:1 call with founder</li>
+                                <li>Priority feature requests</li>
+                                <li>Co-founder credits + testimonial video</li>
+                                <li>Referral revenue share (15% for 6 months)</li>
+                            </ul>
+                        </div>
+                        <div class="cf-tier" style="border-color:rgba(255,200,0,0.5);background:rgba(255,200,0,0.06)">
+                            <div class="cf-amount" style="color:#92400E">₦100,000</div>
+                            <div class="cf-name">Ecosystem Elder · Target: 0.5 = ₦50k (stretch)</div>
+                            <ul class="cf-perks">
+                                <li>12 months free ALL products + team seats</li>
+                                <li>Equity conversation (5% advisory equity discussion)</li>
+                                <li>Logo on boldmind.ng forever</li>
+                                <li>First right to invest in Q2 raise</li>
+                                <li>Weekly founder access + product influence</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="margin-bottom:14px">📞 Outreach Strategy</h3>
+                    <div class="card" style="margin-bottom:12px">
+                        <p
+                            style="font-size:11px;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">
+                            Week 1-2: Close Friends & Family (50 people)</p>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span class="task-text">Voice
+                                note on WhatsApp to every close contact explaining the vision. Not text — voice. More
+                                personal.</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span class="task-text">Follow
+                                up with a 2-min Loom/screen recording showing the actual products working</span></div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span
+                                class="task-text">Paystack payment link ready — send immediately after voice note</span>
+                        </div>
+                        <div class="task-item"><span class="task-dot dot-revenue"></span><span class="task-text">Target:
+                                ₦250k from friends (50 × ₦5k). Be direct. "I need your support to grow BoldMind."</span>
+                        </div>
+                    </div>
+
+                    <div class="card card-navy" style="margin-bottom:12px">
+                        <p
+                            style="font-size:11px;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">
+                            Week 3-5: Nigerian Tech Community</p>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span
+                                class="task-text">Twitter/X thread: "I'm building 32 products for Nigeria solo. Here's
+                                why. And I need your support to make this movement real."</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span class="task-text">TikTok
+                                video: Raw founder story. Show the product, the numbers, the dream. Link in bio →
+                                Paystack.</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span class="task-text">Nigerian
+                                tech Slack/Discord communities: Ingressive, Techpoint community, Lagos Devs</span></div>
+                        <div class="task-item"><span class="task-dot dot-social"></span><span class="task-text">Target:
+                                ₦200k from community (8 × ₦25k Circle Partners)</span></div>
+                    </div>
+
+                    <div class="card card-gold">
+                        <p
+                            style="font-size:11px;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:#92400E;margin-bottom:12px">
+                            Crowdfunding Message (WhatsApp Voice Note Script)</p>
+                        <div
+                            style="background:rgba(255,255,255,0.6);border-radius:8px;padding:12px;font-size:12px;color:#374151;line-height:1.75;font-style:italic;">
+                            "Hey [Name], you know I've been building BoldMind — that's 32 AI products for Nigerian
+                            businesses. We've got 32,000 users, we're making revenue, but to really push this to the
+                            next level, I need the support of people who believe in the vision.
+
+                            I'm doing a small community round — ₦5,000 gets you 3 months free on everything, ₦25,000
+                            gets you 6 months and we talk every month.
+
+                            This isn't charity. This is you betting on Nigeria's digital future with someone who's
+                            already shipping. I'd love to have you in the circle.
+
+                            Link in the description — takes 2 minutes to support. And I'll personally thank you
+                            publicly. 🙏"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="page-break">
+
+        <!-- ─── SECTION 7: MILESTONES ─── -->
+        <div class="section">
+            <p class="section-label">07 — Key Milestones + Risks</p>
+            <h2 class="section-title">What Winning Looks Like Each Month</h2>
+
+            <div class="grid-2">
+                <div>
+                    <h3 style="margin-bottom:14px">🏆 Monthly Milestones</h3>
+                    <div class="card">
+                        <div class="milestone-row">
+                            <div class="milestone-date">
+                                <div class="milestone-date-main">March 31</div>
+                                <div class="milestone-date-sub">Month 1</div>
+                            </div>
+                            <div class="milestone-content">
+                                <div class="milestone-title">Foundation & Fixes</div>
+                                <div class="milestone-desc">All core platforms stable. ₦50k MRR. Crowdfunding complete.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="milestone-row">
+                            <div class="milestone-date">
+                                <div class="milestone-date-main">April 30</div>
+                                <div class="milestone-date-sub">Month 2</div>
+                            </div>
+                            <div class="milestone-content">
+                                <div class="milestone-title">Growth & Scraping</div>
+                                <div class="milestone-desc">Cold outreach scaling. 10 businesses closed. ₦250k MRR.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="milestone-row">
+                            <div class="milestone-date">
+                                <div class="milestone-date-main">May 31</div>
+                                <div class="milestone-date-sub">Month 3</div>
+                            </div>
+                            <div class="milestone-content">
+                                <div class="milestone-title">The First Million</div>
+                                <div class="milestone-desc">100 businesses paying ₦10k/mo. ₦1M MRR achieved.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="margin-bottom:14px">⚠️ Key Risks to Mitigate</h3>
+                    <div class="card card-red">
+                        <div class="risk-item risk-high">
+                            <div class="risk-label">HIGH RISK</div>
+                            <div>
+                                <h4 style="font-size:12px;margin-bottom:2px">Not charging enough / Free forever trap
+                                </h4>
+                                <p style="font-size:11px;color:var(--muted)">We have 32k users paying nothing. We must
+                                    kill the free tier or heavily restrict it. No more building for free.</p>
+                            </div>
+                        </div>
+                        <div class="risk-item risk-med">
+                            <div class="risk-label">MED RISK</div>
+                            <div>
+                                <h4 style="font-size:12px;margin-bottom:2px">Founder Burnout</h4>
+                                <p style="font-size:11px;color:var(--muted)">32 products is too many to manage daily.
+                                    Focus strictly on the 4 LIVE revenue generators. Ignore the rest.</p>
+                            </div>
+                        </div>
+                        <div class="risk-item risk-low">
+                            <div class="risk-label">LOW RISK</div>
+                            <div>
+                                <h4 style="font-size:12px;margin-bottom:2px">Platform Bans (Meta/API)</h4>
+                                <p style="font-size:11px;color:var(--muted)">Aggressive outreach can get numbers
+                                    flagged. Rotate WhatsApp business numbers and respect rate limits.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- End Container -->
+
+    <!-- FOOTER -->
+    <div
+        style="text-align:center;padding:40px 0;margin-top:40px;border-top:1px solid var(--border);color:var(--muted);font-size:11px">
+        <p style="font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--navy);margin-bottom:8px">
+            BoldMind Technology Solution Enterprise</p>
+        <p>Q1 Sprint 2026 Strategy Document · Confidential & Proprietary</p>
+        <p style="margin-top:10px">Return to the Circle.</p>
+    </div>
+
+</body>
+
+</html>
