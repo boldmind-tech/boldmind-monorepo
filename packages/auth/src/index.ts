@@ -1,39 +1,38 @@
-// PACKAGES/auth/src/index.ts
+// packages/auth/src/index.ts
+// Main package barrel — re-exports everything needed by Next.js apps.
 
-// auth actions
-export { loginWithEmail } from "./application/login/loginWithEmail";
-export { loginWithOAuth } from "./application/login/loginWithOAuth";
-export { registerWithEmail } from "./application/register/registerWithEmail";
+// Types
+export type {
+  AuthUser,
+  AuthSession,
+  AuthState,
+  AuthStatus,
+  TokenPair,
+  JwtPayload,
+  RegisterInput,
+  LoginInput,
+  AuthError,
+  UserRole,
+  EcosystemRole,
+  AuthProvider as AuthProviderType,
+} from './types';
 
-// password
-export { requestPasswordReset } from "./application/password/requestPasswordReset";
-export { updatePassword } from "./application/password/updatePassword";
+// API client (can be used directly for custom flows)
+export { authApi, AuthApiError } from './api';
 
-// session
-export { getSession } from "./application/session/getSession";
-export { getUser } from "./application/session/getUser";
-export { logout } from "./application/session/logout";
-
-// react
-export { AuthProvider, useAuth, createAuthProvider } from "./delivery/react/AuthProvider";
-export { useUser } from "./delivery/react/hooks/useUser";
-
-// access control
+// Token utilities
 export {
-  canAccessFeature,
-  canAccessProduct,
-  getUserTier,
-  PRODUCT_FEATURES
-} from './domain/policies/canAccessFeature';
-export type { ProductSlug, FeatureTier } from './domain/policies/canAccessFeature';
+  saveRefreshToken,
+  getRefreshToken,
+  clearRefreshToken,
+  decodeJwt,
+  isTokenExpired,
+  isTokenNearExpiry,
+  getTokenExpiryMs,
+} from './token';
 
-// providers - ONLY export the class, not the instance
-// export { SupabaseAuthProvider } from './providers/supabase/auth';
-export { getSupabaseClient, getSupabaseServer, getSupabaseBrowser, resetSupabaseInstance } from './providers/supabase/client';
-export { getSupabaseAuthProvider, resetSupabaseAuthProvider } from './providers/supabase/singleton';
+// Zustand store (for advanced use — prefer hooks in components)
+export { useAuthStore } from './store';
 
-// domain models
-export type { User, Session, AuthState, AuthError, AuthResponse } from './domain/models/index';
-
-export type { AuthContextValue, UserAPI } from './delivery/react/AuthProvider';
-export * from './middleware'
+// Config
+export { AUTH_CONFIG } from './config';

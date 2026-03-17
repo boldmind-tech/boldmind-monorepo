@@ -14,8 +14,6 @@ export default defineConfig({
   treeshake: true,
   external: [
     '@boldmind/config',
-    '@supabase/ssr',
-    '@supabase/supabase-js',
     'cookie',
     'react',
     'react-dom',
