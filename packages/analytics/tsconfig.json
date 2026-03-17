@@ -1,30 +1,22 @@
 {
-  "extends": "../../tsconfig.frontend.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "jsx": "react-jsx", // ✅ Correct for React
-    "lib": [
-      "ES2020",
-      "DOM",
-      "DOM.Iterable"
-    ],
-    "baseUrl": ".",
+    "composite": true,
+    "noEmit": false,
+    "jsx": "react-jsx",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "outDir": "./dist",
     "rootDir": "./src",
+    "declaration": true,
+    "declarationMap": true,
+    "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@boldmind/*": [
-        "../*/src"
-      ]
+      "@boldmind/utils": ["../utils/src"]
     }
   },
-  "include": [
-    "src/**/*"
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../utils" }
   ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    ".turbo"
-  ]
+  "exclude": ["node_modules", "dist", ".turbo", "**/*.test.ts", "**/*.spec.ts"]
 }

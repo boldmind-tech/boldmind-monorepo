@@ -7,11 +7,14 @@ export default defineConfig({
   clean: true,
   sourcemap: true,
   minify: false,
-  external: [
-    '@boldmind/utils',
-    'mixpanel-browser',
-    'posthog-js'
-  ],
   platform: 'neutral',
   treeshake: true,
+  external: [
+    '@boldmind/utils',
+    'posthog-js',
+    'mixpanel-browser',
+    'react',
+    'react-dom',
+    'next',
+  ],
 });

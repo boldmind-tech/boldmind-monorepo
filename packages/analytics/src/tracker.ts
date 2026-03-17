@@ -1,4 +1,3 @@
-// import { BOLDMIND_PRODUCTS } from '@boldmind/utils';
 
 export interface AnalyticsEvent {
   name: string;
