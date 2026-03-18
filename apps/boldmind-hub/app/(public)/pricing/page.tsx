@@ -17,7 +17,7 @@ const BASE_URL =
   process.env['NEXT_PUBLIC_APP_URL']?.replace(/\/$/, '') ?? 'https://boldmind.ng';
 
 const API_URL =
-  process.env['NEXT_PUBLIC_API_URL']?.replace(/\/$/, '') ?? 'http://localhost:4000';
+  process.env['NEXT_PUBLIC_API_URL']?.replace(/\/$/, '') ?? 'http://localhost:4001';
 
 export const metadata: Metadata = {
   title: 'Pricing — BoldMind Ecosystem',
