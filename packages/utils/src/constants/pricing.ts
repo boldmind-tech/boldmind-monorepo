@@ -324,8 +324,8 @@ export const BOLDMIND_PRICING: ProductPricing[] = [
     },
 
     {
-        productSlug: 'naija-fither',
-        productName: 'Naija FitHer',
+        productSlug: 'naija-fit',
+        productName: 'Naija Fit',
         tiers: [
             {
                 name: 'free',

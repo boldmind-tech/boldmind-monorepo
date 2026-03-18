@@ -27,6 +27,7 @@ export { default as StatusBadge } from './components/StatusBadge';
 export { default as LoadingSpinner } from './components/LoadingSpinner';
 export { ErrorBoundary } from './components/ErrorBoundary';
 export { PricingContent } from './components/PricingContent';
+export { PrivacyPolicy } from './components/PrivacyPolicy';
 
 // ============================================
 // LAYOUT COMPONENTS

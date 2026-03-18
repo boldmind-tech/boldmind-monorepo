@@ -53,13 +53,19 @@ import {
   BOLDMIND_PRICING,
   getProductPricing,
   calculateYearlySavings,
+  type PricingTier,
+  type ProductPricing,
 } from './constants/pricing';
 
 export {
   BOLDMIND_PRICING,
   getProductPricing,
   calculateYearlySavings,
+  type PricingTier,
+  type ProductPricing,
 };
+
+export * from './constants/auth';
 
 // ===================================
 // DATABASE CONFIGURATION
@@ -179,55 +185,7 @@ export {
 /**
  * Detect current product from window.location
  */
-export function detectCurrentProduct(): string | null {
-  if (typeof window === 'undefined') return null;
 
-  const hostname = window.location.hostname;
-  const pathname = window.location.pathname;
-
-  // Check for subdomain routes (PlanAI Suite)
-  if (hostname.includes('planai.boldmind.ng')) {
-    if (pathname.startsWith('/receptionist')) return 'ai-receptionist';
-    if (pathname.startsWith('/credibility')) return 'credibility-hubs';
-    if (pathname.startsWith('/planning')) return 'business-planning';
-    if (pathname.startsWith('/finance')) return 'financial-forecasting';
-    if (pathname.startsWith('/investor')) return 'investor-readiness';
-    if (pathname.startsWith('/design')) return 'branding-design';
-    if (pathname.startsWith('/store')) return 'digital-storefronts';
-    if (pathname.startsWith('/marketing')) return 'marketing-automation';
-    if (pathname.startsWith('/analytics')) return 'analytics-dashboard';
-    return 'planai-suite';
-  }
-
-  // Map domains to products
-  const domainMap: Record<string, string> = {
-    'boldmind.ng': 'boldmind-hub',
-    'www.boldmind.ng': 'boldmind-hub',
-    'amebogist.ng': 'amebogist',
-    'www.amebogist.ng': 'amebogist',
-    'educenter.com.ng': 'educenter',
-    'www.educenter.com.ng': 'educenter',
-    'os.boldmind.ng': 'boldmind-os',
-    'fit.boldmind.ng': 'naija-fither',
-    'email.boldmind.ng': 'emailscraper-pro',
-    'social.boldmind.ng': 'social-factory',
-    'safe.boldmind.ng': 'safe-ai',
-    'hustle.boldmind.ng': 'afrohustle-os',
-    'gig.educenter.com.ng': 'naijagig-matcher',
-    'kolo.boldmind.ng': 'kolo-ai',
-    'border.boldmind.ng': 'borderless-remit',
-    'receipt.boldmind.ng': 'receipt-genius',
-    'power.boldmind.ng': 'power-alert',
-    'farm.boldmind.ng': 'farmgate-direct',
-    'copy.amebogist.ng': 'afrocopy-ai',
-    'skills.educenter.com.ng': 'skill2cash',
-    'anon.amebogist.ng': 'anontruth-mic',
-    'localhost': 'boldmind-hub',
-    '127.0.0.1': 'boldmind-hub',
-  };
-
-  return domainMap[hostname] || 'boldmind-hub';
-}
 
 /**
  * Get product from path (for development)
@@ -487,7 +445,6 @@ export default {
 
   // Utils
   utils: {
-    detectCurrentProduct,
     getProductFromPath,
     formatCurrency,
     formatDate,

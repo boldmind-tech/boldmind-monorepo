@@ -103,7 +103,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
       'SSO — single login across all 10 apps',
       'Product ecosystem grid (32+ products)',
       'Personalized user dashboard',
-      'Role-based access: USER / ADMIN / SUPER_ADMIN',
+      'Role-based access: ',
       'Cross-product subscription management',
       'Community feed for founders & entrepreneurs',
       'Verified business directory',
@@ -286,10 +286,6 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     createdAt: '2025-10-15',
     updatedAt: '2026-02-27',
   },
-
-  // ═══════════════════════════════════════════
-  // SECTION 2: BUILDING PRODUCTS (priority 4-15)
-  // ═══════════════════════════════════════════
 
   {
     id: 'prod_004',

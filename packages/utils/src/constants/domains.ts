@@ -140,8 +140,8 @@ export const DOMAIN_MAPPINGS: DomainMapping[] = [
   },
   {
     domain: 'fit.boldmind.ng',
-    productSlug: 'naija-fither',
-    productName: 'Naija FitHer',
+    productSlug: 'naija-fit',
+    productName: 'Naija Fit',
     status: 'BUILDING',
     category: 'health',
     apiEndpoint: 'api.boldmind.ng',

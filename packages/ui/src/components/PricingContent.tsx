@@ -24,10 +24,9 @@ import { cn } from '../lib/utils';
 import {
   BOLDMIND_PRICING,
   getProductPricing,
-  calculateYearlySavingsPercent,
-  type PricingTier,
-  type ProductPricing,
+  calculateYearlySavings
 } from '@boldmind/utils';
+import type { PricingTier, ProductPricing } from '../../../utils/src/constants/pricing';
 import { BOLDMIND_COLOR_SCHEMES } from '@boldmind/utils';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -65,7 +64,7 @@ interface TierCardProps {
 
 function TierCard({ tier, productSlug, isYearly, accentColor, isHighlighted, compact }: TierCardProps) {
   const price = isYearly ? tier.priceYearly : tier.priceMonthly;
-  const yearlySavings = calculateYearlySavingsPercent(tier);
+  const yearlySavings = calculateYearlySavings(tier);
   const checkoutUrl = buildCheckoutUrl(productSlug, tier.name, isYearly);
 
   const tierLabel: Record<PricingTier['name'], string> = {
@@ -149,7 +148,7 @@ function TierCard({ tier, productSlug, isYearly, accentColor, isHighlighted, com
       {/* Features */}
       {!compact && (
         <ul className="space-y-3 mb-6 flex-1">
-          {tier.features.map((feature, i) => (
+          {tier.features.map((feature: string, i: number) => (
             <li key={i} className="flex items-start gap-2.5 text-sm">
               <Check
                 className="mt-0.5 flex-shrink-0 h-4 w-4"
@@ -160,7 +159,7 @@ function TierCard({ tier, productSlug, isYearly, accentColor, isHighlighted, com
               </span>
             </li>
           ))}
-          {tier.limits && Object.entries(tier.limits).map(([key, val]) => (
+          {tier.limits && Object.entries(tier.limits).map(([key, val]: [string, any]) => (
             <li key={key} className="flex items-start gap-2.5 text-xs">
               <div className="mt-1 flex-shrink-0 w-4 h-4 rounded-full border border-current opacity-30 flex items-center justify-center">
                 <span className="text-[8px]">i</span>
@@ -266,8 +265,8 @@ function SingleProductPricing({
   const highlightedTier = useMemo(() => {
     // Prefer 'pro', fall back to highest non-enterprise tier
     const tiers = pricing.tiers;
-    return tiers.find(t => t.name === 'pro')?.name
-      ?? tiers.find(t => t.name === 'basic')?.name
+    return tiers.find((t: PricingTier) => t.name === 'pro')?.name
+      ?? tiers.find((t: PricingTier) => t.name === 'basic')?.name
       ?? tiers[0]?.name;
   }, [pricing.tiers]);
 
@@ -283,7 +282,7 @@ function SingleProductPricing({
             'sm:grid-cols-2 lg:grid-cols-4',
           )}
         >
-          {pricing.tiers.map((tier) => (
+          {pricing.tiers.map((tier: PricingTier) => (
             <TierCard
               key={tier.name}
               tier={tier}
@@ -312,7 +311,7 @@ function SingleProductPricing({
                 : 'sm:grid-cols-2 lg:grid-cols-4',
             )}
           >
-            {pricing.oneTimePrices.map((item) => (
+            {pricing.oneTimePrices.map((item: { name: string; price: number; currency: 'NGN' | 'USD'; description: string }) => (
               <OneTimeCard
                 key={item.name}
                 item={item}
@@ -335,7 +334,7 @@ function ProductPricingRow({ pricing }: { pricing: ProductPricing }) {
 
   const scheme = BOLDMIND_COLOR_SCHEMES[pricing.productSlug];
   const accentColor = scheme?.primary ?? '#2B4D87';
-  const lowestPrice = pricing.tiers.find(t => t.priceMonthly === 0)
+  const lowestPrice = pricing.tiers.find((t: PricingTier) => t.priceMonthly === 0)
     ? '₦0 Free tier'
     : pricing.tiers[0]
       ? `From ₦${pricing.tiers[0].priceMonthly.toLocaleString()}/mo`
@@ -396,7 +395,7 @@ function ProductPricingRow({ pricing }: { pricing: ProductPricing }) {
           >
             <div className="px-5 pb-6 border-t border-[var(--product-muted)]">
               {/* Period toggle */}
-              {pricing.tiers.some(t => t.priceYearly > 0) && (
+              {pricing.tiers.some((t: PricingTier) => t.priceYearly > 0) && (
                 <div className="flex justify-end pt-4 pb-4">
                   <div className="inline-flex rounded-full p-1 border border-[var(--product-muted)] text-xs font-bold">
                     <button
@@ -432,7 +431,7 @@ function ProductPricingRow({ pricing }: { pricing: ProductPricing }) {
                   pricing.tiers.length === 3 ? 'sm:grid-cols-3' :
                   'sm:grid-cols-2 lg:grid-cols-4',
                 )}>
-                  {pricing.tiers.map((tier) => (
+                  {pricing.tiers.map((tier : PricingTier) => (
                     <TierCard
                       key={tier.name}
                       tier={tier}
@@ -447,7 +446,7 @@ function ProductPricingRow({ pricing }: { pricing: ProductPricing }) {
 
               {pricing.oneTimePrices && pricing.oneTimePrices.length > 0 && (
                 <div className="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {pricing.oneTimePrices.map(item => (
+                  {pricing.oneTimePrices.map((item: { name: string; price: number; currency: 'NGN' | 'USD'; description: string }) => (
                     <OneTimeCard
                       key={item.name}
                       item={item}
@@ -530,8 +529,8 @@ export function PricingContent({
   // ── Highlight row ────────────────────────────────────────────────────────────
   const highlightedTier = useMemo(() => {
     if (!singlePricing) return undefined;
-    return singlePricing.tiers.find(t => t.name === 'pro')?.name
-      ?? singlePricing.tiers.find(t => t.name === 'basic')?.name
+    return singlePricing.tiers.find((t: PricingTier) => t.name === 'pro')?.name
+      ?? singlePricing.tiers.find((t: PricingTier) => t.name === 'basic')?.name
       ?? singlePricing.tiers[0]?.name;
   }, [singlePricing]);
 

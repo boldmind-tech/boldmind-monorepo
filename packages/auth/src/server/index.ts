@@ -1,7 +1,7 @@
 // packages/auth/src/server/index.ts
 // Server-side auth utilities for Next.js App Router (RSC + Route Handlers).
 // Uses `jose` for JWT verification — no round-trip to the API needed.
-
+'use server';
 import { jwtVerify, type JWTPayload } from 'jose';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
