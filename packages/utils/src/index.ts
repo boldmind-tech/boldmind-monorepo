@@ -65,7 +65,13 @@ export {
   type ProductPricing,
 };
 
-export * from './constants/auth';
+export {
+  hasPermission,
+  SYSTEM_ROLE_PERMISSIONS,
+  ECOSYSTEM_ROLE_PERMISSIONS,
+ type AuthProvider,
+
+} from './constants/auth';
 
 // ===================================
 // DATABASE CONFIGURATION

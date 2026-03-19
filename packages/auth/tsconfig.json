@@ -11,12 +11,14 @@
     "declarationMap": true,
     "baseUrl": ".",
     "paths": {
-      "@boldmind/config": ["../config/src"]
+      "@boldmind/config": ["../config/src"],
+      "@boldmind/utils": ["../utils/src"]
     }
   },
   "include": ["src/**/*"],
   "references": [
-    { "path": "../config" }
+    { "path": "../config" },
+    { "path": "../utils" }
   ],
   "exclude": ["node_modules", "dist", ".turbo", "**/*.test.ts", "**/*.spec.ts"]
 }

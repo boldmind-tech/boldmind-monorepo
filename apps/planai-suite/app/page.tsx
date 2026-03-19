@@ -1,4 +1,19 @@
+'use client';
+
 import { useState, useEffect, useRef } from "react";
+
+type KeywordMatch = {
+  text: string;
+  intent: string;
+  score: number;
+  action: string;
+};
+
+type ScanResult =
+  | { found: true } & KeywordMatch
+  | { found: false };
+
+type Tick = { time: string; event: string; score: number | null };
 
 const TOOLS = [
   { id: "receptionist", icon: "🤖", name: "AI Receptionist", tag: "LIVE", color: "#FFC800", desc: "Scans every comment for buying signals. Auto-replies. Captures leads while you sleep.", stat: "12x more leads", proof: "avg. per client" },
@@ -9,7 +24,7 @@ const TOOLS = [
   { id: "marketing", icon: "📢", name: "Marketing Engine", tag: "PLANNED", color: "#2DD4BF", desc: "Content calendars, ad copy, WhatsApp campaigns — all AI-generated for your business.", stat: "80%", proof: "less manual work" },
 ];
 
-const KEYWORDS = [
+const KEYWORDS: KeywordMatch[] = [
   { text: "how much", intent: "PRICE INQUIRY", score: 74, action: "DM + Reply" },
   { text: "interested", intent: "PURCHASE INTENT", score: 88, action: "Capture Lead" },
   { text: "i wan buy", intent: "PURCHASE INTENT", score: 91, action: "Hot Lead 🔥" },
@@ -18,7 +33,7 @@ const KEYWORDS = [
   { text: "scam!", intent: "COMPLAINT", score: 50, action: "Priority Reply" },
 ];
 
-const TICKS = [
+const TICKS: Tick[] = [
   { time: "09:14", event: "🔥 HOT LEAD: Adaeze asked 'how much for bulk?'", score: 91 },
   { time: "09:22", event: "💬 AUTO-REPLY sent to Emeka's comment", score: null },
   { time: "09:31", event: "📋 NEW LEAD: Fatima — interested in services", score: 74 },
@@ -29,7 +44,7 @@ const TICKS = [
 
 function LiveDemoWidget() {
   const [comment, setComment] = useState("");
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState<ScanResult | null>(null);
   const [scanning, setScanning] = useState(false);
   const [tickIdx, setTickIdx] = useState(0);
 
@@ -54,6 +69,9 @@ function LiveDemoWidget() {
     }, 1200);
   };
 
+  const tick = TICKS[tickIdx];
+  const score = tick.score;
+
   return (
     <div style={{ background: "rgba(255,200,0,0.04)", border: "1px solid rgba(255,200,0,0.15)", borderRadius: 20, padding: "28px 24px" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
@@ -65,12 +83,12 @@ function LiveDemoWidget() {
       <div style={{ background: "rgba(0,0,0,0.4)", borderRadius: 12, padding: "12px 14px", marginBottom: 16, height: 52, overflow: "hidden", position: "relative" }}>
         <div key={tickIdx} style={{ animation: "tickin 0.4s ease-out forwards", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <span style={{ fontSize: 12, color: "rgba(255,255,255,0.7)", fontFamily: "monospace" }}>
-            <span style={{ color: "#FFC800", marginRight: 8 }}>{TICKS[tickIdx].time}</span>
-            {TICKS[tickIdx].event}
+            <span style={{ color: "#FFC800", marginRight: 8 }}>{tick.time}</span>
+            {tick.event}
           </span>
-          {TICKS[tickIdx].score && (
-            <span style={{ fontSize: 11, padding: "2px 8px", background: TICKS[tickIdx].score >= 85 ? "rgba(239,68,68,0.2)" : "rgba(255,200,0,0.15)", color: TICKS[tickIdx].score >= 85 ? "#F87171" : "#FFC800", borderRadius: 6, fontFamily: "monospace", flexShrink: 0 }}>
-              {TICKS[tickIdx].score}/100
+          {score != null && (
+            <span style={{ fontSize: 11, padding: "2px 8px", background: score >= 85 ? "rgba(239,68,68,0.2)" : "rgba(255,200,0,0.15)", color: score >= 85 ? "#F87171" : "#FFC800", borderRadius: 6, fontFamily: "monospace", flexShrink: 0 }}>
+              {score}/100
             </span>
           )}
         </div>
@@ -178,8 +196,8 @@ export default function PlanAILanding() {
         <div style={{ display: "flex", gap: 6 }}>
           {["Tools", "Pricing", "Docs", "Community"].map(l => (
             <a key={l} href="#" style={{ padding: "6px 14px", color: "rgba(240,237,228,0.45)", fontSize: 13, fontWeight: 500, textDecoration: "none", borderRadius: 8, transition: "color 0.2s" }}
-              onMouseEnter={e => e.target.style.color = "#F0EDE4"}
-              onMouseLeave={e => e.target.style.color = "rgba(240,237,228,0.45)"}
+              onMouseEnter={e => (e.currentTarget.style.color = "#F0EDE4")}
+              onMouseLeave={e => (e.currentTarget.style.color = "rgba(240,237,228,0.45)")}
             >{l}</a>
           ))}
         </div>

@@ -1,12 +1,26 @@
 
 import type { Metadata } from 'next';
+import Link from 'next/link';
  
 export const metadata: Metadata = {
   title: 'Dashboard — PlanAI Suite',
   robots: { index: false },
 };
 
-
+const TOOLS = [
+  { href: '/dashboard/business-analyzer', emoji: '📊', label: 'Business Analyzer' },
+  { href: '/dashboard/content-creator', emoji: '✍️', label: 'Content Creator' },
+  { href: '/dashboard/market-research', emoji: '🔍', label: 'Market Research' },
+  { href: '/dashboard/financial-planner', emoji: '💰', label: 'Financial Planner' },
+  { href: '/dashboard/competitor-tracker', emoji: '👁️', label: 'Competitor Tracker' },
+  { href: '/dashboard/growth-strategist', emoji: '📈', label: 'Growth Strategist' },
+  { href: '/dashboard/customer-insights', emoji: '👥', label: 'Customer Insights' },
+  { href: '/dashboard/sales-optimizer', emoji: '🎯', label: 'Sales Optimizer' },
+  { href: '/dashboard/workflow-automation', emoji: '⚙️', label: 'Workflow Automation' },
+  { href: '/dashboard/ai-assistant', emoji: '🤖', label: 'AI Assistant' },
+  { href: '/dashboard/reporting', emoji: '📋', label: 'Reporting' },
+  { href: '/dashboard/settings', emoji: '⚡', label: 'Settings' },
+];
  
 const API = process.env['NEXT_PUBLIC_API_URL']?.replace(/\/$/, '') ?? 'http://localhost:4000';
  
@@ -50,11 +64,11 @@ export default async function PlanaiDashboardPage() {
               href={tool.href}
               className="group flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all hover:shadow-md text-center"
               style={{ borderColor: 'var(--product-muted)', backgroundColor: 'var(--product-background)' }}
-              onMouseEnter={e => {
+              onMouseEnter={(e: { currentTarget: HTMLElement; }) => {
                 (e.currentTarget as HTMLElement).style.borderColor = 'var(--product-primary)';
                 (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--product-highlight)';
               }}
-              onMouseLeave={e => {
+              onMouseLeave={(e: { currentTarget: HTMLElement; }) => {
                 (e.currentTarget as HTMLElement).style.borderColor = 'var(--product-muted)';
                 (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--product-background)';
               }}

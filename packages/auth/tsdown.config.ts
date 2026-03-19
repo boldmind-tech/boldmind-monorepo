@@ -14,6 +14,7 @@ export default defineConfig({
   treeshake: true,
   external: [
     '@boldmind/config',
+    '@boldmind/utils',
     'cookie',
     'react',
     'react-dom',
