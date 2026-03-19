@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@boldmind/auth';
-import { hubAPI } from '../../../lib/api-adapters';
+import { hubAPI } from '../../../lib/api';
 import {
   Search,
   // Filter,

@@ -1,8 +1,3 @@
-
-// NOTE: In your actual repo this is a SEPARATE file from layout.tsx.
-// The 'use client' at the top of this file covers both exports since they're
-// shown together here. In the real monorepo, split into two files.
- 
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
@@ -118,13 +113,13 @@ export function DashboardSidebar({ open = false, onClose }: DashboardSidebarProp
                 color:           isActive ? 'var(--product-primary)'    : 'var(--product-foreground)',
                 opacity:         isActive ? 1 : 0.65,
               }}
-              onMouseEnter={(e: any) => {
+              onMouseEnter={(e:any) => {
                 if (!isActive) {
                   (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--product-muted)';
                   (e.currentTarget as HTMLElement).style.opacity = '1';
                 }
               }}
-              onMouseLeave={(e: any) => {
+              onMouseLeave={(e :any) => {
                 if (!isActive) {
                   (e.currentTarget as HTMLElement).style.backgroundColor = '';
                   (e.currentTarget as HTMLElement).style.opacity = '0.65';

@@ -40,14 +40,14 @@ const HUB_URL =
   process.env['NEXT_PUBLIC_HUB_URL'] ||
   (process.env.NODE_ENV === 'production'
     ? 'https://boldmind.ng'
-    : 'http://localhost:3001');
+    : 'http://localhost:3000s');
 
 const SAFE_DOMAINS = [
   'boldmind.ng',
   'amebogist.ng',
   'educenter.com.ng',
   'localhost',
-  '127.0.0.1',
+  '127.0.0.0',
 ];
 
 // ─── URL builders ─────────────────────────────────────────────────────────────
