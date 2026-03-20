@@ -36,7 +36,8 @@
     "@types/react": "18.3.27",
     "cookie": "^1.1.1",
     "jose": "^6.2.2",
-    "tsdown": "^0.20.1"
+    "tsdown": "^0.20.1",
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@types/node": "20.19.30",
