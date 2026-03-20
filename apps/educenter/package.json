@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "predev": "pnpm run prebuild",
     "dev": "next dev -p 3002",
     "prebuild": "pnpm --filter '@boldmind/ui' --filter '@boldmind/utils' --filter '@boldmind/auth' --filter '@boldmind/api-client' --filter '@boldmind/payments' build",
     "build": "next build",

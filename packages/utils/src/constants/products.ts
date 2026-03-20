@@ -2,10 +2,21 @@
 // COMPLETE BOLDMIND PRODUCTS CATALOG - Updated Jan 18, 2026
 // Full blow lauch 19/1/2026
 
-export type ProductStatus = 'LIVE' | 'BUILDING' | 'PLANNED' | 'CONCEPT';
-export type ProductCategory = 'media' | 'education' | 'ai' | 'productivity' | 'security' | 'health' | 'marketplace' | 'fintech' | 'utilities' | 'social';
-export type DatabaseType = 'postgres' | 'mongodb';
 
+export type ProductStatus = 'LIVE' | 'BUILDING' | 'PLANNED' | 'CONCEPT';
+export type ProductCategory =
+  | 'media'
+  | 'education'
+  | 'ai'
+  | 'productivity'
+  | 'security'
+  | 'health'
+  | 'marketplace'
+  | 'fintech'
+  | 'utilities'
+  | 'social';
+export type DatabaseType = 'postgres' | 'mongodb';
+ 
 export interface Product {
   id: string;
   name: string;
@@ -20,9 +31,9 @@ export interface Product {
   revenueModel: string;
   monthlyRevenue?: number;
   users?: string | number;
-  app: string; 
+  app: string;
   techStack: string[];
-  serviceModule: string; // e.g. 'AdminModule', 'ContentModule', 'PlanAIModule'
+  serviceModule: string;
   database: DatabaseType;
   teamSize?: number;
   timeline?: string;
@@ -48,8 +59,100 @@ export interface Product {
   createdAt: string;
   updatedAt: string;
 }
-
-
+ 
+// ─────────────────────────────────────────────────────────────────────────────
+// DERIVED TYPES
+// ─────────────────────────────────────────────────────────────────────────────
+ 
+/** Lightweight card representation — safe to send to the client */
+export interface ProductCard {
+  id: string;
+  name: string;
+  slug: string;
+  icon: string;
+  description: string;
+  category: ProductCategory;
+  status: ProductStatus;
+  domain: string;
+  monthlyRevenue: number;
+  priority: number;
+  tags: string[];
+}
+ 
+/** Pair of products that share category / integration / dependency */
+export interface ProductPair {
+  a: Product;
+  b: Product;
+  reason: string;
+}
+ 
+/** Result shape returned by the build-plan generator */
+export interface BuildPlan {
+  wave: number;
+  products: Product[];
+  estimatedCost: number;
+  estimatedMonthlyRevenue: number;
+  durationWeeks: number;
+  dependencies: string[];
+}
+ 
+/** Generic paginated response */
+export interface PaginatedResult<T> {
+  data: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+}
+ 
+/** Health score breakdown for a product */
+export interface ProductHealthScore {
+  productId: string;
+  productName: string;
+  overall: number; // 0-100
+  breakdown: {
+    revenueScore: number;
+    userScore: number;
+    teamScore: number;
+    techScore: number;
+    priorityScore: number;
+  };
+  rating: 'excellent' | 'good' | 'fair' | 'needs-attention';
+  recommendations: string[];
+}
+ 
+/** Competitive gap analysis result */
+export interface CompetitorGap {
+  category: ProductCategory;
+  boldmindCount: number;
+  estimatedMarketSize: string;
+  missingFeatureAreas: string[];
+  opportunityScore: number; // 0-100
+}
+ 
+export interface ProductStatusSummary {
+  total: number;
+  live: number;
+  building: number;
+  planned: number;
+  concept: number;
+  revenue: number;
+  teamSize: number;
+  upcomingReleases: number;
+}
+ 
+export interface CategorySummary {
+  category: string;
+  count: number;
+  live: number;
+  building: number;
+  planned: number;
+  concept: number;
+  revenue: number;
+}
+ 
 export const PRODUCT_CATEGORIES = [
   { id: 'media', name: 'Media & Content', count: 2 },
   { id: 'education', name: 'Education', count: 3 },
@@ -71,7 +174,6 @@ export const BOLDMIND_PRODUCTS: Product[] = [
   // ═══════════════════════════════════════════
   // SECTION 1: LIVE PRODUCTS (priority 0-3)
   // ═══════════════════════════════════════════
-
   {
     id: 'prod_000',
     name: 'BoldMind Hub',
@@ -103,7 +205,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
       'SSO — single login across all 10 apps',
       'Product ecosystem grid (32+ products)',
       'Personalized user dashboard',
-      'Role-based access: ',
+      'Role-based access',
       'Cross-product subscription management',
       'Community feed for founders & entrepreneurs',
       'Verified business directory',
@@ -119,13 +221,19 @@ export const BOLDMIND_PRODUCTS: Product[] = [
       'Founder leaderboard (revenue generated via ecosystem)',
       'API marketplace — sell BoldMind APIs to third parties',
       'Investor pitch deck auto-generator from your product stats',
+      // ── NEW HIGH-DEMAND SUGGESTIONS ──────────────────────────────────────
+      'BoldMind Wallet — unified balance across all 32 products (reduces Paystack fees via internal ledger)',
+      'Cross-product AI assistant — "Ask BoldMind" chatbot that knows all your products, subscriptions, and data',
+      'Affiliate hub — one dashboard to track referral revenue across every BoldMind product',
+      'Open Graph preview cards per product — shareable social cards auto-generated per founder',
+      'BoldMind Academy — free onboarding videos for each product, gated behind free signup',
     ],
     challenges: ['Managing 32+ products', 'SSO consistency across apps'],
     opportunities: ['Ecosystem network effects', 'Investment showcase'],
     createdAt: '2025-01-01',
     updatedAt: '2026-02-27',
   },
-
+ 
   {
     id: 'prod_001',
     name: 'AmeboGist',
@@ -174,13 +282,19 @@ export const BOLDMIND_PRODUCTS: Product[] = [
       'AmeboGist TV — short video news clips (YouTube integration)',
       'Breaking news push notifications via Web Push API',
       'Local Ads — Nigerian SMEs advertise to specific states',
+      // ── NEW HIGH-DEMAND SUGGESTIONS ──────────────────────────────────────
+      'AI-generated Pidgin summaries — auto-summarize 3rd-party news into Pidgin (huge SEO traffic driver)',
+      'AmeboGist Radio — livestream Pidgin commentary during big events (AFCON, elections)',
+      'Gist Club membership — ₦200/month unlock exclusive investigative stories',
+      'Pidgin SEO tool — suggests trending Pidgin keywords for creators to rank on Google',
+      'Branded content studio — Nigerian brands pay ₦50k+ for native Pidgin advertorials',
     ],
     challenges: ['Pidgin authenticity', 'Monetization beyond AdSense'],
     opportunities: ['Video content', 'Premium tier', 'Local ad network'],
     createdAt: '2025-01-15',
     updatedAt: '2026-02-27',
   },
-
+ 
   {
     id: 'prod_002',
     name: 'EduCenter',
@@ -217,7 +331,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
       'Leaderboard',
       'Course library',
       'Marketing playbooks',
-      'AI tools training'
+      'AI tools training',
     ],
     suggestedFeatures: [
       'AI essay marking — WAEC essay practice with AI feedback',
@@ -227,13 +341,19 @@ export const BOLDMIND_PRODUCTS: Product[] = [
       'Post-UTME practice for specific universities',
       'Teacher dashboard — set assignments, track class progress',
       'SMS result alerts to parents (₦50 per SMS)',
+      // ── NEW HIGH-DEMAND SUGGESTIONS ──────────────────────────────────────
+      'EduCenter Maths Clinic — AI step-by-step solver for WAEC maths (highest failure rate subject)',
+      'Scholarship radar — auto-alert students about Nigerian/diaspora scholarships they qualify for',
+      'Peer study rooms — 4-student virtual CBT rooms with live chat, massive retention driver',
+      'School dashboard — subscribe schools per-student at ₦500/student/term (B2B goldmine)',
+      'JAMB mock marathon — 24-hour live countdown mock exam, social sharing drives virality',
     ],
     challenges: ['User acquisition', 'Content freshness for new exam years'],
     opportunities: ['School B2B licensing', 'Video tutorials', 'Post-UTME niche'],
     createdAt: '2025-03-20',
     updatedAt: '2026-02-27',
   },
-
+ 
   {
     id: 'prod_003',
     name: 'AI Receptionist',
@@ -262,8 +382,8 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     features: [
       'Auto-reply Instagram DMs & Comments',
       'WhatsApp Business 24/7 responses',
-      'Facebook Page message handling and comment moderation and Auto-reply to Facebook Page messages and comments',
-      'WhatsAPP Business API integration for Nigerian phone numbers',
+      'Facebook Page message handling and comment moderation',
+      'WhatsApp Business API integration for Nigerian phone numbers',
       'Lead qualification & scoring',
       'Appointment booking (Google Calendar sync)',
       'FAQ knowledge base (per client)',
@@ -280,6 +400,12 @@ export const BOLDMIND_PRODUCTS: Product[] = [
       'CRM export (HubSpot, Google Sheets)',
       'AI sentiment analysis — alert owner when customer is angry',
       'Broadcast campaigns — send promotions to all past leads',
+      // ── NEW HIGH-DEMAND SUGGESTIONS ──────────────────────────────────────
+      'Abandoned cart recovery — AI follows up after 30 minutes if customer goes silent',
+      'AI voice call answering — handles inbound phone calls via Twilio + Nigerian VoIP',
+      'Product catalog bot — AI shows product photos + prices inline in WhatsApp chat',
+      'Upsell engine — AI recommends add-ons based on customer inquiry context',
+      'Competitor mention trigger — when a customer mentions a competitor, AI activates a counter-script',
     ],
     challenges: ['Meta API policy changes', 'Client onboarding complexity'],
     opportunities: ['Expand to 50+ clients', 'Enterprise tier', 'White-label reseller program'],
@@ -1479,170 +1605,644 @@ export const BOLDMIND_PRODUCTS: Product[] = [
 ];
 
 
-// Helper Functions
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION A: BASIC LOOKUP HELPERS
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+/** O(1) lookup map built once at module load — never iterate the array for IDs */
+const _byId = new Map<string, Product>(
+  BOLDMIND_PRODUCTS.map((p) => [p.id, p]),
+);
+const _bySlug = new Map<string, Product>(
+  BOLDMIND_PRODUCTS.map((p) => [p.slug, p]),
+);
+ 
 export function getProductById(id: string): Product | undefined {
-  return BOLDMIND_PRODUCTS.find(product => product.id === id);
+  return _byId.get(id);
 }
-
+ 
 export function getProductBySlug(slug: string): Product | undefined {
-  return BOLDMIND_PRODUCTS.find(product => product.slug === slug);
+  return _bySlug.get(slug);
 }
-
+ 
 export function getProductByDomain(domain: string): Product | undefined {
-  return BOLDMIND_PRODUCTS.find(p => p.domain === domain);
+  return BOLDMIND_PRODUCTS.find((p) => p.domain === domain);
 }
-
+ 
 export function getProductByFullDomain(fullDomain: string): Product | undefined {
-  return BOLDMIND_PRODUCTS.find(product => {
-    const productFullDomain = product.subdomain
+  return BOLDMIND_PRODUCTS.find((product) => {
+    const full = product.subdomain
       ? `${product.subdomain}.${product.domain}`
       : product.domain;
-    return productFullDomain === fullDomain;
+    return full === fullDomain;
   });
 }
-
-export function getProductsByStatus(status: ProductStatus): Product[] {
-  return BOLDMIND_PRODUCTS.filter(product => product.status === status);
-}
-
-export function getProductsByCategory(category: ProductCategory): Product[] {
-  return BOLDMIND_PRODUCTS.filter(product => product.category === category);
-}
-
-export function getProductsByPriority(minPriority: number, maxPriority?: number): Product[] {
-  if (maxPriority) {
-    return BOLDMIND_PRODUCTS.filter(product =>
-      product.priority >= minPriority && product.priority <= maxPriority
-    );
+ 
+/** Returns the canonical URL for a product */
+export function getProductWebsiteUrl(product: Product): string {
+  if (product.subdomain) {
+    return `https://${product.domain}${product.subdomain}`;
   }
-  return BOLDMIND_PRODUCTS.filter(product => product.priority >= minPriority);
+  return `https://${product.domain}`;
 }
-
-
-export function getLiveProducts(): Product[] {
-  return getProductsByStatus('LIVE');
+ 
+/** Lightweight card — safe for API responses and SSR props */
+export function toProductCard(p: Product): ProductCard {
+  return {
+    id: p.id,
+    name: p.name,
+    slug: p.slug,
+    icon: p.icon,
+    description: p.description,
+    category: p.category,
+    status: p.status,
+    domain: p.domain,
+    monthlyRevenue: p.monthlyRevenue ?? 0,
+    priority: p.priority,
+    tags: p.tags,
+  };
 }
-
-export function getBuildingProducts(): Product[] {
-  return getProductsByStatus('BUILDING');
+ 
+export function toProductCards(products: Product[]): ProductCard[] {
+  return products.map(toProductCard);
 }
-
-export function getPlannedProducts(): Product[] {
-  return getProductsByStatus('PLANNED');
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION B: STATUS FILTERS
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+export function getProductsByStatus(status: ProductStatus): Product[] {
+  return BOLDMIND_PRODUCTS.filter((p) => p.status === status);
 }
-
-export function getConceptProducts(): Product[] {
-  return getProductsByStatus('CONCEPT');
-}
-
-export function getProductsByDomainName(domain: string): Product[] {
-  return BOLDMIND_PRODUCTS.filter(product => product.domain === domain);
-}
-
-export function getProductsBySubdomain(subdomain: string): Product[] {
-  return BOLDMIND_PRODUCTS.filter(product => product.subdomain === subdomain);
-}
-
-export function getProductsWithSubdomain(): Product[] {
-  return BOLDMIND_PRODUCTS.filter(product => product.subdomain !== undefined);
-}
-
-export function getProductsWithoutSubdomain(): Product[] {
-  return BOLDMIND_PRODUCTS.filter(product => product.subdomain === undefined);
-}
-
-export function getPlanAISuiteProducts(): Product[] {
-  return BOLDMIND_PRODUCTS.filter(product =>
-    product.domain === 'planai.boldmind.ng' ||
-    product.slug.includes('planai') ||
-    product.slug.includes('receptionist') ||
-    product.slug.includes('credibility') ||
-    product.slug.includes('business-planning') ||
-    product.slug.includes('financial-forecasting') ||
-    product.slug.includes('investor-readiness') ||
-    product.slug.includes('branding-design') ||
-    product.slug.includes('digital-storefronts') ||
-    product.slug.includes('marketing-automation') ||
-    product.slug.includes('analytics-dashboard')
+ 
+export const getLiveProducts     = (): Product[] => getProductsByStatus('LIVE');
+export const getBuildingProducts = (): Product[] => getProductsByStatus('BUILDING');
+export const getPlannedProducts  = (): Product[] => getProductsByStatus('PLANNED');
+export const getConceptProducts  = (): Product[] => getProductsByStatus('CONCEPT');
+ 
+/** Products that are actionable right now (LIVE or BUILDING) */
+export function getActiveProducts(): Product[] {
+  return BOLDMIND_PRODUCTS.filter(
+    (p) => p.status === 'LIVE' || p.status === 'BUILDING',
   );
 }
-
+ 
+/** Products not yet in production (PLANNED or CONCEPT) */
+export function getInactiveProducts(): Product[] {
+  return BOLDMIND_PRODUCTS.filter(
+    (p) => p.status === 'PLANNED' || p.status === 'CONCEPT',
+  );
+}
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION C: CATEGORY & TAG FILTERS
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+export function getProductsByCategory(category: ProductCategory): Product[] {
+  return BOLDMIND_PRODUCTS.filter((p) => p.category === category);
+}
+ 
+/**
+ * Multi-category filter — returns products matching ANY of the supplied categories.
+ * @example getProductsByCategories(['ai', 'fintech'])
+ */
+export function getProductsByCategories(categories: ProductCategory[]): Product[] {
+  const set = new Set<ProductCategory>(categories);
+  return BOLDMIND_PRODUCTS.filter((p) => set.has(p.category));
+}
+ 
+/**
+ * Tag-based search — all supplied tags must be present (AND).
+ * @example getProductsByTags(['whatsapp', 'ai'])
+ */
+export function getProductsByTags(tags: string[]): Product[] {
+  const lower = tags.map((t) => t.toLowerCase());
+  return BOLDMIND_PRODUCTS.filter((p) =>
+    lower.every((tag) => p.tags.some((t) => t.toLowerCase().includes(tag))),
+  );
+}
+ 
+/**
+ * Tag-based search — any supplied tag matches (OR).
+ */
+export function getProductsByAnyTag(tags: string[]): Product[] {
+  const lower = tags.map((t) => t.toLowerCase());
+  return BOLDMIND_PRODUCTS.filter((p) =>
+    lower.some((tag) => p.tags.some((t) => t.toLowerCase().includes(tag))),
+  );
+}
+ 
+/** All unique tags across all products, sorted alphabetically */
+export function getAllTags(): string[] {
+  const set = new Set<string>();
+  BOLDMIND_PRODUCTS.forEach((p) => p.tags.forEach((t) => set.add(t)));
+  return Array.from(set).sort();
+}
+ 
+/** Tag frequency map — tag → count of products using it */
+export function getTagFrequency(): Record<string, number> {
+  const freq: Record<string, number> = {};
+  BOLDMIND_PRODUCTS.forEach((p) =>
+    p.tags.forEach((t) => {
+      freq[t] = (freq[t] ?? 0) + 1;
+    }),
+  );
+  return freq;
+}
+ 
+/** Top N most-used tags */
+export function getTopTags(n = 10): Array<{ tag: string; count: number }> {
+  return Object.entries(getTagFrequency())
+    .map(([tag, count]) => ({ tag, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, n);
+}
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION D: PRIORITY & SORTING
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+export function getProductsByPriority(
+  minPriority: number,
+  maxPriority?: number,
+): Product[] {
+  return BOLDMIND_PRODUCTS.filter((p) =>
+    p.priority >= minPriority &&
+    (maxPriority === undefined || p.priority <= maxPriority),
+  ).sort((a, b) => a.priority - b.priority);
+}
+ 
+export function getHighPriorityProducts(threshold = 10): Product[] {
+  return BOLDMIND_PRODUCTS.filter((p) => p.priority <= threshold).sort(
+    (a, b) => a.priority - b.priority,
+  );
+}
+ 
+export function getLowPriorityProducts(threshold = 20): Product[] {
+  return BOLDMIND_PRODUCTS.filter((p) => p.priority > threshold).sort(
+    (a, b) => a.priority - b.priority,
+  );
+}
+ 
+/**
+ * Sort any product array by an arbitrary key.
+ * @example sortProducts(getLiveProducts(), 'monthlyRevenue', 'desc')
+ */
+export function sortProducts(
+  products: Product[],
+  key: keyof Product,
+  direction: 'asc' | 'desc' = 'asc',
+): Product[] {
+  return [...products].sort((a, b) => {
+    const av = a[key] ?? 0;
+    const bv = b[key] ?? 0;
+    if (av < bv) return direction === 'asc' ? -1 : 1;
+    if (av > bv) return direction === 'asc' ? 1 : -1;
+    return 0;
+  });
+}
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION E: SEARCH & FULL-TEXT
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+/**
+ * Full-text search across name, description, tags, category, and slug.
+ * Supports multi-word queries — all words must match (AND).
+ */
+export function searchProducts(query: string): Product[] {
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+  if (!words.length) return [...BOLDMIND_PRODUCTS];
+ 
+  return BOLDMIND_PRODUCTS.filter((p) => {
+    const haystack = [
+      p.name,
+      p.description,
+      p.category,
+      p.slug,
+      ...p.tags,
+      ...(p.techStack ?? []),
+    ]
+      .join(' ')
+      .toLowerCase();
+    return words.every((word) => haystack.includes(word));
+  });
+}
+ 
+/**
+ * Fuzzy search — returns products with a relevance score.
+ * Score = number of matched fields (higher = more relevant).
+ */
+export function fuzzySearchProducts(
+  query: string,
+): Array<{ product: Product; score: number }> {
+  const q = query.toLowerCase();
+  const scored = BOLDMIND_PRODUCTS.map((p) => {
+    let score = 0;
+    if (p.name.toLowerCase().includes(q)) score += 10;
+    if (p.slug.toLowerCase().includes(q)) score += 8;
+    if (p.description.toLowerCase().includes(q)) score += 5;
+    if (p.category.toLowerCase().includes(q)) score += 4;
+    p.tags.forEach((t) => { if (t.toLowerCase().includes(q)) score += 2; });
+    p.techStack.forEach((t) => { if (t.toLowerCase().includes(q)) score += 1; });
+    return { product: p, score };
+  });
+  return scored.filter((s) => s.score > 0).sort((a, b) => b.score - a.score);
+}
+ 
+/**
+ * Paginated product list with optional pre-filter.
+ */
+export function paginateProducts(
+  products: Product[],
+  page = 1,
+  pageSize = 10,
+): PaginatedResult<Product> {
+  const total = products.length;
+  const totalPages = Math.ceil(total / pageSize);
+  const start = (page - 1) * pageSize;
+  return {
+    data: products.slice(start, start + pageSize),
+    total,
+    page,
+    pageSize,
+    totalPages,
+    hasNext: page < totalPages,
+    hasPrev: page > 1,
+  };
+}
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION F: TECH STACK & DATABASE ANALYSIS
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+export function getProductsByTech(tech: string): Product[] {
+  const q = tech.toLowerCase();
+  return BOLDMIND_PRODUCTS.filter((p) =>
+    p.techStack.some((t) => t.toLowerCase().includes(q)),
+  );
+}
+ 
 export function getProductsByDatabase(dbType: DatabaseType): Product[] {
-  return BOLDMIND_PRODUCTS.filter(product => product.database === dbType);
+  return BOLDMIND_PRODUCTS.filter((p) => p.database === dbType);
 }
-
-// Revenue calculations
-export function calculateTotalMonthlyRevenue(): number {
-  return BOLDMIND_PRODUCTS.reduce((total, product) =>
-    total + (product.monthlyRevenue || 0), 0
+ 
+/** All unique tech-stack entries across all products */
+export function getAllTechStack(): string[] {
+  const set = new Set<string>();
+  BOLDMIND_PRODUCTS.forEach((p) => p.techStack.forEach((t) => set.add(t)));
+  return Array.from(set).sort();
+}
+ 
+/** Tech stack frequency map — technology → number of products using it */
+export function getTechStackFrequency(): Record<string, number> {
+  const freq: Record<string, number> = {};
+  BOLDMIND_PRODUCTS.forEach((p) =>
+    p.techStack.forEach((t) => {
+      freq[t] = (freq[t] ?? 0) + 1;
+    }),
+  );
+  return freq;
+}
+ 
+/** Products that share at least one tech-stack item with the given product */
+export function getProductsBySimilarStack(slug: string): Product[] {
+  const product = getProductBySlug(slug);
+  if (!product) return [];
+  const stackSet = new Set(product.techStack.map((t) => t.toLowerCase()));
+  return BOLDMIND_PRODUCTS.filter(
+    (p) =>
+      p.slug !== slug &&
+      p.techStack.some((t) => stackSet.has(t.toLowerCase())),
   );
 }
-
-export function calculateProjectedRevenue(months: number = 12): number {
-  const liveRevenue = getLiveProducts().reduce((total, product) =>
-    total + (product.monthlyRevenue || 0) * months, 0
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION G: DOMAIN & URL UTILITIES
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+export function getAllDomains(): string[] {
+  return Array.from(new Set(BOLDMIND_PRODUCTS.map((p) => p.domain)));
+}
+ 
+export function getAllSubdomains(): string[] {
+  return Array.from(
+    new Set(
+      BOLDMIND_PRODUCTS.filter((p) => p.subdomain).map((p) => p.subdomain!),
+    ),
   );
-
-  const buildingRevenue = getBuildingProducts().length * 100000 * months * 0.5;
-  const plannedRevenue = getPlannedProducts().length * 50000 * months * 0.3;
-  const conceptRevenue = getConceptProducts().length * 25000 * months * 0.1;
-
-  return liveRevenue + buildingRevenue + plannedRevenue + conceptRevenue;
 }
-
-// Team size calculations
-export function calculateTotalTeamSize(): number {
-  const teamSizes = BOLDMIND_PRODUCTS
-    .map(product => product.teamSize || 0)
-    .reduce((total, size) => total + size, 0);
-
-  return Math.ceil(teamSizes / 2); // Account for overlapping team members
+ 
+export function getProductsByDomainName(domain: string): Product[] {
+  return BOLDMIND_PRODUCTS.filter((p) => p.domain === domain);
 }
-
-// Timeline analysis
-export function getUpcomingReleases(months: number = 6): Product[] {
-  const now = new Date();
-  const future = new Date();
-  future.setMonth(future.getMonth() + months);
-
-  return BOLDMIND_PRODUCTS.filter(product => {
-    if (!product.timeline) return false;
-
-    const timelineMatch = product.timeline.match(/Q(\d) (\d{4})/);
-    if (timelineMatch) {
-      const quarter = parseInt(timelineMatch[1] || '');
-      const year = parseInt(timelineMatch[2] || '');
-
-      const releaseDate = new Date(year, (quarter - 1) * 3, 1);
-      return releaseDate >= now && releaseDate <= future;
-    }
-
-    return false;
-  }).sort((a, b) => a.priority - b.priority);
+ 
+export function getProductsBySubdomain(subdomain: string): Product[] {
+  return BOLDMIND_PRODUCTS.filter((p) => p.subdomain === subdomain);
 }
-
-// Product dependencies analysis
+ 
+export function getProductsWithSubdomain(): Product[] {
+  return BOLDMIND_PRODUCTS.filter((p) => p.subdomain !== undefined);
+}
+ 
+export function getProductsWithoutSubdomain(): Product[] {
+  return BOLDMIND_PRODUCTS.filter((p) => p.subdomain === undefined);
+}
+ 
+/** Detect which product a request belongs to from an incoming Host header */
+export function detectProductFromHost(host: string): Product | undefined {
+  // Strip port if present
+  const clean = host.split(':')[0] ?? host;
+  return (
+    getProductByDomain(clean) ??
+    BOLDMIND_PRODUCTS.find((p) => clean.endsWith(p.domain))
+  );
+}
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION H: INTEGRATION & DEPENDENCY GRAPH
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+export function getProductsWithIntegration(integration: string): Product[] {
+  const q = integration.toLowerCase();
+  return BOLDMIND_PRODUCTS.filter((p) =>
+    p.integrations?.some((i) => i.toLowerCase().includes(q)),
+  );
+}
+ 
+export function getAllIntegrations(): string[] {
+  const set = new Set<string>();
+  BOLDMIND_PRODUCTS.forEach((p) =>
+    p.integrations?.forEach((i) => set.add(i)),
+  );
+  return Array.from(set).sort();
+}
+ 
+/** Returns the direct dependency products for a given product slug */
 export function getProductDependencies(productSlug: string): Product[] {
   const product = getProductBySlug(productSlug);
-  if (!product || !product.dependencies) return [];
-
+  if (!product?.dependencies?.length) return [];
   return product.dependencies
-    .map(depSlug => getProductBySlug(depSlug))
+    .map((dep) => getProductBySlug(dep))
     .filter((dep): dep is Product => dep !== undefined);
 }
-
-// Status summary
-export interface ProductStatusSummary {
-  total: number;
-  live: number;
-  building: number;
-  planned: number;
-  concept: number;
-  revenue: number;
-  teamSize: number;
-  upcomingReleases: number;
+ 
+/** Returns products that depend ON the given product slug (reverse deps) */
+export function getProductDependents(productSlug: string): Product[] {
+  return BOLDMIND_PRODUCTS.filter((p) =>
+    p.dependencies?.includes(productSlug),
+  );
 }
-
+ 
+/**
+ * Full dependency tree for a product (recursive, cycle-safe).
+ * Returns a flat de-duplicated list of all transitive dependencies.
+ */
+export function getTransitiveDependencies(
+  productSlug: string,
+  visited = new Set<string>(),
+): Product[] {
+  if (visited.has(productSlug)) return [];
+  visited.add(productSlug);
+ 
+  const directDeps = getProductDependencies(productSlug);
+  const transitive = directDeps.flatMap((dep) =>
+    getTransitiveDependencies(dep.slug, visited),
+  );
+  return [...directDeps, ...transitive].filter(
+    (p, i, arr) => arr.findIndex((x) => x.id === p.id) === i,
+  );
+}
+ 
+/**
+ * Products that live on the same app bundle (same `app` field).
+ */
+export function getProductsByApp(app: string): Product[] {
+  return BOLDMIND_PRODUCTS.filter((p) => p.app === app);
+}
+ 
+/**
+ * All unique app bundles across the ecosystem.
+ */
+export function getAllApps(): string[] {
+  return Array.from(new Set(BOLDMIND_PRODUCTS.map((p) => p.app))).sort();
+}
+ 
+export function getPlanAISuiteProducts(): Product[] {
+  return getProductsByApp('planai-suite');
+}
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION I: REVENUE & FINANCIAL ANALYSIS
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+export function calculateTotalMonthlyRevenue(): number {
+  return BOLDMIND_PRODUCTS.reduce(
+    (sum, p) => sum + (p.monthlyRevenue ?? 0),
+    0,
+  );
+}
+ 
+export function calculateAnnualRevenue(): number {
+  return calculateTotalMonthlyRevenue() * 12;
+}
+ 
+export function getRevenueGeneratingProducts(): Product[] {
+  return BOLDMIND_PRODUCTS.filter((p) => (p.monthlyRevenue ?? 0) > 0).sort(
+    (a, b) => (b.monthlyRevenue ?? 0) - (a.monthlyRevenue ?? 0),
+  );
+}
+ 
+export function getTopRevenueProducts(limit = 5): Product[] {
+  return getRevenueGeneratingProducts().slice(0, limit);
+}
+ 
+export function getZeroRevenueProducts(): Product[] {
+  return BOLDMIND_PRODUCTS.filter((p) => (p.monthlyRevenue ?? 0) === 0);
+}
+ 
+/**
+ * Revenue by category — returns a sorted array.
+ */
+export function getRevenueByCategory(): Array<{
+  category: ProductCategory;
+  monthlyRevenue: number;
+  productCount: number;
+}> {
+  const map = new Map<ProductCategory, { monthlyRevenue: number; productCount: number }>();
+  BOLDMIND_PRODUCTS.forEach((p) => {
+    const existing = map.get(p.category) ?? { monthlyRevenue: 0, productCount: 0 };
+    map.set(p.category, {
+      monthlyRevenue: existing.monthlyRevenue + (p.monthlyRevenue ?? 0),
+      productCount: existing.productCount + 1,
+    });
+  });
+  return Array.from(map.entries())
+    .map(([category, v]) => ({ category, ...v }))
+    .sort((a, b) => b.monthlyRevenue - a.monthlyRevenue);
+}
+ 
+/**
+ * Revenue CAGR estimate (compound annual growth rate) given a growth percentage.
+ * @param annualGrowthRate e.g. 0.5 = 50% YoY
+ */
+export function projectRevenue(
+  months: number,
+  annualGrowthRate = 0.5,
+): number {
+  const baseMonthly = calculateTotalMonthlyRevenue();
+  const monthlyGrowthRate = Math.pow(1 + annualGrowthRate, 1 / 12) - 1;
+  return baseMonthly * Math.pow(1 + monthlyGrowthRate, months);
+}
+ 
+/**
+ * Payback period (months) for a product — how long until revenue covers dev cost.
+ * Returns Infinity if the product has no revenue.
+ */
+export function getPaybackPeriod(product: Product): number {
+  const cost = estimateDevelopmentCost(product);
+  const monthly = product.monthlyRevenue ?? 0;
+  if (monthly === 0) return Infinity;
+  return Math.ceil(cost / monthly);
+}
+ 
+/**
+ * Return on investment for a product as a percentage (annual revenue / dev cost).
+ */
+export function calculateROI(product: Product): number {
+  const cost = estimateDevelopmentCost(product);
+  if (cost === 0) return 0;
+  return ((product.monthlyRevenue ?? 0) * 12) / cost * 100;
+}
+ 
+/**
+ * Average monthly revenue per live product.
+ */
+export function getAverageRevenuePerLiveProduct(): number {
+  const live = getLiveProducts();
+  if (!live.length) return 0;
+  return live.reduce((sum, p) => sum + (p.monthlyRevenue ?? 0), 0) / live.length;
+}
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION J: TEAM & COST ANALYSIS
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+export function calculateTotalTeamSize(): number {
+  const raw = BOLDMIND_PRODUCTS.reduce(
+    (sum, p) => sum + (p.teamSize ?? 0),
+    0,
+  );
+  return Math.ceil(raw / 2); // Account for overlapping team members
+}
+ 
+export function getProductsByTeamSize(
+  minSize: number,
+  maxSize?: number,
+): Product[] {
+  return BOLDMIND_PRODUCTS.filter((p) => {
+    const ts = p.teamSize ?? 0;
+    return ts >= minSize && (maxSize === undefined || ts <= maxSize);
+  });
+}
+ 
+/**
+ * Solo-founder products (teamSize === 1).
+ */
+export function getSoloProducts(): Product[] {
+  return BOLDMIND_PRODUCTS.filter((p) => p.teamSize === 1);
+}
+ 
+/** Monthly dev cost using configurable rate (default ₦500k/dev/month) */
+export function estimateDevelopmentCost(
+  product: Product,
+  monthlyRatePerDev = 500_000,
+): number {
+  const teamSize = product.teamSize ?? 1;
+  const months = getTimelineMonths(product.timeline);
+  return teamSize * months * monthlyRatePerDev;
+}
+ 
+export function calculateTotalDevelopmentCost(
+  monthlyRatePerDev = 500_000,
+): number {
+  return BOLDMIND_PRODUCTS.reduce(
+    (sum, p) => sum + estimateDevelopmentCost(p, monthlyRatePerDev),
+    0,
+  );
+}
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION K: TIMELINE ANALYSIS
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+/** Parse a timeline string into a month count */
+function getTimelineMonths(timeline?: string): number {
+  if (!timeline) return 3;
+  const weeks = timeline.match(/(\d+)\s*weeks?/);
+  if (weeks) return parseInt(weeks[1]!) / 4;
+  const months = timeline.match(/(\d+)\s*months?/);
+  if (months) return parseInt(months[1]!);
+  return 3;
+}
+ 
+export function getUpcomingReleases(months = 6): Product[] {
+  const now = new Date();
+  const cutoff = new Date();
+  cutoff.setMonth(cutoff.getMonth() + months);
+ 
+  return BOLDMIND_PRODUCTS.filter((p) => {
+    if (!p.timeline) return false;
+    const m = p.timeline.match(/Q(\d)\s+(\d{4})/);
+    if (!m) return false;
+    const releaseDate = new Date(
+      parseInt(m[2]!),
+      (parseInt(m[1]!) - 1) * 3,
+      1,
+    );
+    return releaseDate >= now && releaseDate <= cutoff;
+  }).sort((a, b) => a.priority - b.priority);
+}
+ 
+export function getProductsLaunchingThisYear(year = 2026): Product[] {
+  return BOLDMIND_PRODUCTS.filter((p) => {
+    if (!p.timeline) return false;
+    const m = p.timeline.match(/Q\d\s+(\d{4})/);
+    return m ? parseInt(m[1]!) === year : false;
+  });
+}
+ 
+/**
+ * Classify products by launch quarter.
+ * @returns Map of "Q1 2026" → Product[]
+ */
+export function groupByQuarter(): Map<string, Product[]> {
+  const map = new Map<string, Product[]>();
+  BOLDMIND_PRODUCTS.forEach((p) => {
+    if (!p.timeline) return;
+    const m = p.timeline.match(/(Q\d\s+\d{4})/);
+    const key = m ? m[1]! : 'Unknown';
+    if (!map.has(key)) map.set(key, []);
+    map.get(key)!.push(p);
+  });
+  return map;
+}
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION L: SUMMARY & REPORTING
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
 export function getProductStatusSummary(): ProductStatusSummary {
   return {
     total: BOLDMIND_PRODUCTS.length,
@@ -1655,201 +2255,553 @@ export function getProductStatusSummary(): ProductStatusSummary {
     upcomingReleases: getUpcomingReleases(6).length,
   };
 }
-
-// Tech stack analysis
-export function getProductsByTech(tech: string): Product[] {
-  return BOLDMIND_PRODUCTS.filter(product =>
-    product.techStack.some(t => t.toLowerCase().includes(tech.toLowerCase()))
-  );
-}
-
-// Domain utility functions
-export function getProductWebsiteUrl(product: Product): string {
-  if (product.subdomain) {
-    return `https://${product.subdomain}.${product.domain}`;
-  }
-  return `https://${product.domain}`;
-}
-
-export function getAllDomains(): string[] {
-  const domains = new Set<string>();
-  BOLDMIND_PRODUCTS.forEach(product => domains.add(product.domain));
-  return Array.from(domains);
-}
-
-export function getAllSubdomains(): string[] {
-  const subdomains = new Set<string>();
-  BOLDMIND_PRODUCTS.forEach(product => {
-    if (product.subdomain) subdomains.add(product.subdomain);
-  });
-  return Array.from(subdomains);
-}
-
-// Priority-based functions
-export function getHighPriorityProducts(threshold: number = 10): Product[] {
-  return BOLDMIND_PRODUCTS.filter(product => product.priority <= threshold)
-    .sort((a, b) => a.priority - b.priority);
-}
-
-export function getLowPriorityProducts(threshold: number = 20): Product[] {
-  return BOLDMIND_PRODUCTS.filter(product => product.priority > threshold)
-    .sort((a, b) => a.priority - b.priority);
-}
-
-// Revenue-focused functions
-export function getRevenueGeneratingProducts(): Product[] {
-  return BOLDMIND_PRODUCTS.filter(product => (product.monthlyRevenue || 0) > 0)
-    .sort((a, b) => (b.monthlyRevenue || 0) - (a.monthlyRevenue || 0));
-}
-
-export function getTopRevenueProducts(limit: number = 5): Product[] {
-  return getRevenueGeneratingProducts().slice(0, limit);
-}
-
-// Team size analysis
-export function getProductsByTeamSize(minSize: number, maxSize?: number): Product[] {
-  if (maxSize) {
-    return BOLDMIND_PRODUCTS.filter(product =>
-      (product.teamSize || 0) >= minSize && (product.teamSize || 0) <= maxSize
-    );
-  }
-  return BOLDMIND_PRODUCTS.filter(product => (product.teamSize || 0) >= minSize);
-}
-
-// Timeline-based functions
-export function getProductsLaunchingThisYear(year: number = 2026): Product[] {
-  return BOLDMIND_PRODUCTS.filter(product => {
-    if (!product.timeline) return false;
-    const timelineMatch = product.timeline.match(/Q(\d) (\d{4})/);
-    if (timelineMatch) {
-      const timelineYear = parseInt(timelineMatch[2] || '');
-      return timelineYear === year;
-    }
-    return false;
-  });
-}
-
-// Integration-based functions
-export function getProductsWithIntegration(integration: string): Product[] {
-  return BOLDMIND_PRODUCTS.filter(product =>
-    product.integrations?.some(integ => integ.toLowerCase().includes(integration.toLowerCase()))
-  );
-}
-
-// Category summary
-export interface CategorySummary {
-  category: string;
-  count: number;
-  live: number;
-  building: number;
-  planned: number;
-  concept: number;
-  revenue: number;
-}
-
+ 
 export function getCategorySummary(): CategorySummary[] {
-  const summary: Record<string, CategorySummary> = {};
-
-  BOLDMIND_PRODUCTS.forEach(product => {
-    if (!summary[product.category]) {
-      summary[product.category] = {
-        category: product.category,
+  const map: Record<string, CategorySummary> = {};
+  BOLDMIND_PRODUCTS.forEach((p) => {
+    if (!map[p.category]) {
+      map[p.category] = {
+        category: p.category,
         count: 0,
         live: 0,
         building: 0,
         planned: 0,
         concept: 0,
-        revenue: 0
+        revenue: 0,
       };
     }
-
-    const catSummary: any = summary[product.category];
-    catSummary.count++;
-    catSummary[product.status.toLowerCase() as keyof Omit<CategorySummary, 'category' | 'count' | 'revenue'>]++;
-    catSummary.revenue += (product.monthlyRevenue || 0);
+    const s = map[p.category]!;
+    s.count++;
+    (s as any)[p.status.toLowerCase()]++;
+    s.revenue += p.monthlyRevenue ?? 0;
   });
-
-  return Object.values(summary).sort((a, b) => b.count - a.count);
+  return Object.values(map).sort((a, b) => b.count - a.count);
 }
-
-// Search functionality
-export function searchProducts(query: string): Product[] {
-  const lowerQuery = query.toLowerCase();
-
-  return BOLDMIND_PRODUCTS.filter(product =>
-    product.name.toLowerCase().includes(lowerQuery) ||
-    product.description.toLowerCase().includes(lowerQuery) ||
-    product.tags.some(tag => tag.toLowerCase().includes(lowerQuery)) ||
-    product.category.toLowerCase().includes(lowerQuery) ||
-    product.slug.toLowerCase().includes(lowerQuery)
-  );
-}
-
-// Budget estimation
-export function estimateDevelopmentCost(product: Product): number {
-  // Rough estimation based on team size and timeline
-  const teamSize = product.teamSize || 1;
-  const months = getTimelineMonths(product.timeline);
-
-  // Average developer cost in Nigeria: ₦500,000/month
-  const monthlyCostPerDev = 500000;
-  const totalCost = teamSize * months * monthlyCostPerDev;
-
-  return totalCost;
-}
-
-function getTimelineMonths(timeline?: string): number {
-  if (!timeline) return 3; // Default 3 months
-
-  if (timeline.includes('week')) {
-    const weeksMatch = timeline.match(/(\d+)\s*weeks?/);
-    if (weeksMatch) {
-      return parseInt(weeksMatch[1] || '') / 4;
-    }
-  }
-
-  if (timeline.includes('month')) {
-    const monthsMatch = timeline.match(/(\d+)\s*months?/);
-    if (monthsMatch) {
-      return parseInt(monthsMatch[1] || '');
-    }
-  }
-
-  return 3; // Default fallback
-}
-
-export function calculateTotalDevelopmentCost(): number {
-  return BOLDMIND_PRODUCTS.reduce((total, product) =>
-    total + estimateDevelopmentCost(product), 0
-  );
-}
-
-// ROI calculation
-export function calculateROI(product: Product): number {
-  const developmentCost = estimateDevelopmentCost(product);
-  const annualRevenue = (product.monthlyRevenue || 0) * 12;
-
-  if (developmentCost === 0) return 0;
-
-  return (annualRevenue / developmentCost) * 100;
-}
-
-// Quick stats
+ 
 export function getQuickStats() {
-  const totalProducts = BOLDMIND_PRODUCTS.length;
   const totalRevenue = calculateTotalMonthlyRevenue();
-  const totalTeamSize = calculateTotalTeamSize();
-  const upcomingReleases = getUpcomingReleases(6).length;
   const developmentCost = calculateTotalDevelopmentCost();
-
   return {
-    totalProducts,
+    totalProducts: BOLDMIND_PRODUCTS.length,
     totalRevenue: `₦${totalRevenue.toLocaleString()}/month`,
-    totalTeamSize,
-    upcomingReleases,
+    annualRevenue: `₦${calculateAnnualRevenue().toLocaleString()}/year`,
+    totalTeamSize: calculateTotalTeamSize(),
+    upcomingReleases: getUpcomingReleases(6).length,
     developmentCost: `₦${developmentCost.toLocaleString()}`,
-    averageROI: `${(totalRevenue * 12 / developmentCost * 100).toFixed(1)}%`
+    averageROI: `${developmentCost > 0 ? ((totalRevenue * 12 / developmentCost) * 100).toFixed(1) : 0}%`,
+    revenueGeneratingCount: getRevenueGeneratingProducts().length,
+    zeroRevenueCount: getZeroRevenueProducts().length,
   };
 }
-
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION M: HEALTH SCORE ENGINE
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+/**
+ * Calculates a 0-100 health score for each product based on:
+ * revenue, users, team size, tech stack diversity, and priority.
+ */
+export function getProductHealthScore(product: Product): ProductHealthScore {
+  const maxRevenue = Math.max(
+    ...BOLDMIND_PRODUCTS.map((p) => p.monthlyRevenue ?? 0),
+    1,
+  );
+ 
+  const revenueScore = Math.min(100, ((product.monthlyRevenue ?? 0) / maxRevenue) * 100);
+ 
+  const rawUsers = typeof product.users === 'string'
+    ? parseInt(product.users.replace(/[^0-9]/g, ''), 10) || 0
+    : (product.users ?? 0);
+  const userScore = Math.min(100, (rawUsers / 100_000) * 100); // 100k as benchmark
+ 
+  const teamScore = Math.min(100, ((product.teamSize ?? 0) / 5) * 100);
+  const techScore = Math.min(100, (product.techStack.length / 8) * 100);
+  const priorityScore = Math.max(0, 100 - product.priority * 3);
+ 
+  const overall = Math.round(
+    revenueScore * 0.35 +
+    userScore * 0.25 +
+    teamScore * 0.15 +
+    techScore * 0.1 +
+    priorityScore * 0.15,
+  );
+ 
+  const rating: ProductHealthScore['rating'] =
+    overall >= 75 ? 'excellent' :
+    overall >= 50 ? 'good' :
+    overall >= 25 ? 'fair' :
+    'needs-attention';
+ 
+  const recommendations: string[] = [];
+  if (revenueScore < 20) recommendations.push('Implement a paid tier or charge for setup');
+  if (userScore < 10) recommendations.push('Run a WhatsApp/Instagram growth campaign');
+  if (teamScore < 20) recommendations.push('Consider hiring a co-founder or contractor');
+  if (product.status === 'CONCEPT') recommendations.push('Validate with 5 paying customers before building');
+  if (!product.integrations?.length) recommendations.push('Add at least one external integration');
+ 
+  return {
+    productId: product.id,
+    productName: product.name,
+    overall,
+    breakdown: { revenueScore, userScore, teamScore, techScore, priorityScore },
+    rating,
+    recommendations,
+  };
+}
+ 
+/** Health scores for all products, sorted by overall score descending */
+export function getAllHealthScores(): ProductHealthScore[] {
+  return BOLDMIND_PRODUCTS.map(getProductHealthScore).sort(
+    (a, b) => b.overall - a.overall,
+  );
+}
+ 
+/** Products that need the most attention (health score below threshold) */
+export function getProductsNeedingAttention(threshold = 25): Product[] {
+  return BOLDMIND_PRODUCTS.filter(
+    (p) => getProductHealthScore(p).overall < threshold,
+  );
+}
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION N: RELATIONSHIP & RECOMMENDATION ENGINE
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+/**
+ * Products related to a given product by category or shared tags.
+ * Sorted by relevance (shared tag count).
+ */
+export function getRelatedProducts(
+  slug: string,
+  limit = 5,
+): Product[] {
+  const target = getProductBySlug(slug);
+  if (!target) return [];
+ 
+  const targetTags = new Set(target.tags);
+ 
+  return BOLDMIND_PRODUCTS
+    .filter((p) => p.slug !== slug)
+    .map((p) => ({
+      product: p,
+      score:
+        (p.category === target.category ? 5 : 0) +
+        p.tags.filter((t) => targetTags.has(t)).length,
+    }))
+    .filter((x) => x.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map((x) => x.product);
+}
+ 
+/**
+ * Natural product pairs that could cross-sell or integrate well.
+ * Useful for bundle pricing or upsell flows.
+ */
+export function suggestProductPairs(): ProductPair[] {
+  const pairs: ProductPair[] = [];
+  const products = BOLDMIND_PRODUCTS;
+ 
+  for (let i = 0; i < products.length; i++) {
+    for (let j = i + 1; j < products.length; j++) {
+      const a = products[i]!;
+      const b = products[j]!;
+ 
+      // Same category
+      if (a.category === b.category && a.status === 'LIVE' && b.status === 'LIVE') {
+        pairs.push({ a, b, reason: `Both are ${a.category} products` });
+        continue;
+      }
+ 
+      // Shared integration
+      const sharedIntegrations = a.integrations?.filter((i) =>
+        b.integrations?.includes(i),
+      );
+      if (sharedIntegrations?.length) {
+        pairs.push({
+          a,
+          b,
+          reason: `Shared integration: ${sharedIntegrations[0]}`,
+        });
+      }
+    }
+  }
+ 
+  return pairs.slice(0, 20); // Cap for performance
+}
+ 
+/**
+ * Recommended next product to build based on ecosystem gaps.
+ * Scores concepts by: market opportunity keywords, dependencies already live, and priority.
+ */
+export function getRecommendedNextBuild(): Product[] {
+  const liveSlugs = new Set(getLiveProducts().map((p) => p.slug));
+ 
+  return getConceptProducts()
+    .map((p) => {
+      const depsReady = (p.dependencies ?? []).every((d) => liveSlugs.has(d));
+      const opportunityScore = (p.opportunities?.join(' ').length ?? 0) / 100;
+      const score = (depsReady ? 30 : 0) + opportunityScore + (100 - p.priority);
+      return { product: p, score };
+    })
+    .sort((a, b) => b.score - a.score)
+    .map((x) => x.product);
+}
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION O: BUILD WAVE PLANNER
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+/**
+ * Groups BUILDING + PLANNED products into sequential build waves.
+ * Wave 1 = products with no unresolved dependencies.
+ * Wave 2 = products whose dependencies are resolved by Wave 1.
+ * And so on.
+ *
+ * Returns an ordered array of BuildPlan objects.
+ */
+export function generateBuildPlan(): BuildPlan[] {
+  const pending = [...getBuildingProducts(), ...getPlannedProducts()];
+  const launched = new Set(getLiveProducts().map((p) => p.slug));
+  const waves: BuildPlan[] = [];
+  let waveNumber = 1;
+ 
+  while (pending.length > 0) {
+    const readyThisWave = pending.filter((p) =>
+      (p.dependencies ?? []).every((d) => launched.has(d)),
+    );
+ 
+    if (!readyThisWave.length) break; // Circular dep guard
+ 
+    const sorted = readyThisWave.sort((a, b) => a.priority - b.priority);
+    const estimatedCost = sorted.reduce(
+      (sum, p) => sum + estimateDevelopmentCost(p),
+      0,
+    );
+    const estimatedRevenue = sorted.reduce(
+      (sum, p) => sum + (p.monthlyRevenue ?? 0),
+      0,
+    );
+    const maxWeeks = Math.max(
+      ...sorted.map((p) => getTimelineMonths(p.timeline) * 4),
+      4,
+    );
+ 
+    waves.push({
+      wave: waveNumber++,
+      products: sorted,
+      estimatedCost,
+      estimatedMonthlyRevenue: estimatedRevenue,
+      durationWeeks: maxWeeks,
+      dependencies: Array.from(
+        new Set(sorted.flatMap((p) => p.dependencies ?? [])),
+      ),
+    });
+ 
+    sorted.forEach((p) => {
+      launched.add(p.slug);
+      pending.splice(pending.indexOf(p), 1);
+    });
+  }
+ 
+  return waves;
+}
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION P: COMPETITIVE GAP ANALYSIS
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+const CATEGORY_MARKET_SIZES: Record<string, string> = {
+  ai: '₦500B+ (Nigerian AI services market)',
+  fintech: '₦2T+ (Nigerian fintech market)',
+  education: '₦300B+ (Nigerian EdTech market)',
+  marketplace: '₦1T+ (Nigerian e-commerce)',
+  health: '₦150B+ (Nigerian digital health)',
+  media: '₦80B+ (Nigerian digital media)',
+  productivity: '₦50B+ (Nigerian SaaS productivity)',
+  security: '₦100B+ (Nigerian security tech)',
+  utilities: '₦200B+ (Nigerian utilities disruption)',
+  social: '₦30B+ (Nigerian creator economy)',
+};
+ 
+const CATEGORY_MISSING_FEATURES: Record<string, string[]> = {
+  ai: ['AI voice agents in Pidgin/Yoruba', 'Offline AI inference for low-data areas', 'AI compliance checker for Nigerian regulations'],
+  fintech: ['Crypto off-ramp to Naira', 'BNPL (Buy Now Pay Later) for SMEs', 'Group insurance pooling'],
+  education: ['Tertiary institution CBT mock (OAU, UNILAG)', 'Trade skills (plumbing, electrical) certification', 'Scholarship tracker & application assistant'],
+  marketplace: ['Logistics tracking API (GIG, DHL, Kwik)', 'Escrow-first payments for high-value items', 'Bulk wholesale ordering'],
+  health: ['Mental health chatbot (Pidgin-aware)', 'Telehealth appointments (NHIS-compatible)', 'Malaria & typhoid symptom checker'],
+  media: ['Nollywood streaming micro-payment layer', 'Local language podcast hosting', 'Creator NFT / digital collectibles for fans'],
+  productivity: ['Offline-first document editor (no Google dependency)', 'Multi-currency expense tracker', 'Automated Nigerian tax filing'],
+  security: ['Community safety reports (crowd-sourced)', 'Digital identity vault (NIN + BVN secured)', 'Fraud alert for Naira transactions'],
+  utilities: ['Water availability tracker (similar to PowerAlert)', 'Internet service comparison tool', 'Fuel price aggregator near me'],
+  social: ['Nigerian language keyboard + autocorrect', 'Private family group photo/video sharing', 'Local event discovery & ticketing'],
+};
+ 
+export function getCompetitorGaps(): CompetitorGap[] {
+  const categories = Array.from(
+    new Set(BOLDMIND_PRODUCTS.map((p) => p.category)),
+  ) as ProductCategory[];
+ 
+  return categories.map((category) => {
+    const products = getProductsByCategory(category);
+    const liveCount = products.filter((p) => p.status === 'LIVE').length;
+    const opportunityScore = Math.min(
+      100,
+      100 - liveCount * 15 + products.length * 5,
+    );
+ 
+    return {
+      category,
+      boldmindCount: products.length,
+      estimatedMarketSize: CATEGORY_MARKET_SIZES[category] ?? 'Unknown',
+      missingFeatureAreas: CATEGORY_MISSING_FEATURES[category] ?? [],
+      opportunityScore,
+    };
+  }).sort((a, b) => b.opportunityScore - a.opportunityScore);
+}
+ 
+/** Returns the single highest-opportunity category gap */
+export function getTopOpportunityGap(): CompetitorGap | undefined {
+  return getCompetitorGaps()[0];
+}
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION Q: VERSION & DATE UTILITIES
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+/**
+ * Products updated within the last N days.
+ */
+export function getRecentlyUpdatedProducts(days = 30): Product[] {
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - days);
+  return BOLDMIND_PRODUCTS.filter(
+    (p) => new Date(p.updatedAt) >= cutoff,
+  ).sort(
+    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+  );
+}
+ 
+/**
+ * Products created within the last N days.
+ */
+export function getRecentlyCreatedProducts(days = 30): Product[] {
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - days);
+  return BOLDMIND_PRODUCTS.filter(
+    (p) => new Date(p.createdAt) >= cutoff,
+  ).sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  );
+}
+ 
+/**
+ * Products that haven't been updated in more than N days — staleness alert.
+ */
+export function getStaleProducts(days = 90): Product[] {
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - days);
+  return BOLDMIND_PRODUCTS.filter(
+    (p) => new Date(p.updatedAt) < cutoff,
+  );
+}
+ 
+/** Parse semver from version string */
+function parseSemver(version: string): [number, number, number] {
+  const [major = 0, minor = 0, patch = 0] = version
+    .split('.')
+    .map((n) => parseInt(n, 10));
+  return [major, minor, patch];
+}
+ 
+/** Products with version >= the given version string */
+export function getProductsByMinVersion(minVersion: string): Product[] {
+  const [minMaj, minMin, minPat] = parseSemver(minVersion);
+  return BOLDMIND_PRODUCTS.filter((p) => {
+    const [maj, min, pat] = parseSemver(p.version);
+    if (maj !== minMaj) return maj > minMaj;
+    if (min !== minMin) return min > minMin;
+    return pat >= minPat;
+  });
+}
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION R: TWA (TRUSTED WEB ACTIVITY) HELPERS
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+export function getProductsWithTWA(): Product[] {
+  return BOLDMIND_PRODUCTS.filter((p) => p.twa !== undefined);
+}
+ 
+export function getTWAByPackageName(packageName: string): Product | undefined {
+  return BOLDMIND_PRODUCTS.find((p) => p.twa?.packageName === packageName);
+}
+ 
+export function getAllTWAPackageNames(): string[] {
+  return BOLDMIND_PRODUCTS.filter((p) => p.twa).map((p) => p.twa!.packageName);
+}
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION S: SERVICE MODULE HELPERS
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+export function getProductsByServiceModule(module: string): Product[] {
+  return BOLDMIND_PRODUCTS.filter((p) => p.serviceModule === module);
+}
+ 
+export function getAllServiceModules(): string[] {
+  return Array.from(new Set(BOLDMIND_PRODUCTS.map((p) => p.serviceModule))).sort();
+}
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION T: SERIALIZATION & API HELPERS
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+/**
+ * Serializes the full product catalog to a JSON string.
+ * Use in getStaticProps or API routes.
+ */
+export function serializeProducts(products: Product[]): string {
+  return JSON.stringify(products);
+}
+ 
+/**
+ * Converts a product to a Next.js-safe static props shape
+ * (dates as ISO strings, no undefined values).
+ */
+export function toStaticProps(product: Product): Record<string, unknown> {
+  return JSON.parse(JSON.stringify(product));
+}
+ 
+/**
+ * Returns a map of slug → ProductCard for O(1) lookups in UI components.
+ */
+export function buildProductCardMap(): Record<string, ProductCard> {
+  return Object.fromEntries(
+    BOLDMIND_PRODUCTS.map((p) => [p.slug, toProductCard(p)]),
+  );
+}
+ 
+/**
+ * Returns a sitemap-compatible array of all product URLs.
+ */
+export function getAllProductUrls(): Array<{
+  url: string;
+  lastModified: string;
+  changeFrequency: string;
+  priority: number;
+}> {
+  return BOLDMIND_PRODUCTS.map((p) => ({
+    url: getProductWebsiteUrl(p),
+    lastModified: p.updatedAt,
+    changeFrequency: p.status === 'LIVE' ? 'daily' : 'weekly',
+    priority: p.status === 'LIVE' ? 1.0 : 0.7,
+  }));
+}
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION U: FONT CONFIGURATION
+// NOTE: OpenDyslexic is the DEFAULT font across ALL BoldMind products.
+// Override per-product only where a different aesthetic is required.
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+export const BOLDMIND_FONT_CONFIG = {
+  /**
+   * Global default — OpenDyslexic for accessibility-first reading.
+   * Load via: https://cdn.jsdelivr.net/npm/open-dyslexic@latest/
+   * Or self-host in /public/fonts/OpenDyslexic/
+   */
+  default: 'OpenDyslexic, "Comic Sans MS", sans-serif',
+ 
+  /** Headings (can override per product) */
+  heading: 'OpenDyslexic, "Plus Jakarta Sans", "Inter", sans-serif',
+ 
+  /** Monospace for code blocks — keep readable for devs */
+  mono: '"JetBrains Mono", "Fira Code", monospace',
+ 
+  /** Optional override for products with strong brand typography requirements */
+  overrides: {
+    'amebogist':    'OpenDyslexic, "Plus Jakarta Sans", sans-serif', // news needs readability
+    'educenter':    'OpenDyslexic, "Inter", sans-serif',             // students benefit most
+    'boldmind-os':  'OpenDyslexic, sans-serif',                      // ADHD users — primary use case
+    'naija-fit':    'OpenDyslexic, "Inter", sans-serif',
+    'boldmind-hub': 'OpenDyslexic, "Plus Jakarta Sans", sans-serif',
+  } as Record<string, string>,
+ 
+  /** CSS custom property to inject into :root */
+  cssVariable: '--font-body',
+ 
+  /** Dyslexia-mode letter/word spacing (BoldMind OS feature) */
+  dyslexiaSpacing: {
+    letterSpacing: '0.12em',
+    wordSpacing: '0.25em',
+    lineHeight: '1.8',
+  },
+} as const;
+ 
+/**
+ * Returns the font family string for a given product slug.
+ * Falls back to the global OpenDyslexic default.
+ */
+export function getProductFont(slug: string): string {
+  return (
+    BOLDMIND_FONT_CONFIG.overrides[slug] ?? BOLDMIND_FONT_CONFIG.default
+  );
+}
+ 
+/**
+ * Generates a <style> tag string for injecting the product font into SSR.
+ * Use inside Next.js layout.tsx `<head>`.
+ */
+export function generateFontCSS(slug: string): string {
+  const font = getProductFont(slug);
+  return `
+    :root { ${BOLDMIND_FONT_CONFIG.cssVariable}: ${font}; }
+    body, * { font-family: var(${BOLDMIND_FONT_CONFIG.cssVariable}); }
+  `.trim();
+}
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION V: LEGACY HELPERS (unchanged API — kept for backwards compatibility)
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
+export function getProductsByDomainNameLegacy(domain: string): Product[] {
+  return getProductsByDomainName(domain);
+}
+ 
+export function calculateProjectedRevenue(months = 12): number {
+  const liveRevenue = getLiveProducts().reduce(
+    (sum, p) => sum + (p.monthlyRevenue ?? 0) * months,
+    0,
+  );
+  const buildingRevenue = getBuildingProducts().length * 100_000 * months * 0.5;
+  const plannedRevenue  = getPlannedProducts().length  * 50_000  * months * 0.3;
+  const conceptRevenue  = getConceptProducts().length  * 25_000  * months * 0.1;
+  return liveRevenue + buildingRevenue + plannedRevenue + conceptRevenue;
+}
+ 
+export function estimateDevelopmentCostLegacy(product: Product): number {
+  return estimateDevelopmentCost(product);
+}
+ 
+export function searchProductsLegacy(query: string): Product[] {
+  return searchProducts(query);
+}
+ 
+ 
+// ═══════════════════════════════════════════════════════════════════════════════
+// DEFAULT EXPORT
+// ═══════════════════════════════════════════════════════════════════════════════
+ 
 export default BOLDMIND_PRODUCTS;

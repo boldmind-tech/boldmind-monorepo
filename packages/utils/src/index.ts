@@ -1,55 +1,172 @@
-// PACKAGES/utils/src/index.ts
-// COMPLETE BOLDMIND UTILS PACKAGE - FIXED
+// packages/utils/src/index.ts
+// COMPLETE BOLDMIND UTILS — single barrel export
 
-// ===================================
+// ─────────────────────────────────────────────────────────────────────────────
 // PRODUCTS & CATALOG
-// ===================================
-import {
+// ─────────────────────────────────────────────────────────────────────────────
+
+export {
+  // Data
   BOLDMIND_PRODUCTS,
+  PRODUCT_CATEGORIES,
+
+  // Section A — Lookup
   getProductById,
   getProductBySlug,
   getProductByDomain,
+  getProductByFullDomain,
+  getProductWebsiteUrl,
+  toProductCard,
+  toProductCards,
+
+  // Section B — Status
   getProductsByStatus,
-  getProductsByCategory,
-  getProductsByDatabase,
   getLiveProducts,
   getBuildingProducts,
   getPlannedProducts,
   getConceptProducts,
+  getActiveProducts,
+  getInactiveProducts,
+
+  // Section C — Category & Tags
+  getProductsByCategory,
+  getProductsByCategories,
+  getProductsByTags,
+  getProductsByAnyTag,
+  getAllTags,
+  getTagFrequency,
+  getTopTags,
+
+  // Section D — Priority & Sort
+  getProductsByPriority,
+  getHighPriorityProducts,
+  getLowPriorityProducts,
+  sortProducts,
+
+  // Section E — Search
+  searchProducts,
+  fuzzySearchProducts,
+  paginateProducts,
+
+  // Section F — Tech Stack
+  getProductsByTech,
+  getProductsByDatabase,
+  getAllTechStack,
+  getTechStackFrequency,
+  getProductsBySimilarStack,
+
+  // Section G — Domain & URL
+  getAllDomains,
+  getAllSubdomains,
+  getProductsByDomainName,
+  getProductsBySubdomain,
+  getProductsWithSubdomain,
+  getProductsWithoutSubdomain,
+  detectProductFromHost,
+
+  // Section H — Integration & Dependency
+  getProductsWithIntegration,
+  getAllIntegrations,
+  getProductDependencies,
+  getProductDependents,
+  getTransitiveDependencies,
+  getProductsByApp,
+  getAllApps,
+  getPlanAISuiteProducts,
+
+  // Section I — Revenue
   calculateTotalMonthlyRevenue,
-  calculateProjectedRevenue,
+  calculateAnnualRevenue,
+  getRevenueGeneratingProducts,
+  getTopRevenueProducts,
+  getZeroRevenueProducts,
+  getRevenueByCategory,
+  projectRevenue,
+  getPaybackPeriod,
+  calculateROI,
+  getAverageRevenuePerLiveProduct,
+
+  // Section J — Team & Cost
+  calculateTotalTeamSize,
+  getProductsByTeamSize,
+  getSoloProducts,
+  estimateDevelopmentCost,
+  calculateTotalDevelopmentCost,
+
+  // Section K — Timeline
+  getUpcomingReleases,
+  getProductsLaunchingThisYear,
+  groupByQuarter,
+
+  // Section L — Summaries
   getProductStatusSummary,
+  getCategorySummary,
+  getQuickStats,
+
+  // Section M — Health Score
+  getProductHealthScore,
+  getAllHealthScores,
+  getProductsNeedingAttention,
+
+  // Section N — Recommendations
+  getRelatedProducts,
+  getRecommendedNextBuild,
+
+  // Section O — Build Wave Planner
+  generateBuildPlan,
+
+  // Section P — Competitive Gap
+  getCompetitorGaps,
+  getTopOpportunityGap,
+
+  // Section Q — Dates
+  getRecentlyUpdatedProducts,
+  getRecentlyCreatedProducts,
+  getStaleProducts,
+
+  // Section R — TWA
+  getProductsWithTWA,
+  getTWAByPackageName,
+  getAllTWAPackageNames,
+
+  // Section S — Service Modules
+  getProductsByServiceModule,
+  getAllServiceModules,
+
+  // Section T — Serialization
+  serializeProducts,
+  toStaticProps,
+  buildProductCardMap,
+  getAllProductUrls,
+
+  // Section U — Font
+  BOLDMIND_FONT_CONFIG,
+  getProductFont,
+  generateFontCSS,
+
+  // Legacy shims
+  calculateProjectedRevenue,
+
+  // Types
   type Product,
+  type ProductCard,
+  type ProductPair,
+  type BuildPlan,
+  type PaginatedResult,
+  type ProductHealthScore,
+  type CompetitorGap,
+  type ProductStatusSummary,
+  type CategorySummary,
   type ProductStatus,
   type ProductCategory,
   type DatabaseType,
 } from './constants/products';
 
-export {
-  BOLDMIND_PRODUCTS,
-  getProductById,
-  getProductBySlug,
-  getProductByDomain,
-  getProductsByStatus,
-  getProductsByCategory,
-  getProductsByDatabase,
-  getLiveProducts,
-  getBuildingProducts,
-  getPlannedProducts,
-  getConceptProducts,
-  calculateTotalMonthlyRevenue,
-  calculateProjectedRevenue,
-  getProductStatusSummary,
-  type Product,
-  type ProductStatus,
-  type ProductCategory,
-  type DatabaseType,
-};
-
-// ===================================
+// ─────────────────────────────────────────────────────────────────────────────
 // PRICING
-// ===================================
-import {
+// ─────────────────────────────────────────────────────────────────────────────
+
+export {
   BOLDMIND_PRICING,
   getProductPricing,
   calculateYearlySavings,
@@ -57,26 +174,24 @@ import {
   type ProductPricing,
 } from './constants/pricing';
 
-export {
-  BOLDMIND_PRICING,
-  getProductPricing,
-  calculateYearlySavings,
-  type PricingTier,
-  type ProductPricing,
-};
+// ─────────────────────────────────────────────────────────────────────────────
+// AUTH
+// ─────────────────────────────────────────────────────────────────────────────
 
 export {
   hasPermission,
   SYSTEM_ROLE_PERMISSIONS,
   ECOSYSTEM_ROLE_PERMISSIONS,
- type AuthProvider,
-
+  type UserRole,
+  type EcosystemRole,
+  type AuthProvider,
 } from './constants/auth';
 
-// ===================================
+// ─────────────────────────────────────────────────────────────────────────────
 // DATABASE CONFIGURATION
-// ===================================
-import {
+// ─────────────────────────────────────────────────────────────────────────────
+
+export {
   DATABASE_CONFIG,
   getServiceDatabase,
   getServiceForProduct,
@@ -96,30 +211,11 @@ import {
   type ProductSlug,
 } from './constants/database-config';
 
-export {
-  DATABASE_CONFIG,
-  getServiceDatabase,
-  getServiceForProduct,
-  getDatabaseName,
-  getDatabaseEnvVar,
-  getConnectionString,
-  getServiceUrl,
-  usesPostgres,
-  usesMongoDB,
-  getServicesByDatabase,
-  getProductsForService,
-  validateDatabaseEnvVars,
-  SERVICE_DB_CONFIG,
-  type PostgresService,
-  type MongoService,
-  type ServiceName,
-  type ProductSlug,
-};
-
-// ===================================
+// ─────────────────────────────────────────────────────────────────────────────
 // DOMAIN MAPPING & ROUTES
-// ===================================
-import {
+// ─────────────────────────────────────────────────────────────────────────────
+
+export {
   DOMAIN_MAPPINGS,
   getProductFromDomain,
   getDomainFromProduct,
@@ -128,27 +224,9 @@ import {
   isLiveDomain,
 } from './constants/domains';
 
-export {
-  DOMAIN_MAPPINGS,
-  getProductFromDomain,
-  getDomainFromProduct,
-  getDomainsByStatus,
-  getAPIEndpoint,
-  isLiveDomain,
-};
-
-// ===================================
+// ─────────────────────────────────────────────────────────────────────────────
 // COLORS & THEMES
-// ===================================
-import {
-  BOLDMIND_COLOR_SCHEMES,
-  getColorScheme,
-  getCategoryColorSchemes,
-  generateCSSVariables,
-  getContrastColor,
-  generateThemeClasses,
-  type ProductTheme,
-} from './styles/theme';
+// ─────────────────────────────────────────────────────────────────────────────
 
 export {
   BOLDMIND_COLOR_SCHEMES,
@@ -157,11 +235,6 @@ export {
   generateCSSVariables,
   getContrastColor,
   generateThemeClasses,
-  type ProductTheme,
-};
-
-// Re-export common theme assets
-export {
   boldmindColors,
   boldmindTypography,
   boldmindAnimations,
@@ -169,307 +242,184 @@ export {
   getProductTheme,
   getProductColors,
   getProductThemeClass,
+  type ProductTheme,
 } from './styles/theme';
 
-import {
-  socialAccounts,
-  crossPostingRules,
-  SocialIntegration,
-} from './constants/social';
+// ─────────────────────────────────────────────────────────────────────────────
+// SOCIAL
+// ─────────────────────────────────────────────────────────────────────────────
 
 export {
-  crossPostingRules,
   socialAccounts,
+  crossPostingRules,
   SocialIntegration,
-};
+  type SocialAccount,
+  type PostResult,
+  type AnalyticsData,
+  type PlatformStats,
+} from './constants/social';
 
+// ─────────────────────────────────────────────────────────────────────────────
+// PRODUCT DETECTION  (client-side URL → slug)
+// ─────────────────────────────────────────────────────────────────────────────
 
-// ===================================
-// UTILITY FUNCTIONS
-// ===================================
+export { detectCurrentProduct } from './utils/detect-product';
 
-/**
- * Detect current product from window.location
- */
+// ─────────────────────────────────────────────────────────────────────────────
+// GENERAL UTILITIES
+// ─────────────────────────────────────────────────────────────────────────────
 
-
-/**
- * Get product from path (for development)
- */
+/** Extract the first path segment as product slug (useful in middleware) */
 export function getProductFromPath(pathname: string): string {
-  const segments = pathname.split('/').filter(Boolean);
-  return segments[0] || 'boldmind-hub';
+  return pathname.split('/').filter(Boolean)[0] ?? 'boldmind-hub';
 }
 
-/**
- * Format currency (Nigerian Naira)
- */
-export function formatCurrency(amount: number, currency: string = 'NGN'): string {
-  if (currency === 'NGN') {
-    return `₦${amount.toLocaleString('en-NG')}`;
-  }
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency,
-  }).format(amount);
+/** Format currency — defaults to Nigerian Naira */
+export function formatCurrency(amount: number, currency = 'NGN'): string {
+  if (currency === 'NGN') return `₦${amount.toLocaleString('en-NG')}`;
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(amount);
 }
 
-/**
- * Format date
- */
+/** Format a date to Nigerian locale */
 export function formatDate(date: string | Date, format: 'short' | 'long' = 'short'): string {
   const d = typeof date === 'string' ? new Date(date) : date;
-
-  if (format === 'long') {
-    return d.toLocaleDateString('en-NG', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  }
-
-  return d.toLocaleDateString('en-NG', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
+  return d.toLocaleDateString('en-NG', format === 'long'
+    ? { year: 'numeric', month: 'long', day: 'numeric' }
+    : { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
-/**
- * Truncate text
- */
-export function truncateText(text: string, maxLength: number = 100): string {
-  if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength).trim() + '...';
+/** Truncate text to maxLength characters */
+export function truncateText(text: string, maxLength = 100): string {
+  return text.length <= maxLength ? text : `${text.slice(0, maxLength).trim()}…`;
 }
 
-/**
- * Class name utility (like clsx)
- */
+/** Lightweight clsx replacement */
 export function cn(...classes: (string | undefined | null | false)[]): string {
   return classes.filter(Boolean).join(' ');
 }
 
-/**
- * Sleep utility
- */
-export function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+/** Promise-based sleep */
+export const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
-/**
- * Debounce function
- */
-// export function debounce<T extends (...args: any[]) => any>(
-//   func: T,
-//   wait: number
-// ): (...args: Parameters<T>) => void {
-//   let timeout: NodeJS.Timeout;
-//   return (...args: Parameters<T>) => {
-//     clearTimeout(timeout);
-//     timeout = setTimeout(() => func(...args), wait);
-//   };
-// }
-
-/**
- * Throttle function
- */
-export function throttle<T extends (...args: any[]) => any>(
-  func: T,
-  limit: number
-): (...args: Parameters<T>) => void {
-  let inThrottle: boolean;
+/** Leading-edge throttle */
+export function throttle<T extends (...args: unknown[]) => unknown>(fn: T, limit: number) {
+  let inThrottle = false;
   return (...args: Parameters<T>) => {
-    if (!inThrottle) {
-      func(...args);
-      inThrottle = true;
-      setTimeout(() => (inThrottle = false), limit);
-    }
+    if (!inThrottle) { fn(...args); inThrottle = true; setTimeout(() => { inThrottle = false; }, limit); }
   };
 }
 
-/**
- * Generate unique ID
- */
-export function generateId(prefix: string = 'id'): string {
-  return `${prefix}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+/** Trailing-edge debounce */
+export function debounce<T extends (...args: unknown[]) => unknown>(fn: T, wait: number) {
+  let timer: ReturnType<typeof setTimeout>;
+  return (...args: Parameters<T>) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), wait); };
 }
 
-/**
- * Check if user is in Nigeria (based on timezone)
- */
+/** Collision-resistant ID */
+export function generateId(prefix = 'id'): string {
+  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+}
+
+/** Returns true when the visitor's timezone is Africa/Lagos */
 export function isNigerianUser(): boolean {
   if (typeof window === 'undefined') return false;
-  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  return timezone === 'Africa/Lagos';
+  return Intl.DateTimeFormat().resolvedOptions().timeZone === 'Africa/Lagos';
 }
 
-/**
- * Get greeting based on time
- */
+/** Time-of-day greeting */
 export function getGreeting(): string {
-  const hour = new Date().getHours();
-  if (hour < 12) return 'Good morning';
-  if (hour < 17) return 'Good afternoon';
-  return 'Good evening';
+  const h = new Date().getHours();
+  return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
 }
 
-/**
- * Copy to clipboard
- */
+/** Copy text to clipboard — returns success flag */
 export async function copyToClipboard(text: string): Promise<boolean> {
-  try {
-    await navigator.clipboard.writeText(text);
-    return true;
-  } catch (error) {
-    console.error('Failed to copy:', error);
-    return false;
-  }
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch { return false; }
 }
 
-/**
- * Share content (Web Share API)
- */
-export async function shareContent(data: {
-  title?: string;
-  text?: string;
-  url?: string;
-}): Promise<boolean> {
-  if (!navigator.share) {
-    console.warn('Web Share API not supported');
-    return false;
-  }
-
-  try {
-    await navigator.share(data);
-    return true;
-  } catch (error) {
-    console.error('Failed to share:', error);
-    return false;
-  }
+/** Web Share API wrapper — returns false when not supported */
+export async function shareContent(data: { title?: string; text?: string; url?: string }): Promise<boolean> {
+  if (typeof navigator === 'undefined' || !navigator.share) return false;
+  try { await navigator.share(data); return true; }
+  catch { return false; }
 }
 
-/**
- * Format phone number (Nigerian)
- */
+/** Format a Nigerian phone number to a readable form */
 export function formatPhoneNumber(phone: string): string {
-  const cleaned = phone.replace(/\D/g, '');
-
-  // Nigerian format: +234 XXX XXX XXXX
-  if (cleaned.startsWith('234')) {
-    return `+234 ${cleaned.slice(3, 6)} ${cleaned.slice(6, 9)} ${cleaned.slice(9)}`;
-  }
-
-  // Local format: 0XXX XXX XXXX
-  if (cleaned.startsWith('0')) {
-    return `${cleaned.slice(0, 4)} ${cleaned.slice(4, 7)} ${cleaned.slice(7)}`;
-  }
-
+  const c = phone.replace(/\D/g, '');
+  if (c.startsWith('234') && c.length === 13) return `+234 ${c.slice(3, 6)} ${c.slice(6, 9)} ${c.slice(9)}`;
+  if (c.startsWith('0')   && c.length === 11) return `${c.slice(0, 4)} ${c.slice(4, 7)} ${c.slice(7)}`;
   return phone;
 }
 
-/**
- * Validate email
- */
+/** RFC-5322 email validation */
 export function isValidEmail(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-/**
- * Validate Nigerian phone number
- */
+/** Nigerian phone number validation (local 0XX or international +234XX) */
 export function isValidNigerianPhone(phone: string): boolean {
-  const cleaned = phone.replace(/\D/g, '');
-
-  // Must be 11 digits starting with 0, or 13 digits starting with 234
-  if (cleaned.length === 11 && cleaned.startsWith('0')) return true;
-  if (cleaned.length === 13 && cleaned.startsWith('234')) return true;
-
-  return false;
+  const c = phone.replace(/\D/g, '');
+  return (c.length === 11 && c.startsWith('0')) || (c.length === 13 && c.startsWith('234'));
 }
 
-/**
- * Calculate reading time
- */
-export function calculateReadingTime(text: string, wordsPerMinute: number = 200): number {
-  const words = text.trim().split(/\s+/).length;
-  return Math.ceil(words / wordsPerMinute);
+/** Approximate reading time in minutes */
+export function calculateReadingTime(text: string, wpm = 200): number {
+  return Math.ceil(text.trim().split(/\s+/).length / wpm);
 }
 
-/**
- * Pluralize word
- */
+/** Simple pluralize */
 export function pluralize(count: number, singular: string, plural?: string): string {
-  if (count === 1) return singular;
-  return plural || `${singular}s`;
+  return count === 1 ? singular : (plural ?? `${singular}s`);
 }
 
-/**
- * Format number with suffix (K, M, B)
- */
-export function formatNumberShort(num: number): string {
-  if (num >= 1_000_000_000) {
-    return `${(num / 1_000_000_000).toFixed(1)}B`;
-  }
-  if (num >= 1_000_000) {
-    return `${(num / 1_000_000).toFixed(1)}M`;
-  }
-  if (num >= 1_000) {
-    return `${(num / 1_000).toFixed(1)}K`;
-  }
-  return num.toString();
+/** Format number with K / M / B suffix */
+export function formatNumberShort(n: number): string {
+  if (n >= 1e9) return `${(n / 1e9).toFixed(1)}B`;
+  if (n >= 1e6) return `${(n / 1e6).toFixed(1)}M`;
+  if (n >= 1e3) return `${(n / 1e3).toFixed(1)}K`;
+  return String(n);
 }
 
-/**
- * Get relative time (e.g., "2 hours ago")
- */
+/** Human-readable relative time ("2 hours ago") */
 export function getRelativeTime(date: string | Date): string {
-  const d = typeof date === 'string' ? new Date(date) : date;
-  const now = new Date();
-  const diffInSeconds = Math.floor((now.getTime() - d.getTime()) / 1000);
-
-  if (diffInSeconds < 60) return 'just now';
-  if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
-  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
-  if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} days ago`;
-  if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 604800)} weeks ago`;
-  if (diffInSeconds < 31536000) return `${Math.floor(diffInSeconds / 2592000)} months ago`;
-  return `${Math.floor(diffInSeconds / 31536000)} years ago`;
+  const diff = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
+  if (diff < 60)       return 'just now';
+  if (diff < 3600)     return `${Math.floor(diff / 60)} minutes ago`;
+  if (diff < 86400)    return `${Math.floor(diff / 3600)} hours ago`;
+  if (diff < 604800)   return `${Math.floor(diff / 86400)} days ago`;
+  if (diff < 2592000)  return `${Math.floor(diff / 604800)} weeks ago`;
+  if (diff < 31536000) return `${Math.floor(diff / 2592000)} months ago`;
+  return `${Math.floor(diff / 31536000)} years ago`;
 }
 
-// ===================================
-// RE-EXPORT EVERYTHING AS DEFAULT
-// ===================================
+/** Chunk an array into pages */
+export function chunkArray<T>(arr: T[], size: number): T[][] {
+  const chunks: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) chunks.push(arr.slice(i, i + size));
+  return chunks;
+}
+
+/** Deep clone any JSON-serializable value */
+export function deepClone<T>(value: T): T {
+  return JSON.parse(JSON.stringify(value));
+}
+
+/** Naira amount to kobo (Paystack expects kobo) */
+export function nairaToKobo(naira: number): number { return Math.round(naira * 100); }
+
+/** Kobo to Naira */
+export function koboToNaira(kobo: number): number { return kobo / 100; }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DEFAULT EXPORT  (namespace object for non-tree-shaking consumers)
+// ─────────────────────────────────────────────────────────────────────────────
 
 export default {
-  // Core constants
-  products: BOLDMIND_PRODUCTS,
-  database: DATABASE_CONFIG,
-  domains: DOMAIN_MAPPINGS,
-  colors: BOLDMIND_COLOR_SCHEMES,
-
-  // Utils
-  utils: {
-    getProductFromPath,
-    formatCurrency,
-    formatDate,
-    truncateText,
-    cn,
-    sleep,
-    // debounce,
-    throttle,
-    generateId,
-    isNigerianUser,
-    getGreeting,
-    copyToClipboard,
-    shareContent,
-    formatPhoneNumber,
-    isValidEmail,
-    isValidNigerianPhone,
-    calculateReadingTime,
-    pluralize,
-    formatNumberShort,
-    getRelativeTime,
-  },
+  formatCurrency, formatDate, truncateText, cn, sleep, throttle, debounce,
+  generateId, isNigerianUser, getGreeting, copyToClipboard, shareContent,
+  formatPhoneNumber, isValidEmail, isValidNigerianPhone, calculateReadingTime,
+  pluralize, formatNumberShort, getRelativeTime, chunkArray, deepClone,
+  nairaToKobo, koboToNaira, getProductFromPath,
 };

@@ -67,7 +67,7 @@ export const socialAccounts: Record<string, SocialAccount[]> = {
   ],
   instagram: [
     { id: 'ig1', name: '@boldmindtech', url: 'https://instagram.com/boldmindtech', platform: 'instagram' },
-    { id: 'ig2', name: '@amebogist10', url: 'https://instagram.com/amebogist10', platform: 'instagram' },
+    { id: 'ig2', name: '@amebogist10', url: 'https://instagram.com/amebogistng', platform: 'instagram' },
     { id: 'ig3', name: '@educenterc', url: 'https://instagram.com/educenterc', platform: 'instagram' },
     { id: 'ig4', name: '@charleschijuka', url: 'https://instagram.com/charleschijuka', platform: 'instagram' },
     { id: 'ig5', name: '@villagecircl', url: 'https://instagram.com/villagecircl', platform: 'instagram' },
@@ -82,7 +82,8 @@ export const socialAccounts: Record<string, SocialAccount[]> = {
   tiktok: [
     { id: 'tt1', name: 'CodeFiresAfrica', url: 'https://tiktok.com/@codesfiresafrica', platform: 'tiktok' },
     { id: 'tt2', name: 'VillageCircle', url: 'https://tiktok.com/@viilagecircle', platform: 'tiktok' },
-  ],
+
+    { id: 'tt3', name: 'ChainsToCoins', url: 'https://tiktok.com/@chainstocoins', platform: 'tiktok'}],
   whatsapp: [
     { id: 'wa1', name: 'Charles', phone: '+2348136705908', platform: 'whatsapp' },
     { id: 'wa2', name: 'BoldMind Technology Solution Enterprises', phone: '+2349138349271', platform: 'whatsapp' },

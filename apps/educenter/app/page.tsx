@@ -1,4 +1,4 @@
-// apps/web/educenter/app/(home)/page.tsx
+// apps/educenter/app/page.tsx
 "use client";
 
 import { motion } from "framer-motion";

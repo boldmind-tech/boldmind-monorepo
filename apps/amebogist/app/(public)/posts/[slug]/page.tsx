@@ -3,16 +3,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Clock, Eye, MessageSquare, ThumbsUp, Heart, ChevronRight, Share2, Zap } from "lucide-react";
-import { amebogistAPI } from "../../../lib/api";
-import { Button } from "../../../components/ui/button";
+import { amebogistAPI } from "../../../../lib/api";
+import { Button } from "../../../../components/ui/button";
 // import { Card, CardContent } from "../../../components/ui/card";
-import { Badge } from "../../../components/ui/badge";
+import { Badge } from "../../../../components/ui/badge";
 import { SuperNavbar, SuperFooter } from "@boldmind/ui";
 
-import AdBanner from "../../../components/AdBanner";
-import ShareButtons from "../../../components/ShareButtons";
-import PostCard from "../../../components/PostCard";
-import { AmebogistComment, AmebogistCategory } from "../../../types/index";
+import AdBanner from "../../../../components/AdBanner";
+import ShareButtons from "../../../../components/ShareButtons";
+import PostCard from "../../../../components/PostCard";
+import { AmebogistComment, AmebogistCategory } from "../../../../types/index";
 
 export const revalidate = 60;
 
@@ -67,7 +67,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
     const navLinks = [
         { href: "/", label: "Home" },
-        ...categories.map((cat) => ({
+        ...categories.map((cat:any) => ({
             href: `/category/${cat.slug}`,
             label: cat.name,
         })),
@@ -78,7 +78,7 @@ export default async function PostPage({ params }: PostPageProps) {
             title: "Navigation",
             links: [
                 { href: "/", label: "Home" },
-                ...categories.map((cat) => ({
+                ...categories.map((cat:any) => ({
                     href: `/category/${cat.slug}`,
                     label: cat.name,
                 })),

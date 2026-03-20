@@ -9,7 +9,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import { BoldMindLayout } from './boldmindLayout';
-import { ErrorBoundary, CookieConsent, FacebookSDK } from '@boldmind/ui';
+import { ErrorBoundary, CookieConsent } from '@boldmind/ui';
 import '@boldmind/ui/dist/index.css';
 import './globals.css';
 
@@ -163,21 +163,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
 
-      {/*
-        body: NO font class here.
-        Font is controlled by data-font attribute via font-classes.css.
-        Adding font-sans/font-primary here overrides OpenDyslexic.
-      */}
       <body className="antialiased">
         <ErrorBoundary>
           <BoldMindLayout>
             {children}
           </BoldMindLayout>
           <CookieConsent />
-          <FacebookSDK
-            appId={process.env['NEXT_PUBLIC_FACEBOOK_APP_ID']}
-            pixelId={process.env['NEXT_PUBLIC_FACEBOOK_PIXEL_ID']}
-          />
+        
         </ErrorBoundary>
       </body>
     </html>

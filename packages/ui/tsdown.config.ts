@@ -9,6 +9,7 @@ export default defineConfig({
   minify: false,
   external: [
     '@boldmind/utils',
+    '@boldmind/auth',
     'react',
     'react-dom',
     'next',

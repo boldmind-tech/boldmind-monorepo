@@ -29,6 +29,7 @@ export { ErrorBoundary } from './components/ErrorBoundary';
 export { PricingContent } from './components/PricingContent';
 export { PrivacyPolicy } from './components/PrivacyPolicy';
 export {DyslexiaToggle } from './components/DyslexiaToggle'
+export { CookieConsent } from './components/CookieConsent';
 
 // ============================================
 // LAYOUT COMPONENTS

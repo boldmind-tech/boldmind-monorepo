@@ -1,15 +1,15 @@
 // APPS/WEB_APPS/amebogist/app/search/page.tsx
 import Link from "next/link";
-import { amebogistAPI } from "../../lib/api";
+import { amebogistAPI } from "../../../lib/api";
 
 // Components
-import PostCard from "../../components/PostCard";
-import SearchBar from "../../components/SearchBar";
+import PostCard from "../../../components/PostCard";
+import SearchBar from "../../../components/SearchBar";
 import { SuperNavbar, SuperFooter } from "@boldmind/ui";
 import { TrendingUp } from "lucide-react";
 
 // Types
-import type { AmebogistCategory } from "../../types/index";
+import type { AmebogistCategory } from "../../../types/index";
 
 export const revalidate = 60;
 
@@ -30,7 +30,7 @@ async function searchPosts(query: string) {
         const response = await amebogistAPI.articles.list({ q: query });
         const articles = response.data || [];
 
-        return articles.map((post) => ({
+        return articles.map((post: any) => ({
             _id: post._id,
             title: post.title,
             excerpt: post.excerpt || (typeof post.content === 'string' ? post.content.substring(0, 160) : post.content.pidgin.substring(0, 160)) + "...",
@@ -72,7 +72,7 @@ export default async function SearchPage({
 
     const navLinks = [
         { href: "/", label: "Home" },
-        ...categories.map((cat) => ({
+        ...categories.map((cat: any) => ({
             href: `/category/${cat.slug}`,
             label: cat.name,
         })),
@@ -83,7 +83,7 @@ export default async function SearchPage({
             title: "Navigation",
             links: [
                 { href: "/", label: "Home" },
-                ...categories.map((cat) => ({
+                ...categories.map((cat: any) => ({
                     href: `/category/${cat.slug}`,
                     label: cat.name,
                 })),
@@ -127,7 +127,7 @@ export default async function SearchPage({
                     <div className="lg:col-span-8">
                         {posts.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                {posts.map((post) => (
+                                {posts.map((post: any) => (
                                     <PostCard key={post._id} post={post} />
                                 ))}
                             </div>
@@ -159,7 +159,7 @@ export default async function SearchPage({
                                 Trending Instead
                             </h3>
                             <div className="space-y-6">
-                                {trendingPosts.map((post, idx) => (
+                                {trendingPosts.map((post: any, idx: number) => (
                                     <Link key={post._id} href={`/posts/${post.slug}`} className="flex items-start gap-4 group">
                                         <span className="text-2xl font-black text-gray-100 group-hover:text-amebogreen-500/20 transition-colors">0{idx + 1}</span>
                                         <div>

@@ -1,21 +1,20 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// packages/ui/src/providers/AppLayout.tsx
-// ─────────────────────────────────────────────────────────────────────────────
-// Generic base layout used by every BoldMind app.
-// Each app creates its own *Layout.tsx that passes its slug to this component.
-// This eliminates the 8 near-identical layout files that existed before.
-//
-// Usage in any app:
-//   <AppLayout productSlug="amebogist">{children}</AppLayout>
-// ─────────────────────────────────────────────────────────────────────────────
-
 'use client';
 
-import { ReactNode } from 'react';
-import { ThemeProvider } from './theme-provider';
-import { FontProvider } from '../components/FontProvider';
-import { AuthProvider } from '@boldmind/auth';
-import { Toaster } from 'react-hot-toast';
+// ─────────────────────────────────────────────────────────────────────────────
+// packages/ui/src/providers/AppLayout.tsx
+//
+// Single base layout shared by every BoldMind app.
+//
+// Usage:
+//   <AppLayout productSlug="amebogist">{children}</AppLayout>
+//   <AppLayout productSlug="boldmind-os" withAuth={false}>{children}</AppLayout>
+// ─────────────────────────────────────────────────────────────────────────────
+
+import type { ReactNode } from 'react';
+import { Toaster }        from 'react-hot-toast';
+import { ThemeProvider }  from './theme-provider';
+import { FontProvider }   from '../components/FontProvider';
+import { AuthProvider }   from '@boldmind/auth';
 import {
   getProductBySlug,
   getProductColors,
@@ -24,15 +23,26 @@ import {
 } from '@boldmind/utils';
 import type { ProductThemeType } from './theme-provider';
 
-// ─── Toast style map per product ─────────────────────────────────────────────
+// ─── Toast accent per product  ────────────────────────────────────────────────
 
 const TOAST_ACCENT: Record<string, string> = {
-  'boldmind-hub': '#E9A825',
-  'amebogist':    '#065F46',
-  'educenter':    '#1E40AF',
-  'planai-suite': '#6B21A8',
-  'naija-fit':    '#BE185D',
-  'boldmind-os':  '#9F1239',
+  'boldmind-hub':         '#E9A825',
+  'amebogist':            '#065F46',
+  'educenter':            '#1E40AF',
+  'planai-suite':         '#6B21A8',
+  'ai-receptionist':      '#0C4A6E',
+  'social-factory':       '#831843',
+  'boldmind-os':          '#9F1239',
+  'naija-fit':            '#065F46',
+  'emailscraper-pro':     '#075985',
+  'credibility-hubs':     '#312E81',
+  'business-planning':    '#1E3A5F',
+  'financial-forecasting':'#064E3B',
+  'investor-readiness':   '#1E293B',
+  'branding-design':      '#86198F',
+  'digital-storefronts':  '#7C2D12',
+  'marketing-automation': '#7E22CE',
+  'analytics-dashboard':  '#0F172A',
 };
 
 // ─── Props ────────────────────────────────────────────────────────────────────
@@ -42,12 +52,14 @@ export interface AppLayoutProps {
   /** Must match a slug in BOLDMIND_PRODUCTS */
   productSlug: string;
   /**
-   * Override default font mode for this app.
-   * Defaults to 'dyslexic' (OpenDyslexic) — BoldMind brand standard.
+   * Font mode passed to FontProvider.
+   * Defaults to 'dyslexic' — OpenDyslexic is the BoldMind brand standard.
    */
   defaultFontMode?: 'dyslexic' | 'standard';
-  /** Pass false to skip AuthProvider (e.g. public-only apps) */
+  /** Set false for fully public apps that don't need AuthProvider */
   withAuth?: boolean;
+  /** Override default toast duration (ms) */
+  toastDuration?: number;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -55,17 +67,15 @@ export interface AppLayoutProps {
 export function AppLayout({
   children,
   productSlug,
-  defaultFontMode = 'dyslexic',
-  withAuth = true,
+  defaultFontMode  = 'dyslexic',
+  withAuth         = true,
+  toastDuration    = 4000,
 }: AppLayoutProps) {
-  // Build ProductThemeType from shared utils — single source of truth
-  const product =
-    getProductBySlug(productSlug) ||
-    BOLDMIND_PRODUCTS.find((p) => p.slug === productSlug) ||
-    BOLDMIND_PRODUCTS[0]!;
 
-  const colors = getProductColors(productSlug);
-  const theme  = productThemes[productSlug] ?? productThemes['boldmind-hub']!;
+  // Build the ProductThemeType from utils — single source of truth
+  const product = getProductBySlug(productSlug) ?? BOLDMIND_PRODUCTS[0]!;
+  const colors  = getProductColors(productSlug);
+  const theme   = productThemes[productSlug] ?? productThemes['boldmind-hub']!;
 
   const productTheme: ProductThemeType = {
     slug:        product.slug,
@@ -81,55 +91,41 @@ export function AppLayout({
     },
   };
 
-  const toastAccent = TOAST_ACCENT[productSlug] ?? colors.primary;
+  const accent  = TOAST_ACCENT[productSlug] ?? colors.primary;
+  const toastStyle = {
+    background:  '#1a1a1a',
+    color:       '#fff',
+    fontFamily:  'var(--font-active, var(--font-primary))',
+    borderLeft:  `4px solid ${accent}`,
+  } as const;
 
-  const content = (
-    <ThemeProvider defaultTheme="light" defaultProduct={productTheme}>
+  const toaster = (
+    <Toaster
+      position="top-right"
+      toastOptions={{
+        duration: toastDuration,
+        style:    toastStyle,
+        success:  { duration: 3000, iconTheme: { primary: '#10b981', secondary: '#fff' } },
+        error:    { duration: 5000, iconTheme: { primary: '#ef4444', secondary: '#fff' } },
+      }}
+    />
+  );
+
+  return (
+    <ThemeProvider defaultTheme="light" forceProductSlug={productSlug} defaultProduct={productTheme}>
       <FontProvider defaultMode={defaultFontMode}>
         {withAuth ? (
           <AuthProvider>
             {children}
-            <Toaster
-              position="top-right"
-              toastOptions={{
-                duration: 4000,
-                style: {
-                  background: '#1a1a1a',
-                  color: '#fff',
-                  fontFamily: 'var(--font-active, var(--font-primary))',
-                  borderLeft: `4px solid ${toastAccent}`,
-                },
-                success: {
-                  duration: 3000,
-                  iconTheme: { primary: '#10b981', secondary: '#fff' },
-                },
-                error: {
-                  duration: 5000,
-                  iconTheme: { primary: '#ef4444', secondary: '#fff' },
-                },
-              }}
-            />
+            {toaster}
           </AuthProvider>
         ) : (
           <>
             {children}
-            <Toaster
-              position="top-right"
-              toastOptions={{
-                duration: 4000,
-                style: {
-                  background: '#1a1a1a',
-                  color: '#fff',
-                  fontFamily: 'var(--font-active, var(--font-primary))',
-                  borderLeft: `4px solid ${toastAccent}`,
-                },
-              }}
-            />
+            {toaster}
           </>
         )}
       </FontProvider>
     </ThemeProvider>
   );
-
-  return content;
 }

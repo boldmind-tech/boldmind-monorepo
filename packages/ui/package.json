@@ -32,13 +32,15 @@
   },
   "dependencies": {
     "@boldmind/utils": "workspace:*",
+    "@boldmind/auth": "workspace:*",
     "clsx": "^2.1.1",
     "cookie": "^1.1.1",
     "framer-motion": "^11.0.5",
     "lucide-react": "^0.309.0",
+    "react-hot-toast": "^2.4.1",
     "tailwind-merge": "^2.6.0",
-    "tw-animate-css": "^1.2.8",
-    "tsdown": "^0.20.1"
+    "tsdown": "^0.20.1",
+    "tw-animate-css": "^1.2.8"
   },
   "devDependencies": {
     "@types/node": "^20.11.5",

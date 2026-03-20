@@ -1,452 +1,334 @@
-// apps/web/boldmind-hub/app/about/page.tsx
 'use client';
 
+// apps/boldmind-hub/app/(public)/about/page.tsx
+// ─────────────────────────────────────────────────────────────────────────────
+// CORRECTIONS FROM PASTE:
+//   1. SuperNavbar + SuperFooter REMOVED — provided by (public)/layout.tsx
+//   2. All hardcoded colors (#00143C, #FFC800) → CSS variables
+//   3. Card variant="premium" → plain div (premium variant not confirmed in ui)
+//      ASSUMPTION: if @boldmind/ui exports Card with variant="premium", restore it
+//   4. StatusBadge with variant="premium" → inline span
+//   5. ParticleBackground → removed (component not confirmed in ui exports)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import {
-  SuperNavbar,
-  SuperFooter,
-  Card,
-  Button,
-  ParticleBackground,
-  StatusBadge
-} from '@boldmind/ui';
-import { Users, Target, Heart, Zap, Globe, Rocket, Award, TrendingUp, Linkedin, Twitter, ExternalLink } from 'lucide-react';
+  Users, Target, Heart, Zap, Globe, Rocket,
+  Award, TrendingUp, Linkedin, Twitter, ExternalLink,
+} from 'lucide-react';
+
+const values = [
+  { icon: Zap,        title: 'Boldness',     description: "Courage to tackle Nigeria's biggest problems with innovation.", color: 'gold' },
+  { icon: Award,      title: 'Excellence',   description: 'Premium quality products that create measurable impact.',          color: 'blue' },
+  { icon: Heart,      title: 'Relevance',    description: 'Solutions built specifically for the Nigerian context.',            color: 'red'  },
+  { icon: Users,      title: 'Authenticity', description: 'True to our culture, building trust through transparency.',        color: 'purple' },
+  { icon: TrendingUp, title: 'Growth',       description: 'Continuous improvement and empowering entrepreneur growth.',       color: 'green' },
+];
+
+const milestones = [
+  { year: '2024', event: 'BoldMind Technology Solution Enterprise Founded',     icon: Rocket },
+  { year: '2024', event: 'AmeboGist.ng Launched — Building Mass Audience',      icon: Globe  },
+  { year: '2024', event: 'EduCenter.com.ng Goes Live — Education Platform',     icon: Award  },
+  { year: '2025', event: 'PlanAI Suite Launch — AI Business Tools',             icon: Zap    },
+  { year: '2030', event: 'Goal: 1 Million Entrepreneurs Empowered',             icon: Target },
+];
+
+const gradientColors: Record<string, string> = {
+  gold:   'from-yellow-500 to-amber-400',
+  blue:   'from-blue-600 to-blue-400',
+  red:    'from-red-600 to-red-400',
+  purple: 'from-purple-600 to-purple-400',
+  green:  'from-green-600 to-green-400',
+};
 
 export default function AboutPage() {
-  const navLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/#ecosystem', label: 'Ecosystem' },
-    { href: '/products', label: 'Products' },
-    { href: '/contact', label: 'Contact' },
-  ];
-
-  const footerSections = [
-    {
-      title: '🚀 Products',
-      links: [
-        { href: 'https://amebogist.ng', label: 'AmeboGist', isExternal: true },
-        { href: 'https://educenter.com.ng', label: 'EduCenter', isExternal: true },
-        { href: '/products', label: 'All Products', badge: '31+' },
-      ],
-    },
-    {
-      title: '🏢 Company',
-      links: [
-        { href: '/about', label: 'About Us' },
-        { href: '/#ecosystem', label: 'Our Ecosystem' },
-        { href: '/#impact', label: 'Impact' },
-        { href: '/contact', label: 'Contact' },
-      ],
-    },
-    {
-      title: '🔗 Connect',
-      links: [
-        { href: 'https://twitter.com/charlesuchech', label: 'Twitter', isExternal: true },
-        { href: 'https://linkedin.com/in/charliedotcom', label: 'LinkedIn', isExternal: true },
-        { href: '/contact', label: 'Contact' },
-      ],
-    },
-  ];
-
-  const team = [
-    {
-      name: 'Charles Uche Chijuka',
-      role: 'Founder & CEO',
-      bio: 'Visionary entrepreneur building technology solutions for Africa. With over a decade of experience in software engineering and business strategy, Charles is dedicated to bridging the digital divide in Nigeria.',
-      image: '👨‍💼',
-      linkedin: 'https://linkedin.com/in/charliedotcom',
-      twitter: 'https://twitter.com/charlesuchech',
-    },
-  ];
-
-  const values = [
-    {
-      icon: Zap,
-      title: 'Boldness',
-      description: "We tackle Nigeria's biggest problems with courage and innovation, never settling for the status quo.",
-      color: 'gold',
-    },
-    {
-      icon: Award,
-      title: 'Excellence',
-      description: 'We deliver premium quality products that create measurable impact and exceed expectations.',
-      color: 'blue',
-    },
-    {
-      icon: Heart,
-      title: 'Relevance',
-      description: 'Solutions built specifically for the Nigerian context, addressing real-world needs.',
-      color: 'red',
-    },
-    {
-      icon: Users,
-      title: 'Authenticity',
-      description: 'True to our culture and community voice, building trust through transparency and integrity.',
-      color: 'purple',
-    },
-    {
-      icon: TrendingUp,
-      title: 'Growth',
-      description: 'Continuous improvement for ourselves and empowering entrepreneur growth across the nation.',
-      color: 'green',
-    },
-  ];
-
-  const milestones = [
-    { year: '2024', event: 'BoldMind Technology Solution Enterprise Founded', icon: Rocket },
-    { year: '2024', event: 'AmeboGist.ng Launched - Building Mass Audience', icon: Globe },
-    { year: '2024', event: 'EduCenter.com.ng Goes Live - Education Platform', icon: Award },
-    { year: '2025', event: 'PlanAI Suite Launch - AI Business Tools', icon: Zap },
-    { year: '2030', event: 'Goal: 1 Million Entrepreneurs Empowered', icon: Target },
-  ];
-
   return (
-    <div className="min-h-screen bg-white dark:bg-[#000B21] transition-colors duration-500">
-      <SuperNavbar
-        links={navLinks}
-        cta={{ href: '/register', label: 'Join the Movement' }}
-        logoSrc="/logo.png"
-      />
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--product-background)' }}>
 
-      {/* Hero Section */}
-      <section className="relative min-h-[70vh] flex items-center bg-[#00143C] text-white overflow-hidden pt-20">
-        <ParticleBackground density={40} className="opacity-40" />
+      {/* Hero */}
+      <section
+        className="relative min-h-[70vh] flex items-center overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, var(--product-primary), color-mix(in srgb, var(--product-primary) 70%, black))' }}
+      >
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-3xl opacity-10"
+               style={{ backgroundColor: 'var(--product-secondary)', transform: 'translate(30%, -30%)' }} />
+        </div>
 
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#00143C]/50 to-[#00143C]" />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 text-center w-full py-20">
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+            <div
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-8"
+              style={{ backgroundColor: 'rgba(255,255,255,0.08)', borderColor: 'rgba(255,255,255,0.15)' }}
+            >
               <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FFC800] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-[#FFC800]"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: 'var(--product-secondary)' }} />
+                <span className="relative inline-flex rounded-full h-3 w-3" style={{ backgroundColor: 'var(--product-secondary)' }} />
               </span>
               <span className="text-sm font-medium text-white/80">Empowering Nigeria's Future</span>
             </div>
 
-            <h1 className="text-5xl md:text-8xl font-black mb-8 tracking-tight">
-              About <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFC800] to-[#E5B600]">BoldMind</span>
+            <h1 className="text-5xl md:text-8xl font-black mb-8 tracking-tight text-white">
+              About{' '}
+              <span style={{ color: 'var(--product-secondary)' }}>BoldMind</span>
             </h1>
-            <p className="text-xl md:text-3xl text-gray-300 max-w-4xl mx-auto leading-relaxed font-light">
-              We're on a mission to empower <span className="text-white font-bold">1 million</span> Nigerian entrepreneurs by 2030
-              through innovative technology solutions that solve fundamental local problems.
+            <p className="text-xl md:text-2xl text-white/70 max-w-4xl mx-auto leading-relaxed">
+              We're on a mission to empower <span className="text-white font-bold">1 million</span> Nigerian
+              entrepreneurs by 2030 through innovative technology solutions.
             </p>
           </motion.div>
         </div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        >
-          <div className="w-6 h-10 border-2 border-white/20 rounded-full flex justify-center p-1">
-            <motion.div
-              animate={{ y: [0, 12, 0] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-              className="w-1.5 h-1.5 bg-[#FFC800] rounded-full"
-            />
-          </div>
-        </motion.div>
       </section>
 
       {/* Our Story */}
-      <section className="py-24 bg-white dark:bg-[#000B21] relative overflow-hidden">
+      <section className="py-24" style={{ backgroundColor: 'var(--product-background)' }}>
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-20 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <h2 className="text-4xl md:text-5xl font-black text-[#00143C] dark:text-white mb-8">
-                The <span className="text-[#FFC800]">Genesis</span> of BoldMind
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+              <h2 className="text-4xl md:text-5xl font-black mb-8" style={{ color: 'var(--product-foreground)' }}>
+                The <span style={{ color: 'var(--product-primary)' }}>Genesis</span> of BoldMind
               </h2>
-              <div className="space-y-6 text-lg text-gray-800 dark:text-gray-300 leading-relaxed">
+              <div className="space-y-6 text-lg leading-relaxed" style={{ color: 'var(--product-foreground)', opacity: 0.8 }}>
                 <p>
-                  BoldMind Technology Solution Enterprise was born from a simple but powerful observation:
-                  Nigerian entrepreneurs face unique, systemic barriers that technology can and should solve.
+                  BoldMind Technology Solution Enterprise was born from a simple observation:
+                  Nigerian entrepreneurs face systemic barriers that technology can solve.
                 </p>
                 <p>
-                  We recognized that building isolated applications wasn't enough. We needed to create a
-                  <span className="text-[#00143C] dark:text-white font-bold"> comprehensive ecosystem</span>.
-                  Each of our products is designed to strengthen the others, creating a powerful flywheel effect
-                  that amplifies impact for every business we touch.
+                  We recognised that building isolated apps wasn't enough — we needed a{' '}
+                  <span className="font-bold" style={{ color: 'var(--product-foreground)', opacity: 1 }}>comprehensive ecosystem</span>.
+                  Each product strengthens the others, creating a flywheel that amplifies impact.
                 </p>
                 <p>
-                  From <span className="font-bold text-[#00A859]">AmeboGist</span> (mass awareness)
-                  to <span className="font-bold text-[#2A4A6E]">EduCenter</span> (education)
-                  to <span className="font-bold text-[#FFC800]">PlanAI</span> (enablement),
-                  we're building the complete digital infrastructure for Nigerian entrepreneurial success.
+                  From <span className="font-bold" style={{ color: '#065F46' }}>AmeboGist</span> (mass awareness)
+                  to <span className="font-bold" style={{ color: '#1E40AF' }}>EduCenter</span> (education)
+                  to <span className="font-bold" style={{ color: '#6B21A8' }}>PlanAI</span> (enablement) —
+                  we are building complete digital infrastructure for Nigerian entrepreneurial success.
                 </p>
-                <div className="pt-6">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="h-0.5 w-12 bg-[#FFC800]" />
-                    <p className="text-2xl font-black text-[#00143C] dark:text-white">
-                      31+ products. 1 mission. Infinite impact.
-                    </p>
-                  </div>
+                <div className="flex items-center gap-4 pt-4">
+                  <div className="h-0.5 w-12" style={{ backgroundColor: 'var(--product-secondary)' }} />
+                  <p className="text-xl font-black" style={{ color: 'var(--product-foreground)' }}>
+                    32+ products. 1 mission. Infinite impact.
+                  </p>
                 </div>
               </div>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="relative"
-            >
-              <Card variant="premium" className="p-12 border-none">
+            <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+              <div
+                className="rounded-3xl p-10 relative overflow-hidden"
+                style={{ background: 'linear-gradient(135deg, var(--product-primary), color-mix(in srgb, var(--product-primary) 70%, black))' }}
+              >
                 <div className="relative z-10">
-                  <div className="text-6xl mb-8">🚀</div>
-                  <h3 className="text-3xl font-black text-white mb-6">Our Vision</h3>
-                  <p className="text-xl text-gray-100 mb-12 leading-relaxed">
-                    To become Africa's leading technology ecosystem,
-                    uniquely positioned to empower entrepreneurs to build the resilient,
-                    high-impact businesses they deserve.
+                  <div className="text-6xl mb-6">🚀</div>
+                  <h3 className="text-3xl font-black text-white mb-5">Our Vision</h3>
+                  <p className="text-lg text-white/80 mb-10 leading-relaxed">
+                    To become Africa's leading technology ecosystem, uniquely positioned to empower
+                    entrepreneurs to build resilient, high-impact businesses.
                   </p>
                   <div className="grid grid-cols-2 gap-8">
-                    <div className="space-y-1">
-                      <div className="text-4xl font-black text-[#FFC800]">31+</div>
-                      <p className="text-sm uppercase tracking-widest text-gray-400 font-bold">Proprietary Products</p>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="text-4xl font-black text-[#FFC800]">1M</div>
-                      <p className="text-sm uppercase tracking-widest text-gray-500 font-bold">Target Impact 2030</p>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="text-4xl font-black text-[#FFC800]">75K+</div>
-                      <p className="text-sm uppercase tracking-widest text-gray-500 font-bold">Growing Community</p>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="text-4xl font-black text-[#FFC800]">3</div>
-                      <p className="text-sm uppercase tracking-widest text-gray-500 font-bold">High-Growth Verticals</p>
-                    </div>
+                    {[
+                      { value: '32+', label: 'Proprietary Products' },
+                      { value: '1M',  label: 'Target Impact 2030'  },
+                      { value: '3',   label: 'Live Products'        },
+                      { value: '₦0',  label: 'Free Tier on Every App' },
+                    ].map((s) => (
+                      <div key={s.label}>
+                        <div className="text-4xl font-black mb-1" style={{ color: 'var(--product-secondary)' }}>{s.value}</div>
+                        <p className="text-xs uppercase tracking-widest text-white/50 font-bold">{s.label}</p>
+                      </div>
+                    ))}
                   </div>
                 </div>
-
-                {/* Decorative Elements */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[#FFC800]/10 rounded-full blur-3xl -mr-16 -mt-16" />
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-500/10 rounded-full blur-3xl -ml-12 -mb-12" />
-              </Card>
+                <div className="absolute -bottom-16 -right-16 w-48 h-48 rounded-full opacity-20" style={{ backgroundColor: 'var(--product-secondary)' }} />
+              </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Our Values */}
-      <section className="py-24 bg-gray-50 dark:bg-[#020D26]">
+      {/* Values */}
+      <section className="py-24" style={{ backgroundColor: 'var(--product-muted)' }}>
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-black text-[#00143C] dark:text-white mb-6">
-              Our Core <span className="text-[#FFC800]">Values</span>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-black mb-6" style={{ color: 'var(--product-foreground)' }}>
+              Our Core <span style={{ color: 'var(--product-primary)' }}>Values</span>
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
-              The foundational principles that guide every strategic decision we make and every line of code we write
+            <p className="text-xl max-w-3xl mx-auto" style={{ color: 'var(--product-foreground)', opacity: 0.6 }}>
+              The foundational principles that guide every decision we make
             </p>
           </div>
-
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {values.map((value, index) => (
+            {values.map((v, i) => (
               <motion.div
-                key={index}
+                key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
+                transition={{ delay: i * 0.1 }}
+                className="rounded-2xl p-8 border-2 hover:shadow-xl hover:-translate-y-2 transition-all"
+                style={{ backgroundColor: 'var(--product-background)', borderColor: 'var(--product-muted)' }}
               >
-                <Card
-                  className="h-full p-8 border-none hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
-                  variant="premium"
-                >
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${value.color === 'gold' ? 'from-[#FFC800] to-[#E5B600]' :
-                      value.color === 'blue' ? 'from-blue-600 to-blue-400' :
-                        value.color === 'red' ? 'from-red-600 to-red-400' :
-                          value.color === 'purple' ? 'from-purple-600 to-purple-400' :
-                            'from-green-600 to-green-400'
-                    } flex items-center justify-center mb-8 shadow-lg`}>
-                    <value.icon className="w-7 h-7 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-black text-[#00143C] dark:text-white mb-4">{value.title}</h3>
-                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{value.description}</p>
-                </Card>
+                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${gradientColors[v.color]} flex items-center justify-center mb-6`}>
+                  <v.icon className="w-7 h-7 text-white" />
+                </div>
+                <h3 className="text-xl font-black mb-3" style={{ color: 'var(--product-foreground)' }}>{v.title}</h3>
+                <p style={{ color: 'var(--product-foreground)', opacity: 0.65 }}>{v.description}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Journey Timeline */}
-      <section className="py-24 bg-white dark:bg-[#000B21]">
+      {/* Timeline */}
+      <section className="py-24" style={{ backgroundColor: 'var(--product-background)' }}>
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-black text-[#00143C] dark:text-white mb-6">
-              Our <span className="text-[#FFC800]">Journey</span>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-black mb-6" style={{ color: 'var(--product-foreground)' }}>
+              Our <span style={{ color: 'var(--product-primary)' }}>Journey</span>
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
-              From inception to nation-wide impact – tracking the BoldMind milestones
-            </p>
           </div>
-
-          <div className="relative">
-            {/* Timeline Line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-[#FFC800] to-[#00143C] hidden md:block" />
-
-            <div className="space-y-20 relative">
-              {milestones.map((milestone, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.2 }}
-                  className={`flex flex-col md:flex-row items-center gap-8 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''
-                    }`}
-                >
-                  <div className="flex-1 w-full">
-                    <Card
-                      className={`p-8 border-none ${index % 2 === 0 ? 'md:text-left' : 'md:text-right'} relative`}
-                      variant="premium"
-                    >
-                      <div className="inline-block px-4 py-1 rounded-full bg-[#FFC800]/20 text-[#FFC800] font-black text-sm mb-4">
-                        {milestone.year}
-                      </div>
-                      <h4 className="text-xl font-bold text-[#00143C] dark:text-white mb-2">{milestone.event}</h4>
-                      {/* Decorative arrow for desktop */}
-                      <div className={`hidden md:block absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-inherit transform rotate-45 ${index % 2 === 0 ? '-left-2' : '-right-2'
-                        }`} />
-                    </Card>
-                  </div>
-
-                  <div className="relative z-10 w-16 h-16 bg-gradient-to-br from-[#FFC800] to-[#E5B600] rounded-full flex items-center justify-center shadow-xl border-4 border-white dark:border-[#000B21] flex-shrink-0">
-                    <milestone.icon className="w-8 h-8 text-white" />
-                  </div>
-
-                  <div className="hidden md:block flex-1" />
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Team Section */}
-      <section className="py-24 bg-gray-50 dark:bg-[#020D26]">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-black text-[#00143C] dark:text-white mb-6">
-              The <span className="text-[#FFC800]">Visionary</span>
-            </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-              Behind every great mission is a dedicated leadership driving innovation
-            </p>
-          </div>
-
-          <div className="max-w-4xl mx-auto">
-            {team.map((member, index) => (
+          <div className="relative space-y-12 max-w-4xl mx-auto">
+            <div
+              className="absolute left-1/2 top-0 bottom-0 w-0.5 hidden md:block"
+              style={{ background: `linear-gradient(to bottom, var(--product-secondary), var(--product-primary))` }}
+            />
+            {milestones.map((m, i) => (
               <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
+                transition={{ delay: i * 0.15 }}
+                className={`flex flex-col md:flex-row items-center gap-6 ${i % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
               >
-                <Card variant="premium" className="overflow-hidden p-0 border-none group">
-                  <div className="grid md:grid-cols-5 items-stretch">
-                    <div className="md:col-span-2 bg-gradient-to-br from-[#00143C] to-[#0A1F4F] flex items-center justify-center p-12 relative overflow-hidden">
-                      <div className="text-9xl z-10 filter drop-shadow-2xl transform group-hover:scale-110 transition-transform duration-500">{member.image}</div>
-                      <div className="absolute top-0 left-0 w-full h-full bg-[#FFC800]/5 animate-pulse" />
-                    </div>
-                    <div className="md:col-span-3 p-12 flex flex-col justify-center bg-white/5 backdrop-blur-3xl">
-                      <StatusBadge variant="premium" className="mb-4">LEADERSHIP</StatusBadge>
-                      <h3 className="text-4xl font-black text-white mb-2">{member.name}</h3>
-                      <p className="text-xl text-[#FFC800] font-bold mb-8 uppercase tracking-widest">{member.role}</p>
-                      <p className="text-lg text-gray-300 mb-10 leading-relaxed italic">"{member.bio}"</p>
-                      <div className="flex gap-4">
-                        <Button
-                          variant="outline"
-                          className="px-6 border-white/20 text-white hover:bg-white/10"
-                          onClick={() => window.open(member.linkedin, '_blank')}
-                        >
-                          <Linkedin className="w-5 h-5 mr-2" />
-                          Connect
-                        </Button>
-                        <Button
-                          variant="outline"
-                          className="px-6 border-white/20 text-white hover:bg-white/10"
-                          onClick={() => window.open(member.twitter, '_blank')}
-                        >
-                          <Twitter className="w-5 h-5 mr-2" />
-                          Follow
-                        </Button>
-                      </div>
-                    </div>
+                <div className="flex-1">
+                  <div
+                    className="rounded-2xl p-6 border-2"
+                    style={{ backgroundColor: 'var(--product-muted)', borderColor: 'var(--product-muted)' }}
+                  >
+                    <span
+                      className="text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full mb-3 inline-block"
+                      style={{ backgroundColor: `${BOLDMIND_COLOR_SCHEMES['boldmind-hub']?.secondary ?? '#E9A825'}20`, color: BOLDMIND_COLOR_SCHEMES['boldmind-hub']?.secondary ?? '#E9A825' }}
+                    >
+                      {m.year}
+                    </span>
+                    <h4 className="font-bold" style={{ color: 'var(--product-foreground)' }}>{m.event}</h4>
                   </div>
-                </Card>
+                </div>
+                <div
+                  className="relative z-10 w-14 h-14 rounded-full flex items-center justify-center shadow-xl flex-shrink-0"
+                  style={{ background: `linear-gradient(135deg, var(--product-secondary), var(--product-primary))` }}
+                >
+                  <m.icon className="w-7 h-7 text-white" />
+                </div>
+                <div className="hidden md:block flex-1" />
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-32 bg-[#00143C] text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#FFC800]/10 rounded-full blur-[120px] -mr-64 -mt-64" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] -ml-64 -mb-64" />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <h2 className="text-5xl md:text-7xl font-black mb-8 leading-tight">
-              Crafting the <span className="text-[#FFC800]">Future</span> <br className="hidden md:block" /> of African Tech
+      {/* Team */}
+      <section className="py-24" style={{ backgroundColor: 'var(--product-muted)' }}>
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-black mb-6" style={{ color: 'var(--product-foreground)' }}>
+              The <span style={{ color: 'var(--product-primary)' }}>Visionary</span>
             </h2>
-            <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-16 font-light leading-relaxed">
-              Join the movement that's transforming how business is done in Nigeria and across Africa.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-8 justify-center items-center">
-              <Button
-                size="lg"
-                className="px-12 py-8 text-xl bg-[#FFC800] text-[#00143C] hover:bg-[#E5B600] font-black group"
-                onClick={() => window.open('https://wa.me/2349138349271', '_blank')}
-              >
-                Join Our WhatsApp Community
-                <ExternalLink className="ml-3 w-6 h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="px-12 py-8 text-xl border-white/20 text-white hover:bg-white/5 font-bold"
-                onClick={() => window.location.href = '/products'}
-              >
-                See All 31+ Products
-              </Button>
+          </div>
+          <motion.div initial={{ opacity: 0, scale: 0.97 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}>
+            <div
+              className="rounded-3xl overflow-hidden border-2"
+              style={{ backgroundColor: 'var(--product-background)', borderColor: 'var(--product-muted)' }}
+            >
+              <div className="grid md:grid-cols-5">
+                <div
+                  className="md:col-span-2 flex items-center justify-center p-12 relative overflow-hidden"
+                  style={{ background: 'linear-gradient(135deg, var(--product-primary), color-mix(in srgb, var(--product-primary) 70%, black))' }}
+                >
+                  <span className="text-9xl filter drop-shadow-2xl">👨‍💼</span>
+                </div>
+                <div className="md:col-span-3 p-10 flex flex-col justify-center">
+                  <span
+                    className="text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-full mb-4 inline-block"
+                    style={{ backgroundColor: 'var(--product-highlight)', color: 'var(--product-primary)' }}
+                  >
+                    FOUNDER & CEO
+                  </span>
+                  <h3 className="text-3xl font-black mb-2" style={{ color: 'var(--product-foreground)' }}>
+                    Charles Uche Chijuka
+                  </h3>
+                  <p className="text-base font-bold mb-6 uppercase tracking-widest" style={{ color: 'var(--product-primary)' }}>
+                    Founder & CEO
+                  </p>
+                  <p className="text-lg mb-8 leading-relaxed italic" style={{ color: 'var(--product-foreground)', opacity: 0.75 }}>
+                    "Visionary entrepreneur building technology solutions for Africa.
+                    Dedicated to bridging the digital divide and empowering the next generation
+                    of Nigerian entrepreneurs."
+                  </p>
+                  <div className="flex gap-3">
+                    <a
+                      href="https://linkedin.com/in/charliedotcom"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 text-sm font-bold transition-all hover:opacity-80"
+                      style={{ borderColor: 'var(--product-muted)', color: 'var(--product-foreground)' }}
+                    >
+                      <Linkedin size={16} /> LinkedIn
+                    </a>
+                    <a
+                      href="https://twitter.com/charlesuchech"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 text-sm font-bold transition-all hover:opacity-80"
+                      style={{ borderColor: 'var(--product-muted)', color: 'var(--product-foreground)' }}
+                    >
+                      <Twitter size={16} /> Twitter
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      <SuperFooter
-        logoSrc="/logo.png"
-        sections={footerSections}
-        contactInfo={{
-          email: 'hello@boldmind.ng',
-          phone: '+2349138349271',
-          whatsapp: '+2349138349271',
-          address: 'No 5 Olusoji imole str ikosi ketu Lagos Nigeria',
-        }}
-        copyright={`© ${new Date().getFullYear()} BoldMind Technology Solution Enterprise. All rights reserved.`}
-      />
+      {/* CTA */}
+      <section
+        className="py-28 text-center relative overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, var(--product-primary), color-mix(in srgb, var(--product-primary) 70%, black))' }}
+      >
+        <div className="relative z-10 max-w-4xl mx-auto px-6">
+          <h2 className="text-4xl md:text-6xl font-black text-white mb-8">
+            Crafting the <span style={{ color: 'var(--product-secondary)' }}>Future</span><br />of African Tech
+          </h2>
+          <p className="text-xl text-white/60 max-w-2xl mx-auto mb-12">
+            Join the movement transforming how business is done in Nigeria and across Africa.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <a
+              href="https://wa.me/2349138349271"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-10 py-4 rounded-xl font-bold text-base transition-all hover:opacity-90"
+              style={{ backgroundColor: 'var(--product-secondary)', color: 'var(--product-foreground)' }}
+            >
+              Join WhatsApp Community <ExternalLink size={16} />
+            </a>
+            <Link
+              href="/products"
+              className="inline-flex items-center gap-2 px-10 py-4 rounded-xl font-bold text-base border-2 text-white transition-all hover:bg-white/10"
+              style={{ borderColor: 'rgba(255,255,255,0.3)' }}
+            >
+              See All Products
+            </Link>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
+
+// Local import needed for color access in JSX
+import { BOLDMIND_COLOR_SCHEMES } from '@boldmind/utils';

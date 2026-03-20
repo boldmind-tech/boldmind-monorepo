@@ -1,15 +1,15 @@
 // APPS/WEB_APPS/amebogist/app/category/[slug]/page.tsx
 import Link from "next/link";
-import { amebogistAPI } from "../../../lib/api";
+import { amebogistAPI } from "../../../../lib/api";
 
 // Components
-import PostCard from "../../../components/PostCard";
+import PostCard from "../../../../components/PostCard";
 import { SuperNavbar, SuperFooter } from "@boldmind/ui";
 import { TrendingUp, Brain, Users, ChevronRight } from "lucide-react";
-import { Button } from "../../../components/ui/button";
+import { Button } from "../../../../components/ui/button";
 
 // Types
-import type { AmebogistCategory } from "../../../types/index";
+import type { AmebogistCategory } from "../../../../types/index";
 
 export const revalidate = 60;
 
@@ -32,7 +32,7 @@ async function fetchPosts(params: any = {}) {
         const total = response.meta?.total || articles.length;
 
         return {
-            posts: articles.map((post) => ({
+            posts: articles.map((post: any) => ({
                 _id: post._id,
                 title: post.title,
                 excerpt: post.excerpt || (typeof post.content === 'string' ? post.content.substring(0, 160) : post.content.pidgin.substring(0, 160)) + "...",
@@ -62,7 +62,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
         amebogistAPI.articles.getTrending(5)
     ]);
 
-    const categoryObject = categories.find(c => c.slug === slug);
+    const categoryObject = categories.find((c: any) => c.slug === slug);
     const categoryName = categoryObject?.name || slug.charAt(0).toUpperCase() + slug.slice(1);
     const { posts } = postsData;
     const trendingPosts = (trendingPostsRes.data || []).map((p: any) => ({
@@ -74,7 +74,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
 
     const navLinks = [
         { href: "/", label: "Home" },
-        ...categories.map((cat) => ({
+        ...categories.map((cat:any) => ({
             href: `/category/${cat.slug}`,
             label: cat.name,
         })),
@@ -85,7 +85,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             title: "Navigation",
             links: [
                 { href: "/", label: "Home" },
-                ...categories.map((cat) => ({
+                ...categories.map((cat:any) => ({
                     href: `/category/${cat.slug}`,
                     label: cat.name,
                 })),
@@ -132,7 +132,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                     <div className="lg:col-span-8">
                         {posts.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                {posts.map((post) => (
+                                {posts.map((post: any) => (
                                     <PostCard key={post._id} post={post} />
                                 ))}
                             </div>
@@ -156,7 +156,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                                 Trending Now
                             </h3>
                             <div className="space-y-6">
-                                {trendingPosts.map((post, idx) => (
+                                {trendingPosts.map((post: any, idx: number) => (
                                     <Link key={post._id} href={`/posts/${post.slug}`} className="flex items-start gap-4 group">
                                         <span className="text-2xl font-black text-gray-100 group-hover:text-amebogreen-500/20 transition-colors">0{idx + 1}</span>
                                         <div>
