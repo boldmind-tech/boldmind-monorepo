@@ -3,7 +3,6 @@ import { defineConfig } from 'tsdown';
 export default defineConfig({
   entry: {
     index:  'src/index.ts',   // React AuthProvider, useAuth, SSO helpers
-    server: 'src/server.ts',  // Edge middleware guard (no React imports)
   },
   format: ['cjs', 'esm'],
   dts: true,
