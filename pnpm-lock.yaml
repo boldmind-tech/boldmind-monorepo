@@ -67,9 +67,18 @@ importers:
       '@boldmind/utils':
         specifier: workspace:*
         version: link:../../packages/utils
+      clsx:
+        specifier: ^2.0.0
+        version: 2.1.1
       cookie:
         specifier: ^1.1.1
         version: 1.1.1
+      framer-motion:
+        specifier: ^12.34.3
+        version: 12.36.0(@emotion/is-prop-valid@1.4.0)(react-dom@18.3.1)(react@18.3.1)
+      lucide-react:
+        specifier: ^0.577.0
+        version: 0.577.0(react@18.3.1)
       next:
         specifier: 14.2.35
         version: 14.2.35(react-dom@18.3.1)(react@18.3.1)
@@ -79,6 +88,9 @@ importers:
       react-dom:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
+      sonner:
+        specifier: ^2.0.3
+        version: 2.0.7(react-dom@18.3.1)(react@18.3.1)
     devDependencies:
       '@types/cookie':
         specifier: ^1.0.0
@@ -11832,6 +11844,17 @@ packages:
 
   /lucide-react@0.563.0(react@18.3.1):
     resolution: {integrity: sha512-8dXPB2GI4dI8jV4MgUDGBeLdGk8ekfqVZ0BdLcrRzocGgG75ltNEmWS+gE7uokKF/0oSUuczNDT+g9hFJ23FkA==}
+    peerDependencies:
+      react: 18.3.1
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      react: 18.3.1
+    dev: false
+
+  /lucide-react@0.577.0(react@18.3.1):
+    resolution: {integrity: sha512-4LjoFv2eEPwYDPg/CUdBJQSDfPyzXCRrVW1X7jrx/trgxnxkHFjnVZINbzvzxjN70dxychOfg+FTYwBiS3pQ5A==}
     peerDependencies:
       react: 18.3.1
     peerDependenciesMeta:

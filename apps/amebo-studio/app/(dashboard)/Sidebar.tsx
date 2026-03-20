@@ -1,5 +1,6 @@
 'use client';
  
+import type { MouseEvent } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
@@ -25,13 +26,13 @@ interface StudioSidebarProps { open?: boolean; onClose?: () => void; }
 export function StudioSidebar({ open = false, onClose }: StudioSidebarProps) {
   const pathname = usePathname();
   const router   = useRouter();
-  const { user, signOut } = useAuth();
+  const { user, logout } = useAuth();
  
   const initials = [(user as any)?.firstName?.[0], (user as any)?.lastName?.[0]]
     .filter(Boolean).join('').toUpperCase() || user?.email?.[0]?.toUpperCase() || 'C';
  
   const handleSignOut = async () => {
-    try { await signOut(); router.push('/'); }
+    try { await logout(); router.push('/'); }
     catch { toast.error('Sign out failed'); }
   };
  
@@ -67,8 +68,8 @@ export function StudioSidebar({ open = false, onClose }: StudioSidebarProps) {
             <Link key={item.href} href={item.href} onClick={onClose}
               className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
               style={{ backgroundColor: isActive ? 'var(--product-highlight)' : undefined, color: isActive ? 'var(--product-primary)' : 'var(--product-foreground)', opacity: isActive ? 1 : 0.65 }}
-              onMouseEnter={e => { if (!isActive) { (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--product-muted)'; (e.currentTarget as HTMLElement).style.opacity = '1'; } }}
-              onMouseLeave={e => { if (!isActive) { (e.currentTarget as HTMLElement).style.backgroundColor = ''; (e.currentTarget as HTMLElement).style.opacity = '0.65'; } }}
+              onMouseEnter={(e: { currentTarget: HTMLElement; }) => { if (!isActive) { (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--product-muted)'; (e.currentTarget as HTMLElement).style.opacity = '1'; } }}
+              onMouseLeave={(e: { currentTarget: HTMLElement; }) => { if (!isActive) { (e.currentTarget as HTMLElement).style.backgroundColor = ''; (e.currentTarget as HTMLElement).style.opacity = '0.65'; } }}
             >
               <item.icon size={17} />
               {item.label}

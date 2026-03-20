@@ -54,7 +54,7 @@ export default function AdminUsersPage() {
       setLoading(true);
       // Switching to hubAPI.team.list() which maps to /hub/team
       const response = await hubAPI.team.list();
-      setUsers(response);
+      setUsers(response as AdminUser[]);
     } catch (error) {
       console.error('Failed to fetch users:', error);
     } finally {

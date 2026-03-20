@@ -34,11 +34,11 @@ interface DashboardSidebarProps {
 export function DashboardSidebar({ open = false, onClose }: DashboardSidebarProps) {
   const pathname = usePathname();
   const router   = useRouter();
-  const { user, signOut } = useAuth();
+  const { user, logout } = useAuth();
  
   const handleSignOut = async () => {
     try {
-      await signOut();
+      await logout();
       toast.success('Signed out successfully');
       router.push('/login');
     } catch {
