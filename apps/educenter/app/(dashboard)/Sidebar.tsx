@@ -2,14 +2,16 @@
  
 import Link from 'next/link';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useAuth } from '@boldmind/auth';
+import { authApi, useAuth } from '@boldmind/auth';
 import { cn } from '@boldmind/ui';
 import { toast } from 'sonner';
 import {
   LayoutDashboard, BookOpen, Target, BarChart3,
   GraduationCap, Trophy, Brain, Settings, X, LogOut,
 } from 'lucide-react';
+import type { AuthUser, TokenPair } from '@boldmind/auth';
  
 const NAV = [
   { href: '/dashboard',             label: 'Overview',   icon: LayoutDashboard, badge: null     },
@@ -28,14 +30,65 @@ interface StudentSidebarProps { open?: boolean; onClose?: () => void; }
 export function StudentSidebar({ open = false, onClose }: StudentSidebarProps) {
   const pathname = usePathname();
   const router   = useRouter();
-  const { user, signOut } = useAuth();
+//   const { user } = useAuth();
  
-  const initials = [(user as any)?.firstName?.[0], (user as any)?.lastName?.[0]]
-    .filter(Boolean).join('').toUpperCase() || user?.email?.[0]?.toUpperCase() || 'S';
- 
+ const [user, setUser] = useState<AuthUser | null>(null);
+  const [tokens, setTokens] = useState<TokenPair | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // ─── Load user + tokens ────────────────────────────────────
+  useEffect(() => {
+    const stored = localStorage.getItem('auth_tokens');
+
+    if (!stored) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const parsed: TokenPair = JSON.parse(stored);
+      setTokens(parsed);
+
+      authApi.getMe(parsed.accessToken)
+        .then(setUser)
+        .catch(() => {
+          setUser(null);
+          localStorage.removeItem('auth_tokens');
+        })
+        .finally(() => setLoading(false));
+
+    } catch {
+      localStorage.removeItem('auth_tokens');
+      setLoading(false);
+    }
+  }, []);
+
+  // ─── Derived values ────────────────────────────────────────
+  const initials =
+    user
+      ? [user.name?.[0]]
+          .filter(Boolean)
+          .join('')
+          .toUpperCase()
+      : 'S';
+
+  const displayName =
+    user?.name ||
+    user?.email?.split('@')[0] ||
+    'Student';
+
+  // ─── Logout ───────────────────────────────────────────────
   const handleSignOut = async () => {
-    try { await signOut(); router.push('/'); }
-    catch { toast.error('Sign out failed'); }
+    try {
+      if (tokens?.refreshToken) {
+        await authApi.logout(tokens.refreshToken);
+      }
+
+      localStorage.removeItem('auth_tokens');
+      router.push('/');
+    } catch {
+      toast.error('Sign out failed');
+    }
   };
  
   return (
@@ -68,8 +121,8 @@ export function StudentSidebar({ open = false, onClose }: StudentSidebarProps) {
             <Link key={item.href} href={item.href} onClick={onClose}
               className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
               style={{ backgroundColor: isActive ? 'var(--product-highlight)' : undefined, color: isActive ? 'var(--product-primary)' : 'var(--product-foreground)', opacity: isActive ? 1 : 0.65 }}
-              onMouseEnter={e => { if (!isActive) { (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--product-muted)'; (e.currentTarget as HTMLElement).style.opacity = '1'; } }}
-              onMouseLeave={e => { if (!isActive) { (e.currentTarget as HTMLElement).style.backgroundColor = ''; (e.currentTarget as HTMLElement).style.opacity = '0.65'; } }}
+              onMouseEnter={(e: { currentTarget: HTMLElement; }) => { if (!isActive) { (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--product-muted)'; (e.currentTarget as HTMLElement).style.opacity = '1'; } }}
+              onMouseLeave={(e: { currentTarget: HTMLElement; }) => { if (!isActive) { (e.currentTarget as HTMLElement).style.backgroundColor = ''; (e.currentTarget as HTMLElement).style.opacity = '0.65'; } }}
             >
               <item.icon size={17} />
               <span className="flex-1">{item.label}</span>

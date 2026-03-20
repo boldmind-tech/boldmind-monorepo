@@ -19,6 +19,8 @@ export type {
 
 // API client (can be used directly for custom flows)
 export { authApi, AuthApiError } from './api';
+export { useAuth } from './client/use-auth';
+
 
 // Token utilities
 export {

@@ -80,8 +80,8 @@ export default async function FitDashboardPage() {
           <Link key={q.href} href={q.href}
             className="flex items-center gap-3 p-4 rounded-xl border-2 transition-all hover:shadow-sm"
             style={{ borderColor: 'var(--product-muted)', backgroundColor: 'var(--product-background)' }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = 'var(--product-primary)'}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = 'var(--product-muted)'}>
+            onMouseEnter={(e: { currentTarget: HTMLElement; }) => (e.currentTarget as HTMLElement).style.borderColor = 'var(--product-primary)'}
+            onMouseLeave={(e: { currentTarget: HTMLElement; }) => (e.currentTarget as HTMLElement).style.borderColor = 'var(--product-muted)'}>
             <span className="text-2xl">{q.emoji}</span>
             <div>
               <p className="font-bold text-sm" style={{ color: 'var(--product-foreground)' }}>{q.label}</p>
