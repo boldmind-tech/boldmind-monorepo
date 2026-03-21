@@ -23,9 +23,9 @@
     "dist/**"
   ],
   "scripts": {
-    "build": "rimraf dist && tsdown",
+    "build": "rm -rf dist && tsdown",
     "dev": "tsdown --watch",
-    "clean": "rimraf dist node_modules",
+    "clean": "rm -rf dist node_modules",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
