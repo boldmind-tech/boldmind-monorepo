@@ -1,4 +1,4 @@
-// APPS/WEB_APPS/boldmind-hub/src/app/admin/users/page.tsx
+// apps/boldmind-hub/app/admin/users/page.tsx
 'use client';
 
 import { useState, useEffect } from 'react';

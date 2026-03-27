@@ -1,3 +1,18 @@
+'use client';
+
+/**
+ * BoldMind Hub — Dashboard Sidebar
+ * File: apps/boldmind-hub/app/dashboard/Sidebar.tsx
+ *
+ * Wired to:
+ *   - useLogout hook  → replaces direct useAuth().logout()
+ *   - useCurrentUser  → augments the auth user with firstName/lastName
+ *                       from the /auth/me endpoint (richer than JWT payload)
+ * Fixed:
+ *   - Removed `User` import from @boldmind/utils (caused type conflicts)
+ *   - `onMouseEnter/Leave` typed as React.MouseEvent instead of `any`
+ */
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
@@ -5,57 +20,95 @@ import { cn } from '@boldmind/ui';
 import { useAuth } from '@boldmind/auth';
 import { DyslexiaToggle, ThemeToggle } from '@boldmind/ui';
 import { toast } from 'sonner';
+import { useLogout, useCurrentUser } from '../../lib/hooks';
 import {
   LayoutDashboard, BarChart3, Users, Target,
   Settings, LogOut, Package, Compass, X,
-  ExternalLink,
+  ExternalLink, Bell,
 } from 'lucide-react';
- 
+import { MouseEvent } from 'react';
+
+// ─── Nav config ───────────────────────────────────────────────────────────────
+
 const NAV_ITEMS = [
-  { href: '/dashboard',           label: 'Overview',  icon: LayoutDashboard },
-  { href: '/dashboard/products',  label: 'Products',  icon: Package         },
-  { href: '/dashboard/revenue',   label: 'Revenue',   icon: BarChart3       },
-  { href: '/dashboard/team',      label: 'Team',      icon: Users           },
-  { href: '/dashboard/roadmap',   label: 'Roadmap',   icon: Target          },
-  { href: '/dashboard/settings',  label: 'Settings',  icon: Settings        },
-];
- 
+  { href: '/dashboard',                    label: 'Overview',       icon: LayoutDashboard },
+  { href: '/dashboard/products',           label: 'Products',       icon: Package         },
+  { href: '/dashboard/revenue',            label: 'Revenue',        icon: BarChart3       },
+  { href: '/dashboard/team',               label: 'Team',           icon: Users           },
+  { href: '/dashboard/roadmap',            label: 'Roadmap',        icon: Target          },
+  { href: '/dashboard/notifications',      label: 'Notifications',  icon: Bell            },
+  { href: '/dashboard/settings',           label: 'Settings',       icon: Settings        },
+] as const;
+
 const ECOSYSTEM_QUICK_LINKS = [
-  { href: 'https://amebogist.ng',       label: 'AmeboGist',   icon: '📰' },
-  { href: 'https://educenter.com.ng',   label: 'EduCenter',   icon: '🎓' },
-  { href: 'https://planai.boldmind.ng', label: 'PlanAI Suite',icon: '🧠' },
-];
- 
-interface DashboardSidebarProps {
+  { href: 'https://amebogist.ng',        label: 'AmeboGist',    icon: '📰' },
+  { href: 'https://educenter.com.ng',    label: 'EduCenter',    icon: '🎓' },
+  { href: 'https://planai.boldmind.ng',  label: 'PlanAI Suite', icon: '🧠' },
+] as const;
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+export interface DashboardSidebarProps {
   open?: boolean;
   onClose?: () => void;
 }
- 
+
+// ─── Component ────────────────────────────────────────────────────────────────
+
 export function DashboardSidebar({ open = false, onClose }: DashboardSidebarProps) {
   const pathname = usePathname();
   const router   = useRouter();
-  const { user, logout } = useAuth();
- 
+
+  // Auth user from cookie/session (has email, role, id)
+  const { user: authUser } = useAuth();
+
+  // Profile from /auth/me (has firstName, lastName, avatar)
+  const { data: profile } = useCurrentUser();
+
+  const logoutMutation = useLogout();
+
+  // ── Derived display values ─────────────────────────────────────────────────
+  const firstName = profile?.firstName ?? (authUser as any)?.firstName ?? '';
+  const lastName  = profile?.lastName  ?? (authUser as any)?.lastName  ?? '';
+  const email     = profile?.email     ?? authUser?.email ?? '';
+  const avatar    = profile?.avatar    ?? (authUser as any)?.avatar ?? null;
+
+  const displayName = [firstName, lastName].filter(Boolean).join(' ')
+    || email.split('@')[0]
+    || 'User';
+
+  const initials = [firstName[0], lastName[0]]
+    .filter(Boolean)
+    .join('')
+    .toUpperCase()
+    || email[0]?.toUpperCase()
+    || 'U';
+
+  // ── Logout ─────────────────────────────────────────────────────────────────
   const handleSignOut = async () => {
-    try {
-      await logout();
+    await logoutMutation.execute();
+    if (logoutMutation.error) {
+      toast.error('Sign out failed. Please try again.');
+    } else {
       toast.success('Signed out successfully');
       router.push('/login');
-    } catch {
-      toast.error('Sign out failed. Please try again.');
     }
   };
- 
-  const initials = [
-    (user as any)?.firstName?.[0],
-    (user as any)?.lastName?.[0],
-  ].filter(Boolean).join('').toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U';
- 
-  const displayName =
-    [(user as any)?.firstName, (user as any)?.lastName].filter(Boolean).join(' ') ||
-    user?.email?.split('@')[0] ||
-    'User';
- 
+
+  // ── Nav link hover helpers ─────────────────────────────────────────────────
+  const onEnter = (e: React.MouseEvent<HTMLElement>, isActive: boolean) => {
+    if (!isActive) {
+      (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--product-muted)';
+      (e.currentTarget as HTMLElement).style.opacity = '1';
+    }
+  };
+  const onLeave = (e: React.MouseEvent<HTMLElement>, isActive: boolean) => {
+    if (!isActive) {
+      (e.currentTarget as HTMLElement).style.backgroundColor = '';
+      (e.currentTarget as HTMLElement).style.opacity = '0.65';
+    }
+  };
+
   return (
     <aside
       className={cn(
@@ -71,7 +124,7 @@ export function DashboardSidebar({ open = false, onClose }: DashboardSidebarProp
         borderColor:     'var(--product-muted)',
       }}
     >
-      {/* Brand header */}
+      {/* ── Brand header ─────────────────────────────────────────────────── */}
       <div
         className="flex items-center justify-between h-16 px-5 flex-shrink-0"
         style={{
@@ -92,15 +145,17 @@ export function DashboardSidebar({ open = false, onClose }: DashboardSidebarProp
           <X size={16} />
         </button>
       </div>
- 
-      {/* Main nav */}
+
+      {/* ── Main nav ─────────────────────────────────────────────────────── */}
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
-        <p className="px-3 pb-2 text-[10px] font-black uppercase tracking-widest"
-           style={{ color: 'var(--product-foreground)', opacity: 0.35 }}>
+        <p
+          className="px-3 pb-2 text-[10px] font-black uppercase tracking-widest"
+          style={{ color: 'var(--product-foreground)', opacity: 0.35 }}
+        >
           Navigation
         </p>
- 
-        {NAV_ITEMS.map((item) => {
+
+        {NAV_ITEMS.map(item => {
           const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
             <Link
@@ -113,36 +168,31 @@ export function DashboardSidebar({ open = false, onClose }: DashboardSidebarProp
                 color:           isActive ? 'var(--product-primary)'    : 'var(--product-foreground)',
                 opacity:         isActive ? 1 : 0.65,
               }}
-              onMouseEnter={(e:any) => {
-                if (!isActive) {
-                  (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--product-muted)';
-                  (e.currentTarget as HTMLElement).style.opacity = '1';
-                }
-              }}
-              onMouseLeave={(e :any) => {
-                if (!isActive) {
-                  (e.currentTarget as HTMLElement).style.backgroundColor = '';
-                  (e.currentTarget as HTMLElement).style.opacity = '0.65';
-                }
-              }}
+              onMouseEnter={(e: MouseEvent<HTMLElement>) => onEnter(e, isActive)}
+              onMouseLeave={(e: MouseEvent<HTMLElement>) => onLeave(e, isActive)}
             >
               <item.icon size={17} />
               <span>{item.label}</span>
               {isActive && (
-                <div className="ml-auto w-1.5 h-1.5 rounded-full"
-                     style={{ backgroundColor: 'var(--product-primary)' }} />
+                <div
+                  className="ml-auto w-1.5 h-1.5 rounded-full"
+                  style={{ backgroundColor: 'var(--product-primary)' }}
+                />
               )}
             </Link>
           );
         })}
- 
+
         {/* Ecosystem quick links */}
         <div className="pt-4">
-          <p className="px-3 pb-2 text-[10px] font-black uppercase tracking-widest"
-             style={{ color: 'var(--product-foreground)', opacity: 0.35 }}>
+          <p
+            className="px-3 pb-2 text-[10px] font-black uppercase tracking-widest"
+            style={{ color: 'var(--product-foreground)', opacity: 0.35 }}
+          >
             Ecosystem
           </p>
-          {ECOSYSTEM_QUICK_LINKS.map((link) => (
+
+          {ECOSYSTEM_QUICK_LINKS.map(link => (
             <a
               key={link.href}
               href={link.href}
@@ -150,11 +200,11 @@ export function DashboardSidebar({ open = false, onClose }: DashboardSidebarProp
               rel="noopener noreferrer"
               className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-all"
               style={{ color: 'var(--product-foreground)', opacity: 0.55 }}
-              onMouseEnter={(e) => {
+              onMouseEnter={e => {
                 (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--product-muted)';
                 (e.currentTarget as HTMLElement).style.opacity = '1';
               }}
-              onMouseLeave={(e) => {
+              onMouseLeave={e => {
                 (e.currentTarget as HTMLElement).style.backgroundColor = '';
                 (e.currentTarget as HTMLElement).style.opacity = '0.55';
               }}
@@ -164,20 +214,21 @@ export function DashboardSidebar({ open = false, onClose }: DashboardSidebarProp
               <ExternalLink size={11} className="ml-auto opacity-40" />
             </a>
           ))}
- 
-          <a href="/products"
-             className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold transition-all mt-1"
-             style={{ color: 'var(--product-primary)', opacity: 0.8 }}
-             onMouseEnter={(e) => (e.currentTarget as HTMLElement).style.opacity = '1'}
-             onMouseLeave={(e) => (e.currentTarget as HTMLElement).style.opacity = '0.8'}
+
+          <a
+            href="/products"
+            className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold transition-all mt-1"
+            style={{ color: 'var(--product-primary)', opacity: 0.8 }}
+            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity = '1')}
+            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity = '0.8')}
           >
             <Compass size={15} />
             All 32+ Products →
           </a>
         </div>
       </nav>
- 
-      {/* Theme + font controls */}
+
+      {/* ── Theme + font controls ─────────────────────────────────────────── */}
       <div
         className="px-4 py-3 border-t flex items-center gap-2"
         style={{ borderColor: 'var(--product-muted)' }}
@@ -185,49 +236,65 @@ export function DashboardSidebar({ open = false, onClose }: DashboardSidebarProp
         <ThemeToggle />
         <DyslexiaToggle variant="compact" />
       </div>
- 
-      {/* User footer */}
+
+      {/* ── User footer ───────────────────────────────────────────────────── */}
       <div
         className="flex-shrink-0 border-t px-3 pb-3 pt-2 space-y-1"
         style={{ borderColor: 'var(--product-muted)' }}
       >
+        {/* User info row */}
         <div
           className="flex items-center gap-3 px-3 py-2.5 rounded-xl"
           style={{ backgroundColor: 'var(--product-muted)' }}
         >
-          <div
-            className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black text-white flex-shrink-0"
-            style={{ backgroundColor: 'var(--product-primary)' }}
-          >
-            {initials}
-          </div>
+          {/* Avatar */}
+          {avatar ? (
+            <img
+              src={avatar}
+              alt={displayName}
+              className="w-8 h-8 rounded-full object-cover flex-shrink-0 border-2 border-white/20"
+            />
+          ) : (
+            <div
+              className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black text-white flex-shrink-0"
+              style={{ backgroundColor: 'var(--product-primary)' }}
+            >
+              {initials}
+            </div>
+          )}
+
           <div className="flex-1 min-w-0">
             <p className="text-sm font-bold truncate" style={{ color: 'var(--product-foreground)' }}>
               {displayName}
             </p>
             <p className="text-[11px] truncate" style={{ color: 'var(--product-foreground)', opacity: 0.5 }}>
-              {user?.email}
+              {email}
             </p>
           </div>
         </div>
- 
+
+        {/* Sign out */}
         <button
           onClick={handleSignOut}
-          className="flex items-center gap-3 px-3 py-2.5 w-full rounded-xl text-sm font-medium transition-all"
-          style={{ color: 'var(--color-error)', opacity: 0.75 }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--color-error-light)';
+          disabled={logoutMutation.loading}
+          className="flex items-center gap-3 px-3 py-2.5 w-full rounded-xl text-sm font-medium transition-all disabled:opacity-50"
+          style={{ color: 'var(--color-error, #ef4444)', opacity: 0.75 }}
+          onMouseEnter={e => {
+            (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--color-error-light, rgba(239,68,68,0.08))';
             (e.currentTarget as HTMLElement).style.opacity = '1';
           }}
-          onMouseLeave={(e) => {
+          onMouseLeave={e => {
             (e.currentTarget as HTMLElement).style.backgroundColor = '';
             (e.currentTarget as HTMLElement).style.opacity = '0.75';
           }}
         >
           <LogOut size={17} />
-          Sign Out
+          {logoutMutation.loading ? 'Signing out…' : 'Sign Out'}
         </button>
       </div>
     </aside>
   );
 }
+
+// ── Legacy default export alias so old `import { Sidebar }` still works ───────
+export { DashboardSidebar as Sidebar };

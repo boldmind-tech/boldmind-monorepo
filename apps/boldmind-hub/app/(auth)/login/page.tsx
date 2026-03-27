@@ -4,43 +4,50 @@
  * BoldMind Hub — Centralized Login Page
  * File: apps/boldmind-hub/app/(auth)/login/page.tsx
  *
- * THE ONLY LOGIN PAGE in the whole ecosystem.
- * All sub-apps redirect here. After login, redirects back.
- *
- * Social providers: Google, Facebook, WhatsApp OTP
+ * Wired to authAPI via useLogin / useRegister / useForgotPassword hooks.
+ * Social providers: Google, Facebook, WhatsApp OTP (direct fetch — no hook needed,
+ * these are server-redirect flows, not JSON API calls).
  */
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useLogin, useRegister } from '../../../lib/hooks';
 
 type AuthMode = 'choose' | 'email' | 'whatsapp-phone' | 'whatsapp-otp';
 type Flow = 'login' | 'register';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.boldmind.ng';
-const HUB_URL = process.env.NEXT_PUBLIC_HUB_URL || 'https://boldmind.ng';
+const API_URL  = process.env.NEXT_PUBLIC_API_URL  || 'https://api.boldmind.ng';
+const HUB_URL  = process.env.NEXT_PUBLIC_HUB_URL  || 'https://boldmind.ng';
 
 export default function LoginPage() {
-  const router = useRouter();
-  const params = useSearchParams();
-  const redirectUrl = params.get('redirect') || `${HUB_URL}/dashboard`;
-  const isExternal = params.get('external') === '1';
+  const router       = useRouter();
+  const params       = useSearchParams();
+  const redirectUrl  = params.get('redirect') || `${HUB_URL}/dashboard`;
+  const isExternal   = params.get('external') === '1';
 
   const [mode, setMode] = useState<AuthMode>('choose');
   const [flow, setFlow] = useState<Flow>('login');
 
-  // Email form
-  const [email, setEmail] = useState('');
+  // ── Form state ──────────────────────────────────────────────────────────
+  const [email,    setEmail]    = useState('');
   const [password, setPassword] = useState('');
 
-  // WhatsApp OTP
-  const [phone, setPhone] = useState('');
+  // ── WhatsApp OTP state ───────────────────────────────────────────────────
+  const [phone,          setPhone]          = useState('');
   const [verificationId, setVerificationId] = useState('');
-  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [otp,            setOtp]            = useState(['', '', '', '', '', '']);
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const [otpTimer,  setOtpTimer]  = useState(0);
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpError,   setOtpError]   = useState('');
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [otpTimer, setOtpTimer] = useState(0);
+  // ── API hooks ────────────────────────────────────────────────────────────
+  const loginMutation    = useLogin();
+  const registerMutation = useRegister();
+
+  // Unified loading / error for the email flow
+  const isLoading = loginMutation.loading || registerMutation.loading;
+  const apiError  = loginMutation.error?.message || registerMutation.error?.message || '';
 
   // OTP countdown
   useEffect(() => {
@@ -49,16 +56,22 @@ export default function LoginPage() {
     return () => clearTimeout(id);
   }, [otpTimer]);
 
-  const handleRedirect = (user: { onboardingComplete: boolean }) => {
+  // Reset mutation error when switching modes
+  useEffect(() => {
+    loginMutation.reset();
+    registerMutation.reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode, flow]);
+
+  const handleRedirect = (user: { onboardingComplete?: boolean }) => {
     if (!user.onboardingComplete) {
       router.push('/onboarding');
       return;
     }
-    // For external domains, we get a redirect token from the server via cookie
     window.location.href = redirectUrl;
   };
 
-  // ─── Social logins ───────────────────────────────────────────────────────
+  // ── Social logins ────────────────────────────────────────────────────────
 
   const loginWithGoogle = () => {
     const url = new URL(`${API_URL}/auth/google`);
@@ -74,45 +87,26 @@ export default function LoginPage() {
     window.location.href = url.toString();
   };
 
-  // ─── Email auth ──────────────────────────────────────────────────────────
+  // ── Email auth ───────────────────────────────────────────────────────────
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    setIsLoading(true);
-
-    try {
-      const endpoint = flow === 'login' ? '/auth/login' : '/auth/register';
-      const res = await fetch(`${API_URL}${endpoint}`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!res.ok) {
-        const { message } = await res.json();
-        setError(message || 'Something went wrong');
-        return;
-      }
-
-      const { user } = await res.json();
-      handleRedirect(user);
-    } catch {
-      setError('Network error — please try again');
-    } finally {
-      setIsLoading(false);
+    if (flow === 'login') {
+      const user = await loginMutation.execute({ email, password });
+      if (user) handleRedirect(user as any);
+    } else {
+      const user = await registerMutation.execute({ email, password });
+      if (user) handleRedirect(user as any);
     }
   };
 
-  // ─── WhatsApp OTP ────────────────────────────────────────────────────────
+  // ── WhatsApp OTP ─────────────────────────────────────────────────────────
 
   const sendWhatsAppOTP = async () => {
     if (!phone) return;
-    setError('');
-    setIsLoading(true);
+    setOtpError('');
+    setOtpLoading(true);
 
-    // Normalize Nigerian phone
     let normalized = phone.replace(/\s/g, '');
     if (normalized.startsWith('0')) normalized = `+234${normalized.slice(1)}`;
     if (!normalized.startsWith('+')) normalized = `+234${normalized}`;
@@ -123,21 +117,19 @@ export default function LoginPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone: normalized }),
       });
-
       if (!res.ok) {
         const { message } = await res.json();
-        setError(message || 'Failed to send OTP');
+        setOtpError(message || 'Failed to send OTP');
         return;
       }
-
       const { verificationId: vid } = await res.json();
       setVerificationId(vid);
       setOtpTimer(60);
       setMode('whatsapp-otp');
     } catch {
-      setError('Failed to send OTP. Check your number.');
+      setOtpError('Failed to send OTP. Check your number.');
     } finally {
-      setIsLoading(false);
+      setOtpLoading(false);
     }
   };
 
@@ -158,9 +150,8 @@ export default function LoginPage() {
   const verifyOTP = async () => {
     const code = otp.join('');
     if (code.length !== 6) return;
-    setError('');
-    setIsLoading(true);
-
+    setOtpError('');
+    setOtpLoading(true);
     try {
       const res = await fetch(`${API_URL}/auth/whatsapp/verify-otp`, {
         method: 'POST',
@@ -168,21 +159,19 @@ export default function LoginPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ verificationId, otp: code }),
       });
-
       if (!res.ok) {
         const { message } = await res.json();
-        setError(message || 'Invalid OTP');
+        setOtpError(message || 'Invalid OTP');
         setOtp(['', '', '', '', '', '']);
         otpRefs.current[0]?.focus();
         return;
       }
-
       const { user } = await res.json();
       handleRedirect(user);
     } catch {
-      setError('Verification failed');
+      setOtpError('Verification failed');
     } finally {
-      setIsLoading(false);
+      setOtpLoading(false);
     }
   };
 
@@ -191,13 +180,14 @@ export default function LoginPage() {
     if (otp.every(d => d !== '') && mode === 'whatsapp-otp') {
       verifyOTP();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [otp]);
 
-  // ─── Render ──────────────────────────────────────────────────────────────
+  // ── Render ───────────────────────────────────────────────────────────────
 
   return (
     <div className="min-h-screen bg-[#080C14] text-white flex flex-col">
-      {/* Ambient background */}
+      {/* Ambient */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-[-10%] left-1/3 w-[700px] h-[700px] bg-amber-500/4 rounded-full blur-[150px]" />
         <div className="absolute bottom-[-10%] right-1/4 w-[500px] h-[500px] bg-blue-500/4 rounded-full blur-[120px]" />
@@ -213,11 +203,9 @@ export default function LoginPage() {
         </a>
       </div>
 
-      {/* Main card */}
+      {/* Card */}
       <div className="relative flex-1 flex items-start justify-center px-4 pt-6 pb-16">
         <div className="w-full max-w-[420px]">
-
-          {/* Card */}
           <div className="bg-white/3 border border-white/8 rounded-2xl p-8">
 
             {/* ── Choose mode ── */}
@@ -234,54 +222,36 @@ export default function LoginPage() {
                   </p>
                 </div>
 
-                {/* Social buttons */}
                 <div className="space-y-2.5 mb-6">
-                  <button
-                    onClick={loginWithGoogle}
-                    className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-white/10 bg-white/4 hover:bg-white/8 hover:border-white/20 transition-all duration-150 font-medium text-sm"
-                  >
-                    <GoogleIcon />
-                    Continue with Google
+                  <button onClick={loginWithGoogle}
+                    className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-white/10 bg-white/4 hover:bg-white/8 hover:border-white/20 transition-all font-medium text-sm">
+                    <GoogleIcon /> Continue with Google
                   </button>
-
-                  <button
-                    onClick={loginWithFacebook}
-                    className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-blue-500/30 bg-blue-500/8 hover:bg-blue-500/15 hover:border-blue-500/50 transition-all duration-150 font-medium text-sm"
-                  >
-                    <FacebookIcon />
-                    Continue with Facebook
+                  <button onClick={loginWithFacebook}
+                    className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-blue-500/30 bg-blue-500/8 hover:bg-blue-500/15 hover:border-blue-500/50 transition-all font-medium text-sm">
+                    <FacebookIcon /> Continue with Facebook
                   </button>
-
-                  <button
-                    onClick={() => setMode('whatsapp-phone')}
-                    className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-green-500/30 bg-green-500/8 hover:bg-green-500/15 hover:border-green-500/50 transition-all duration-150 font-medium text-sm"
-                  >
-                    <WhatsAppIcon />
-                    Continue with WhatsApp
+                  <button onClick={() => setMode('whatsapp-phone')}
+                    className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-green-500/30 bg-green-500/8 hover:bg-green-500/15 hover:border-green-500/50 transition-all font-medium text-sm">
+                    <WhatsAppIcon /> Continue with WhatsApp
                   </button>
                 </div>
 
-                {/* Divider */}
                 <div className="flex items-center gap-3 mb-5">
                   <div className="flex-1 h-px bg-white/8" />
                   <span className="text-white/25 text-xs">or</span>
                   <div className="flex-1 h-px bg-white/8" />
                 </div>
 
-                <button
-                  onClick={() => setMode('email')}
-                  className="w-full py-3 px-4 rounded-xl border border-white/8 bg-white/2 hover:bg-white/5 text-white/60 hover:text-white text-sm font-medium transition-all duration-150"
-                >
+                <button onClick={() => setMode('email')}
+                  className="w-full py-3 px-4 rounded-xl border border-white/8 bg-white/2 hover:bg-white/5 text-white/60 hover:text-white text-sm font-medium transition-all">
                   Continue with Email
                 </button>
 
-                {/* Toggle login/register */}
                 <p className="text-center text-white/35 text-sm mt-5">
                   {flow === 'login' ? "Don't have an account? " : 'Already have an account? '}
-                  <button
-                    onClick={() => setFlow(f => f === 'login' ? 'register' : 'login')}
-                    className="text-amber-400 hover:text-amber-300 font-medium transition-colors"
-                  >
+                  <button onClick={() => setFlow(f => f === 'login' ? 'register' : 'login')}
+                    className="text-amber-400 hover:text-amber-300 font-medium transition-colors">
                     {flow === 'login' ? 'Sign up' : 'Log in'}
                   </button>
                 </p>
@@ -291,13 +261,10 @@ export default function LoginPage() {
             {/* ── Email form ── */}
             {mode === 'email' && (
               <>
-                <button
-                  onClick={() => setMode('choose')}
-                  className="text-white/35 text-sm hover:text-white/60 transition-colors mb-5 flex items-center gap-1"
-                >
+                <button onClick={() => setMode('choose')}
+                  className="text-white/35 text-sm hover:text-white/60 transition-colors mb-5 flex items-center gap-1">
                   ← Back
                 </button>
-
                 <h2 className="text-xl font-bold mb-5">
                   {flow === 'login' ? 'Log in with email' : 'Sign up with email'}
                 </h2>
@@ -305,28 +272,16 @@ export default function LoginPage() {
                 <form onSubmit={handleEmailSubmit} className="space-y-3">
                   <div>
                     <label className="text-white/50 text-xs font-medium mb-1.5 block">Email address</label>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
-                      placeholder="you@example.com"
-                      required
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/25 focus:outline-none focus:border-amber-400/50 text-sm transition-colors"
-                    />
+                    <input type="email" value={email} onChange={e => setEmail(e.target.value)}
+                      placeholder="you@example.com" required
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/25 focus:outline-none focus:border-amber-400/50 text-sm transition-colors" />
                   </div>
-
                   <div>
                     <label className="text-white/50 text-xs font-medium mb-1.5 block">Password</label>
-                    <input
-                      type="password"
-                      value={password}
-                      onChange={e => setPassword(e.target.value)}
-                      placeholder="••••••••"
-                      required
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/25 focus:outline-none focus:border-amber-400/50 text-sm transition-colors"
-                    />
+                    <input type="password" value={password} onChange={e => setPassword(e.target.value)}
+                      placeholder="••••••••" required
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/25 focus:outline-none focus:border-amber-400/50 text-sm transition-colors" />
                   </div>
-
                   {flow === 'login' && (
                     <div className="text-right">
                       <a href="/forgot-password" className="text-white/35 text-xs hover:text-amber-400 transition-colors">
@@ -335,29 +290,24 @@ export default function LoginPage() {
                     </div>
                   )}
 
-                  {error && (
+                  {(apiError) && (
                     <p className="text-red-400 text-xs bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2">
-                      {error}
+                      {apiError}
                     </p>
                   )}
 
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className="w-full py-3 rounded-xl font-semibold bg-amber-400 text-black hover:bg-amber-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150 flex items-center justify-center gap-2 text-sm"
-                  >
-                    {isLoading ? (
-                      <span className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
-                    ) : flow === 'login' ? 'Log in' : 'Create account'}
+                  <button type="submit" disabled={isLoading}
+                    className="w-full py-3 rounded-xl font-semibold bg-amber-400 text-black hover:bg-amber-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 text-sm">
+                    {isLoading
+                      ? <span className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+                      : flow === 'login' ? 'Log in' : 'Create account'}
                   </button>
                 </form>
 
                 <p className="text-center text-white/30 text-xs mt-4">
-                  {flow === 'login' ? "No account? " : 'Have an account? '}
-                  <button
-                    onClick={() => setFlow(f => f === 'login' ? 'register' : 'login')}
-                    className="text-amber-400 hover:text-amber-300"
-                  >
+                  {flow === 'login' ? 'No account? ' : 'Have an account? '}
+                  <button onClick={() => setFlow(f => f === 'login' ? 'register' : 'login')}
+                    className="text-amber-400 hover:text-amber-300">
                     {flow === 'login' ? 'Sign up' : 'Log in'}
                   </button>
                 </p>
@@ -367,51 +317,37 @@ export default function LoginPage() {
             {/* ── WhatsApp: enter phone ── */}
             {mode === 'whatsapp-phone' && (
               <>
-                <button
-                  onClick={() => setMode('choose')}
-                  className="text-white/35 text-sm hover:text-white/60 transition-colors mb-5 flex items-center gap-1"
-                >
+                <button onClick={() => setMode('choose')}
+                  className="text-white/35 text-sm hover:text-white/60 transition-colors mb-5 flex items-center gap-1">
                   ← Back
                 </button>
-
                 <div className="flex justify-center mb-5">
                   <div className="w-14 h-14 bg-green-500/15 rounded-2xl flex items-center justify-center">
                     <WhatsAppIcon size={28} />
                   </div>
                 </div>
-
                 <h2 className="text-xl font-bold text-center mb-1.5">Enter your number</h2>
                 <p className="text-white/40 text-sm text-center mb-6">
                   We'll send a 6-digit code to your WhatsApp
                 </p>
-
                 <div className="flex gap-2 mb-4">
                   <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-3 py-3 text-sm text-white/60 whitespace-nowrap">
                     🇳🇬 +234
                   </div>
-                  <input
-                    type="tel"
-                    value={phone}
-                    onChange={e => setPhone(e.target.value)}
+                  <input type="tel" value={phone} onChange={e => setPhone(e.target.value)}
                     placeholder="08012345678"
-                    className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/25 focus:outline-none focus:border-green-400/50 text-sm transition-colors"
-                  />
+                    className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/25 focus:outline-none focus:border-green-400/50 text-sm transition-colors" />
                 </div>
-
-                {error && (
+                {otpError && (
                   <p className="text-red-400 text-xs bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2 mb-3">
-                    {error}
+                    {otpError}
                   </p>
                 )}
-
-                <button
-                  onClick={sendWhatsAppOTP}
-                  disabled={!phone || isLoading}
-                  className="w-full py-3 rounded-xl font-semibold bg-green-500 text-white hover:bg-green-400 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 flex items-center justify-center gap-2 text-sm"
-                >
-                  {isLoading ? (
-                    <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                  ) : 'Send WhatsApp Code'}
+                <button onClick={sendWhatsAppOTP} disabled={!phone || otpLoading}
+                  className="w-full py-3 rounded-xl font-semibold bg-green-500 text-white hover:bg-green-400 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 text-sm">
+                  {otpLoading
+                    ? <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                    : 'Send WhatsApp Code'}
                 </button>
               </>
             )}
@@ -425,72 +361,50 @@ export default function LoginPage() {
                   </div>
                   <h2 className="text-xl font-bold mb-1.5">Check your WhatsApp</h2>
                   <p className="text-white/40 text-sm">
-                    Sent a 6-digit code to{' '}
-                    <span className="text-white/70">{phone}</span>
+                    Sent a 6-digit code to <span className="text-white/70">{phone}</span>
                   </p>
                 </div>
-
-                {/* OTP input boxes */}
                 <div className="flex gap-2 justify-center mb-5">
                   {otp.map((digit, i) => (
-                    <input
-                      key={i}
+                    <input key={i}
                       ref={el => { otpRefs.current[i] = el; }}
-                      type="text"
-                      inputMode="numeric"
-                      maxLength={1}
-                      value={digit}
+                      type="text" inputMode="numeric" maxLength={1} value={digit}
                       onChange={e => handleOTPChange(i, e.target.value)}
                       onKeyDown={e => handleOTPKeyDown(i, e)}
-                      className={`
-                        w-11 h-14 text-center text-xl font-bold bg-white/5 border rounded-xl
-                        focus:outline-none transition-all duration-150
-                        ${digit ? 'border-amber-400/60 text-white' : 'border-white/10 text-white'}
-                        focus:border-amber-400/80
-                      `}
+                      className={`w-11 h-14 text-center text-xl font-bold bg-white/5 border rounded-xl focus:outline-none transition-all ${digit ? 'border-amber-400/60 text-white' : 'border-white/10 text-white'} focus:border-amber-400/80`}
                     />
                   ))}
                 </div>
-
-                {error && (
+                {otpError && (
                   <p className="text-red-400 text-xs bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2 mb-3 text-center">
-                    {error}
+                    {otpError}
                   </p>
                 )}
-
-                {isLoading && (
+                {otpLoading && (
                   <div className="flex justify-center mb-3">
                     <span className="w-5 h-5 border-2 border-amber-400/30 border-t-amber-400 rounded-full animate-spin" />
                   </div>
                 )}
-
                 <div className="text-center">
                   {otpTimer > 0 ? (
                     <p className="text-white/35 text-sm">
-                      Resend in{' '}
-                      <span className="text-white/60 tabular-nums">{otpTimer}s</span>
+                      Resend in <span className="text-white/60 tabular-nums">{otpTimer}s</span>
                     </p>
                   ) : (
-                    <button
-                      onClick={() => { setOtp(['','','','','','']); sendWhatsAppOTP(); }}
-                      className="text-amber-400 hover:text-amber-300 text-sm transition-colors"
-                    >
+                    <button onClick={() => { setOtp(['','','','','','']); sendWhatsAppOTP(); }}
+                      className="text-amber-400 hover:text-amber-300 text-sm transition-colors">
                       Resend code
                     </button>
                   )}
                 </div>
-
-                <button
-                  onClick={() => { setMode('whatsapp-phone'); setOtp(['','','','','','']); }}
-                  className="text-white/30 text-xs hover:text-white/50 transition-colors mt-4 w-full text-center"
-                >
+                <button onClick={() => { setMode('whatsapp-phone'); setOtp(['','','','','','']); }}
+                  className="text-white/30 text-xs hover:text-white/50 transition-colors mt-4 w-full text-center">
                   Wrong number? Change it
                 </button>
               </>
             )}
           </div>
 
-          {/* Trust footer */}
           <p className="text-center text-white/20 text-xs mt-5">
             By continuing, you agree to our{' '}
             <a href="/terms" className="text-white/35 hover:text-white/60 transition-colors">Terms</a>
@@ -498,7 +412,6 @@ export default function LoginPage() {
             <a href="/privacy" className="text-white/35 hover:text-white/60 transition-colors">Privacy Policy</a>
           </p>
 
-          {/* Show where user will be redirected */}
           {redirectUrl !== `${HUB_URL}/dashboard` && (
             <div className="mt-4 text-center">
               <p className="text-white/20 text-xs">
@@ -513,7 +426,7 @@ export default function LoginPage() {
   );
 }
 
-// ─── Icons ───────────────────────────────────────────────────────────────────
+// ─── Icons ────────────────────────────────────────────────────────────────────
 
 function GoogleIcon() {
   return (
