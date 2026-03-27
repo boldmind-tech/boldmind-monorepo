@@ -30,6 +30,7 @@ export { PricingContent } from './components/PricingContent';
 export { PrivacyPolicy } from './components/PrivacyPolicy';
 export {DyslexiaToggle } from './components/DyslexiaToggle'
 export { CookieConsent } from './components/CookieConsent';
+export { FontProvider } from './components/FontProvider';
 
 // ============================================
 // LAYOUT COMPONENTS
