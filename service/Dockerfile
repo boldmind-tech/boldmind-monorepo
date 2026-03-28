@@ -2,7 +2,11 @@
 # service/Dockerfile
 # Multi-stage build for the BoldMind NestJS monolith.
 #
-# Build context = monorepo ROOT (so we can COPY packages/)
+# Build context MUST be the monorepo root so Docker can COPY workspace packages.
+# Example:
+#   cd /path/to/boldmind-monorepo
+#   docker build -f service/Dockerfile -t boldmind-service:latest .
+#
 # This means Docker can see:
 #   ./service/          (NestJS source)
 #   ./packages/utils/   (shared workspace dep)
