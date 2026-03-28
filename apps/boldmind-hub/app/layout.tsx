@@ -10,6 +10,8 @@ import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import { BoldMindLayout } from './boldmindLayout';
 import { ErrorBoundary, CookieConsent } from '@boldmind/ui';
+import { AuthProvider } from '@boldmind/auth';
+import { userAPIAdapter } from '../lib/user-api-adapter';
 import '@boldmind/ui/dist/index.css';
 import './globals.css';
 
@@ -128,13 +130,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         {/*
           BLOCKING SCRIPT — runs synchronously before browser paints.
-          Sets data-font + data-product on <html> IMMEDIATELY.
-          This prevents Flash Of Unstyled Text (FOUT) when OpenDyslexic is active.
+          Sets data-font + data-product on <html> and applies the body font class
+          before React hydration. This prevents Flash Of Unstyled Text (FOUT)
+          and avoids body class hydration warnings when OpenDyslexic is active.
           Must be in <head> as a raw script, NOT in a React component.
         */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var f=localStorage.getItem('boldmind-font-mode')||'dyslexic';document.documentElement.setAttribute('data-font',f);document.documentElement.setAttribute('data-product','boldmind-hub');}catch(e){document.documentElement.setAttribute('data-font','dyslexic');document.documentElement.setAttribute('data-product','boldmind-hub');}})();`,
+            __html: `(function(){function applyFontClass(font){var b=document.body;if(!b)return; b.classList.remove('font-standard','font-dyslexic'); b.classList.add('font-'+font);}try{var f=localStorage.getItem('boldmind-font-mode')||'dyslexic';document.documentElement.setAttribute('data-font',f);document.documentElement.setAttribute('data-product','boldmind-hub');applyFontClass(f);if(!document.body){document.addEventListener('DOMContentLoaded',function(){applyFontClass(f);});}}catch(e){var fallback='dyslexic';document.documentElement.setAttribute('data-font',fallback);document.documentElement.setAttribute('data-product','boldmind-hub');applyFontClass(fallback);if(!document.body){document.addEventListener('DOMContentLoaded',function(){applyFontClass(fallback);});}}})();`,
           }}
         />
 
@@ -163,13 +166,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
 
-      <body className="antialiased">
+      <body className="antialiased" suppressHydrationWarning>
         <ErrorBoundary>
-          <BoldMindLayout>
-            {children}
-          </BoldMindLayout>
+          <AuthProvider>
+            <BoldMindLayout>
+              {children}
+            </BoldMindLayout>
+          </AuthProvider>
           <CookieConsent />
-        
         </ErrorBoundary>
       </body>
     </html>

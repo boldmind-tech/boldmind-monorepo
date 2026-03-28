@@ -163,28 +163,43 @@ export function ThemeProvider({
   defaultDyslexia = false,
 }: ThemeProviderProps) {
 
-  // ── State — initialised lazily from localStorage to avoid hydration mismatch
+  // ── State — initialised from server defaults, then synced on mount
+  // This avoids React hydration mismatch when the client has a different
+  // stored theme/product than the server-rendered default.
 
-  const [theme, _setTheme] = useState<Theme>(() => {
-    if (typeof window === 'undefined') return defaultTheme;
-    return (readStorage(STORAGE.THEME) as Theme | null) ?? defaultTheme;
-  });
+  const [theme, _setTheme] = useState<Theme>(defaultTheme);
 
   const [productSlug, _setProductSlug] = useState<string>(() => {
     if (forceProductSlug) return forceProductSlug;
     if (defaultProduct)   return defaultProduct.slug;
-    if (typeof window === 'undefined') return 'boldmind-hub';
-    return readStorage(STORAGE.PRODUCT) ?? detectCurrentProduct() ?? 'boldmind-hub';
+    return 'boldmind-hub';
   });
 
-  const [dyslexiaMode, _setDyslexia] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return defaultDyslexia;
-    const saved = readStorage(STORAGE.DYSLEXIA);
-    return saved !== null ? saved === 'true' : defaultDyslexia;
-  });
+  const [dyslexiaMode, _setDyslexia] = useState<boolean>(defaultDyslexia);
 
   // Track previous product slug for class cleanup
   const prevSlugRef = useRef<string>(productSlug);
+
+  useEffect(() => {
+    const storedTheme = readStorage(STORAGE.THEME) as Theme | null;
+    const storedDyslexia = readStorage(STORAGE.DYSLEXIA);
+    const storedProduct = !forceProductSlug && !defaultProduct
+      ? (readStorage(STORAGE.PRODUCT) ?? detectCurrentProduct() ?? 'boldmind-hub')
+      : undefined;
+
+    if (storedTheme && storedTheme !== theme) {
+      _setTheme(storedTheme);
+    }
+
+    if (storedProduct && storedProduct !== productSlug) {
+      _setProductSlug(storedProduct);
+    }
+
+    if (storedDyslexia !== null) {
+      _setDyslexia(storedDyslexia === 'true');
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // ── Derived values ────────────────────────────────────────────────────────
 
