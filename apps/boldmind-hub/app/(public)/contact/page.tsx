@@ -4,8 +4,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-  SuperNavbar,
-  SuperFooter,
+ 
   Card,
   Button,
   Input,
@@ -38,31 +37,9 @@ export default function ContactPage() {
     setTimeout(() => setIsSubmitted(false), 5000);
   };
 
-  const navLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/about', label: 'About' },
-    { href: '/products', label: 'Products' },
-    { href: '/contact', label: 'Contact' },
-  ];
 
-  const footerSections = [
-    {
-      title: '🚀 Products',
-      links: [
-        { href: 'https://amebogist.ng', label: 'AmeboGist', isExternal: true },
-        { href: 'https://educenter.com.ng', label: 'EduCenter', isExternal: true },
-        { href: '/products', label: 'All Products', badge: '31+' },
-      ],
-    },
-    {
-      title: '🏢 Company',
-      links: [
-        { href: '/about', label: 'About Us' },
-        { href: '/products', label: 'Products' },
-        { href: '/contact', label: 'Contact' },
-      ],
-    },
-  ];
+
+
 
   const contactMethods = [
     {
@@ -120,11 +97,7 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#000B21] transition-colors duration-500">
-      <SuperNavbar
-        links={navLinks}
-        cta={{ href: 'https://wa.me/2349138349271', label: 'WhatsApp Us' }}
-        logoSrc="/logo.png"
-      />
+     
 
       {/* Hero Section */}
       <section className="relative pt-32 pb-24 bg-[#00143C] text-white overflow-hidden">
@@ -381,17 +354,7 @@ export default function ContactPage() {
         <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#00143C 2px, transparent 2px)', backgroundSize: '40px 40px' }} />
       </section>
 
-      <SuperFooter
-        logoSrc="/logo.png"
-        sections={footerSections}
-        contactInfo={{
-          email: 'hello@boldmind.ng',
-          phone: '+2349138349271',
-          whatsapp: '+2349138349271',
-          address: 'No 5 Olusoji imole str ikosi ketu Lagos Nigeria',
-        }}
-        copyright={`© ${new Date().getFullYear()} BoldMind Technology Solution Enterprise. All rights reserved.`}
-      />
+
     </div>
   );
 }

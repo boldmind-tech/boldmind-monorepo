@@ -69,7 +69,6 @@ export default function PublicHubLayout({ children }: { children: ReactNode }) {
         logoSrc="/logo.webp"
         sticky
         showThemeControls
-        showFontToggle
       />
       <main className="flex-1">
         {children}

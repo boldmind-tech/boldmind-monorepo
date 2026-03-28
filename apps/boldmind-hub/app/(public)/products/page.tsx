@@ -4,8 +4,7 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  SuperNavbar,
-  SuperFooter,
+  
   Card,
   Button,
   ParticleBackground,
@@ -131,11 +130,6 @@ export default function ProductsPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#040D21] transition-colors duration-500">
-      <SuperNavbar
-        links={navLinks}
-        cta={{ href: '/register', label: 'Join Ecosystem' }}
-        logoSrc="/logo.png"
-      />
 
       {/* Hero */}
       <section className="relative pt-32 pb-20 bg-[#00143C] text-white overflow-hidden">
@@ -350,17 +344,6 @@ export default function ProductsPage() {
         </div>
       </section>
 
-      <SuperFooter
-        logoSrc="/logo.png"
-        sections={footerSections}
-        contactInfo={{
-          email: 'hello@boldmind.ng',
-          phone: '+2349138349271',
-          whatsapp: '+2349138349271',
-          address: 'No 5 Olusoji imole str ikosi ketu Lagos Nigeria',
-        }}
-        copyright={`© ${new Date().getFullYear()} BoldMind Technology Solution Enterprise. All rights reserved.`}
-      />
     </div>
   );
 }

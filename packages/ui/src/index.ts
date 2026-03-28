@@ -31,6 +31,7 @@ export { PrivacyPolicy } from './components/PrivacyPolicy';
 export {DyslexiaToggle } from './components/DyslexiaToggle'
 export { CookieConsent } from './components/CookieConsent';
 export { FontProvider } from './components/FontProvider';
+export { TermsAndConditions} from './components/TermsAndConditions';
 
 // ============================================
 // LAYOUT COMPONENTS
@@ -48,7 +49,8 @@ export {
   ThemeToggle,
   DyslexiaModeToggle,
   useProductTheme,
-  type ThemeContextType
+  type ThemeContextType,
+  type ProductThemeType
 } from './providers/theme-provider';
 
 // ============================================
@@ -72,6 +74,7 @@ export {
   truncateText
 } from './lib/utils';
 
+import { TermsAndConditions } from './components/TermsAndConditions';
 // ============================================
 // THEME & STYLES
 // ============================================
