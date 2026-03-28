@@ -182,6 +182,7 @@ export {
   hasPermission,
   SYSTEM_ROLE_PERMISSIONS,
   ECOSYSTEM_ROLE_PERMISSIONS,
+  getRolePermissions,
   type UserRole,
   type EcosystemRole,
   type AuthProvider,

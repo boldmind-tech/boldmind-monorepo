@@ -25,7 +25,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   ) {
     const tokens = await this.authService.handleOAuthLogin({
       providerId: profile.id,
-      provider: AuthProvider.google,
+      provider: 'local' as AuthProvider,
       email: profile.emails[0]?.value ?? '',
       name: profile.displayName,
       avatar: profile.photos?.[0]?.value,

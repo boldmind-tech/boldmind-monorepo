@@ -88,7 +88,7 @@ export class AuthService {
         passwordHash,
         role,
         ecosystemRole: dto.ecosystemRole as EcosystemRole | undefined,
-        provider: AuthProvider.email,
+        provider: 'local' as AuthProvider,
         permissions,
         profile: {
           create: {
