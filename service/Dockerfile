@@ -23,7 +23,7 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY service/package.json ./service/
 COPY packages/utils/package.json ./packages/utils/
-COPY packages/config/package.json ./packages/config/
+# COPY packages/config/package.json ./packages/config/
 # Install ALL workspace deps (needed because service uses workspace:* refs)
 RUN pnpm install --frozen-lockfile --ignore-scripts
 
@@ -41,7 +41,7 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copy source
 COPY service/ ./service/
 COPY packages/utils/ ./packages/utils/
-COPY packages/config/ ./packages/config/
+# COPY packages/config/ ./packages/config/
 
 # Copy root config files needed by NestJS build
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
@@ -80,7 +80,7 @@ COPY --from=deps /app/service/node_modules ./node_modules
 
 # Copy packages source (workspace:* deps need the source at runtime if not bundled)
 COPY --from=builder /app/packages/utils ./packages/utils
-COPY --from=builder /app/packages/config ./packages/config
+# COPY --from=builder /app/packages/config ./packages/config
 
 USER nestjs
 
