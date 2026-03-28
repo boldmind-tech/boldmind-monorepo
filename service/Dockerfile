@@ -23,9 +23,8 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY service/package.json ./service/
 COPY packages/utils/package.json ./packages/utils/
-# Add any other packages the service depends on:
-# COPY packages/config/package.json ./packages/config/
-
+COPY packages/config/package.json ./packages/config/
+COPY packages/auth/package.json ./packages/auth/
 # Install ALL workspace deps (needed because service uses workspace:* refs)
 RUN pnpm install --frozen-lockfile --ignore-scripts
 
