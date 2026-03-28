@@ -1,7 +1,7 @@
 [build]
 builder = "dockerfile"
-dockerfilePath = "service/Dockerfile"
-buildContext = "."
+dockerfilePath = "../service/Dockerfile"
+buildContext = ".."
 
 [deploy]
 startCommand = "node dist/main"
