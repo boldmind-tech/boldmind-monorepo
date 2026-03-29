@@ -53,7 +53,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 WORKDIR /service
 
 # Generate Prisma client
-RUN npx prisma generate
+RUN pnpm exec prisma generate
 
 # Build NestJS
 RUN node -e "try{require('fs').unlinkSync('tsconfig.tsbuildinfo')}catch(e){}" && \
