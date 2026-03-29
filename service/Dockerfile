@@ -52,9 +52,6 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 WORKDIR /service
 
-# Install dependencies so @prisma/client and all packages are available
-RUN pnpm install --frozen-lockfile
-
 # Generate Prisma client
 RUN npx prisma generate
 
