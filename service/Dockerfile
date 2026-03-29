@@ -50,10 +50,10 @@ COPY packages/utils/ ./packages/utils/
 # Copy root config files needed by NestJS build
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-WORKDIR /service
+# Generate Prisma client (run from root where node_modules exists)
+RUN ./node_modules/.bin/prisma generate --schema=./service/prisma/schema.prisma
 
-# Generate Prisma client
-RUN pnpm exec prisma generate
+WORKDIR /service
 
 # Build NestJS
 RUN node -e "try{require('fs').unlinkSync('tsconfig.tsbuildinfo')}catch(e){}" && \
