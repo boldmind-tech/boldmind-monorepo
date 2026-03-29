@@ -29,7 +29,8 @@ COPY service/package.json ./service/
 COPY packages/utils/package.json ./packages/utils/
 # COPY packages/config/package.json ./packages/config/
 # Install ALL workspace deps (needed because service uses workspace:* refs)
-RUN pnpm install --frozen-lockfile --ignore-scripts
+RUN pnpm install --frozen-lockfile
+
 
 
 # ── Stage 2: build ────────────────────────────────────────────────────────────
