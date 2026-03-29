@@ -15,7 +15,7 @@
 # ─────────────────────────────────────────────────────────────────────────────
 
 # ── Stage 1: deps ─────────────────────────────────────────────────────────────
-FROM node:20-alpine AS deps
+FROM node:22-alpine AS deps
 
 # Install pnpm
 RUN corepack enable && corepack prepare pnpm@8.15.0 --activate
@@ -33,7 +33,7 @@ RUN pnpm install --frozen-lockfile --ignore-scripts
 
 
 # ── Stage 2: build ────────────────────────────────────────────────────────────
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 
 RUN corepack enable && corepack prepare pnpm@8.15.0 --activate
 
@@ -61,7 +61,7 @@ RUN node -e "try{require('fs').unlinkSync('tsconfig.tsbuildinfo')}catch(e){}" &&
 
 
 # ── Stage 3: runner ───────────────────────────────────────────────────────────
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 
 RUN apk add --no-cache dumb-init
 
