@@ -80,7 +80,7 @@ COPY --from=builder /service/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /service/node_modules/@prisma ./node_modules/@prisma
 
 # Copy production node_modules
-COPY --from=deps /service/node_modules ./node_modules
+COPY --from=deps /node_modules ./node_modules
 
 # Copy packages source (workspace:* deps need the source at runtime if not bundled)
 COPY --from=builder /packages/utils ./packages/utils
