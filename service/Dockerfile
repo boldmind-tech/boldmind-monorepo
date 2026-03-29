@@ -40,7 +40,7 @@ RUN corepack enable && corepack prepare pnpm@8.15.0 --activate
 WORKDIR /
 
 # Copy node_modules from deps stage
-COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /node_modules ./node_modules
 
 # Copy source
 COPY service/ ./service/
