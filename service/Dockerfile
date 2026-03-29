@@ -20,7 +20,7 @@ FROM node:20-alpine AS deps
 # Install pnpm
 RUN corepack enable && corepack prepare pnpm@8.15.0 --activate
 
-WORKDIR /app
+WORKDIR /
 
 # Copy workspace manifests (root + service + shared packages)
 # We only copy what's needed to resolve workspace deps
