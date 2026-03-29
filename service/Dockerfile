@@ -37,7 +37,7 @@ FROM node:20-alpine AS builder
 
 RUN corepack enable && corepack prepare pnpm@8.15.0 --activate
 
-WORKDIR /app
+WORKDIR /
 
 # Copy node_modules from deps stage
 COPY --from=deps /app/node_modules ./node_modules
@@ -50,7 +50,7 @@ COPY packages/utils/ ./packages/utils/
 # Copy root config files needed by NestJS build
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-WORKDIR /app/service
+WORKDIR /service
 
 # Generate Prisma client
 RUN npx prisma generate
@@ -65,25 +65,25 @@ FROM node:20-alpine AS runner
 
 RUN apk add --no-cache dumb-init
 
-WORKDIR /app
+WORKDIR /
 
 # Non-root user for security
 RUN addgroup --system --gid 1001 nodejs && \
     adduser  --system --uid  1001 nestjs
 
 # Copy built output
-COPY --from=builder /app/service/dist ./dist
+COPY --from=builder /service/dist ./dist
 
 # Copy Prisma schema + generated client
-COPY --from=builder /app/service/prisma ./prisma
-COPY --from=builder /app/service/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/service/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder /service/prisma ./prisma
+COPY --from=builder /service/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /service/node_modules/@prisma ./node_modules/@prisma
 
 # Copy production node_modules
-COPY --from=deps /app/service/node_modules ./node_modules
+COPY --from=deps /service/node_modules ./node_modules
 
 # Copy packages source (workspace:* deps need the source at runtime if not bundled)
-COPY --from=builder /app/packages/utils ./packages/utils
+COPY --from=builder /packages/utils ./packages/utils
 # COPY --from=builder /app/packages/config ./packages/config
 
 USER nestjs
