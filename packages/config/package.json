@@ -22,8 +22,8 @@
   "files": [
     "dist/**"
   ],
-  "scripts": {
-    "build": "pnpm exec rimraf dist && tsdown",
+    "scripts": {
+    "build": "tsdown",
     "dev": "tsdown --watch",
     "clean": "pnpm exec rimraf dist node_modules",
     "type-check": "tsc --noEmit"
