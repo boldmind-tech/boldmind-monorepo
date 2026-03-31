@@ -24,16 +24,6 @@
     "**/*.spec.ts",
     "dist",
     "node_modules"
-  ],
-  "references": [
-    {
-      "path": "../utils",
-    }, // ← add this – points to utils/tsconfig.json
-    {
-      "path": "../auth",
-    }, // ← add this – points to utils/tsconfig.json
-    {
-      "path": "../config",
-    }, // ← add this – points to utils/tsconfig.json
   ]
+
 }

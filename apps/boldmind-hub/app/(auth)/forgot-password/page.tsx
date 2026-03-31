@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * BoldMind Hub — Reset Password Page
+ * BoldMind Hub — Forgot Password Page (inner form only)
  * File: apps/boldmind-hub/app/(auth)/forgot-password/page.tsx
  *
+ * (auth)/layout.tsx provides the dark split-panel shell.
  * Wired to useForgotPassword hook → POST /auth/forgot-password.
- * Replaced useAuth().resetPassword (Supabase-style) with the NestJS API hook.
  */
 
 import { useState } from 'react';
@@ -15,7 +15,7 @@ import Link from 'next/link';
 import { toast } from 'sonner';
 import { useForgotPassword } from '../../../lib/hooks';
 
-export default function ResetPasswordPage() {
+export default function ForgotPasswordPage() {
   const [email,     setEmail]     = useState('');
   const [emailSent, setEmailSent] = useState(false);
 
@@ -24,13 +24,8 @@ export default function ResetPasswordPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
-
-    const result = await forgotMutation.execute(email.trim());
-
-    // execute() returns null on error (error is stored in mutation.error)
-    if (forgotMutation.error) {
-      toast.error(forgotMutation.error.message || 'Failed to send reset email');
-    } else {
+    await forgotMutation.execute(email.trim());
+    if (!forgotMutation.error) {
       setEmailSent(true);
       toast.success('Password reset email sent!');
     }
@@ -39,121 +34,102 @@ export default function ResetPasswordPage() {
   // ── Success state ─────────────────────────────────────────────────────────
   if (emailSent) {
     return (
-      <div className="w-full max-w-md mx-auto">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="text-center"
-        >
-          <div className="w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
-          </div>
-
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-            Check Your Email
-          </h1>
-
-          <p className="text-gray-600 dark:text-gray-400 mb-8">
-            We've sent a password reset link to{' '}
-            <strong className="text-gray-900 dark:text-white">{email}</strong>.
-            Click the link in the email to reset your password.
-          </p>
-
-          <div className="space-y-4">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Didn't receive the email? Check your spam folder or{' '}
-              <button
-                onClick={() => { setEmailSent(false); forgotMutation.reset(); }}
-                className="text-[#00143C] dark:text-[#FFC800] hover:underline font-medium"
-              >
-                try again
-              </button>
-            </p>
-
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-[#00143C] dark:hover:text-white transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back to Login
-            </Link>
-          </div>
-        </motion.div>
-      </div>
-    );
-  }
-
-  // ── Form state ────────────────────────────────────────────────────────────
-  return (
-    <div className="w-full max-w-md mx-auto">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="text-center"
       >
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Reset Your Password
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Enter your email and we'll send you a link to reset your password
-          </p>
+        <div className="w-14 h-14 bg-green-500/15 rounded-full flex items-center justify-center mx-auto mb-6 border border-green-500/25">
+          <CheckCircle className="w-7 h-7 text-green-400" />
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Email Address
-            </label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={e => { setEmail(e.target.value); forgotMutation.reset(); }}
-                required
-                placeholder="you@example.com"
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-[#00143C] dark:focus:ring-[#FFC800] focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 outline-none transition-all"
-              />
-            </div>
-          </div>
+        <h1 className="text-2xl font-bold text-white mb-3">Check Your Email</h1>
 
-          {/* API error */}
-          {forgotMutation.error && (
-            <p className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl px-4 py-3">
-              {forgotMutation.error.message}
-            </p>
-          )}
+        <p className="text-white/50 text-sm mb-8 leading-relaxed">
+          We've sent a password reset link to{' '}
+          <strong className="text-white">{email}</strong>.
+          Click the link in the email to reset your password.
+        </p>
 
-          <button
-            type="submit"
-            disabled={forgotMutation.loading}
-            className="w-full bg-[#00143C] hover:bg-[#00143C]/90 dark:bg-[#FFC800] dark:hover:bg-[#FFC800]/90 text-white dark:text-[#00143C] py-3 rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-          >
-            {forgotMutation.loading && (
-              <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-              </svg>
-            )}
-            {forgotMutation.loading ? 'Sending…' : 'Send Reset Link'}
-          </button>
-        </form>
+        <div className="space-y-4">
+          <p className="text-xs text-white/35">
+            Didn't receive the email? Check your spam folder or{' '}
+            <button
+              onClick={() => { setEmailSent(false); forgotMutation.reset(); }}
+              className="text-amber-400 hover:text-amber-300 font-medium transition-colors"
+            >
+              try again
+            </button>
+          </p>
 
-        {/* Back to login */}
-        <div className="mt-6 text-center">
           <Link
             href="/login"
-            className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-[#00143C] dark:hover:text-white transition-colors text-sm"
+            className="inline-flex items-center gap-2 text-white/35 hover:text-white/60 text-sm transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Login
           </Link>
         </div>
       </motion.div>
-    </div>
+    );
+  }
+
+  // ── Form ──────────────────────────────────────────────────────────────────
+  return (
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+      <div className="text-center mb-7">
+        <h1 className="text-2xl font-bold text-white mb-1.5">Reset Your Password</h1>
+        <p className="text-white/45 text-sm">
+          Enter your email and we'll send you a reset link
+        </p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="email" className="text-white/50 text-xs font-medium mb-1.5 block">
+            Email Address
+          </label>
+          <div className="relative">
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={e => { setEmail(e.target.value); forgotMutation.reset(); }}
+              required
+              placeholder="you@example.com"
+              className="w-full pl-9 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/25 focus:outline-none focus:border-amber-400/50 text-sm transition-colors"
+            />
+          </div>
+        </div>
+
+        {forgotMutation.error && (
+          <p className="text-red-400 text-xs bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2">
+            {forgotMutation.error.message}
+          </p>
+        )}
+
+        <button
+          type="submit"
+          disabled={forgotMutation.loading}
+          className="w-full py-3 rounded-xl font-semibold bg-amber-400 text-black hover:bg-amber-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 text-sm"
+        >
+          {forgotMutation.loading ? (
+            <span className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+          ) : null}
+          {forgotMutation.loading ? 'Sending…' : 'Send Reset Link'}
+        </button>
+      </form>
+
+      <div className="mt-5 text-center">
+        <Link
+          href="/login"
+          className="inline-flex items-center gap-2 text-white/35 hover:text-white/60 text-sm transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Login
+        </Link>
+      </div>
+    </motion.div>
   );
 }

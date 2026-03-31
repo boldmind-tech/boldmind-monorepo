@@ -1,24 +1,10 @@
 'use client';
 
 // apps/boldmind-hub/app/(public)/page.tsx
-// ─────────────────────────────────────────────────────────────────────────────
-// BoldMind Hub Home Page
-//
-// CORRECTIONS FROM PASTE:
-//   1. Removed hardcoded colors (#00143C, #FFC800) → CSS variables
-//   2. Removed hardcoded product arrays → real data from @boldmind/utils
-//   3. getProductColor() now uses BOLDMIND_COLOR_SCHEMES (not BOLDMIND_COLOR_SCHEMES[slug].primary)
-//   4. SuperNavbar / SuperFooter come from the (public)/layout.tsx wrapper,
-//      so they are REMOVED from this page component (no duplicate nav)
-//   5. ParticleBackground / TypewriterEffect removed — not in delivered @boldmind/ui
-//      ASSUMPTION: If you've built those components, re-import from '@boldmind/ui'
-//      and restore the JSX. They're stubbed below so the page compiles.
-//   6. Entrepreneur counter moved to a standalone client component
-//   7. All `window.location.href` replaced with Next.js <Link>
-// ─────────────────────────────────────────────────────────────────────────────
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import {
   getLiveProducts,
@@ -134,19 +120,35 @@ export default function HomePage() {
     <div className="min-h-screen" style={{ backgroundColor: 'var(--product-background)' }}>
 
       {/* ─── Hero ───────────────────────────────────────────────────────────── */}
-      <section
-        className="relative min-h-screen flex items-center justify-center overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, var(--product-primary) 0%, color-mix(in srgb, var(--product-primary) 70%, black) 100%)' }}
-      >
-        {/* Animated blobs */}
-        <div className="absolute inset-0 pointer-events-none">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/hero-bg.jpg"
+            alt="BoldMind Hero Background"
+            fill
+            priority
+            className="object-cover"
+            quality={100}
+          />
+          {/* Dark overlay for text readability */}
+          <div 
+            className="absolute inset-0"
+            style={{ 
+              background: 'linear-gradient(135deg, rgba(43, 77, 135, 0.85) 0%, rgba(0, 0, 0, 0.7) 100%)'
+            }}
+          />
+        </div>
+
+        {/* Animated blobs - optional, can remove if image is rich enough */}
+        <div className="absolute inset-0 pointer-events-none z-0">
           <div
             className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full blur-3xl animate-pulse"
-            style={{ backgroundColor: 'var(--product-secondary)', opacity: 0.1 }}
+            style={{ backgroundColor: 'var(--product-secondary)', opacity: 0.15 }}
           />
           <div
             className="absolute bottom-0 right-1/4 w-[500px] h-[500px] rounded-full blur-3xl animate-pulse"
-            style={{ backgroundColor: 'var(--product-accent)', opacity: 0.08 }}
+            style={{ backgroundColor: 'var(--product-accent)', opacity: 0.12 }}
           />
         </div>
 
@@ -158,10 +160,10 @@ export default function HomePage() {
           >
             {/* Eyebrow */}
             <div
-              className="inline-flex items-center gap-3 px-6 py-2 rounded-full mb-8 border"
+              className="inline-flex items-center gap-3 px-6 py-2 rounded-full mb-8 border backdrop-blur-sm"
               style={{
-                backgroundColor: 'rgba(255,255,255,0.08)',
-                borderColor: 'rgba(255,255,255,0.15)',
+                backgroundColor: 'rgba(255,255,255,0.12)',
+                borderColor: 'rgba(255,255,255,0.2)',
               }}
             >
               <span
@@ -182,7 +184,7 @@ export default function HomePage() {
               <span style={{ color: 'var(--product-secondary)' }}>That Shift Nations</span>
             </h1>
 
-            <p className="text-lg sm:text-xl md:text-2xl text-white/70 max-w-3xl mx-auto mb-12 leading-relaxed">
+            <p className="text-lg sm:text-xl md:text-2xl text-white/80 max-w-3xl mx-auto mb-12 leading-relaxed backdrop-blur-sm px-4 py-2 rounded-xl inline-block">
               Welcome to <span className="text-white font-bold">{SITE_NAME}</span>.
               A Nigerian tech ecosystem building impact-driven products that solve fundamental problems.
             </p>
@@ -191,14 +193,14 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
               <button
                 onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-base transition-all hover:opacity-90"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-base transition-all hover:opacity-90 hover:scale-105"
                 style={{ backgroundColor: 'var(--product-secondary)', color: 'var(--product-foreground)' }}
               >
                 Explore Ecosystem
               </button>
               <Link
                 href="/pricing"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-base border-2 text-white transition-all hover:bg-white/10"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-base border-2 text-white transition-all hover:bg-white/10 hover:scale-105"
                 style={{ borderColor: 'rgba(255,255,255,0.3)' }}
               >
                 View Pricing
@@ -213,8 +215,8 @@ export default function HomePage() {
                   href={product.links?.website || `/products/${product.slug}`}
                   target={product.links?.website ? '_blank' : undefined}
                   rel={product.links?.website ? 'noopener noreferrer' : undefined}
-                  className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl border transition-all hover:border-white/30 group"
-                  style={{ backgroundColor: 'rgba(255,255,255,0.06)', borderColor: 'rgba(255,255,255,0.12)' }}
+                  className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl border transition-all hover:border-white/30 group backdrop-blur-sm"
+                  style={{ backgroundColor: 'rgba(255,255,255,0.1)', borderColor: 'rgba(255,255,255,0.2)' }}
                 >
                   <span className="text-xl">{product.icon}</span>
                   <div className="text-left">
@@ -224,7 +226,7 @@ export default function HomePage() {
                         🚀 LIVE
                       </span>
                     </div>
-                    <p className="text-xs text-white/50 group-hover:text-white/70 transition-colors max-w-[160px] truncate">
+                    <p className="text-xs text-white/70 group-hover:text-white/90 transition-colors max-w-[160px] truncate">
                       {product.description.substring(0, 60)}…
                     </p>
                   </div>
@@ -259,7 +261,7 @@ export default function HomePage() {
                 whileHover={{ y: -8 }}
               >
                 <div
-                  className="relative rounded-3xl border-2 p-8 pt-14 text-center h-full"
+                  className="relative rounded-3xl border-2 p-8 pt-14 text-center h-full transition-all hover:shadow-xl"
                   style={{ backgroundColor: 'var(--product-background)', borderColor: 'var(--product-muted)' }}
                 >
                   <div
@@ -289,7 +291,7 @@ export default function HomePage() {
                     href={step.link}
                     target={step.isExternal ? '_blank' : undefined}
                     rel={step.isExternal ? 'noopener noreferrer' : undefined}
-                    className="inline-flex items-center gap-2 text-sm font-bold"
+                    className="inline-flex items-center gap-2 text-sm font-bold hover:gap-3 transition-all"
                     style={{ color: step.color }}
                   >
                     Learn More <ArrowRight size={14} />
@@ -344,7 +346,7 @@ export default function HomePage() {
                   {planAIBuildingProducts.map((p) => (
                     <div
                       key={p.id}
-                      className="w-72 flex-shrink-0 rounded-xl border-2 p-4"
+                      className="w-72 flex-shrink-0 rounded-xl border-2 p-4 transition-all hover:shadow-lg"
                       style={{ backgroundColor: 'var(--product-background)', borderColor: 'var(--product-muted)' }}
                     >
                       <div className="flex items-center gap-3 mb-2">
@@ -372,7 +374,7 @@ export default function HomePage() {
                 {planAIPlannedProducts.slice(0, 10).map((p) => (
                   <div
                     key={p.id}
-                    className="flex flex-col items-center text-center gap-2 p-3 rounded-xl border"
+                    className="flex flex-col items-center text-center gap-2 p-3 rounded-xl border transition-all hover:shadow-md"
                     style={{ backgroundColor: 'var(--product-background)', borderColor: 'var(--product-muted)' }}
                   >
                     <div className="w-10 h-10 rounded-lg flex items-center justify-center text-xl" style={{ backgroundColor: getProductColor(p) }}>
@@ -393,7 +395,7 @@ export default function HomePage() {
               {conceptProducts.slice(0, 12).map((p) => (
                 <span
                   key={p.id}
-                  className="flex items-center gap-2 px-3 py-2 rounded-xl border text-sm"
+                  className="flex items-center gap-2 px-3 py-2 rounded-xl border text-sm transition-all hover:shadow-md"
                   style={{ backgroundColor: 'var(--product-background)', borderColor: 'var(--product-muted)', color: 'var(--product-foreground)' }}
                 >
                   {p.icon} {p.name}
@@ -425,7 +427,7 @@ export default function HomePage() {
                 className="text-center"
               >
                 <div
-                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl sm:text-4xl font-black"
+                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl sm:text-4xl font-black transition-all hover:scale-110"
                   style={{ backgroundColor: 'var(--product-secondary)', color: 'var(--product-foreground)' }}
                 >
                   {v.letter}
@@ -456,7 +458,7 @@ export default function HomePage() {
               href="https://wa.me/2349138349271"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-bold text-white text-base transition-all hover:opacity-90"
+              className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-bold text-white text-base transition-all hover:opacity-90 hover:scale-105"
               style={{ backgroundColor: 'var(--product-primary)' }}
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -466,7 +468,7 @@ export default function HomePage() {
             </a>
             <Link
               href="/products"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-base border-2 transition-all hover:opacity-80"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-base border-2 transition-all hover:opacity-80 hover:scale-105"
               style={{ borderColor: 'var(--product-foreground)', color: 'var(--product-foreground)' }}
             >
               Explore Products <ArrowRight size={16} />
@@ -510,13 +512,13 @@ function ProductSection({
                 href={product.links?.website || `/products/${product.slug}`}
                 target={product.links?.website ? '_blank' : undefined}
                 rel={product.links?.website ? 'noopener noreferrer' : undefined}
-                className="group flex flex-col rounded-2xl border-2 p-6 h-full transition-all hover:shadow-lg"
+                className="group flex flex-col rounded-2xl border-2 p-6 h-full transition-all hover:shadow-xl"
                 style={{ backgroundColor: 'var(--product-background)', borderColor: 'var(--product-muted)' }}
                 onMouseEnter={(e) => (e.currentTarget as HTMLElement).style.borderColor = color}
                 onMouseLeave={(e) => (e.currentTarget as HTMLElement).style.borderColor = 'var(--product-muted)'}
               >
                 <div className="flex items-start gap-4 mb-4">
-                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0 transition-transform group-hover:scale-110" style={{ backgroundColor: color }}>
+                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0 transition-all group-hover:scale-110 group-hover:rotate-3" style={{ backgroundColor: color }}>
                     {product.icon}
                   </div>
                   <div>
@@ -537,7 +539,7 @@ function ProductSection({
                 <p className="text-sm flex-1" style={{ color: 'var(--product-foreground)', opacity: 0.65 }}>
                   {product.description.substring(0, 120)}…
                 </p>
-                <div className="flex items-center gap-2 mt-4 font-bold text-sm" style={{ color }}>
+                <div className="flex items-center gap-2 mt-4 font-bold text-sm group-hover:gap-3 transition-all" style={{ color }}>
                   {status === 'live' ? 'Launch Product' : 'View Details'}
                   <ArrowRight size={14} />
                   {product.links?.website && <ExternalLink size={12} className="opacity-60" />}

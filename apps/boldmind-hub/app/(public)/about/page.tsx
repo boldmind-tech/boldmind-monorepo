@@ -1,22 +1,15 @@
 'use client';
 
 // apps/boldmind-hub/app/(public)/about/page.tsx
-// ─────────────────────────────────────────────────────────────────────────────
-// CORRECTIONS FROM PASTE:
-//   1. SuperNavbar + SuperFooter REMOVED — provided by (public)/layout.tsx
-//   2. All hardcoded colors (#00143C, #FFC800) → CSS variables
-//   3. Card variant="premium" → plain div (premium variant not confirmed in ui)
-//      ASSUMPTION: if @boldmind/ui exports Card with variant="premium", restore it
-//   4. StatusBadge with variant="premium" → inline span
-//   5. ParticleBackground → removed (component not confirmed in ui exports)
-// ─────────────────────────────────────────────────────────────────────────────
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Users, Target, Heart, Zap, Globe, Rocket,
   Award, TrendingUp, Linkedin, Twitter, ExternalLink,
 } from 'lucide-react';
+import { BOLDMIND_COLOR_SCHEMES } from '@boldmind/utils';
 
 const values = [
   { icon: Zap,        title: 'Boldness',     description: "Courage to tackle Nigeria's biggest problems with innovation.", color: 'gold' },
@@ -47,33 +40,49 @@ export default function AboutPage() {
     <div className="min-h-screen" style={{ backgroundColor: 'var(--product-background)' }}>
 
       {/* Hero */}
-      <section
-        className="relative min-h-[70vh] flex items-center overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, var(--product-primary), color-mix(in srgb, var(--product-primary) 70%, black))' }}
-      >
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-3xl opacity-10"
+      <section className="relative min-h-[70vh] flex items-center overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/about-story-bg.jpg"
+            alt="About BoldMind Hero Background"
+            fill
+            priority
+            className="object-cover"
+            quality={100}
+          />
+          {/* Dark overlay for text readability */}
+          <div 
+            className="absolute inset-0"
+            style={{ 
+              background: 'linear-gradient(135deg, rgba(43, 77, 135, 0.9) 0%, rgba(0, 0, 0, 0.8) 100%)'
+            }}
+          />
+        </div>
+
+        <div className="absolute inset-0 pointer-events-none z-0">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-3xl opacity-20"
                style={{ backgroundColor: 'var(--product-secondary)', transform: 'translate(30%, -30%)' }} />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 text-center w-full py-20">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <div
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-8"
-              style={{ backgroundColor: 'rgba(255,255,255,0.08)', borderColor: 'rgba(255,255,255,0.15)' }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-8 backdrop-blur-sm"
+              style={{ backgroundColor: 'rgba(255,255,255,0.12)', borderColor: 'rgba(255,255,255,0.2)' }}
             >
               <span className="relative flex h-3 w-3">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: 'var(--product-secondary)' }} />
                 <span className="relative inline-flex rounded-full h-3 w-3" style={{ backgroundColor: 'var(--product-secondary)' }} />
               </span>
-              <span className="text-sm font-medium text-white/80">Empowering Nigeria's Future</span>
+              <span className="text-sm font-medium text-white/90">Empowering Nigeria's Future</span>
             </div>
 
             <h1 className="text-5xl md:text-8xl font-black mb-8 tracking-tight text-white">
               About{' '}
               <span style={{ color: 'var(--product-secondary)' }}>BoldMind</span>
             </h1>
-            <p className="text-xl md:text-2xl text-white/70 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-white/80 max-w-4xl mx-auto leading-relaxed backdrop-blur-sm px-4 py-2 rounded-xl inline-block">
               We're on a mission to empower <span className="text-white font-bold">1 million</span> Nigerian
               entrepreneurs by 2030 through innovative technology solutions.
             </p>
@@ -116,9 +125,18 @@ export default function AboutPage() {
 
             <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <div
-                className="rounded-3xl p-10 relative overflow-hidden"
+                className="rounded-3xl p-10 relative overflow-hidden min-h-[500px] flex items-center"
                 style={{ background: 'linear-gradient(135deg, var(--product-primary), color-mix(in srgb, var(--product-primary) 70%, black))' }}
               >
+                {/* Background image overlay */}
+                <div className="absolute inset-0 opacity-20">
+                  <Image
+                    src="/about-story-bg.jpg"
+                    alt="BoldMind Story Background"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
                 <div className="relative z-10">
                   <div className="text-6xl mb-6">🚀</div>
                   <h3 className="text-3xl font-black text-white mb-5">Our Vision</h3>
@@ -135,7 +153,7 @@ export default function AboutPage() {
                     ].map((s) => (
                       <div key={s.label}>
                         <div className="text-4xl font-black mb-1" style={{ color: 'var(--product-secondary)' }}>{s.value}</div>
-                        <p className="text-xs uppercase tracking-widest text-white/50 font-bold">{s.label}</p>
+                        <p className="text-xs uppercase tracking-widest text-white/60 font-bold">{s.label}</p>
                       </div>
                     ))}
                   </div>
@@ -204,7 +222,7 @@ export default function AboutPage() {
               >
                 <div className="flex-1">
                   <div
-                    className="rounded-2xl p-6 border-2"
+                    className="rounded-2xl p-6 border-2 transition-all hover:shadow-lg"
                     style={{ backgroundColor: 'var(--product-muted)', borderColor: 'var(--product-muted)' }}
                   >
                     <span
@@ -217,7 +235,7 @@ export default function AboutPage() {
                   </div>
                 </div>
                 <div
-                  className="relative z-10 w-14 h-14 rounded-full flex items-center justify-center shadow-xl flex-shrink-0"
+                  className="relative z-10 w-14 h-14 rounded-full flex items-center justify-center shadow-xl flex-shrink-0 transition-all hover:scale-110"
                   style={{ background: `linear-gradient(135deg, var(--product-secondary), var(--product-primary))` }}
                 >
                   <m.icon className="w-7 h-7 text-white" />
@@ -230,69 +248,79 @@ export default function AboutPage() {
       </section>
 
       {/* Team */}
-      <section className="py-24" style={{ backgroundColor: 'var(--product-muted)' }}>
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-black mb-6" style={{ color: 'var(--product-foreground)' }}>
-              The <span style={{ color: 'var(--product-primary)' }}>Visionary</span>
-            </h2>
+      {/* Team */}
+<section className="py-24" style={{ backgroundColor: 'var(--product-muted)' }}>
+  <div className="max-w-4xl mx-auto px-6">
+    <div className="text-center mb-16">
+      <h2 className="text-4xl font-black mb-6" style={{ color: 'var(--product-foreground)' }}>
+        The <span style={{ color: 'var(--product-primary)' }}>Visionary</span>
+      </h2>
+    </div>
+    <motion.div initial={{ opacity: 0, scale: 0.97 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}>
+      <div
+        className="rounded-3xl overflow-hidden border-2 transition-all hover:shadow-xl"
+        style={{ backgroundColor: 'var(--product-background)', borderColor: 'var(--product-muted)' }}
+      >
+        <div className="grid md:grid-cols-5">
+          <div
+            className="md:col-span-2 flex items-center justify-center p-0 relative overflow-hidden min-h-[400px]"
+            style={{ background: 'linear-gradient(135deg, var(--product-primary), color-mix(in srgb, var(--product-primary) 70%, black))' }}
+          >
+            <Image
+              src="/founder.jpg"
+              alt="Charles Uche Chijuka - Founder & CEO of BoldMind"
+              fill
+              className="object-cover object-center transition-all hover:scale-110 duration-500"
+              sizes="(max-width: 768px) 100vw, 40vw"
+              priority
+            />
+            {/* Optional overlay gradient for better text contrast if needed */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
           </div>
-          <motion.div initial={{ opacity: 0, scale: 0.97 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}>
-            <div
-              className="rounded-3xl overflow-hidden border-2"
-              style={{ backgroundColor: 'var(--product-background)', borderColor: 'var(--product-muted)' }}
+          <div className="md:col-span-3 p-10 flex flex-col justify-center">
+            <span
+              className="text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-full mb-4 inline-block w-fit"
+              style={{ backgroundColor: 'var(--product-highlight)', color: 'var(--product-primary)' }}
             >
-              <div className="grid md:grid-cols-5">
-                <div
-                  className="md:col-span-2 flex items-center justify-center p-12 relative overflow-hidden"
-                  style={{ background: 'linear-gradient(135deg, var(--product-primary), color-mix(in srgb, var(--product-primary) 70%, black))' }}
-                >
-                  <span className="text-9xl filter drop-shadow-2xl">👨‍💼</span>
-                </div>
-                <div className="md:col-span-3 p-10 flex flex-col justify-center">
-                  <span
-                    className="text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-full mb-4 inline-block"
-                    style={{ backgroundColor: 'var(--product-highlight)', color: 'var(--product-primary)' }}
-                  >
-                    FOUNDER & CEO
-                  </span>
-                  <h3 className="text-3xl font-black mb-2" style={{ color: 'var(--product-foreground)' }}>
-                    Charles Uche Chijuka
-                  </h3>
-                  <p className="text-base font-bold mb-6 uppercase tracking-widest" style={{ color: 'var(--product-primary)' }}>
-                    Founder & CEO
-                  </p>
-                  <p className="text-lg mb-8 leading-relaxed italic" style={{ color: 'var(--product-foreground)', opacity: 0.75 }}>
-                    "Visionary entrepreneur building technology solutions for Africa.
-                    Dedicated to bridging the digital divide and empowering the next generation
-                    of Nigerian entrepreneurs."
-                  </p>
-                  <div className="flex gap-3">
-                    <a
-                      href="https://linkedin.com/in/charliedotcom"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 text-sm font-bold transition-all hover:opacity-80"
-                      style={{ borderColor: 'var(--product-muted)', color: 'var(--product-foreground)' }}
-                    >
-                      <Linkedin size={16} /> LinkedIn
-                    </a>
-                    <a
-                      href="https://twitter.com/charlesuchech"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 text-sm font-bold transition-all hover:opacity-80"
-                      style={{ borderColor: 'var(--product-muted)', color: 'var(--product-foreground)' }}
-                    >
-                      <Twitter size={16} /> Twitter
-                    </a>
-                  </div>
-                </div>
-              </div>
+              FOUNDER & CEO
+            </span>
+            <h3 className="text-3xl font-black mb-2" style={{ color: 'var(--product-foreground)' }}>
+              Charles Uche Chijuka
+            </h3>
+            <p className="text-base font-bold mb-6 uppercase tracking-widest" style={{ color: 'var(--product-primary)' }}>
+              Founder & CEO
+            </p>
+            <p className="text-lg mb-8 leading-relaxed italic" style={{ color: 'var(--product-foreground)', opacity: 0.75 }}>
+              "Visionary entrepreneur building technology solutions for Africa.
+              Dedicated to bridging the digital divide and empowering the next generation
+              of Nigerian entrepreneurs."
+            </p>
+            <div className="flex gap-3">
+              <a
+                href="https://linkedin.com/in/charliedotcom"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 text-sm font-bold transition-all hover:opacity-80 hover:scale-105"
+                style={{ borderColor: 'var(--product-muted)', color: 'var(--product-foreground)' }}
+              >
+                <Linkedin size={16} /> LinkedIn
+              </a>
+              <a
+                href="https://twitter.com/charlesuchech"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 text-sm font-bold transition-all hover:opacity-80 hover:scale-105"
+                style={{ borderColor: 'var(--product-muted)', color: 'var(--product-foreground)' }}
+              >
+                <Twitter size={16} /> Twitter
+              </a>
             </div>
-          </motion.div>
+          </div>
         </div>
-      </section>
+      </div>
+    </motion.div>
+  </div>
+</section>
 
       {/* CTA */}
       <section
@@ -303,7 +331,7 @@ export default function AboutPage() {
           <h2 className="text-4xl md:text-6xl font-black text-white mb-8">
             Crafting the <span style={{ color: 'var(--product-secondary)' }}>Future</span><br />of African Tech
           </h2>
-          <p className="text-xl text-white/60 max-w-2xl mx-auto mb-12">
+          <p className="text-xl text-white/80 max-w-2xl mx-auto mb-12">
             Join the movement transforming how business is done in Nigeria and across Africa.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
@@ -311,14 +339,14 @@ export default function AboutPage() {
               href="https://wa.me/2349138349271"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-10 py-4 rounded-xl font-bold text-base transition-all hover:opacity-90"
+              className="inline-flex items-center gap-2 px-10 py-4 rounded-xl font-bold text-base transition-all hover:opacity-90 hover:scale-105"
               style={{ backgroundColor: 'var(--product-secondary)', color: 'var(--product-foreground)' }}
             >
               Join WhatsApp Community <ExternalLink size={16} />
             </a>
             <Link
               href="/products"
-              className="inline-flex items-center gap-2 px-10 py-4 rounded-xl font-bold text-base border-2 text-white transition-all hover:bg-white/10"
+              className="inline-flex items-center gap-2 px-10 py-4 rounded-xl font-bold text-base border-2 text-white transition-all hover:bg-white/10 hover:scale-105"
               style={{ borderColor: 'rgba(255,255,255,0.3)' }}
             >
               See All Products
@@ -329,6 +357,3 @@ export default function AboutPage() {
     </div>
   );
 }
-
-// Local import needed for color access in JSX
-import { BOLDMIND_COLOR_SCHEMES } from '@boldmind/utils';

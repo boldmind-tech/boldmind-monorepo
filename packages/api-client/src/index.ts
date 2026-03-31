@@ -1,41 +1,74 @@
-// Export main API client class
-export { default as APIClient } from './client';
-export { BoldMindAPI, boldMindAPI } from './api';
+// ─────────────────────────────────────────────────────────────────────────────
+// packages/api-client/src/index.ts
+// Single barrel export for @boldmind/api-client
+//
+// Usage in any app:
+//   import { boldMindAPI, configure, ApiError } from '@boldmind/api-client';
+//   configure({ baseUrl: process.env.NEXT_PUBLIC_API_URL });
+//   const { data } = await boldMindAPI.auth.login({ email, password });
+//
+// Or import individual APIs:
+//   import { authAPI, educenterAPI } from '@boldmind/api-client';
+// ─────────────────────────────────────────────────────────────────────────────
 
-// Export endpoint classes
-export { AuthEndpoints } from './endpoints/auth';
-export { UsersEndpoints } from './endpoints/users';
-export { PaymentsEndpoints } from './endpoints/payments';
-export { EducenterEndpoints } from './endpoints/educenter';
-export { ProductsEndpoints } from './endpoints/products';
+export { configure, ApiError, setAccessToken, getAccessToken, apiFetch, apiUpload, qs } from './client';
 
-// Export API utilities
-export { analyticsApi } from './endpoints/analytics';
-export { typedApi } from './utils/typed-api';
+export { authAPI }          from './auth.api';
+export { usersAPI }         from './users.api';
+export { paymentAPI }       from './payment.api';
+export { amebogistAPI }     from './amebogist.api';
+export { educenterAPI }     from './educenter.api';
+export { planaiAPI, receptionistAPI, storefrontsAPI } from './planai.api';
+export { fitnessAPI }       from './fitness.api';
+export { osAPI }            from './os.api';
+export { mediaAPI }         from './media.api';
+export { notificationsAPI } from './notifications.api';
+export { automationAPI }    from './automation.api';
+export { adminAPI }         from './admin.api';
 
-// Export interceptor setup functions
-export {
-  setupLoggingInterceptor,
-  setupRetryInterceptor,
-  setupCacheInterceptor,
-} from './interceptors';
+export type * from './types';
+export type { RegisterPayload, LoginPayload, VerifyEmailPayload, ForgotPasswordPayload, ResetPasswordPayload, ChangePasswordPayload } from './auth.api';
+export type { UserListParams, UpdateProfilePayload }   from './users.api';
+export type { InitializePaymentPayload }               from './payment.api';
+export type { ArticleListParams, CreateArticlePayload } from './amebogist.api';
+export type { StartCbtPayload, SubmitCbtPayload, AiTutorPayload, StudyPlanPayload, CourseProgressPayload } from './educenter.api';
 
-// ────────────────────────────────────────────────
-// FIX FOR TS4053: Re-export types from @boldmind/utils that appear
-// in public method return types / parameters of this package.
-// This makes them visible/namable in the bundled .d.ts files.
-export type {
-  // ProductPricing,          // the main culprit from the original error
-  BOLDMIND_PRICING,        // if you expose the constant or its shape
-  // Add others only if new TS4053 errors mention them, e.g.:
-  // BOLDMIND_PRODUCTS,
-  // ProductTheme,
-} from '@boldmind/utils';
+// ─── Unified client object (compatible with existing boldMindAPI usage) ────────
 
-// Your existing local type re-exports (good to keep)
-export type { Product, CreateProductData } from './endpoints/products';
+import { authAPI }          from './auth.api';
+import { usersAPI }         from './users.api';
+import { paymentAPI }       from './payment.api';
+import { amebogistAPI }     from './amebogist.api';
+import { educenterAPI }     from './educenter.api';
+import { planaiAPI, receptionistAPI, storefrontsAPI } from './planai.api';
+import { fitnessAPI }       from './fitness.api';
+import { osAPI }            from './os.api';
+import { mediaAPI }         from './media.api';
+import { notificationsAPI } from './notifications.api';
+import { automationAPI }    from './automation.api';
+import { adminAPI }         from './admin.api';
 
-// Re-export Axios types for convenience
-export type { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
-export * from './config';
-export * from './product-client';
+/**
+ * Unified API client — mirrors the shape apps already use via boldMindAPI.*
+ *
+ * @example
+ * const { data } = await boldMindAPI.auth.login({ email, password });
+ * const { data } = await boldMindAPI.educenter.dashboard();
+ * const { data } = await boldMindAPI.payments.verify('txn_ref');
+ */
+export const boldMindAPI = {
+  auth:          authAPI,
+  users:         usersAPI,
+  payments:      paymentAPI,
+  amebogist:     amebogistAPI,
+  educenter:     educenterAPI,
+  planai:        planaiAPI,
+  receptionist:  receptionistAPI,
+  storefronts:   storefrontsAPI,
+  fitness:       fitnessAPI,
+  os:            osAPI,
+  media:         mediaAPI,
+  notifications: notificationsAPI,
+  automation:    automationAPI,
+  admin:         adminAPI,
+} as const;

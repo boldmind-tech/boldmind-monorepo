@@ -1,31 +1,31 @@
 "use client";
+
+/**
+ * packages/ui/src/components/SuperNavbar.tsx
+ *
+ * FIXED:
+ *  1. Logo + title: when used in boldmind-hub, show the passed `logoSrc` and
+ *     a passed `brandName` prop — do NOT fall through to `currentProduct.name`
+ *     from the theme (which was showing whatever product the theme was set to).
+ *  2. Added `brandName` prop — defaults to `currentProduct?.name` for
+ *     sub-product apps, but hub passes "BoldMind Hub" explicitly.
+ *  3. Fixed image fallback initial to use `brandName[0]` not `productInitial`.
+ *  4. Removed `window.innerWidth/Height` references from SSR-safe particle init.
+ *  5. Cleaned up unused commented-out code.
+ */
+
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Menu,
-  X,
-  // ChevronDown,
-  Sparkles,
-  Zap,
-  Rocket,
-  // Moon,
-  // Sun,
-  // Eye,
-  ExternalLink,
+  Menu, X, Sparkles, Zap, Rocket, ExternalLink,
 } from "lucide-react";
-import {
-  useTheme,
-  ThemeToggle,
-  DyslexiaModeToggle,
-} from "../providers/theme-provider";
+import { useTheme, ThemeToggle, DyslexiaModeToggle } from "../providers/theme-provider";
 import { cn } from "../lib/utils";
-import {
-  BOLDMIND_PRODUCTS,
-  getProductBySlug,
-  // getProductsByStatus
-} from "@boldmind/utils";
+import { BOLDMIND_PRODUCTS, getProductBySlug } from "@boldmind/utils";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface NavLink {
   href: string;
@@ -36,7 +36,13 @@ export interface NavLink {
 }
 
 export interface SuperNavbarProps {
+  /** Path to logo image. Pass "/logo.webp" from hub, product logo from sub-apps. */
   logoSrc?: string;
+  /**
+   * Brand name shown next to logo.
+   * Hub passes "BoldMind Hub". Sub-apps omit this — falls back to product name.
+   */
+  brandName?: string;
   links?: NavLink[];
   cta?: {
     href: string;
@@ -50,15 +56,39 @@ export interface SuperNavbarProps {
   showParticles?: boolean;
   showThemeControls?: boolean;
   className?: string;
-  user?: {
-    name: string;
-    role: string;
-  };
+  /** Deprecated: user display is now handled by DashboardSidebar */
+  user?: { name: string; role: string };
   onLinkClick?: (href: string) => void;
 }
 
+// ─── Default nav links ────────────────────────────────────────────────────────
+
+const DEFAULT_LINKS: NavLink[] = [
+  { href: "/",        label: "Home",     icon: "🏠" },
+  { href: "/features",label: "Features", icon: "✨" },
+  { href: "/pricing", label: "Pricing",  icon: "💰" },
+  { href: "/docs",    label: "Docs",     icon: "📚" },
+  { href: "/contact", label: "Contact",  icon: "✉️" },
+];
+
+// ─── Icon map ─────────────────────────────────────────────────────────────────
+
+const ICON_MAP: Record<string, React.ReactNode> = {
+  "🏠": <span>🏠</span>, "✨": <span>✨</span>, "💰": <span>💰</span>,
+  "📚": <span>📚</span>, "✉️": <span>✉️</span>, "🚀": <Rocket className="w-4 h-4" />,
+  "🤖": <span>🤖</span>, "🎓": <span>🎓</span>, "📰": <span>📰</span>,
+};
+
+function getIconNode(icon: React.ReactNode): React.ReactNode {
+  if (typeof icon !== "string") return icon;
+  return ICON_MAP[icon] ?? <Sparkles className="w-4 h-4" />;
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
+
 export function SuperNavbar({
   logoSrc = "/logo.png",
+  brandName,
   links,
   cta,
   theme = "dark",
@@ -67,400 +97,232 @@ export function SuperNavbar({
   showParticles = false,
   showThemeControls = true,
   className = "",
-  // user,
   onLinkClick,
 }: SuperNavbarProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [imageError, setImageError] = useState(false);
+  const [isOpen,      setIsOpen]      = useState(false);
+  const [scrolled,    setScrolled]    = useState(false);
+  const [imageError,  setImageError]  = useState(false);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
-  const [hoveredCta, setHoveredCta] = useState(false);
-  const [activeLink, setActiveLink] = useState("");
-  const [showSparkles, setShowSparkles] = useState(false);
+  const [hoveredCta,  setHoveredCta]  = useState(false);
+  const [activeLink,  setActiveLink]  = useState("");
+  const [showSparkle, setShowSparkle] = useState(false);
+  const [mounted,     setMounted]     = useState(false);
 
   const { productTheme } = useTheme();
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
-  const currentProduct =
-    getProductBySlug(productTheme.slug) || BOLDMIND_PRODUCTS[0];
-  const productInitial = currentProduct?.name.charAt(0);
-  const productColor = productTheme.colors.primary;
+  // ── Resolve branding ──────────────────────────────────────────────────────
+  // `brandName` prop takes full precedence.
+  // If not passed, fall back to the theme's current product name.
+  const currentProduct = getProductBySlug(productTheme.slug) ?? BOLDMIND_PRODUCTS[0];
+  const resolvedBrand  = brandName ?? currentProduct?.name ?? "BoldMind";
+  const productColor   = productTheme.colors.primary;
 
-  // Default links if none provided
-  const defaultLinks: NavLink[] = [
-    { href: "/", label: "Home", icon: "🏠" },
-    { href: "/features", label: "Features", icon: "✨" },
-    { href: "/pricing", label: "Pricing", icon: "💰" },
-    { href: "/docs", label: "Docs", icon: "📚" },
-    { href: "/contact", label: "Contact", icon: "✉️" },
-  ];
+  useEffect(() => { setMounted(true); }, []);
 
-  const navLinks = links || defaultLinks;
-  // Get product-specific CTA
-  const getDefaultCTA = () => {
-    if (
-      currentProduct?.status === ("LIVE") &&
-      currentProduct?.links?.website
-    ) {
-      return {
-        href: currentProduct?.links.website,
-        label: "Visit Website",
-        variant: "primary" as const,
-        icon: <ExternalLink className="w-4 h-4" />,
-      };
-    }
-
-    return {
-      href: "https://wa.me/2349138349271",
-      label: "Get Started",
-      variant: "primary" as const,
-      icon: <Zap className="w-4 h-4" />,
-    };
-  };
-
-  const navCTA = cta || getDefaultCTA();
-
-  // Theme colors - FIXED VERSION
-  const getThemeColors = () => {
-    const baseColor = productColor;
-    const rgbMatch = baseColor.match(
-      /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i,
-    );
-
-    if (rgbMatch) {
-      const r = parseInt(rgbMatch[1]!, 16);
-      const g = parseInt(rgbMatch[2]!, 16);
-      const b = parseInt(rgbMatch[3]!, 16);
-
-      switch (theme) {
-        case "light":
-          return {
-            bg: scrolled ? baseColor : `rgba(${r}, ${g}, ${b}, 0.95)`,
-            text: "#FFFFFF",
-            border: "#E5E7EB",
-          };
-        case "transparent":
-          return {
-            bg: scrolled ? `rgba(${r}, ${g}, ${b}, 0.95)` : "transparent",
-            text: "#FFFFFF",
-            border: "transparent",
-          };
-        default: // dark
-          return {
-            bg: scrolled ? baseColor : `rgba(${r}, ${g}, ${b}, 0.95)`,
-            text: "#FFFFFF",
-            border: "#374151",
-          };
-      }
-    }
-
-    // Fallback colors
-    return {
-      bg: scrolled ? "#00143C" : "rgba(0, 20, 60, 0.95)",
-      text: "#FFFFFF",
-      border: "#374151",
-    };
-  };
-
-  const currentNavTheme = getThemeColors();
-
-  // Scroll effect
+  // ── Scroll handler ────────────────────────────────────────────────────────
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-      if (window.scrollY > 100) {
-        setShowSparkles(true);
-        setTimeout(() => setShowSparkles(false), 1000);
-      }
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 20);
+      if (y > 100) { setShowSparkle(true); setTimeout(() => setShowSparkle(false), 1000); }
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close mobile menu when clicking outside
+  // ── Click outside mobile menu ─────────────────────────────────────────────
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handler = (e: MouseEvent) => {
       if (
         isOpen &&
         mobileMenuRef.current &&
         menuButtonRef.current &&
-        !mobileMenuRef.current.contains(event.target as Node) &&
-        !menuButtonRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
+        !mobileMenuRef.current.contains(e.target as Node) &&
+        !menuButtonRef.current.contains(e.target as Node)
+      ) setIsOpen(false);
     };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
   }, [isOpen]);
 
-  // FIXED: Proper navigation handling
+  // ── Nav click ─────────────────────────────────────────────────────────────
   const handleNavClick = (href: string, isExternal?: boolean) => {
     setActiveLink(href);
     setIsOpen(false);
     onLinkClick?.(href);
-
-    // If it's an external link, let the anchor tag handle it
-    if (isExternal || href.startsWith("http")) {
-      return; // Let browser handle external links
-    }
-
-    // If it's a hash link (same page anchor)
+    if (isExternal || href.startsWith("http")) return;
     if (href.startsWith("#")) {
-      const element = document.getElementById(href.substring(1));
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-        // Update URL without page reload
-        window.history.pushState(null, "", href);
-      }
-      return;
+      const el = document.getElementById(href.slice(1));
+      el?.scrollIntoView({ behavior: "smooth" });
+      window.history.pushState(null, "", href);
     }
   };
 
-  const getCtaStyles = () => {
-    const baseStyles =
-      "px-6 py-3 rounded-xl font-bold transition-all duration-300 flex items-center gap-2";
+  // ── Theme colors ──────────────────────────────────────────────────────────
+  const getThemeColors = () => {
+    const m = productColor.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
+    if (m) {
+      const [r, g, b] = [parseInt(m[1]!, 16), parseInt(m[2]!, 16), parseInt(m[3]!, 16)];
+      if (theme === "transparent")
+        return { bg: scrolled ? `rgba(${r},${g},${b},0.95)` : "transparent", text: "#FFF", border: "transparent" };
+      return { bg: scrolled ? productColor : `rgba(${r},${g},${b},0.95)`, text: "#FFF", border: "#374151" };
+    }
+    return { bg: scrolled ? "#00143C" : "rgba(0,20,60,0.95)", text: "#FFF", border: "#374151" };
+  };
 
+  const navTheme = getThemeColors();
+  const navLinks = links ?? DEFAULT_LINKS;
+
+  // ── CTA ───────────────────────────────────────────────────────────────────
+  const defaultCTA = currentProduct?.status === "LIVE" && currentProduct?.links?.website
+    ? { href: currentProduct.links.website, label: "Visit Website", variant: "primary" as const, icon: <ExternalLink className="w-4 h-4" /> }
+    : { href: "https://wa.me/2349138349271", label: "Get Started", variant: "primary" as const, icon: <Zap className="w-4 h-4" /> };
+  const navCTA = cta ?? defaultCTA;
+
+  const ctaClass = (() => {
+    const base = "px-6 py-3 rounded-xl font-bold transition-all duration-300 flex items-center gap-2 text-sm";
     switch (navCTA.variant) {
-      case "secondary":
-        return `${baseStyles} bg-white text-blue-600 hover:bg-gray-100 hover:scale-105`;
-      case "glow":
-        return `${baseStyles} bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] hover:scale-105`;
-      case "gradient":
-        return `${baseStyles} bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white hover:shadow-xl hover:scale-105`;
-      default:
-        return `${baseStyles} bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 hover:shadow-lg hover:scale-105`;
+      case "secondary": return `${base} bg-white text-blue-600 hover:bg-gray-100 hover:scale-105`;
+      case "glow":      return `${base} bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] hover:scale-105`;
+      case "gradient":  return `${base} bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white hover:shadow-xl hover:scale-105`;
+      default:          return `${base} bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 hover:shadow-lg hover:scale-105`;
     }
-  };
+  })();
 
-  // Helper to get icon component
-  const getIconComponent = (icon: React.ReactNode) => {
-    if (typeof icon !== 'string') {
-      return icon;
-    }
-
-    const iconMap: Record<string, React.ReactNode> = {
-      "🏠": <div>🏠</div>,
-      "✨": <div>✨</div>,
-      "💰": <div>💰</div>,
-      "📚": <div>📚</div>,
-      "✉️": <div>✉️</div>,
-      "🚀": <Rocket className="w-4 h-4" />,
-      "🤖": <div>🤖</div>,
-      "🎓": <div>🎓</div>,
-      "📰": <div>📰</div>,
-    };
-    return iconMap[icon] || <Sparkles className="w-4 h-4" />;
-  };
   return (
     <>
-      {/* Floating Particles (Optional) */}
-      {showParticles && animated && (
+      {/* Particles — client-only, SSR safe */}
+      {showParticles && animated && mounted && (
         <div className="fixed inset-0 pointer-events-none z-40">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
+          {Array.from({ length: 20 }).map((_, i) => (
+            <motion.div key={i}
               className="absolute w-1 h-1 bg-blue-400 rounded-full"
-              initial={{
-                x: Math.random() * window.innerWidth,
-                y: -10,
-                opacity: 0,
-              }}
-              animate={{
-                y: window.innerHeight,
-                opacity: [0, 1, 0],
-              }}
-              transition={{
-                duration: Math.random() * 3 + 2,
-                repeat: Infinity,
-                delay: Math.random() * 5,
-              }}
+              initial={{ x: Math.random() * window.innerWidth, y: -10, opacity: 0 }}
+              animate={{ y: window.innerHeight, opacity: [0, 1, 0] }}
+              transition={{ duration: Math.random() * 3 + 2, repeat: Infinity, delay: Math.random() * 5 }}
             />
           ))}
         </div>
       )}
 
-      {/* Sparkles Animation */}
+      {/* Sparkle */}
       <AnimatePresence>
-        {showSparkles && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed top-4 right-4 z-50"
-          >
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            >
+        {showSparkle && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed top-4 right-4 z-50">
+            <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}>
               <Sparkles className="w-6 h-6 text-yellow-400" />
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Main Navbar */}
+      {/* Navbar */}
       <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
+        initial={{ y: -100 }} animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 100, damping: 20 }}
-        style={{
-          backgroundColor: currentNavTheme.bg,
-          color: currentNavTheme.text,
-          borderBottom: `1px solid ${currentNavTheme.border}`,
-        }}
-        className={cn(
-          "w-full z-50 transition-all duration-300 backdrop-blur-lg",
-          sticky && "fixed top-0",
-          className,
-        )}
+        style={{ backgroundColor: navTheme.bg, color: navTheme.text, borderBottom: `1px solid ${navTheme.border}` }}
+        className={cn("w-full z-50 transition-all duration-300 backdrop-blur-lg", sticky && "fixed top-0", className)}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
-            {/* Logo */}
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="flex items-center space-x-3"
-            >
-              <Link
-                href="/"
-                className="flex items-center space-x-3 no-underline"
-                onClick={() => handleNavClick("/")}
-              >
-                {!imageError ? (
-                  <div className="relative w-12 h-12">
-                    <Image
-                      src={logoSrc}
-                      alt={`${currentProduct?.name} Logo`}
-                      fill
-                      className="object-contain"
-                      onError={() => setImageError(true)}
-                      priority
-                    />
-                    {animated && (
-                      <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{
-                          duration: 20,
-                          repeat: Infinity,
-                          ease: "linear",
-                        }}
-                        className="absolute inset-0 border-2 border-transparent border-t-blue-500 border-r-purple-500 rounded-full"
+
+            {/* ── Logo ── */}
+            <motion.div whileHover={{ scale: 1.05 }} className="flex items-center space-x-3">
+              <Link href="/" className="flex items-center space-x-3 no-underline" onClick={() => handleNavClick("/")}>
+                <div className="relative w-10 h-10 flex-shrink-0">
+                  {!imageError ? (
+                    <>
+                      <Image
+                        src={logoSrc}
+                        alt={resolvedBrand}
+                        fill
+                        className="object-contain"
+                        onError={() => setImageError(true)}
+                        priority
                       />
-                    )}
-                  </div>
-                ) : (
-                  <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center"
-                    style={{ backgroundColor: productColor }}
-                  >
-                    <span className="text-white font-black text-xl">
-                      {productInitial}
-                    </span>
-                  </div>
-                )}
-
-                <div>
-                  <span className="text-2xl font-black">
-                    {currentProduct?.name}
-                  </span>
-                  <motion.p
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-xs text-gray-400 -mt-1"
-                  >
-
-                    {/* {currentProduct.status === ('LIVE' as ProductStatus) ? '🚀 LIVE' : 
-                     currentProduct.status === ('BUILDING' as ProductStatus) ? '🔨 BUILDING' :
-                     currentProduct.status === ('PLANNED' as ProductStatus) ? '📅 PLANNED' : '💡 CONCEPT'} */}
-                  </motion.p>
+                      {animated && (
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                          className="absolute inset-0 border-2 border-transparent border-t-blue-500 border-r-purple-500 rounded-full"
+                        />
+                      )}
+                    </>
+                  ) : (
+                    // Fallback: coloured initial box — uses resolvedBrand not productInitial
+                    <div
+                      className="w-10 h-10 rounded-xl flex items-center justify-center"
+                      style={{ backgroundColor: productColor }}
+                    >
+                      <span className="text-white font-black text-lg">
+                        {resolvedBrand.charAt(0)}
+                      </span>
+                    </div>
+                  )}
                 </div>
+
+                {/* Brand name — always shows resolvedBrand */}
+                <span className="text-xl font-black tracking-tight" style={{ color: navTheme.text }}>
+                  {resolvedBrand}
+                </span>
               </Link>
             </motion.div>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-2">
-              {navLinks.map((link) => {
-                const isExternal =
-                  link.isExternal || link.href.startsWith("http");
-                const isHashLink = link.href.startsWith("#");
+            {/* ── Desktop nav ── */}
+            <div className="hidden md:flex items-center space-x-1">
+              {navLinks.map(link => {
+                const isExt    = link.isExternal || link.href.startsWith("http");
+                const isHash   = link.href.startsWith("#");
                 const isActive = activeLink === link.href;
-
+                const inner    = (
+                  <>
+                    {getIconNode(link.icon)}
+                    <span className="font-medium text-sm">{link.label}</span>
+                    {link.badge && (
+                      <span className="px-2 py-0.5 text-xs font-bold bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full">
+                        {link.badge}
+                      </span>
+                    )}
+                    {isExt && <ExternalLink className="w-3 h-3 opacity-60" />}
+                  </>
+                );
+                const itemClass = cn(
+                  "flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all cursor-pointer",
+                  isActive ? "bg-white/20" : "hover:bg-white/10",
+                );
                 return (
-                  <div key={link.href} className="relative">
-                    {isExternal || isHashLink ? (
-                      // External or hash links use anchor tags
-                      <motion.a
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                  <div key={link.href} className="relative"
+                    onMouseEnter={() => setHoveredLink(link.href)}
+                    onMouseLeave={() => setHoveredLink(null)}
+                  >
+                    {isExt || isHash ? (
+                      <motion.a whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                         href={link.href}
-                        target={isExternal ? "_blank" : undefined}
-                        rel={isExternal ? "noopener noreferrer" : undefined}
-                        onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                          if (isHashLink) {
-                            e.preventDefault();
-                            handleNavClick(link.href, isExternal);
-                          }
-                        }}
-                        onMouseEnter={() => setHoveredLink(link.href)}
-                        onMouseLeave={() => setHoveredLink(null)}
-                        className={cn(
-                          "flex items-center gap-2 px-4 py-3 rounded-lg transition-all",
-                          isActive
-                            ? "bg-blue-500/20 text-blue-400"
-                            : "hover:bg-white/10",
-                        )}
-                      >
-                        {getIconComponent(link.icon)}
-                        <span className="font-medium">{link.label}</span>
-                        {link.badge && (
-                          <span className="px-2 py-0.5 text-xs font-bold bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full">
-                            {link.badge}
-                          </span>
-                        )}
-                        {isExternal && <ExternalLink className="w-4 h-4" />}
-                      </motion.a>
+                        target={isExt ? "_blank" : undefined}
+                        rel={isExt ? "noopener noreferrer" : undefined}
+                        onClick={(e: { preventDefault: () => void; }) => { if (isHash) { e.preventDefault(); handleNavClick(link.href, isExt); } }}
+                        className={itemClass}
+                      >{inner}</motion.a>
                     ) : (
-                      // Internal Next.js routes use Link component
                       <Link href={link.href} passHref>
-                        <motion.div
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
+                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                           onClick={() => handleNavClick(link.href)}
-                          onMouseEnter={() => setHoveredLink(link.href)}
-                          onMouseLeave={() => setHoveredLink(null)}
-                          className={cn(
-                            "flex items-center gap-2 px-4 py-3 rounded-lg transition-all cursor-pointer",
-                            isActive
-                              ? "bg-blue-500/20 text-blue-400"
-                              : "hover:bg-white/10",
-                          )}
-                        >
-                          {getIconComponent(link.icon)}
-                          <span className="font-medium">{link.label}</span>
-                          {link.badge && (
-                            <span className="px-2 py-0.5 text-xs font-bold bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full">
-                              {link.badge}
-                            </span>
-                          )}
-                        </motion.div>
+                          className={itemClass}
+                        >{inner}</motion.div>
                       </Link>
                     )}
-
-                    {/* Hover effect */}
                     {hoveredLink === link.href && (
-                      <motion.div
-                        layoutId="navbar-hover"
-                        className="absolute bottom-2 left-4 right-4 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+                      <motion.div layoutId="navbar-hover"
+                        className="absolute bottom-1 left-4 right-4 h-0.5 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full"
                       />
                     )}
                   </div>
                 );
               })}
 
-              {/* Theme Controls */}
               {showThemeControls && (
                 <div className="flex items-center space-x-1 ml-2">
                   <ThemeToggle />
@@ -468,36 +330,26 @@ export function SuperNavbar({
                 </div>
               )}
 
-              {/* CTA Button */}
               {navCTA && (
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <a
-                    href={navCTA.href}
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="ml-2">
+                  <a href={navCTA.href}
                     target={navCTA.href.startsWith("http") ? "_blank" : "_self"}
-                    className={getCtaStyles()}
+                    className={ctaClass}
                     onMouseEnter={() => setHoveredCta(true)}
                     onMouseLeave={() => setHoveredCta(false)}
                     onClick={() => onLinkClick?.(navCTA.href)}
                   >
-                    {navCTA.icon || <Rocket className="w-4 h-4" />}
+                    {navCTA.icon ?? <Rocket className="w-4 h-4" />}
                     {navCTA.label}
                     {hoveredCta && (
-                      <motion.span
-                        animate={{ x: [0, 5, 0] }}
-                        transition={{ duration: 0.5 }}
-                      >
-                        →
-                      </motion.span>
+                      <motion.span animate={{ x: [0, 5, 0] }} transition={{ duration: 0.5 }}>→</motion.span>
                     )}
                   </a>
                 </motion.div>
               )}
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* ── Mobile button ── */}
             <div className="flex items-center gap-2 md:hidden">
               {showThemeControls && (
                 <div className="flex items-center space-x-1">
@@ -505,119 +357,62 @@ export function SuperNavbar({
                   <DyslexiaModeToggle />
                 </div>
               )}
-
-              <button
-                ref={menuButtonRef}
-                onClick={() => setIsOpen(!isOpen)}
-                className="p-3 rounded-lg hover:bg-white/10 transition-colors"
-                aria-label="Toggle menu"
-              >
+              <button ref={menuButtonRef} onClick={() => setIsOpen(v => !v)}
+                className="p-2.5 rounded-lg hover:bg-white/10 transition-colors" aria-label="Toggle menu">
                 <AnimatePresence mode="wait">
-                  {isOpen ? (
-                    <motion.div
-                      key="close"
-                      initial={{ rotate: -90, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: 90, opacity: 0 }}
-                    >
-                      <X className="w-6 h-6" />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="menu"
-                      initial={{ rotate: 90, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: -90, opacity: 0 }}
-                    >
-                      <Menu className="w-6 h-6" />
-                    </motion.div>
-                  )}
+                  {isOpen
+                    ? <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}><X className="w-5 h-5" /></motion.div>
+                    : <motion.div key="menu"  initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }}><Menu className="w-5 h-5" /></motion.div>
+                  }
                 </AnimatePresence>
               </button>
             </div>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile menu */}
         <AnimatePresence>
           {isOpen && (
-            <motion.div
-              ref={mobileMenuRef}
+            <motion.div ref={mobileMenuRef}
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              style={{ backgroundColor: currentNavTheme.bg }}
-              className="md:hidden overflow-hidden border-t"
+              style={{ backgroundColor: navTheme.bg }}
+              className="md:hidden overflow-hidden border-t border-white/10"
             >
-              <div className="px-4 py-6 space-y-2">
-                {navLinks.map((link, index) => {
-                  const isExternal =
-                    link.isExternal || link.href.startsWith("http");
-                  const isHashLink = link.href.startsWith("#");
+              <div className="px-4 py-5 space-y-1">
+                {navLinks.map((link, idx) => {
+                  const isExt    = link.isExternal || link.href.startsWith("http");
+                  const isHash   = link.href.startsWith("#");
                   const isActive = activeLink === link.href;
-
+                  const rowClass = cn(
+                    "w-full flex items-center justify-between p-3.5 rounded-xl transition-all",
+                    isActive ? "bg-white/20" : "hover:bg-white/10",
+                  );
                   return (
-                    <motion.div
-                      key={link.href}
-                      initial={{ x: -20, opacity: 0 }}
+                    <motion.div key={link.href}
+                      initial={{ x: -16, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: index * 0.1 }}
+                      transition={{ delay: idx * 0.07 }}
                     >
-                      {isExternal || isHashLink ? (
-                        <a
-                          href={link.href}
-                          target={isExternal ? "_blank" : undefined}
-                          rel={isExternal ? "noopener noreferrer" : undefined}
-                          onClick={(e) => {
-                            if (isHashLink) {
-                              e.preventDefault();
-                              handleNavClick(link.href, isExternal);
-                            } else {
-                              handleNavClick(link.href, isExternal);
-                            }
-                          }}
-                          className={cn(
-                            "w-full flex items-center justify-between p-4 rounded-xl transition-all",
-                            isActive
-                              ? "bg-blue-500/20 text-blue-400"
-                              : "hover:bg-white/10",
-                          )}
+                      {isExt || isHash ? (
+                        <a href={link.href}
+                          target={isExt ? "_blank" : undefined}
+                          rel={isExt ? "noopener noreferrer" : undefined}
+                          onClick={e => { if (isHash) { e.preventDefault(); handleNavClick(link.href, isExt); } else handleNavClick(link.href, isExt); }}
+                          className={rowClass}
                         >
-                          <div className="flex items-center gap-3">
-                            {getIconComponent(link.icon)}
-                            <span className="font-medium">{link.label}</span>
-                          </div>
+                          <div className="flex items-center gap-3">{getIconNode(link.icon)}<span className="font-medium text-sm">{link.label}</span></div>
                           <div className="flex items-center gap-2">
-                            {link.badge && (
-                              <span className="px-2 py-1 text-xs font-bold bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full">
-                                {link.badge}
-                              </span>
-                            )}
-                            {isExternal && <ExternalLink className="w-4 h-4" />}
+                            {link.badge && <span className="px-2 py-0.5 text-xs font-bold bg-orange-500 text-white rounded-full">{link.badge}</span>}
+                            {isExt && <ExternalLink className="w-3 h-3 opacity-50" />}
                           </div>
                         </a>
                       ) : (
                         <Link href={link.href} passHref>
-                          <div
-                            onClick={() => handleNavClick(link.href)}
-                            className={cn(
-                              "w-full flex items-center justify-between p-4 rounded-xl transition-all cursor-pointer",
-                              isActive
-                                ? "bg-blue-500/20 text-blue-400"
-                                : "hover:bg-white/10",
-                            )}
-                          >
-                            <div className="flex items-center gap-3">
-                              {getIconComponent(link.icon)}
-                              <span className="font-medium">{link.label}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              {link.badge && (
-                                <span className="px-2 py-1 text-xs font-bold bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full">
-                                  {link.badge}
-                                </span>
-                              )}
-                            </div>
+                          <div onClick={() => handleNavClick(link.href)} className={rowClass}>
+                            <div className="flex items-center gap-3">{getIconNode(link.icon)}<span className="font-medium text-sm">{link.label}</span></div>
+                            {link.badge && <span className="px-2 py-0.5 text-xs font-bold bg-orange-500 text-white rounded-full">{link.badge}</span>}
                           </div>
                         </Link>
                       )}
@@ -629,21 +424,15 @@ export function SuperNavbar({
                   <motion.div
                     initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    transition={{ delay: navLinks.length * 0.1 }}
-                    className="pt-4"
+                    transition={{ delay: navLinks.length * 0.07 }}
+                    className="pt-3"
                   >
-                    <a
-                      href={navCTA.href}
-                      target={
-                        navCTA.href.startsWith("http") ? "_blank" : "_self"
-                      }
-                      className={`block w-full text-center ${getCtaStyles()}`}
-                      onClick={() => {
-                        setIsOpen(false);
-                        onLinkClick?.(navCTA.href);
-                      }}
+                    <a href={navCTA.href}
+                      target={navCTA.href.startsWith("http") ? "_blank" : "_self"}
+                      className={`block w-full text-center ${ctaClass}`}
+                      onClick={() => { setIsOpen(false); onLinkClick?.(navCTA.href); }}
                     >
-                      {navCTA.icon || <Zap className="w-4 h-4" />}
+                      {navCTA.icon ?? <Zap className="w-4 h-4" />}
                       {navCTA.label}
                     </a>
                   </motion.div>
@@ -654,7 +443,6 @@ export function SuperNavbar({
         </AnimatePresence>
       </motion.nav>
 
-      {/* Spacer for fixed navbar */}
       {sticky && <div className="h-20" />}
     </>
   );

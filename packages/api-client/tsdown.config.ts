@@ -8,13 +8,7 @@ export default defineConfig({
   sourcemap: true,
   minify: false,
   external: [
-    '@boldmind/auth',
-    '@boldmind/utils',
-    '@boldmind/config',
-    '@supabase/supabase-js',
     'axios',
-    'next',
-    'react'
   ],
   platform: 'neutral',
   treeshake: true,

@@ -1,27 +1,24 @@
 'use client';
 
 /**
- * BoldMind Hub — Verify Email Page
+ * BoldMind Hub — Verify Email Page (inner form only)
  * File: apps/boldmind-hub/app/(auth)/verify-email/page.tsx
  *
- * Wired to:
- *   POST /auth/verify-email  → verify the 6-digit code
- *   POST /auth/resend-verification → resend the code
+ * (auth)/layout.tsx provides the dark split-panel shell.
  *
- * Replaced useAuth().verifyEmailCode / resendVerification (Supabase-style)
- * with direct calls to the NestJS authAPI. These endpoints are not yet in
- * lib/api.ts so they are added here as lightweight inline fetchers with the
- * same credential + error pattern as the rest of the codebase.
+ * Endpoints (not yet in lib/api.ts — added here as inline fetchers):
+ *   POST /auth/verify-email        { email, code }
+ *   POST /auth/resend-verification { email }
  *
- * TODO: add verifyEmail / resendVerification to authAPI in lib/api.ts when
- * the endpoints are confirmed in your NestJS server startup log.
+ * Auto-submits when all 6 digits are entered.
+ * 60-second resend cooldown with live countdown.
  */
 
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, ArrowRight, Inbox, Loader2, RefreshCw } from 'lucide-react';
+import { Mail, Loader2, RefreshCw, ArrowLeft, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useState, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 
 // ─── API helpers ──────────────────────────────────────────────────────────────
@@ -43,23 +40,7 @@ async function apiPost<T>(path: string, body: unknown): Promise<T> {
   return res.json();
 }
 
-// ─── Step component ───────────────────────────────────────────────────────────
-
-function Step({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) {
-  return (
-    <div className="flex gap-4">
-      <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center">
-        {icon}
-      </div>
-      <div>
-        <h3 className="font-bold text-gray-900 dark:text-white text-base">{title}</h3>
-        <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">{description}</p>
-      </div>
-    </div>
-  );
-}
-
-// ─── Resend cooldown ──────────────────────────────────────────────────────────
+// ─── Resend cooldown hook ─────────────────────────────────────────────────────
 
 function useResendCooldown(seconds = 60) {
   const [remaining, setRemaining] = useState(0);
@@ -76,7 +57,6 @@ function useResendCooldown(seconds = 60) {
   };
 
   useEffect(() => () => { if (ref.current) clearInterval(ref.current); }, []);
-
   return { remaining, start, canResend: remaining === 0 };
 }
 
@@ -85,19 +65,19 @@ function useResendCooldown(seconds = 60) {
 export default function VerifyEmailPage() {
   const searchParams = useSearchParams();
   const router       = useRouter();
-
-  const email = searchParams.get('email') ?? '';
+  const email        = searchParams.get('email') ?? '';
 
   const [code,        setCode]        = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
   const [isResending, setIsResending] = useState(false);
   const [verifyError, setVerifyError] = useState('');
+  const [verified,    setVerified]    = useState(false);
 
   const cooldown = useResendCooldown(60);
 
   // ── Verify ───────────────────────────────────────────────────────────────
-  const handleVerify = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleVerify = async (e?: React.FormEvent) => {
+    e?.preventDefault();
     setVerifyError('');
 
     if (!email) {
@@ -112,8 +92,9 @@ export default function VerifyEmailPage() {
     setIsVerifying(true);
     try {
       await apiPost('/auth/verify-email', { email, code });
-      toast.success('Email verified successfully!');
-      router.push('/dashboard');
+      setVerified(true);
+      toast.success('Email verified!');
+      setTimeout(() => router.push('/dashboard'), 1500);
     } catch (err: any) {
       setVerifyError(err.message || 'Verification failed. Check the code and try again.');
     } finally {
@@ -121,11 +102,15 @@ export default function VerifyEmailPage() {
     }
   };
 
+  // Auto-submit when 6 digits entered
+  useEffect(() => {
+    if (code.length === 6 && !isVerifying) handleVerify();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [code]);
+
   // ── Resend ───────────────────────────────────────────────────────────────
   const handleResend = async () => {
-    if (!email) { toast.error('Email is missing.'); return; }
-    if (!cooldown.canResend) return;
-
+    if (!email || !cooldown.canResend) return;
     setIsResending(true);
     try {
       await apiPost('/auth/resend-verification', { email });
@@ -138,118 +123,118 @@ export default function VerifyEmailPage() {
     }
   };
 
-  // Auto-submit when 6 digits entered
-  useEffect(() => {
-    if (code.length === 6) {
-      handleVerify(new Event('submit') as any);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [code]);
+  // ── Verified success ──────────────────────────────────────────────────────
+  if (verified) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="text-center py-4"
+      >
+        <div className="w-16 h-16 bg-green-500/15 rounded-full flex items-center justify-center mx-auto mb-5 border border-green-500/25">
+          <CheckCircle className="w-8 h-8 text-green-400" />
+        </div>
+        <h2 className="text-xl font-bold text-white mb-2">Email Verified!</h2>
+        <p className="text-white/45 text-sm">Taking you to your dashboard…</p>
+      </motion.div>
+    );
+  }
 
+  // ── Form ──────────────────────────────────────────────────────────────────
   return (
-    <div className="w-full max-w-md mx-auto">
-      {/* Icon */}
-      <div className="text-center mb-10">
+    <>
+      {/* Icon + heading */}
+      <div className="text-center mb-7">
         <motion.div
           initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5, type: 'spring' }}
-          className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 mb-6"
+          transition={{ type: 'spring', duration: 0.5 }}
+          className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-blue-500/15 border border-blue-500/25 mb-5"
         >
-          <Mail size={40} />
+          <Mail className="w-7 h-7 text-blue-400" />
         </motion.div>
 
-        <h1 className="text-3xl font-black text-[#00143C] dark:text-white mb-3">
-          Check Your Email
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400 text-lg">
-          We sent a verification code to{' '}
-          <span className="font-bold text-gray-900 dark:text-white">
-            {email || 'your email'}
-          </span>
+        <h1 className="text-2xl font-bold text-white mb-1.5">Check Your Email</h1>
+        <p className="text-white/45 text-sm">
+          We sent a 6-digit code to{' '}
+          <span className="text-white/70 font-medium">{email || 'your email'}</span>
         </p>
       </div>
 
-      {/* Card */}
-      <div className="bg-white dark:bg-gray-900 rounded-3xl p-8 border border-gray-100 dark:border-gray-800 shadow-xl shadow-blue-900/5 mb-8">
-        <form onSubmit={handleVerify}>
-          <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
-            Verification Code
-          </label>
+      {/* Code input */}
+      <form onSubmit={handleVerify}>
+        <label className="text-white/50 text-xs font-medium mb-2 block">
+          Verification Code
+        </label>
 
-          {/* Single 6-digit input */}
-          <input
-            type="text"
-            inputMode="numeric"
-            maxLength={6}
-            value={code}
-            onChange={e => {
-              setVerifyError('');
-              setCode(e.target.value.replace(/\D/g, ''));
-            }}
-            placeholder="123456"
-            className="w-full mb-2 py-4 px-6 bg-gray-50 dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-2xl text-center text-2xl font-black tracking-[0.5em] focus:border-[#00143C] dark:focus:border-[#FFC800] outline-none transition-all placeholder:tracking-normal placeholder:font-normal placeholder:text-gray-300"
-          />
+        <input
+          type="text"
+          inputMode="numeric"
+          maxLength={6}
+          value={code}
+          onChange={e => {
+            setVerifyError('');
+            setCode(e.target.value.replace(/\D/g, ''));
+          }}
+          placeholder="123456"
+          className="w-full mb-2 py-4 px-4 bg-white/5 border border-white/10 rounded-xl text-center text-2xl font-black tracking-[0.5em] text-white focus:border-amber-400/50 focus:outline-none transition-all placeholder:tracking-normal placeholder:font-normal placeholder:text-white/20"
+        />
 
-          {verifyError && (
-            <p className="text-red-500 text-sm mb-4 text-center">{verifyError}</p>
-          )}
+        {verifyError && (
+          <p className="text-red-400 text-xs text-center mb-3">{verifyError}</p>
+        )}
 
-          <button
-            type="submit"
-            disabled={isVerifying || code.length < 6}
-            className="w-full py-4 px-6 bg-[#00143C] text-white font-bold rounded-2xl hover:bg-[#00256B] disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 mt-2"
-          >
-            {isVerifying
-              ? <><Loader2 size={20} className="animate-spin" /> Verifying…</>
-              : 'Verify Account'
-            }
-          </button>
-        </form>
+        <button
+          type="submit"
+          disabled={isVerifying || code.length < 6}
+          className="w-full py-3 rounded-xl font-semibold bg-amber-400 text-black hover:bg-amber-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 text-sm mt-1"
+        >
+          {isVerifying
+            ? <><Loader2 size={16} className="animate-spin" /> Verifying…</>
+            : 'Verify Account'
+          }
+        </button>
+      </form>
 
-        <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mt-6 mb-5">
-          Alternatively
-        </p>
-
-        <div className="space-y-5">
-          <Step
-            icon={<Inbox className="text-blue-500" size={18} />}
-            title="Click the magic link"
-            description="You can also click the button in the email to verify instantly."
-          />
-          <Step
-            icon={<ArrowRight className="text-purple-500" size={18} />}
-            title="Start building"
-            description="Once verified, you'll be redirected to your dashboard automatically."
-          />
+      {/* Steps */}
+      <div className="mt-6 pt-5 border-t border-white/6 space-y-3">
+        <p className="text-white/25 text-[10px] uppercase tracking-widest font-bold">Alternatively</p>
+        <div className="flex gap-3">
+          <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+            <Mail className="w-4 h-4 text-blue-400" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-white">Click the magic link</p>
+            <p className="text-xs text-white/40">You can also click the button in the email to verify instantly.</p>
+          </div>
         </div>
       </div>
 
-      {/* Footer actions */}
-      <div className="text-center space-y-4">
-        <p className="text-gray-500 dark:text-gray-500 text-sm">
-          Didn't receive the email? Check your spam folder or try again.
+      {/* Resend + back */}
+      <div className="mt-6 text-center space-y-3">
+        <p className="text-white/30 text-xs">
+          Didn't receive the email? Check your spam or{' '}
         </p>
+        <button
+          onClick={handleResend}
+          disabled={isResending || !cooldown.canResend}
+          className="flex items-center gap-2 mx-auto text-amber-400 hover:text-amber-300 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          {isResending
+            ? <><Loader2 size={13} className="animate-spin" /> Sending…</>
+            : cooldown.remaining > 0
+              ? <><RefreshCw size={13} /> Resend in {cooldown.remaining}s</>
+              : 'Resend Verification Email'
+          }
+        </button>
 
-        <div className="flex flex-col items-center gap-3">
-          <button
-            onClick={handleResend}
-            disabled={isResending || !cooldown.canResend}
-            className="flex items-center gap-2 text-[#00143C] dark:text-[#FFC800] font-bold hover:underline disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
-          >
-            {isResending
-              ? <><Loader2 size={14} className="animate-spin" /> Sending…</>
-              : cooldown.remaining > 0
-                ? <><RefreshCw size={14} /> Resend in {cooldown.remaining}s</>
-                : 'Resend Verification Email'
-            }
-          </button>
-
-          <Link href="/login" className="text-gray-500 dark:text-gray-400 text-sm hover:underline transition-colors">
-            Back to Login
-          </Link>
-        </div>
+        <Link
+          href="/login"
+          className="flex items-center gap-1.5 justify-center text-white/30 hover:text-white/55 text-xs transition-colors"
+        >
+          <ArrowLeft size={12} /> Back to Login
+        </Link>
       </div>
-    </div>
+    </>
   );
 }

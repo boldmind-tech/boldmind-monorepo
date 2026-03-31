@@ -945,18 +945,6 @@ importers:
 
   packages/api-client:
     dependencies:
-      '@boldmind/auth':
-        specifier: workspace:*
-        version: link:../auth
-      '@boldmind/config':
-        specifier: workspace:*
-        version: link:../config
-      '@boldmind/utils':
-        specifier: workspace:*
-        version: link:../utils
-      '@supabase/supabase-js':
-        specifier: ^2.39.0
-        version: 2.99.1
       axios:
         specifier: ^1.6.2
         version: 1.13.6
