@@ -6,12 +6,6 @@
 # Example:
 #   cd /path/to/boldmind-monorepo
 #   docker build -f service/Dockerfile -t boldmind-service:latest .
-#
-# This means Docker can see:
-#   ./service/          (NestJS source)
-#   ./packages/utils/   (shared workspace dep)
-#   ./package.json      (root monorepo package.json)
-#   ./pnpm-lock.yaml
 # ─────────────────────────────────────────────────────────────────────────────
 
 # ── Stage 1: deps ─────────────────────────────────────────────────────────────
@@ -23,15 +17,13 @@ RUN corepack enable && corepack prepare pnpm@8.15.0 --activate
 WORKDIR /
 
 # Copy workspace manifests (root + service + shared packages)
-# We only copy what's needed to resolve workspace deps
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY service/package.json ./service/
 COPY packages/utils/package.json ./packages/utils/
 # COPY packages/config/package.json ./packages/config/
+
 # Install ALL workspace deps (needed because service uses workspace:* refs)
 RUN pnpm install --frozen-lockfile
-
-
 
 # ── Stage 2: build ────────────────────────────────────────────────────────────
 FROM node:22-alpine AS builder
@@ -51,15 +43,13 @@ COPY packages/utils/ ./packages/utils/
 # Copy root config files needed by NestJS build
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-# Generate Prisma client (run from root where node_modules exists)
-RUN ./node_modules/.bin/prisma generate --schema=./service/prisma/schema.prisma
+# Generate Prisma client - now node_modules exists!
+RUN npx prisma generate --schema=./service/prisma/schema.prisma
 
 WORKDIR /service
 
 # Build NestJS
-RUN node -e "try{require('fs').unlinkSync('tsconfig.tsbuildinfo')}catch(e){}" && \
-    npx nest build
-
+RUN npx nest build
 
 # ── Stage 3: runner ───────────────────────────────────────────────────────────
 FROM node:22-alpine AS runner
@@ -70,7 +60,7 @@ WORKDIR /
 
 # Non-root user for security
 RUN addgroup --system --gid 1001 nodejs && \
-    adduser  --system --uid  1001 nestjs
+    adduser --system --uid 1001 nestjs
 
 # Copy built output
 COPY --from=builder /service/dist ./dist
@@ -86,6 +76,9 @@ COPY --from=deps /node_modules ./node_modules
 # Copy packages source (workspace:* deps need the source at runtime if not bundled)
 COPY --from=builder /packages/utils ./packages/utils
 # COPY --from=builder /app/packages/config ./packages/config
+
+# Ensure proper ownership
+RUN chown -R nestjs:nodejs /
 
 USER nestjs
 
