@@ -10,14 +10,14 @@ COPY . .
 # Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Ensure service has access to node_modules
-RUN ln -sf /node_modules /service/node_modules
+# Copy all node_modules to service directory (the key fix)
+RUN mkdir -p /service/node_modules && cp -r /node_modules/* /service/node_modules/
 
 # Generate Prisma client
-RUN /node_modules/.bin/prisma generate --schema=/service/prisma/schema.prisma
+RUN cd /service && npx prisma generate
 
 # Build NestJS
-RUN cd /service && /node_modules/.bin/nest build
+RUN cd /service && npx nest build
 
 EXPOSE 4001
 
