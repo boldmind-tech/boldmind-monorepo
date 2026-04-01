@@ -7,9 +7,11 @@ WORKDIR /
 # Copy everything
 COPY . .
 
-# Install ALL dependencies (root + service) in one go
-RUN pnpm install --frozen-lockfile && \
-    cd /service && pnpm install --frozen-lockfile --ignore-workspace
+# Install root dependencies with pnpm
+RUN pnpm install --frozen-lockfile
+
+# Install service dependencies with npm (simpler and more reliable)
+RUN cd /service && npm install --production=false
 
 # Generate Prisma client
 RUN cd /service && npx prisma generate
@@ -18,7 +20,7 @@ RUN cd /service && npx prisma generate
 RUN cd /service && npx nest build
 
 # Remove dev dependencies
-RUN pnpm prune --prod
+RUN cd /service && npm prune --production
 
 EXPOSE 4001
 
