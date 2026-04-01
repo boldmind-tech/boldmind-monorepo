@@ -1,17 +1,6 @@
-# ─────────────────────────────────────────────────────────────────────────────
-# service/Dockerfile
-# Multi-stage build for the BoldMind NestJS monolith.
-#
-# Build context MUST be the monorepo root so Docker can COPY workspace packages.
-# Example:
-#   cd /path/to/boldmind-monorepo
-#   docker build -f service/Dockerfile -t boldmind-service:latest .
-# ─────────────────────────────────────────────────────────────────────────────
-
 # ── Stage 1: deps ─────────────────────────────────────────────────────────────
 FROM node:22-alpine AS deps
 
-# Install pnpm
 RUN corepack enable && corepack prepare pnpm@8.15.0 --activate
 
 WORKDIR /
@@ -21,12 +10,11 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY service/package.json ./service/
 COPY packages/utils/package.json ./packages/utils/
 
-# Install ALL workspace deps including @prisma/client
+# Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Verify Prisma client is installed
-RUN ls -la ./node_modules/@prisma/client || echo "Prisma client not found in root node_modules"
-RUN ls -la ./service/node_modules/@prisma/client || echo "Prisma client not found in service node_modules"
+# Prisma generate should run after install to ensure client is generated
+# But we'll do it in the builder stage
 
 # ── Stage 2: build ────────────────────────────────────────────────────────────
 FROM node:22-alpine AS builder
@@ -35,7 +23,7 @@ RUN corepack enable && corepack prepare pnpm@8.15.0 --activate
 
 WORKDIR /
 
-# Copy node_modules from deps stage
+# Copy everything from deps
 COPY --from=deps /node_modules ./node_modules
 COPY --from=deps /service/node_modules ./service/node_modules
 
@@ -44,13 +32,9 @@ COPY service/ ./service/
 COPY packages/utils/ ./packages/utils/
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-# Set the correct path for Prisma schema
-ENV PRISMA_SCHEMA_PATH=./service/prisma/schema.prisma
-
-# Generate Prisma client - use the locally installed prisma
-RUN ./node_modules/.bin/prisma generate --schema=./service/prisma/schema.prisma
-
+# Run prisma generate using the installed prisma
 WORKDIR /service
+RUN ../node_modules/.bin/prisma generate --schema=./prisma/schema.prisma
 
 # Build NestJS
 RUN npx nest build
@@ -62,31 +46,21 @@ RUN apk add --no-cache dumb-init
 
 WORKDIR /
 
-# Non-root user for security
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nestjs
 
-# Copy built output
+# Copy built output and dependencies
 COPY --from=builder /service/dist ./dist
-
-# Copy Prisma schema + generated client
 COPY --from=builder /service/prisma ./prisma
 COPY --from=builder /service/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /service/node_modules/@prisma ./node_modules/@prisma
-
-# Copy production node_modules
 COPY --from=deps /node_modules ./node_modules
 COPY --from=deps /service/node_modules ./service/node_modules
-
-# Copy packages source
 COPY --from=builder /packages/utils ./packages/utils
 
-# Ensure proper ownership
 RUN chown -R nestjs:nodejs /
 
 USER nestjs
 
 EXPOSE 4001
-
-# dumb-init handles signal forwarding + zombie reaping
 CMD ["dumb-init", "node", "dist/main"]
