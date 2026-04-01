@@ -2,24 +2,28 @@ FROM node:22-alpine
 
 RUN corepack enable && corepack prepare pnpm@8.15.0 --activate
 
-WORKDIR /
+WORKDIR /service
 
-# Copy everything
-COPY . .
+# Copy service and workspace packages
+COPY service/package.json ./
+COPY packages/utils/package.json ../packages/utils/
+COPY package.json ../package.json
+COPY pnpm-lock.yaml ../pnpm-lock.yaml
+COPY pnpm-workspace.yaml ../pnpm-workspace.yaml
 
-# Install all dependencies
+# Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Debug: Show what's installed
-RUN echo "=== Checking pnpm store ===" && ls -la /node_modules/.pnpm/ | head -20
-RUN echo "=== Looking for @nestjs/common ===" && find /node_modules -name "@nestjs" -type d 2>/dev/null | head -10
+# Copy source code
+COPY service/ ./
+COPY packages/utils ../packages/utils/
 
-# Generate Prisma client using the full path
-RUN /node_modules/.bin/prisma generate --schema=/service/prisma/schema.prisma
+# Generate Prisma client
+RUN pnpm exec prisma generate
 
-# Build NestJS using the full path
-RUN /node_modules/.bin/nest build /service
+# Build NestJS
+RUN pnpm exec nest build
 
 EXPOSE 4001
 
-CMD ["node", "service/dist/main"]
+CMD ["node", "dist/main"]
