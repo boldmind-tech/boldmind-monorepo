@@ -1,30 +1,15 @@
-# service/Dockerfile
-FROM node:22-alpine
+# service/Dockerfile - Multi-stage build
+FROM node:22-alpine AS builder
 
 RUN npm install -g pnpm@8.15.0
 
-WORKDIR /
+WORKDIR /build
 
-# Copy package management files
-COPY package.json pnpm-workspace.yaml .npmrc ./
-COPY pnpm-lock.yaml* ./
+# Copy everything
+COPY . .
 
-# Copy TypeScript configuration files
-COPY tsconfig.base.json ./
-COPY packages/*/tsconfig.json ./packages/
-COPY service/tsconfig.json ./service/
-
-# Copy package.json files for workspace packages
-COPY packages/*/package.json ./packages/
-COPY service/package.json ./service/
-
-# Install dependencies with shamefully hoist to flatten everything
-# This overrides the .npmrc setting for the build
+# Install with shamefully hoist
 RUN pnpm install --no-frozen-lockfile --shamefully-hoist
-
-# Copy source code
-COPY packages ./packages
-COPY service ./service
 
 # Build shared packages
 RUN cd packages/utils && pnpm run build
@@ -35,6 +20,19 @@ RUN cd service && npx prisma generate
 # Build NestJS
 RUN cd service && npx nest build
 
+# Production stage
+FROM node:22-alpine
+
+RUN npm install -g pnpm@8.15.0
+
+WORKDIR /
+
+# Copy only what's needed for production
+COPY --from=builder /build/service/dist ./dist
+COPY --from=builder /build/service/package.json ./package.json
+COPY --from=builder /build/service/node_modules ./node_modules
+COPY --from=builder /build/packages ./packages
+
 EXPOSE 4001
 
-CMD ["node", "service/dist/main"]
+CMD ["node", "dist/main"]
