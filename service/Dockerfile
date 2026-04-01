@@ -16,14 +16,17 @@ RUN corepack enable && corepack prepare pnpm@8.15.0 --activate
 
 WORKDIR /
 
-# Copy workspace manifests (root + service + shared packages)
+# Copy workspace manifests
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY service/package.json ./service/
 COPY packages/utils/package.json ./packages/utils/
-# COPY packages/config/package.json ./packages/config/
 
-# Install ALL workspace deps (needed because service uses workspace:* refs)
+# Install ALL workspace deps including @prisma/client
 RUN pnpm install --frozen-lockfile
+
+# Verify Prisma client is installed
+RUN ls -la ./node_modules/@prisma/client || echo "Prisma client not found in root node_modules"
+RUN ls -la ./service/node_modules/@prisma/client || echo "Prisma client not found in service node_modules"
 
 # ── Stage 2: build ────────────────────────────────────────────────────────────
 FROM node:22-alpine AS builder
@@ -34,17 +37,18 @@ WORKDIR /
 
 # Copy node_modules from deps stage
 COPY --from=deps /node_modules ./node_modules
+COPY --from=deps /service/node_modules ./service/node_modules
 
-# Copy source
+# Copy source files
 COPY service/ ./service/
 COPY packages/utils/ ./packages/utils/
-# COPY packages/config/ ./packages/config/
-
-# Copy root config files needed by NestJS build
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-# Generate Prisma client - now node_modules exists!
-RUN npx prisma generate --schema=./service/prisma/schema.prisma
+# Set the correct path for Prisma schema
+ENV PRISMA_SCHEMA_PATH=./service/prisma/schema.prisma
+
+# Generate Prisma client - use the locally installed prisma
+RUN ./node_modules/.bin/prisma generate --schema=./service/prisma/schema.prisma
 
 WORKDIR /service
 
@@ -72,10 +76,10 @@ COPY --from=builder /service/node_modules/@prisma ./node_modules/@prisma
 
 # Copy production node_modules
 COPY --from=deps /node_modules ./node_modules
+COPY --from=deps /service/node_modules ./service/node_modules
 
-# Copy packages source (workspace:* deps need the source at runtime if not bundled)
+# Copy packages source
 COPY --from=builder /packages/utils ./packages/utils
-# COPY --from=builder /app/packages/config ./packages/config
 
 # Ensure proper ownership
 RUN chown -R nestjs:nodejs /
