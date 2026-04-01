@@ -1,12 +1,16 @@
 FROM node:22-alpine
 
+# Install pnpm globally to match the monorepo's declared package manager
+RUN npm install -g pnpm@8.15.0
+
 WORKDIR /
 
-# Copy everything
+# Copy everything (includes root package.json, pnpm-workspace.yaml, pnpm-lock.yaml,
+# and all workspace packages so workspace:* references resolve correctly)
 COPY . .
 
-# Install with npm (no pnpm workspace complexity)
-RUN cd /service && npm install
+# Install dependencies using pnpm so workspace protocol is understood
+RUN pnpm install --frozen-lockfile
 
 # Generate Prisma client
 RUN cd /service && npx prisma generate
