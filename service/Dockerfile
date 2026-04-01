@@ -12,6 +12,9 @@ COPY . .
 # Install dependencies using pnpm so workspace protocol is understood
 RUN pnpm install --frozen-lockfile
 
+# Ensure service-specific dependencies are hoisted into the service's node_modules
+RUN pnpm install --filter ./service
+
 # Generate Prisma client
 RUN cd /service && npx prisma generate
 
