@@ -1,95 +1,68 @@
 # ─────────────────────────────────────────────────────────────────────────────
-# service/Dockerfile - Explicit installation approach
+# service/Dockerfile - Production-ready NestJS build with Prisma
 # ─────────────────────────────────────────────────────────────────────────────
 
-# ── Stage 1: deps ─────────────────────────────────────────────────────────────
+# ── Stage 1: Install dependencies ────────────────────────────────────────────
 FROM node:22-alpine AS deps
 
 RUN corepack enable && corepack prepare pnpm@8.15.0 --activate
 
-WORKDIR /
+WORKDIR /build
 
-# Copy root workspace files
+# Copy package files
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY service/package.json ./service/
 COPY packages/utils/package.json ./packages/utils/
 
-# Install root dependencies
+# Install ALL dependencies (including Prisma)
 RUN pnpm install --frozen-lockfile
 
-# Explicitly install service dependencies (critical for Prisma)
-RUN cd /service && pnpm install --frozen-lockfile --ignore-workspace
-
-# Verify Prisma is installed
-RUN echo "=== Prisma binary locations ===" && \
-    find / -name "prisma" -type f -executable 2>/dev/null | grep -E "(bin|node_modules)" && \
-    echo "=== Prisma version ===" && \
-    /node_modules/.bin/prisma --version 2>/dev/null || \
-    /service/node_modules/.bin/prisma --version 2>/dev/null || \
-    echo "Prisma not found!"
-
-# ── Stage 2: build ────────────────────────────────────────────────────────────
+# ── Stage 2: Build application ───────────────────────────────────────────────
 FROM node:22-alpine AS builder
 
 RUN corepack enable && corepack prepare pnpm@8.15.0 --activate
 
-WORKDIR /
+WORKDIR /build
 
-# Copy all node_modules
-COPY --from=deps /node_modules ./node_modules
-COPY --from=deps /service/node_modules ./service/node_modules
+# Copy node_modules from deps stage
+COPY --from=deps /build/node_modules ./node_modules
 
-# Copy source files
+# Copy source code
 COPY service/ ./service/
 COPY packages/utils/ ./packages/utils/
 
-# Generate Prisma client (try multiple paths)
-RUN if [ -f "/node_modules/.bin/prisma" ]; then \
-      /node_modules/.bin/prisma generate --schema=/service/prisma/schema.prisma; \
-    elif [ -f "/service/node_modules/.bin/prisma" ]; then \
-      /service/node_modules/.bin/prisma generate --schema=/service/prisma/schema.prisma; \
-    else \
-      echo "ERROR: Prisma binary not found!" && exit 1; \
-    fi
+# Generate Prisma client
+WORKDIR /build/service
+RUN npx prisma generate
 
-# Build NestJS
-RUN cd /service && \
-    if [ -f "/node_modules/.bin/nest" ]; then \
-      /node_modules/.bin/nest build; \
-    elif [ -f "/service/node_modules/.bin/nest" ]; then \
-      /service/node_modules/.bin/nest build; \
-    else \
-      echo "ERROR: NestJS binary not found!" && exit 1; \
-    fi
+# Build NestJS application
+RUN npx nest build
 
-# ── Stage 3: runner ───────────────────────────────────────────────────────────
+# ── Stage 3: Production runner ───────────────────────────────────────────────
 FROM node:22-alpine AS runner
 
 RUN apk add --no-cache dumb-init
 
-WORKDIR /
+WORKDIR /app
 
+# Create non-root user
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nestjs
 
-# Copy built output
-COPY --from=builder /service/dist ./dist
-COPY --from=builder /service/prisma ./prisma
+# Copy built application
+COPY --from=builder /build/service/dist ./dist
+COPY --from=builder /build/service/prisma ./prisma
+COPY --from=builder /build/service/package.json ./package.json
 
-# Copy Prisma client (from whatever location it was generated)
-COPY --from=builder /node_modules/.prisma ./node_modules/.prisma 2>/dev/null || echo "No Prisma client in root node_modules"
-COPY --from=builder /service/node_modules/.prisma ./node_modules/.prisma 2>/dev/null || echo "No Prisma client in service node_modules"
-COPY --from=builder /node_modules/@prisma ./node_modules/@prisma 2>/dev/null || echo "No Prisma package in root node_modules"
-COPY --from=builder /service/node_modules/@prisma ./node_modules/@prisma 2>/dev/null || echo "No Prisma package in service node_modules"
+# Copy Prisma client
+COPY --from=builder /build/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /build/node_modules/@prisma ./node_modules/@prisma
 
-# Copy production dependencies
-COPY --from=deps /node_modules ./node_modules
-COPY --from=deps /service/node_modules ./service/node_modules 2>/dev/null || echo "No service node_modules found"
+# Copy production dependencies only
+COPY --from=deps /build/node_modules ./node_modules
 
-# Copy shared packages
-COPY --from=builder /packages/utils ./packages/utils
-
-RUN chown -R nestjs:nodejs /
+# Set ownership
+RUN chown -R nestjs:nodejs /app
 
 USER nestjs
 
