@@ -9,11 +9,10 @@ WORKDIR /
 # and all workspace packages so workspace:* references resolve correctly)
 COPY . .
 
-# Install dependencies using pnpm so workspace protocol is understood
-RUN pnpm install --frozen-lockfile
-
-# Ensure service-specific dependencies are hoisted into the service's node_modules
-RUN pnpm install --filter ./service
+# Install dependencies using pnpm so workspace protocol is understood.
+# --shamefully-hoist flattens node_modules so TypeScript can resolve all
+# dependencies when compiling from the /service subdirectory in Docker.
+RUN pnpm install --frozen-lockfile --shamefully-hoist
 
 # Generate Prisma client
 RUN cd /service && npx prisma generate
