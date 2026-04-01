@@ -7,20 +7,18 @@ WORKDIR /
 # Copy everything
 COPY . .
 
-# Install root dependencies with pnpm
+# Install all dependencies
 RUN pnpm install --frozen-lockfile
 
-# Install service dependencies with npm (simpler and more reliable)
-RUN cd /service && npm install --production=false
+# Debug: Show what's installed
+RUN echo "=== Checking pnpm store ===" && ls -la /node_modules/.pnpm/ | head -20
+RUN echo "=== Looking for @nestjs/common ===" && find /node_modules -name "@nestjs" -type d 2>/dev/null | head -10
 
-# Generate Prisma client
-RUN cd /service && npx prisma generate
+# Generate Prisma client using the full path
+RUN /node_modules/.bin/prisma generate --schema=/service/prisma/schema.prisma
 
-# Build NestJS
-RUN cd /service && npx nest build
-
-# Remove dev dependencies
-RUN cd /service && npm prune --production
+# Build NestJS using the full path
+RUN /node_modules/.bin/nest build /service
 
 EXPOSE 4001
 
