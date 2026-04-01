@@ -5,15 +5,19 @@ RUN npm install -g pnpm@8.15.0
 
 WORKDIR /
 
-# Copy everything needed for install
-COPY package.json pnpm-workspace.yaml pnpm-lock.yaml .npmrc ./
+# Copy package management files (lockfile is optional - pnpm will generate if missing)
+COPY package.json pnpm-workspace.yaml .npmrc ./
+# Copy lockfile only if it exists (use wildcard to handle missing file)
+COPY pnpm-lock.yaml* ./
+
+# Copy package.json files for workspace packages
 COPY packages/*/package.json ./packages/
 COPY service/package.json ./service/
 
-# Install with frozen lockfile (now that lockfile is included)
-RUN pnpm install --frozen-lockfile
+# Install dependencies - use --no-frozen-lockfile to generate lockfile if missing
+RUN pnpm install --no-frozen-lockfile
 
-# Copy source
+# Copy source code
 COPY packages ./packages
 COPY service ./service
 
