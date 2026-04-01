@@ -4,25 +4,29 @@ RUN corepack enable && corepack prepare pnpm@8.15.0 --activate
 
 WORKDIR /service
 
-# Copy service and workspace packages
+# Copy everything needed
 COPY service/package.json ./
 COPY packages/utils/package.json ../packages/utils/
 COPY package.json ../package.json
 COPY pnpm-lock.yaml ../pnpm-lock.yaml
 COPY pnpm-workspace.yaml ../pnpm-workspace.yaml
 
-# Install dependencies
+# Install with pnpm
 RUN pnpm install --frozen-lockfile
 
-# Copy source code
+# Copy source
 COPY service/ ./
 COPY packages/utils ../packages/utils/
 
+# Create a symlink from service/node_modules to root node_modules
+# This makes NestJS see the dependencies
+RUN ln -sf ../node_modules node_modules
+
 # Generate Prisma client
-RUN pnpm exec prisma generate
+RUN npx prisma generate
 
 # Build NestJS
-RUN pnpm exec nest build
+RUN npx nest build
 
 EXPOSE 4001
 
