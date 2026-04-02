@@ -14,8 +14,9 @@ RUN cd service && npx prisma generate
 
 RUN npm install -g @nestjs/cli
 
-# Tell TypeScript to look for node_modules at root level
-RUN cd service && NODE_PATH=/node_modules nest build
+RUN ln -s /node_modules /service/node_modules
+
+RUN cd service && nest build
 
 # ---- Production stage ----
 FROM node:22-alpine
