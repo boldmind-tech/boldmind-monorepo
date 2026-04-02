@@ -1,14 +1,14 @@
-# service/Dockerfile
+# service/Dockerfile - Multi-stage build
 FROM node:22-alpine AS builder
 
 RUN npm install -g pnpm@8.15.0
 
-WORKDIR /
+WORKDIR /service
 
 # Copy everything
 COPY . .
 
-# Install with shamefully hoist to flatten dependencies
+# Install with shamefully hoist
 RUN pnpm install --no-frozen-lockfile --shamefully-hoist
 
 # Build shared packages
@@ -25,14 +25,14 @@ FROM node:22-alpine
 
 RUN npm install -g pnpm@8.15.0
 
-WORKDIR /
+WORKDIR /service
 
 # Copy only what's needed for production
-COPY --from=builder /service/dist /service/dist
-COPY --from=builder /service/package.json /service/package.json
-COPY --from=builder /service/node_modules /service/node_modules
-COPY --from=builder /packages/utils /packages/utils
+COPY --from=builder /service/dist ./dist
+COPY --from=builder /service/package.json ./package.json
+COPY --from=builder /service/node_modules ./node_modules
+COPY --from=builder /packages ./packages
 
 EXPOSE 4001
 
-CMD ["node", "service/dist/main"]
+CMD ["node", "dist/main"]
