@@ -4,14 +4,13 @@ RUN npm install -g pnpm@8.15.0
 
 WORKDIR /
 
-# Monorepo root lands at /service (contains service/, packages/, apps/, etc.)
 COPY . .
 
 RUN pnpm install --no-frozen-lockfile --shamefully-hoist
 
-RUN pnpm --filter '@boldmind/utils' run build
+# Fix: cd directly instead of --filter
+RUN cd packages/utils && pnpm run build
 
-# Prisma and nest build are inside /service/service/
 RUN cd service && npx prisma generate
 RUN cd service && npx nest build
 
