@@ -6,15 +6,18 @@ WORKDIR /
 
 COPY . .
 
-RUN pnpm install --no-frozen-lockfile --shamefully-hoist
+# Override .npmrc to force hoisted node_modules so NestJS can resolve
+# nested dependencies. The root .npmrc sets node-linker=pnpm which
+# prevents shamefully-hoist from working correctly.
+RUN echo "node-linker=hoisted\nshamefully-hoist=true\nstrict-peer-dependencies=false\nauto-install-peers=true\nshared-workspace-lockfile=true" > .npmrc
+
+RUN pnpm install --no-frozen-lockfile
 
 RUN cd packages/utils && pnpm run build
 
 RUN cd service && npx prisma generate
 
 RUN npm install -g @nestjs/cli
-
-RUN ln -s /node_modules /service/node_modules
 
 RUN cd service && nest build
 
@@ -34,9 +37,11 @@ COPY --from=builder /packages/utils/package.json ./packages/utils/package.json
 
 COPY --from=builder /package.json ./package.json
 COPY --from=builder /pnpm-workspace.yaml ./pnpm-workspace.yaml
-COPY --from=builder /pnpm-lock.yaml ./pnpm-lock.yaml
 
-RUN pnpm install --prod --no-frozen-lockfile --shamefully-hoist
+# Override .npmrc for production install as well
+RUN echo "node-linker=hoisted\nshamefully-hoist=true\nstrict-peer-dependencies=false\nauto-install-peers=true\nshared-workspace-lockfile=true" > .npmrc
+
+RUN pnpm install --prod --no-frozen-lockfile
 
 EXPOSE 4001
 
