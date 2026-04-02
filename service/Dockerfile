@@ -7,14 +7,18 @@ WORKDIR /service
 COPY service/package.json ./
 COPY packages/utils /packages/utils
 
-# Replace workspace:* with file:../packages/utils using Node (single line)
+# Copy root configuration files needed for the build
+COPY tsconfig.base.json /          
+COPY .npmrc /                     
+
+# Replace workspace:* with file:../packages/utils
 RUN node -e "const fs=require('fs');const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));if(pkg.dependencies&&pkg.dependencies['@boldmind/utils']==='workspace:*'){pkg.dependencies['@boldmind/utils']='file:../packages/utils';fs.writeFileSync('package.json',JSON.stringify(pkg,null,2));console.log('✅ Modified');}else{console.log('⚠️ Not modified');}"
 
-# Verify change
 RUN cat package.json
 
 RUN pnpm install --no-frozen-lockfile --ignore-workspace
 
+# Build utils (tsconfig.base.json is now available at /)
 RUN cd /packages/utils && pnpm install --no-frozen-lockfile && pnpm run build
 
 COPY service/ .
