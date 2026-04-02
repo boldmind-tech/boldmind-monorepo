@@ -6,25 +6,25 @@ WORKDIR /
 
 COPY . .
 
+# Root install for workspace package linking
 RUN pnpm install --no-frozen-lockfile --shamefully-hoist
-
-RUN cd service && pnpm install --no-frozen-lockfile --shamefully-hoist
 
 RUN cd packages/utils && pnpm run build
 
 RUN cd service && npx prisma generate
 
-RUN npm install -g @nestjs/cli typescript
+RUN npm install -g @nestjs/cli
 
-# Debug: verify node_modules actually exist in service/
-RUN ls /service/node_modules/@nestjs/common | head -5
+# Use npm directly inside service/ — bypasses pnpm workspace, installs local node_modules
+RUN cd service && npm install --legacy-peer-deps
+
+# Verify it worked before attempting build
+RUN ls /service/node_modules/@nestjs/common | head -3
 
 RUN cd service && nest build
 
 # ---- Production stage ----
 FROM node:22-alpine
-
-RUN npm install -g pnpm@8.15.0
 
 WORKDIR /
 
@@ -35,10 +35,6 @@ COPY --from=builder /service/node_modules ./service/node_modules
 
 COPY --from=builder /packages/utils/dist ./packages/utils/dist
 COPY --from=builder /packages/utils/package.json ./packages/utils/package.json
-
-COPY --from=builder /package.json ./package.json
-COPY --from=builder /pnpm-workspace.yaml ./pnpm-workspace.yaml
-COPY --from=builder /pnpm-lock.yaml ./pnpm-lock.yaml
 
 EXPOSE 4001
 
