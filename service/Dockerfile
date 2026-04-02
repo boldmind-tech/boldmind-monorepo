@@ -6,21 +6,17 @@ WORKDIR /
 
 COPY . .
 
-# Root install for workspace package linking
+# Install all workspace dependencies (hoisted)
 RUN pnpm install --no-frozen-lockfile --shamefully-hoist
 
+# Build local workspace package
 RUN cd packages/utils && pnpm run build
 
+# Generate Prisma client
 RUN cd service && npx prisma generate
 
-RUN npm install -g @nestjs/cli
-
-# Use npm directly inside service/ — bypasses pnpm workspace, installs local node_modules
-RUN cd service && npm install --legacy-peer-deps
-
-# Verify it worked before attempting build
-RUN ls /service/node_modules/@nestjs/common | head -3
-
+# Build the service – it will resolve modules from /node_modules (hoisted)
+# because there is no local node_modules inside /service.
 RUN cd service && nest build
 
 # ---- Production stage ----
@@ -31,7 +27,8 @@ WORKDIR /
 COPY --from=builder /service/dist ./service/dist
 COPY --from=builder /service/package.json ./service/package.json
 COPY --from=builder /service/prisma ./service/prisma
-COPY --from=builder /service/node_modules ./service/node_modules
+COPY --from=builder /service/node_modules ./service/node_modules   # <-- this will be empty, but we keep for safety
+COPY --from=builder /node_modules ./node_modules                   # <-- copy the hoisted production dependencies
 
 COPY --from=builder /packages/utils/dist ./packages/utils/dist
 COPY --from=builder /packages/utils/package.json ./packages/utils/package.json
