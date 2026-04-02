@@ -6,17 +6,18 @@ WORKDIR /
 
 COPY . .
 
-# Install from monorepo root for workspace linking
 RUN pnpm install --no-frozen-lockfile --shamefully-hoist
 
-# Also install directly inside service/ so node_modules lives there
 RUN cd service && pnpm install --no-frozen-lockfile --shamefully-hoist
 
 RUN cd packages/utils && pnpm run build
 
 RUN cd service && npx prisma generate
 
-RUN npm install -g @nestjs/cli
+RUN npm install -g @nestjs/cli typescript
+
+# Debug: verify node_modules actually exist in service/
+RUN ls /service/node_modules/@nestjs/common | head -5
 
 RUN cd service && nest build
 
