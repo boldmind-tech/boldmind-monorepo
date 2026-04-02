@@ -27,8 +27,8 @@ WORKDIR /
 COPY --from=builder /service/dist ./service/dist
 COPY --from=builder /service/package.json ./service/package.json
 COPY --from=builder /service/prisma ./service/prisma
-COPY --from=builder /service/node_modules ./service/node_modules   # <-- this will be empty, but we keep for safety
-COPY --from=builder /node_modules ./node_modules                   # <-- copy the hoisted production dependencies
+COPY --from=builder /service/node_modules ./service/node_modules 
+COPY --from=builder /node_modules ./node_modules                   
 
 COPY --from=builder /packages/utils/dist ./packages/utils/dist
 COPY --from=builder /packages/utils/package.json ./packages/utils/package.json
