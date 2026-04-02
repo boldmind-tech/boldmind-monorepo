@@ -12,8 +12,8 @@ COPY packages/utils /packages/utils
 # Replace "workspace:*" with "file:../packages/utils" so pnpm can resolve it locally
 RUN sed -i 's|"@boldmind/utils": "workspace:\\*"|"@boldmind/utils": "file:../packages/utils"|' package.json
 
-# Install dependencies (no workspace, just a regular install)
-RUN pnpm install --no-frozen-lockfile
+# Install dependencies (ignore any parent workspace)
+RUN pnpm install --no-frozen-lockfile --ignore-workspace   # <-- ADDED FLAG
 
 # Build the utils package
 RUN cd /packages/utils && pnpm install --no-frozen-lockfile && pnpm run build
@@ -42,7 +42,7 @@ COPY --from=builder /service/node_modules ./node_modules
 COPY --from=builder /packages/utils/dist /packages/utils/dist
 COPY --from=builder /packages/utils/package.json /packages/utils/package.json
 
-# Optional: create a symlink inside node_modules so Node can resolve @boldmind/utils
+# Create a symlink inside node_modules so Node can resolve @boldmind/utils
 RUN mkdir -p /service/node_modules/@boldmind && \
     ln -s /packages/utils /service/node_modules/@boldmind/utils
 
