@@ -12,10 +12,10 @@ RUN cd packages/utils && pnpm run build
 
 RUN cd service && npx prisma generate
 
-# Install nest CLI globally so it's available
 RUN npm install -g @nestjs/cli
 
-RUN cd service && nest build
+# Tell TypeScript to look for node_modules at root level
+RUN cd service && NODE_PATH=/node_modules nest build
 
 # ---- Production stage ----
 FROM node:22-alpine
