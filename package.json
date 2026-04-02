@@ -44,7 +44,7 @@
     "test": "turbo run test",
     "type-check": "turbo run type-check",
     "format": "prettier --write \"**/*.{ts,tsx,md,json}\" --ignore-path .gitignore",
-    "clean": "rimraf node_modules **/node_modules",
+    "clean": "rimraf node_modules /node_modules",
     "health": "echo 'Checking monorepo health...' && pnpm run type-check && pnpm run lint && echo '✅ All checks passed'"
   },
   "dependencies": {

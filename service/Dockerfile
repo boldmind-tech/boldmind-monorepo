@@ -1,38 +1,40 @@
-# service/Dockerfile - Multi-stage build
 FROM node:22-alpine AS builder
 
 RUN npm install -g pnpm@8.15.0
 
-WORKDIR /service
+WORKDIR /
 
-# Copy everything
+# Monorepo root lands at /service (contains service/, packages/, apps/, etc.)
 COPY . .
 
-# Install with shamefully hoist
 RUN pnpm install --no-frozen-lockfile --shamefully-hoist
 
-# Build shared packages
-RUN cd packages/utils && pnpm run build
+RUN pnpm --filter '@boldmind/utils' run build
 
-# Generate Prisma client
-RUN npx prisma generate
+# Prisma and nest build are inside /service/service/
+RUN cd service && npx prisma generate
+RUN cd service && npx nest build
 
-# Build NestJS
-RUN npx nest build
-
-# Production stage
+# ---- Production stage ----
 FROM node:22-alpine
 
 RUN npm install -g pnpm@8.15.0
 
-WORKDIR /service
+WORKDIR /
 
-# Copy only what's needed for production
-# COPY --from=builder /service/dist ./dist
-# COPY --from=builder /service/package.json ./package.json
-# COPY --from=builder /service/node_modules ./node_modules
-# COPY --from=builder /packages ./packages
+COPY --from=builder /service/dist ./service/dist
+COPY --from=builder /service/package.json ./service/package.json
+COPY --from=builder /service/prisma ./service/prisma
+
+COPY --from=builder /packages/utils/dist ./packages/utils/dist
+COPY --from=builder /packages/utils/package.json ./packages/utils/package.json
+
+COPY --from=builder /package.json ./package.json
+COPY --from=builder /pnpm-workspace.yaml ./pnpm-workspace.yaml
+COPY --from=builder /pnpm-lock.yaml ./pnpm-lock.yaml
+
+RUN pnpm install --prod --no-frozen-lockfile --shamefully-hoist
 
 EXPOSE 4001
 
-CMD ["node", "dist/main"]
+CMD ["node", "service/dist/main"]
