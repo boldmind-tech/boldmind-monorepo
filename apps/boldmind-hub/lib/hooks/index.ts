@@ -31,6 +31,21 @@ import {
   type ApiResponse,
 } from '../api';
 
+const REFRESH_TOKEN_KEY = 'bm_rt';
+
+function saveRefreshToken(token: string) {
+  if (typeof window !== 'undefined') localStorage.setItem(REFRESH_TOKEN_KEY, token);
+}
+
+function getRefreshToken(): string | null {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem(REFRESH_TOKEN_KEY);
+}
+
+function clearRefreshToken() {
+  if (typeof window !== 'undefined') localStorage.removeItem(REFRESH_TOKEN_KEY);
+}
+
 // ─── Shared types ─────────────────────────────────────────────────────────────
 
 export interface UseQueryState<T> {
@@ -121,36 +136,56 @@ export function useCurrentUser() {
   return useQuery(() => authAPI.me().then(r => r.data));
 }
 
-/** Login mutation. Call execute(payload) to trigger. */
+/**
+ * Login mutation.
+ * On success: saves refresh token to localStorage, returns the AuthUser from /auth/me.
+ */
 export function useLogin() {
-  return useMutation((payload: LoginPayload) =>
-    authAPI.login(payload).then(r => r.data),
-  );
+  return useMutation(async (payload: LoginPayload): Promise<AuthUser> => {
+    const res = await authAPI.login(payload);
+    saveRefreshToken(res.data.refreshToken);
+    const userRes = await authAPI.me();
+    return userRes.data;
+  });
 }
 
-/** Register mutation. */
+/**
+ * Register mutation.
+ * On success: saves refresh token to localStorage, returns the AuthUser from /auth/me.
+ */
 export function useRegister() {
-  return useMutation((payload: RegisterPayload) =>
-    authAPI.register(payload).then(r => r.data),
-  );
+  return useMutation(async (payload: RegisterPayload): Promise<AuthUser> => {
+    const res = await authAPI.register(payload);
+    saveRefreshToken(res.data.refreshToken);
+    const userRes = await authAPI.me();
+    return userRes.data;
+  });
 }
 
-/** Logout mutation. */
+/** Logout mutation — revokes the stored refresh token and clears localStorage. */
 export function useLogout() {
-  return useMutation(() => authAPI.logout());
+  return useMutation(async () => {
+    const rt = getRefreshToken();
+    if (rt) {
+      try {
+        await authAPI.logout(rt);
+      } catch {
+        // Server may already have revoked it — proceed regardless
+      }
+      clearRefreshToken();
+    }
+  });
 }
 
-/** Forgot-password mutation. */
+/** Forgot-password mutation — sends OTP email; always succeeds (204). */
 export function useForgotPassword() {
-  return useMutation((email: string) =>
-    authAPI.forgotPassword(email).then(r => r.data),
-  );
+  return useMutation((email: string) => authAPI.forgotPassword(email));
 }
 
-/** Reset-password mutation. */
+/** Reset-password mutation — verifies OTP then sets new password. */
 export function useResetPassword() {
-  return useMutation((token: string, password: string) =>
-    authAPI.resetPassword(token, password).then(r => r.data),
+  return useMutation((email: string, code: string, newPassword: string) =>
+    authAPI.resetPassword(email, code, newPassword),
   );
 }
 

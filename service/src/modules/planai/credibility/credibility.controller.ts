@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Get, Param, UseGuards } from '@nestjs/common';
 import { CredibilityService } from './credibility.service';
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
-import { CurrentUser } from 'src/common/decorators/user.decorator';
+import { CurrentUser } from '../../../common/decorators/user.decorator';
 import { GeneratePortfolioDto, GenerateResumeDto } from './credibility.service';
 
 

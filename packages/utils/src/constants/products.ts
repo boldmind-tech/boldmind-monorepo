@@ -1,6 +1,4 @@
 // packages/utils/src/constants/products.ts
-// COMPLETE BOLDMIND PRODUCTS CATALOG - Updated Jan 18, 2026
-// Full blow lauch 19/1/2026
 
 
 export type ProductStatus = 'LIVE' | 'BUILDING' | 'PLANNED' | 'CONCEPT';

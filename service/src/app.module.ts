@@ -24,6 +24,7 @@ import { FitnessModule } from './modules/fitness/fitness.module';
 import { OSModule } from './modules/os/os.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { EmailScraperModule } from './modules/emailscraper/emailscraper.module';
+import { HubModule } from './modules/hub/hub.module';
 
 @Module({
   imports: [
@@ -140,6 +141,7 @@ import { EmailScraperModule } from './modules/emailscraper/emailscraper.module';
     OSModule,
     AdminModule,
     EmailScraperModule,
+    HubModule,
   ],
 })
 export class AppModule { }

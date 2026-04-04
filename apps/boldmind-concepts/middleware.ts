@@ -1,12 +1,5 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// apps/amebogist/middleware.ts
-// ─────────────────────────────────────────────────────────────────────────────
-// AmeboGist is a PUBLIC news reader. Most routes require NO auth.
-// Only creator-side routes (write, dashboard) redirect to hub SSO.
-// The actual creator dashboard lives in amebo-studio — this just
-// protects the /create quick-submit route on the main site.
-// ─────────────────────────────────────────────────────────────────────────────
-
+// apps/boldmind-concepts/middleware.ts
+// All concept tools require authentication — unauthenticated users go to hub.
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
@@ -14,25 +7,42 @@ const HUB_URL =
   process.env['NEXT_PUBLIC_HUB_URL'] ||
   (process.env.NODE_ENV === 'production' ? 'https://boldmind.ng' : 'http://localhost:3000');
 
-// Must match service/src/modules/auth/sso.service.ts
 const SSO_COOKIE = 'boldmind_sso';
 
 export function middleware(request: NextRequest): NextResponse {
+  const { pathname } = request.nextUrl;
   const token = request.cookies.get(SSO_COOKIE)?.value;
 
-  if (token) return NextResponse.next();
+  // Authenticated users on local auth pages → home
+  if (token && ['/login', '/register'].some(p => pathname.startsWith(p))) {
+    return NextResponse.redirect(new URL('/', request.url));
+  }
 
-  const loginUrl = new URL(`${HUB_URL}/login`);
-  loginUrl.searchParams.set('return_url', request.nextUrl.href);
-  return NextResponse.redirect(loginUrl);
+  // Unauthenticated → hub login
+  if (!token) {
+    const loginUrl = new URL(`${HUB_URL}/login`);
+    loginUrl.searchParams.set('return_url', request.nextUrl.href);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-  // Only guard creator-side routes on amebogist.ng
-  // Everything else (articles, categories, search) is public
+  // Protect all tool routes and local auth pages; allow root + pricing public
   matcher: [
-    '/create/:path*',
-    '/my-articles/:path*',
-    '/profile/edit/:path*',
+    '/afrocopy/:path*',
+    '/afrohustle/:path*',
+    '/anon/:path*',
+    '/farmgate/:path*',
+    '/kolo/:path*',
+    '/naijagig/:path*',
+    '/power/:path*',
+    '/receipt/:path*',
+    '/remit/:path*',
+    '/safe/:path*',
+    '/skill2cash/:path*',
+    '/login',
+    '/register',
   ],
 };

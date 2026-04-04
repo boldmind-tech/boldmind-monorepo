@@ -83,34 +83,59 @@ export interface PaginatedResponse<T> {
   };
 }
 
+/** Matches the ResponseInterceptor envelope: { success, data, message?, timestamp } */
 export interface ApiResponse<T> {
+  success: boolean;
   data: T;
   message?: string;
+  timestamp: string;
 }
 
 // ═════════════════════════════════════════════════════════════════════════════
 // AUTH  (/auth/*)
-// ASSUMPTION: These paths match what appears in your NestJS server startup log.
-// Paste your routes and I'll correct them.
 // ═════════════════════════════════════════════════════════════════════════════
 
+/** Token pair returned by login / register / refresh */
+export interface TokenPair {
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number; // seconds (900 = 15 min)
+}
+
+/** Full user object returned by GET /auth/me */
 export interface AuthUser {
   id: string;
   email: string;
-  firstName?: string;
-  lastName?: string;
-  fullName?: string;
+  name: string;
   role: string;
-  isSuperAdmin: boolean;
-  isActive: boolean;
+  ecosystemRole?: string;
+  permissions: string[];
+  isVerified: boolean;
   avatar?: string;
   createdAt: string;
+  lastLoginAt?: string;
+  profile?: {
+    displayName?: string;
+    bio?: string;
+    avatarUrl?: string;
+    state?: string;
+    prefersPidgin?: boolean;
+    dyslexiaMode?: boolean;
+    activeProducts?: string[];
+    onboardingDone: boolean;
+    referralCode?: string;
+    examTarget?: string;
+  };
+  subscriptions?: Array<{
+    productSlug: string;
+    tier: string;
+    currentPeriodEnd: string;
+  }>;
 }
 
 export interface LoginPayload {
   email: string;
   password: string;
-  rememberMe?: boolean;
 }
 
 export interface RegisterPayload {
@@ -118,51 +143,67 @@ export interface RegisterPayload {
   password: string;
   firstName?: string;
   lastName?: string;
+  name?: string;
 }
 
 export const authAPI = {
-  /** POST /auth/login — sets boldmind_sso httpOnly cookie on success */
+  /** POST /auth/login — sets boldmind_sso httpOnly cookie; returns TokenPair */
   login: (payload: LoginPayload) =>
-    apiFetch<ApiResponse<AuthUser>>('/auth/login', {
+    apiFetch<ApiResponse<TokenPair>>('/auth/login', {
       method: 'POST',
       body: JSON.stringify(payload),
     }),
 
-  /** POST /auth/register */
+  /** POST /auth/register — sets boldmind_sso httpOnly cookie; returns TokenPair */
   register: (payload: RegisterPayload) =>
-    apiFetch<ApiResponse<AuthUser>>('/auth/register', {
+    apiFetch<ApiResponse<TokenPair>>('/auth/register', {
       method: 'POST',
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        email: payload.email,
+        password: payload.password,
+        name: payload.name ?? ([payload.firstName, payload.lastName].filter(Boolean).join(' ') || payload.email.split('@')[0]),
+      }),
     }),
 
-  /** GET /auth/me — returns current user from cookie */
+  /** GET /auth/me — returns current user from SSO cookie */
   me: () =>
     apiFetch<ApiResponse<AuthUser>>('/auth/me', {
-      next: { revalidate: 0 }, // always fresh
+      next: { revalidate: 0 },
     }),
 
-  /** POST /auth/logout — clears boldmind_sso cookie */
-  logout: () =>
-    apiFetch<void>('/auth/logout', { method: 'POST' }),
-
-  /** POST /auth/refresh */
-  refresh: () =>
-    apiFetch<ApiResponse<{ accessToken: string }>>('/auth/refresh', {
+  /** POST /auth/logout — revokes refresh token, clears boldmind_sso cookie */
+  logout: (refreshToken: string) =>
+    apiFetch<void>('/auth/logout', {
       method: 'POST',
+      body: JSON.stringify({ refreshToken }),
     }),
 
-  /** POST /auth/forgot-password */
+  /** POST /auth/refresh — rotates tokens; requires stored refresh token in body */
+  refresh: (refreshToken: string) =>
+    apiFetch<ApiResponse<TokenPair>>('/auth/refresh', {
+      method: 'POST',
+      body: JSON.stringify({ refreshToken }),
+    }),
+
+  /** POST /auth/forgot-password — sends OTP email; always 204 */
   forgotPassword: (email: string) =>
-    apiFetch<ApiResponse<void>>('/auth/forgot-password', {
+    apiFetch<void>('/auth/forgot-password', {
       method: 'POST',
       body: JSON.stringify({ email }),
     }),
 
-  /** POST /auth/reset-password */
-  resetPassword: (token: string, password: string) =>
-    apiFetch<ApiResponse<void>>('/auth/reset-password', {
+  /** POST /auth/reset-password — verifies OTP then updates password; 204 */
+  resetPassword: (email: string, code: string, newPassword: string) =>
+    apiFetch<void>('/auth/reset-password', {
       method: 'POST',
-      body: JSON.stringify({ token, password }),
+      body: JSON.stringify({ email, code, newPassword }),
+    }),
+
+  /** POST /auth/verify-email — verifies 6-digit OTP */
+  verifyEmail: (email: string, code: string) =>
+    apiFetch<ApiResponse<{ verified: boolean }>>('/auth/verify-email', {
+      method: 'POST',
+      body: JSON.stringify({ email, code, purpose: 'email_verify' }),
     }),
 };
 

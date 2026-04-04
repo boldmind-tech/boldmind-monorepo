@@ -33,7 +33,8 @@ const HUB_URL = process.env.NEXT_PUBLIC_HUB_URL || 'https://boldmind.ng';
 export default function LoginPage() {
   const router      = useRouter();
   const params      = useSearchParams();
-  const redirectUrl = params.get('redirect') || `${HUB_URL}/dashboard`;
+  // 'return_url' is set by middleware (cross-app SSO); 'redirect' kept for compat
+  const redirectUrl = params.get('return_url') || params.get('redirect') || `${HUB_URL}/dashboard`;
   const isExternal  = params.get('external') === '1';
 
   // ── UI state ────────────────────────────────────────────────────────────
@@ -74,8 +75,8 @@ export default function LoginPage() {
   }, [mode, flow]);
 
   // ── Post-auth redirect ───────────────────────────────────────────────────
-  const handleRedirect = (user: { onboardingComplete?: boolean }) => {
-    if (!user.onboardingComplete) {
+  const handleRedirect = (user: { profile?: { onboardingDone?: boolean } }) => {
+    if (!user.profile?.onboardingDone) {
       router.push('/onboarding');
       return;
     }

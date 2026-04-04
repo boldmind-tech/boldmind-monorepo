@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, ForbiddenException, Logger } from '@nestjs/common';
+import { Injectable, ForbiddenException, Logger } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
 import { RedisService } from '../../database/redis.service';
 import { UpdateUserDto, UpdateProfileDto, UserQueryDto } from './user.dto';
@@ -154,5 +154,42 @@ export class UserService {
       this.prisma.activityLog.count({ where: { userId } }),
     ]);
     return { data: logs, meta: { total, page, limit } };
+  }
+
+  async getUserProducts(userId: string) {
+    return this.prisma.subscription.findMany({
+      where: { userId, status: { in: ['ACTIVE', 'TRIAL'] } },
+      select: { productSlug: true, tier: true, status: true, currentPeriodEnd: true, planCode: true },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async completeOnboarding(userId: string, dto: any) {
+    const profile = await this.prisma.userProfile.upsert({
+      where: { userId },
+      update: {
+        onboardingDone: true,
+        ...(dto.preferences ? { activeProducts: dto.preferences } : {}),
+      },
+      create: {
+        userId,
+        onboardingDone: true,
+        activeProducts: dto.preferences ?? [],
+        referralCode: require('crypto').randomBytes(6).toString('hex'),
+      },
+    });
+
+    if (dto.role || dto.digitalMaturity) {
+      await this.prisma.user.update({
+        where: { id: userId },
+        data: {
+          ...(dto.role ? { ecosystemRole: dto.role as any } : {}),
+          ...(dto.digitalMaturity ? { digitalMaturity: dto.digitalMaturity as any } : {}),
+        },
+      });
+      await this.redis.del(`user:${userId}`);
+    }
+
+    return { onboardingDone: true, profile };
   }
 }

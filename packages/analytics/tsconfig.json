@@ -9,7 +9,6 @@
     "rootDir": "./src",
     "declaration": true,
     "declarationMap": true,
-    "baseUrl": ".",
     "paths": {
       "@boldmind/utils": ["../utils/src"]
     }

@@ -31,7 +31,8 @@ import {
   ECOSYSTEM_ROLE_PERMISSIONS,
   getRolePermissions,
 } from '@boldmind/utils';
- 
+import { Resend } from 'resend';
+
 const SALT_ROUNDS = 12;
 const OTP_TTL_SECS = 600; // 10 minutes
 const REFRESH_TOKEN_EXPIRY_DAYS = 30;
@@ -57,13 +58,22 @@ export interface TokenPair {
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
- 
+  private resend: Resend | null = null;
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
     private readonly config: ConfigService,
     private readonly redis: RedisService,
   ) {}
+
+  private getResend(): Resend | null {
+    if (this.resend) return this.resend;
+    const key = this.config.get<string>('RESEND_API_KEY');
+    if (!key) return null;
+    this.resend = new Resend(key);
+    return this.resend;
+  }
  
   // ──────────────────────────────────────────
   // REGISTER
@@ -88,7 +98,7 @@ export class AuthService {
         passwordHash,
         role,
         ecosystemRole: dto.ecosystemRole as EcosystemRole | undefined,
-        provider: 'local' as AuthProvider,
+        provider: 'email' as AuthProvider,
         permissions,
         profile: {
           create: {
@@ -103,7 +113,18 @@ export class AuthService {
  
     // Queue OTP email verification
     await this.sendEmailOtp(user.id, user.email, 'email_verify');
- 
+
+    // Send welcome email (fire and forget)
+    const resend = this.getResend();
+    if (resend) {
+      resend.emails.send({
+        from: 'BoldMind <noreply@boldmind.ng>',
+        to: user.email,
+        subject: 'Welcome to BoldMind! 🚀',
+        text: `Welcome ${dto.name}!\n\nYour BoldMind account is ready. Please verify your email using the OTP we just sent you to get started.\n\nBoldMind Team`,
+      }).catch(err => this.logger.error(`Welcome email failed: ${err.message}`));
+    }
+
     // Log activity
     await this.prisma.activityLog.create({
       data: { userId: user.id, action: 'register', ipAddress, metadata: { role } },
@@ -435,7 +456,8 @@ export class AuthService {
     });
  
     if (!user || !user.isActive) throw new UnauthorizedException('Token is no longer valid');
-    return user;
+    // Expose `sub` so @CurrentUser() behaves the same as the raw JwtPayload
+    return { ...user, sub: user.id };
   }
  
   // ──────────────────────────────────────────
@@ -483,10 +505,24 @@ export class AuthService {
     await this.prisma.oTPVerification.create({
       data: { userId, email, code: hashedCode, purpose, expiresAt },
     });
- 
-    // TODO: Queue email sending via NotificationModule / Resend
-    // For now log in dev — replace with actual email queue
+
     this.logger.log(`OTP for ${email} [${purpose}]: ${rawCode}`);
+
+    const resend = this.getResend();
+    if (resend) {
+      const subject = purpose === 'email_verify'
+        ? 'Verify your BoldMind email'
+        : 'Reset your BoldMind password';
+      const text = purpose === 'email_verify'
+        ? `Your BoldMind email verification code is:\n\n${rawCode}\n\nThis code expires in 10 minutes.`
+        : `Your BoldMind password reset code is:\n\n${rawCode}\n\nThis code expires in 10 minutes. If you did not request this, ignore this email.`;
+      resend.emails.send({
+        from: 'BoldMind <noreply@boldmind.ng>',
+        to: email,
+        subject,
+        text,
+      }).catch(err => this.logger.error(`Email send failed [${purpose}]: ${err.message}`));
+    }
   }
  
   private async trackFailedAttempt(attemptKey: string, lockKey: string): Promise<void> {

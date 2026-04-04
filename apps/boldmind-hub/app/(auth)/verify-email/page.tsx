@@ -94,7 +94,7 @@ export default function VerifyEmailPage() {
       await apiPost('/auth/verify-email', { email, code });
       setVerified(true);
       toast.success('Email verified!');
-      setTimeout(() => router.push('/dashboard'), 1500);
+      setTimeout(() => router.push('/onboarding'), 1500);
     } catch (err: any) {
       setVerifyError(err.message || 'Verification failed. Check the code and try again.');
     } finally {
@@ -135,7 +135,7 @@ export default function VerifyEmailPage() {
           <CheckCircle className="w-8 h-8 text-green-400" />
         </div>
         <h2 className="text-xl font-bold text-white mb-2">Email Verified!</h2>
-        <p className="text-white/45 text-sm">Taking you to your dashboard…</p>
+        <p className="text-white/45 text-sm">Taking you to onboarding…</p>
       </motion.div>
     );
   }

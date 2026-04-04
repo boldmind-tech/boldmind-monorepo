@@ -3,13 +3,14 @@ import { ValidationPipe, Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
-import * as compression from 'compression';
-import * as morgan from 'morgan';
+import compression = require('compression');
+import morgan = require('morgan');
+import cookieParser = require('cookie-parser');
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http.exception.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
-import { validateDatabaseEnvVars } from './database/validate-env';
+import { validateDatabaseEnvVars } from './database/validate-env'; 
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
@@ -26,7 +27,7 @@ async function bootstrap() {
   });
 
   const configService = app.get(ConfigService);
-  const PORT = configService.get<number>('PORT', 3001);
+  const PORT = configService.get<number>('PORT', 4001);
   const NODE_ENV = configService.get<string>('NODE_ENV', 'development');
   const FRONTEND_ORIGINS = configService.get<string>('ALLOWED_ORIGINS', '').split(',');
 
@@ -56,6 +57,9 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-App-ID', 'X-Request-ID'],
   });
+
+  // Cookie parser — must be before any guard that reads req.cookies (e.g. JWT SSO cookie)
+  app.use(cookieParser());
 
   // Compression + logging
   app.use(compression());

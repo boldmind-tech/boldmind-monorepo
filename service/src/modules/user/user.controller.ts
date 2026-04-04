@@ -1,7 +1,8 @@
-import { Controller, Get, Patch, Delete, Param, Body, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Patch, Delete, Post, Param, Body, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { UpdateUserDto, UpdateProfileDto, UserQueryDto } from './user.dto';
+import { UpdateUserDto, UpdateProfileDto, UserQueryDto, OnboardingDto } from './user.dto';
+import { JwtPayload } from '../auth/auth.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { CurrentUser } from '../../common/decorators/user.decorator';
@@ -74,5 +75,14 @@ export class UserController {
     @Body('reason') reason: string,
   ) {
     return this.userService.banUser(id, reason, actorId);
+  }
+
+  @Post('onboarding')
+  @ApiOperation({ summary: 'Complete user onboarding' })
+  completeOnboarding(
+    @CurrentUser() user: JwtPayload,
+    @Body() dto: OnboardingDto,
+  ) {
+    return this.userService.completeOnboarding(user.sub, dto);
   }
 }
