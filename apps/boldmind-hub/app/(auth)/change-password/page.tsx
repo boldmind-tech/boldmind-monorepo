@@ -29,6 +29,7 @@ export default function ChangePasswordPage() {
   const router       = useRouter();
   const searchParams = useSearchParams();
   const token        = searchParams.get('token') ?? '';
+  const email        = searchParams.get('email') ?? '';
 
   const [password,            setPassword]            = useState('');
   const [confirmPassword,     setConfirmPassword]     = useState('');
@@ -41,8 +42,8 @@ export default function ChangePasswordPage() {
 
   // Show error immediately if token is missing (broken link)
   useEffect(() => {
-    if (!token) setFieldError('Invalid or missing reset token. Please request a new link.');
-  }, [token]);
+    if (!token || !email) setFieldError('Invalid or missing reset link. Please request a new one.');
+  }, [token, email]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,8 +54,9 @@ export default function ChangePasswordPage() {
     if (pwdError)                        { setFieldError(pwdError); return; }
     if (password !== confirmPassword)    { setFieldError('Passwords do not match'); return; }
     if (!token)                          { setFieldError('Missing reset token'); return; }
+    if (!email)                          { setFieldError('Missing email. Please use the link from your reset email.'); return; }
 
-    await resetMutation.execute(token, password);
+    await resetMutation.execute(email, token, password);
 
     if (resetMutation.error) {
       toast.error(resetMutation.error.message || 'Failed to change password');
@@ -168,7 +170,7 @@ export default function ChangePasswordPage() {
 
         <button
           type="submit"
-          disabled={resetMutation.loading || !token}
+          disabled={resetMutation.loading || !token || !email}
           className="w-full py-3 rounded-xl font-semibold bg-amber-400 text-black hover:bg-amber-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 text-sm"
         >
           {resetMutation.loading && (
