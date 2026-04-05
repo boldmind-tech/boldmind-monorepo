@@ -8,7 +8,7 @@ export const metadata = {
 export default function PricingPage() {
     return (
         <main className="flex-1 flex flex-col min-h-screen pt-24">
-            <PricingContent appHost="boldmind-os" />
+            <PricingContent productSlug="boldmind-os" />
         </main>
     );
 }
