@@ -1,6 +1,5 @@
 // APPS/WEB_APPS/boldmind-os/app/api/auth/callback/route.ts
 import { NextResponse } from 'next/server';
-import { safeRedirectUrl } from '@boldmind/auth';
 
 /**
  * Auth Callback Route
@@ -9,7 +8,8 @@ import { safeRedirectUrl } from '@boldmind/auth';
  */
 export async function GET(request: Request) {
     const { searchParams, origin } = new URL(request.url);
-    const next = safeRedirectUrl(searchParams.get('next'), '/dashboard');
+    const next = searchParams.get('next');
+    const destination = next?.startsWith('/') ? next : '/dashboard';
 
-    return NextResponse.redirect(`${origin}${next}`);
+    return NextResponse.redirect(`${origin}${destination}`);
 }
