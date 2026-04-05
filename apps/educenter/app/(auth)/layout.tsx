@@ -130,7 +130,7 @@ const StatsDisplay = () => (
     className="grid grid-cols-3 gap-4"
   >
     {[
-      { vaule: '50k+', label: 'Active', delay: 0.6 },
+      { value: '50k+', label: 'Active', delay: 0.6 },
       { value: '10k+', label: 'Practice Question', delay: 0.7 },
       { value: '95%', label: 'Exam Success Rate', delay: 0.8 },
     ].map((stat, index) => (

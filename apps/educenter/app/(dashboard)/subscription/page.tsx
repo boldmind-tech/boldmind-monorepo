@@ -53,7 +53,9 @@ export default function SubscriptionPage() {
   const loadSubscription = async () => {
     try {
       const response = await educenterAPI.getMySubscription();
-      setActiveSubscription(response.data);
+      const subs = response.data as any[];
+      const active = subs?.find((s: any) => s.status === 'active');
+      setActiveSubscription(active ? { active: true, plan: active.plan, expiresAt: active.expiresAt } : null);
     } catch (error) {
       console.error('Error loading subscription:', error);
     } finally {
@@ -74,14 +76,21 @@ export default function SubscriptionPage() {
 
     try {
       // Initialize payment
-      const paymentData = await educenterAPI.intializePayment({ amount, plan, pillar });
+      const paymentData = await educenterAPI.initializePayment({
+        productSlug: pillar,
+        plan,
+        email: user.email,
+        callbackUrl: `${window.location.origin}/subscription`,
+        amount,
+        metadata: { pillar },
+      });
 
       // Open Paystack popup
       const handler = window.PaystackPop.setup({
         key: process.env['NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY']!,
         email: user.email!,
         amount,
-        ref: paymentData.reference,
+        ref: (paymentData as any).data?.reference ?? (paymentData as any).reference,
         metadata: {
           userId: user.id,
           plan,
