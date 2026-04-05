@@ -6,7 +6,7 @@ yarn.lock
 
 # Build outputs
 .next/
-dist/
+apps/**/dist/
 out/
 build/
 *.tsbuildinfo
@@ -93,7 +93,7 @@ uploads/
 
 # Monorepo specific
 **/.next/
-**/dist/
+apps/**/dist/
 **/build/
 
 # AmeboGist specific
