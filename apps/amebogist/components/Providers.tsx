@@ -1,7 +1,6 @@
 // apps/web/amebogist/components/Providers.tsx
 
 import { AuthProvider } from '@boldmind/auth';
-import { userAPIAdapter } from '../lib/user-api-adapter';
 import { ThemeProvider, type ProductThemeType } from '@boldmind/ui';
 
 interface ProvidersProps {
@@ -20,7 +19,7 @@ export function Providers({ children, defaultProductTheme }: ProvidersProps) {
 
   return (
     <ThemeProvider {...themeProviderProps}>
-      <AuthProvider userAPI={userAPIAdapter}>
+      <AuthProvider>
         {children}
       </AuthProvider>
     </ThemeProvider>

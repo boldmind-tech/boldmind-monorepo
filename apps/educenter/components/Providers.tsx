@@ -5,7 +5,6 @@
 import { AuthProvider } from '@boldmind/auth';
 import { Toaster } from 'sonner';
 import { ThemeProvider } from '@boldmind/ui';
-import { userAPIAdapter } from '../lib/user-api-adapter';
 
 export function Providers({ children, defaultProductTheme }: {
     children: React.ReactNode;
@@ -13,7 +12,7 @@ export function Providers({ children, defaultProductTheme }: {
 }) {
     return (
         <ThemeProvider defaultProduct={defaultProductTheme}>
-            <AuthProvider userAPI={userAPIAdapter}>
+            <AuthProvider>
                 {children}
                 <Toaster position="top-right" richColors />
             </AuthProvider>

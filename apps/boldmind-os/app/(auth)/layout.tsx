@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { Logo, SuperNavbar, SuperFooter } from '@boldmind/ui';
 import Link from 'next/link';
 import { AuthProvider } from '@boldmind/auth';
-import { userAPIAdapter } from '../../lib/user-api-adapter';
 import { ReactNode } from 'react';
 
 // Background dots pattern
@@ -91,7 +90,7 @@ const StatsDisplay = () => (
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
-    <AuthProvider userAPI={userAPIAdapter}>
+    <AuthProvider>
       <div className="min-h-screen flex flex-col">
         <SuperNavbar
           logoSrc="/logo.png"

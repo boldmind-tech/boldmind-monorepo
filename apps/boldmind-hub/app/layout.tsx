@@ -11,7 +11,6 @@ import { Inter } from 'next/font/google';
 import { BoldMindLayout } from './boldmindLayout';
 import { ErrorBoundary, CookieConsent } from '@boldmind/ui';
 import { AuthProvider } from '@boldmind/auth';
-import { userAPIAdapter } from '../lib/user-api-adapter';
 import '@boldmind/ui/dist/index.css';
 import './globals.css';
 
