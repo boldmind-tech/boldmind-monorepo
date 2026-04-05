@@ -19,5 +19,6 @@
     "declarationMap": true,
     "sourceMap": true,
     "incremental": true
-  }
+  },
+  "files": ["css.d.ts"]
 }
