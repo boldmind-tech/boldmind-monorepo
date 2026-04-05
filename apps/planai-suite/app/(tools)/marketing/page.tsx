@@ -6,12 +6,10 @@ import {
   Mail, Users, Zap, BarChart, ArrowRight, MessageSquare, Repeat
 } from 'lucide-react';
 import Link from 'next/link';
-import logo from '../public/logo.png';
 
 export default function MarketingAutomationPage() {
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 selection:bg-purple-500/30">
-      <SuperNavbar theme="light" logoSrc={logo.src} />
 
       <main>
         {/* Hero Section */}

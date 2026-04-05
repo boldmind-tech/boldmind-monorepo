@@ -6,7 +6,6 @@ import {
   BarChart, Activity, TrendingUp, Zap, ArrowRight, CheckCircle2
 } from 'lucide-react';
 import Link from 'next/link';
-import logo from '../public/logo.png';
 
 export default function AnalyticsLandingPage() {
   const features = [
@@ -29,9 +28,7 @@ export default function AnalyticsLandingPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-purple-500/30">
-      <SuperNavbar
-        logoSrc={logo.src}
-      />
+      <SuperNavbar logoSrc="/logo.png" />
 
       <main>
         {/* Hero Section */}
@@ -151,7 +148,6 @@ export default function AnalyticsLandingPage() {
         </section>
       </main>
 
-      <SuperFooter product="analytics-dashboard" logoSrc={logo.src} />
     </div>
   );
 }

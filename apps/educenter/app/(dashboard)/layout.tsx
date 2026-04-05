@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
-import { getSession, logout } from '@boldmind/auth';
+import { useAuthStore, clearRefreshToken } from '@boldmind/auth';
+
 
 import {
   School,
@@ -24,6 +25,7 @@ import {
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
+  const { session, status } = useAuthStore();
 
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -31,19 +33,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   /* ------------------ AUTH GUARD ------------------ */
   useEffect(() => {
-    async function checkAuth() {
-      const session = await getSession();
-
-      if (!session) {
-        router.push('/login');
-        return;
-      }
-
-      setLoading(false);
+    if (status === 'loading') return;
+    if (!session) {
+      router.push('/login');
+      return;
     }
-
-    checkAuth();
-  }, [router]);
+    setLoading(false);
+  }, [session, status, router]);
 
   /* ------------------ THEME ------------------ */
   useEffect(() => {
@@ -60,14 +56,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   };
 
   /* ------------------ LOGOUT ------------------ */
-  const handleLogout = async () => {
-    try {
-      await logout();
-      toast.success('Logged out successfully');
-      router.push('/');
-    } catch {
-      toast.error('Logout failed');
-    }
+  const handleLogout = () => {
+    clearRefreshToken();
+    useAuthStore.getState().clearSession();
+    toast.success('Logged out successfully');
+    router.push('/');
   };
 
   if (loading) {

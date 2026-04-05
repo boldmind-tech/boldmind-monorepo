@@ -23,7 +23,6 @@ import {
   PhoneCall,
 
 } from "lucide-react";
-import logo from "../public/logo.png";
 
 export default function Home() {
   const [_scrolled, setScrolled] = useState(false);
@@ -86,7 +85,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 font-sans selection:bg-[#FFC800]/30 text-gray-900 dark:text-white">
       <SuperNavbar
-        logoSrc={logo.src}
+        logoSrc="/logo.png"
         cta={{ label: "Get Started", href: "/register" }}
         sticky={true}
       />
@@ -345,7 +344,6 @@ export default function Home() {
       </section>
 
       <SuperFooter
-        logoSrc={logo.src}
         sections={[
           { title: "Product", links: [{ label: "Features", href: "#features" }, { label: "Pricing", href: "#pricing" }] },
           { title: "Company", links: [{ label: "About", href: "/about" }, { label: "Contact", href: "/contact" }] },
