@@ -11,7 +11,7 @@
   "globalPassThroughEnv": [
     "COREPACK_HOME"
   ],
-  "pipeline": {
+  "tasks": {
     "build": {
       "dependsOn": ["^build"],
       "outputs": [
