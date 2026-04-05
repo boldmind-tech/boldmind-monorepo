@@ -2,17 +2,17 @@
 
 import { motion } from 'framer-motion';
 import { Trophy, Flame, Target, Award } from 'lucide-react';
-import { User } from '@boldmind/utils';
+import type { AuthUser } from '../../../lib/api';
 
 interface IdentitySectionProps {
-    user: User | null;
+    user: AuthUser | null;
 }
 
 export function IdentitySection({ user }: IdentitySectionProps) {
     if (!user) return null;
 
     const roleName = user.ecosystemRole || user.role || 'Member';
-    const maturity = user.digitalMaturity || 'Exploring';
+    const maturity = (user as any).digitalMaturity || 'Exploring';
 
     // Mock data for streak and progress until backend supports it
     const streak = 7;
