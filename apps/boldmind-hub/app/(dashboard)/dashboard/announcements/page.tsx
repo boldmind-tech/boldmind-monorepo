@@ -95,7 +95,7 @@ function CreateForm({
               <Input
                 type="text"
                 value={formData.title}
-                onChange={e => setFormData(f => ({ ...f, title: e.target.value }))}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData(f => ({ ...f, title: e.target.value }))}
                 placeholder="Announcement title"
                 required
               />
@@ -104,7 +104,7 @@ function CreateForm({
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Content *</label>
               <textarea
                 value={formData.content}
-                onChange={e => setFormData(f => ({ ...f, content: e.target.value }))}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData(f => ({ ...f, content: e.target.value }))}
                 placeholder="Write your announcement…"
                 rows={4}
                 required
@@ -115,7 +115,7 @@ function CreateForm({
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Priority</label>
               <select
                 value={formData.priority}
-                onChange={e => setFormData(f => ({ ...f, priority: e.target.value }))}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData(f => ({ ...f, priority: e.target.value }))}
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#FFC800]/40 transition-all"
               >
                 <option value="low">Low</option>
