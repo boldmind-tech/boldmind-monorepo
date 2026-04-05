@@ -319,10 +319,8 @@ export default async function Home({
                   <Link
                     key={term}
                     href={`/search?q=${term}`}
-                    className="text-xs font-black px-5 py-2.5 rounded-full uppercase tracking-widest transition-all border hover:text-white"
+                    className="trending-tag text-xs font-black px-5 py-2.5 rounded-full uppercase tracking-widest transition-all border hover:text-white"
                     style={{ backgroundColor: 'var(--product-background)', borderColor: 'var(--product-muted)', color: 'var(--product-foreground)' }}
-                    onMouseEnter={(e: { currentTarget: HTMLElement; }) => (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--product-primary)'}
-                    onMouseLeave={(e: { currentTarget: HTMLElement; }) => (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--product-background)'}
                   >
                     #{term}
                   </Link>

@@ -26,7 +26,7 @@ export default function PopularPosts() {
       title: 'Why Afrobeats is the Next Big Tech Investment Frontier',
       slug: 'afrobeats-tech-investment-frontier',
       views: 8200,
-      imageUrl: 'https://images.unsplash.com/photo-1514525253344-f81ade0ac19e?auto=format&fit=crop&q=80&w=300&h=200',
+      imageUrl: '/og-image.png',
     },
   ];
 

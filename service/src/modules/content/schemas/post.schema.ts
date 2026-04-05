@@ -182,4 +182,10 @@ PostSchema.index({ isFeatured: 1, status: 1 });
 PostSchema.index({ 'engagement.views': -1, status: 1 }); // Trending
 PostSchema.index({ tags: 1, status: 1 });
 
+// Full-text search index
+PostSchema.index(
+  { title: 'text', excerpt: 'text', 'content.pidgin': 'text', 'content.english': 'text', tags: 'text' },
+  { weights: { title: 10, tags: 5, excerpt: 3, 'content.pidgin': 1, 'content.english': 1 }, name: 'posts_text_search' }
+);
+
 export const Post = mongoose.model<IPost>('Post', PostSchema);

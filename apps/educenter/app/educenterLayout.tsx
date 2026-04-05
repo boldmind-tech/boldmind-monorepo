@@ -13,16 +13,36 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { AppLayout } from '@boldmind/ui';
+import { ThemeProvider, FontProvider } from '@boldmind/ui';
+import type { ProductThemeType } from '@boldmind/ui';
 
 interface EducenterLayoutProps {
   children: ReactNode;
 }
 
+const EDUCENTER_THEME: ProductThemeType = {
+  slug: 'educenter',
+  name: 'EduCenter',
+  description: 'Nigeria\'s leading exam prep and digital skills platform',
+  icon: '🎓',
+  status: 'LIVE',
+  colors: {
+    primary:    '#1E40AF',   // royal blue
+    secondary:  '#F59E0B',   // amber
+    accent:     '#3B82F6',   // lighter blue for hover states
+    background: '#FAFAFA',
+  },
+};
+
 export function EducenterLayout({ children }: EducenterLayoutProps) {
   return (
-    <AppLayout productSlug="educenter">
-      {children}
-    </AppLayout>
+    <ThemeProvider
+      defaultTheme="light"
+      defaultProduct={EDUCENTER_THEME}
+    >
+      <FontProvider defaultMode="dyslexic">
+        {children}
+      </FontProvider>
+    </ThemeProvider>
   );
 }

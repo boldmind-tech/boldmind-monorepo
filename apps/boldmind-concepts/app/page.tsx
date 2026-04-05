@@ -1,4 +1,6 @@
-﻿import { useState, useEffect, useRef } from "react";
+﻿'use client';
+
+import { useState, useEffect, useRef } from "react";
 
 const CONCEPTS = [
   {
@@ -128,7 +130,7 @@ export default function ConceptHub() {
       fontFamily: "'Georgia', 'Palatino Linotype', serif",
       overflowX: "hidden",
     }}>
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap');
         .pf { font-family: 'Playfair Display', Georgia, serif; }
         .lo { font-family: 'Lora', Georgia, serif; }
@@ -153,7 +155,7 @@ export default function ConceptHub() {
         .tickin{animation:tickin 0.4s ease-out forwards}
         .dot-grid { background-image: radial-gradient(circle at 1px 1px, rgba(237,232,220,0.055) 1px, transparent 0); background-size: 28px 28px; }
         ::-webkit-scrollbar{width:3px} ::-webkit-scrollbar-track{background:#0A0B07} ::-webkit-scrollbar-thumb{background:rgba(201,146,42,0.35);border-radius:2px}
-      `}</style>
+      ` }} />
 
       <div className="grain" />
       <div style={{ position: "fixed", top: "-15%", left: "15%", width: 700, height: 700, background: "radial-gradient(circle, rgba(201,146,42,0.055) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />

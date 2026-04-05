@@ -5,22 +5,36 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { AppLayout } from '@boldmind/ui';
+import { ThemeProvider, FontProvider } from '@boldmind/ui';
+import type { ProductThemeType } from '@boldmind/ui';
 
 interface AmebogistLayoutProps {
   children: ReactNode;
 }
 
+const AMEBOGIST_THEME: ProductThemeType = {
+  slug: 'amebogist',
+  name: 'AmeboGist',
+  description: 'Nigerian news, entertainment, sports, and lifestyle',
+  icon: '📰',
+  status: 'LIVE',
+  colors: {
+    primary:    '#DC2626',   // red — news/media energy
+    secondary:  '#F97316',   // orange accent
+    accent:     '#EF4444',   // lighter red for hover states
+    background: '#FAFAFA',
+  },
+};
+
 export function AmebogistLayout({ children }: AmebogistLayoutProps) {
   return (
-    // AmeboGist is public-content-first — auth is optional for readers
-    // Set withAuth=false so unauthenticated article pages don't trigger
-    // AuthProvider redirects. Auth is still available via useAuth() hook
-    // on pages that opt in (e.g. /create, /dashboard).
-    // ASSUMPTION: Your AuthProvider gracefully handles no-token state.
-    // If it throws on missing token, set withAuth={true} instead.
-    <AppLayout productSlug="amebogist" withAuth={false}>
-      {children}
-    </AppLayout>
+    <ThemeProvider
+      defaultTheme="light"
+      defaultProduct={AMEBOGIST_THEME}
+    >
+      <FontProvider defaultMode="dyslexic">
+        {children}
+      </FontProvider>
+    </ThemeProvider>
   );
 }

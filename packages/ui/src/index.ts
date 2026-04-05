@@ -31,6 +31,7 @@ export { PrivacyPolicy } from './components/PrivacyPolicy';
 export {DyslexiaToggle } from './components/DyslexiaToggle'
 export { CookieConsent } from './components/CookieConsent';
 export { FontProvider } from './components/FontProvider';
+export { FacebookSDK } from './components/analytics/FacebookSDK';
 export { TermsAndConditions} from './components/TermsAndConditions';
 
 // ============================================

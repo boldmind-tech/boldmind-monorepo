@@ -58,4 +58,6 @@
 .hover\:bg-amebogreen-600:hover { background-color: var(--amebo-green-600); }
 .hover\:bg-amebogreen-700:hover { background-color: var(--amebo-green-700); }
 
+.trending-tag:hover { background-color: var(--product-primary) !important; }
+
  
