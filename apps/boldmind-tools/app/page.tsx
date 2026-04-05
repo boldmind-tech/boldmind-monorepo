@@ -1,6 +1,30 @@
+'use client';
 import { useState, useEffect } from "react";
 
-const TOOLS = [
+type Tool = {
+    id: string; slug: string; name: string; tagline: string; icon: string;
+    status: string; color: string; category: string; subdomain: string;
+    stat1: { n: string; label: string }; stat2: { n: string; label: string };
+    description: string; useCases: string[];
+    pricing: { tier: string; price: string; limit: string; features: string[] }[];
+    features: { icon: string; title: string; desc: string }[];
+};
+
+type EmailResult = {
+    type: 'emails';
+    found: number;
+    verified: number;
+    sample: { email: string; score: number; role: string; ok: boolean }[];
+};
+
+type CaptionsResult = {
+    type: 'captions';
+    items: { platform: string; text: string }[];
+};
+
+type DemoResult = EmailResult | CaptionsResult;
+
+const TOOLS: Tool[] = [
     {
         id: "emailscraper", slug: "emailscraper", name: "EmailScraper Pro", tagline: "Find verified Nigerian business emails in seconds.", icon: "🔍", status: "BUILDING", color: "#00FF87", category: "Lead Generation", subdomain: "/emailscraper",
         stat1: { n: "10,000", label: "emails/mo on Pro" }, stat2: { n: "₦5k", label: "to start" },
@@ -43,9 +67,9 @@ const TOOLS = [
     },
 ];
 
-function Demo({ tool }) {
+function Demo({ tool }: { tool: Tool }) {
     const [input, setInput] = useState("");
-    const [result, setResult] = useState(null);
+    const [result, setResult] = useState<DemoResult | null>(null);
     const [scanning, setScanning] = useState(false);
 
     const run = () => {

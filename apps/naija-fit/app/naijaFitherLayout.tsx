@@ -21,7 +21,7 @@ const NAIJA_FIT_THEME: ProductThemeType = {
   },
 };
 
-export function FitLayout({ children }: { children: ReactNode }) {
+export function NaijaFitherLayout({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider
       defaultTheme="light"
