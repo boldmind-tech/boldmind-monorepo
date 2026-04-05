@@ -1,7 +1,7 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { ReactNode, useState, useEffect } from 'react';
+import { useAuthStore } from '@boldmind/auth';
 import { useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
@@ -21,9 +21,15 @@ interface DashboardLayoutProps {
 }
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  const { data: session, status } = useSession();
+  const { session, status } = useAuthStore();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    if (status !== 'loading' && !session) {
+      router.push('/login');
+    }
+  }, [session, status, router]);
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -35,17 +41,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     { name: 'Settings', href: '/settings', icon: Settings },
   ];
 
-  if (status === 'loading') {
+  if (status === 'loading' || !session) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
-  }
-
-  if (status === 'unauthenticated') {
-    router.push('/login');
-    return null;
   }
 
   return (
