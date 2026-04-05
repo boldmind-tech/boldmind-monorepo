@@ -421,6 +421,9 @@ importers:
       '@boldmind/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@boldmind/pwa':
+        specifier: workspace:*
+        version: link:../../packages/pwa
       '@boldmind/ui':
         specifier: workspace:*
         version: link:../../packages/ui

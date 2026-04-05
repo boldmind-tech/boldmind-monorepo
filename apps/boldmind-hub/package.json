@@ -18,6 +18,7 @@
     "@boldmind/api-client": "workspace:*",
     "@boldmind/auth": "workspace:*",
     "@boldmind/config": "workspace:*",
+    "@boldmind/pwa": "workspace:*",
     "@boldmind/ui": "workspace:*",
     "@boldmind/utils": "workspace:*",
     "@types/node": "^20.11.5",
