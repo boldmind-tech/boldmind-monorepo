@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Lock, Eye, EyeOff, CheckCircle, AlertCircle } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useAuth } from '@boldmind/auth';
+import { authApi } from '@boldmind/auth';
 import { toast } from 'sonner';
 import Link from 'next/link';
 
@@ -19,16 +19,16 @@ export default function ChangePasswordPage() {
 
     const router = useRouter();
     const searchParams = useSearchParams();
-    const { updatePassword } = useAuth();
 
-    // Get token from URL
+    // Get token and email from URL
     const token = searchParams.get('token');
+    const email = searchParams.get('email') ?? '';
 
     useEffect(() => {
-        if (!token) {
+        if (!token || !email) {
             setError('Invalid or missing reset token');
         }
-    }, [token]);
+    }, [token, email]);
 
     const validatePassword = (pwd: string) => {
         if (pwd.length < 8) return 'Password must be at least 8 characters';
@@ -55,7 +55,7 @@ export default function ChangePasswordPage() {
             return;
         }
 
-        if (!token) {
+        if (!token || !email) {
             setError('Invalid reset token');
             return;
         }
@@ -63,7 +63,7 @@ export default function ChangePasswordPage() {
         setIsLoading(true);
 
         try {
-            await updatePassword(password);
+            await authApi.resetPassword(email, token, password);
             setSuccess(true);
             toast.success('Password changed successfully!');
 
@@ -195,7 +195,7 @@ export default function ChangePasswordPage() {
 
                     <button
                         type="submit"
-                        disabled={isLoading || !token}
+                        disabled={isLoading || !token || !email}
                         className="w-full bg-[#00143C] hover:bg-[#00143C]/90 dark:bg-[#FFC800] dark:hover:bg-[#FFC800]/90 text-white dark:text-[#00143C] py-3 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {isLoading ? 'Changing Password...' : 'Change Password'}
