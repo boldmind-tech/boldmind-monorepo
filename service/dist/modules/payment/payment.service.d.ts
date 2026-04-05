@@ -1,0 +1,126 @@
+import { ConfigService } from '@nestjs/config';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { PrismaService } from '../../database/prisma.service';
+import { InitializePaymentDto } from './payment.dto';
+export declare class PaymentService {
+    private readonly prisma;
+    private readonly config;
+    private readonly eventEmitter;
+    private readonly logger;
+    private readonly PAYSTACK_SECRET;
+    private readonly PAYSTACK_BASE;
+    constructor(prisma: PrismaService, config: ConfigService, eventEmitter: EventEmitter2);
+    private get paystackHeaders();
+    private paystackPost;
+    private paystackGet;
+    initializePayment(userId: string, userEmail: string, dto: InitializePaymentDto): Promise<{
+        authorizationUrl: any;
+        reference: string;
+        accessCode: any;
+    }>;
+    verifyPayment(reference: string): Promise<{
+        id: string;
+        provider: import("@prisma/client").$Enums.PaymentProvider;
+        createdAt: Date;
+        updatedAt: Date;
+        userId: string;
+        productSlug: string;
+        metadata: import("@prisma/client/runtime/client").JsonValue | null;
+        amountNGN: number;
+        status: import("@prisma/client").$Enums.PaymentStatus;
+        description: string | null;
+        paystackRef: string;
+        paystackTrxRef: string | null;
+        paystackId: string | null;
+        currency: string;
+        channel: string | null;
+        webhookPayload: import("@prisma/client/runtime/client").JsonValue | null;
+        paidAt: Date | null;
+        subscriptionId: string | null;
+    }>;
+    handleWebhook(signature: string, rawBody: Buffer): Promise<void>;
+    private handleChargeSuccess;
+    private handleSubscriptionCreated;
+    private handleSubscriptionDisabled;
+    private handleInvoiceFailure;
+    getUserPayments(userId: string, page?: number, limit?: number): Promise<{
+        data: ({
+            invoice: {
+                id: string;
+                createdAt: Date;
+                userId: string;
+                currency: string;
+                paidAt: Date | null;
+                paymentId: string;
+                invoiceNumber: string;
+                amount: number;
+                vatAmount: number;
+                totalAmount: number;
+                dueDate: Date | null;
+                pdfUrl: string | null;
+                lineItems: import("@prisma/client/runtime/client").JsonValue;
+                billingAddress: import("@prisma/client/runtime/client").JsonValue | null;
+            };
+        } & {
+            id: string;
+            provider: import("@prisma/client").$Enums.PaymentProvider;
+            createdAt: Date;
+            updatedAt: Date;
+            userId: string;
+            productSlug: string;
+            metadata: import("@prisma/client/runtime/client").JsonValue | null;
+            amountNGN: number;
+            status: import("@prisma/client").$Enums.PaymentStatus;
+            description: string | null;
+            paystackRef: string;
+            paystackTrxRef: string | null;
+            paystackId: string | null;
+            currency: string;
+            channel: string | null;
+            webhookPayload: import("@prisma/client/runtime/client").JsonValue | null;
+            paidAt: Date | null;
+            subscriptionId: string | null;
+        })[];
+        meta: {
+            total: number;
+            page: number;
+            limit: number;
+        };
+    }>;
+    getUserSubscriptions(userId: string): Promise<{
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        userId: string;
+        productSlug: string;
+        metadata: import("@prisma/client/runtime/client").JsonValue | null;
+        planName: string;
+        amountNGN: number;
+        interval: string;
+        tier: import("@prisma/client").$Enums.SubscriptionTier;
+        status: import("@prisma/client").$Enums.SubscriptionStatus;
+        paystackSubCode: string | null;
+        planCode: string | null;
+        currentPeriodStart: Date;
+        currentPeriodEnd: Date;
+        cancelledAt: Date | null;
+        cancelReason: string | null;
+        trialEndsAt: Date | null;
+    }[]>;
+    checkProductAccess(userId: string, productSlug: string): Promise<boolean>;
+    createWaitlistEntry(productSlug: string, email: string, name?: string, userId?: string): Promise<{
+        name: string | null;
+        email: string;
+        referralCode: string | null;
+        id: string;
+        createdAt: Date;
+        userId: string | null;
+        productSlug: string;
+        metadata: import("@prisma/client/runtime/client").JsonValue | null;
+        status: import("@prisma/client").$Enums.WaitlistStatus;
+        position: number;
+        source: string | null;
+        invitedAt: Date | null;
+        convertedAt: Date | null;
+    }>;
+}

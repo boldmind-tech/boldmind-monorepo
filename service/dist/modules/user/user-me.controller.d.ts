@@ -1,0 +1,107 @@
+import { UserService } from './user.service';
+import { UpdateProfileDto, OnboardingDto } from './user.dto';
+import { JwtPayload } from '../auth/auth.service';
+export declare class UserMeController {
+    private readonly userService;
+    constructor(userService: UserService);
+    getMyProfile(user: JwtPayload): Promise<{
+        name: string;
+        email: string;
+        ecosystemRole: import("@prisma/client").$Enums.EcosystemRole;
+        role: import("@prisma/client").$Enums.UserRole;
+        id: string;
+        phone: string;
+        isVerified: boolean;
+        emailVerifiedAt: Date;
+        phoneVerifiedAt: Date;
+        lastLoginAt: Date;
+        avatar: string;
+        createdAt: Date;
+        profile: {
+            referralCode: string;
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            displayName: string | null;
+            bio: string | null;
+            avatarUrl: string | null;
+            coverImageUrl: string | null;
+            website: string | null;
+            location: string | null;
+            state: string | null;
+            timezone: string;
+            language: string;
+            prefersPidgin: boolean;
+            dyslexiaMode: boolean;
+            activeProducts: string[];
+            onboardingDone: boolean;
+            referredBy: string | null;
+            examTarget: import("@prisma/client").$Enums.ExamType | null;
+            targetYear: number | null;
+            targetScore: number | null;
+            userId: string;
+        };
+        _count: {
+            subscriptions: number;
+        };
+    }>;
+    updateMyProfile(user: JwtPayload, dto: UpdateProfileDto): Promise<{
+        referralCode: string;
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        displayName: string | null;
+        bio: string | null;
+        avatarUrl: string | null;
+        coverImageUrl: string | null;
+        website: string | null;
+        location: string | null;
+        state: string | null;
+        timezone: string;
+        language: string;
+        prefersPidgin: boolean;
+        dyslexiaMode: boolean;
+        activeProducts: string[];
+        onboardingDone: boolean;
+        referredBy: string | null;
+        examTarget: import("@prisma/client").$Enums.ExamType | null;
+        targetYear: number | null;
+        targetScore: number | null;
+        userId: string;
+    }>;
+    getMyProducts(user: JwtPayload): Promise<{
+        productSlug: string;
+        tier: import("@prisma/client").$Enums.SubscriptionTier;
+        status: import("@prisma/client").$Enums.SubscriptionStatus;
+        planCode: string;
+        currentPeriodEnd: Date;
+    }[]>;
+    completeOnboarding(user: JwtPayload, dto: OnboardingDto): Promise<{
+        onboardingDone: boolean;
+        profile: {
+            referralCode: string;
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            displayName: string | null;
+            bio: string | null;
+            avatarUrl: string | null;
+            coverImageUrl: string | null;
+            website: string | null;
+            location: string | null;
+            state: string | null;
+            timezone: string;
+            language: string;
+            prefersPidgin: boolean;
+            dyslexiaMode: boolean;
+            activeProducts: string[];
+            onboardingDone: boolean;
+            referredBy: string | null;
+            examTarget: import("@prisma/client").$Enums.ExamType | null;
+            targetYear: number | null;
+            targetScore: number | null;
+            userId: string;
+        };
+    }>;
+    deleteAccount(user: JwtPayload): Promise<void>;
+}
