@@ -2,8 +2,14 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Logo, SuperNavbar, SuperFooter } from '@boldmind/ui';
+import { Logo, SuperNavbar, SuperFooter, ThemeProvider } from '@boldmind/ui';
 import Link from 'next/link';
+
+const AMEBOGIST_THEME = {
+  slug: 'amebogist', name: 'AmeboGist', description: 'Nigerian news and creator platform',
+  icon: '📰', status: 'LIVE' as const,
+  colors: { primary: '#DC2626', secondary: '#F97316', accent: '#EF4444', background: '#FAFAFA' },
+};
 
 // Background dots pattern
 const DotsPattern = () => (
@@ -94,6 +100,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
+    <ThemeProvider defaultTheme="light" defaultProduct={AMEBOGIST_THEME}>
     <div className="min-h-screen flex flex-col">
       {/* SuperNavbar for theme support */}
       <SuperNavbar
@@ -201,6 +208,7 @@ export default function AuthLayout({
         className="border-t"
       />
     </div>
+    </ThemeProvider>
   );
 }
 

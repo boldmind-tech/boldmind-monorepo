@@ -1,7 +1,13 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { SuperNavbar, SuperFooter } from '@boldmind/ui';
+import { SuperNavbar, SuperFooter, ThemeProvider } from '@boldmind/ui';
+
+const AMEBOGIST_THEME = {
+  slug: 'amebogist', name: 'AmeboGist', description: 'Nigerian news and creator platform',
+  icon: '📰', status: 'LIVE' as const,
+  colors: { primary: '#DC2626', secondary: '#F97316', accent: '#EF4444', background: '#FAFAFA' },
+};
 
 const NAV_LINKS = [
   { href: '/',             label: 'Home' },
@@ -36,7 +42,7 @@ const FOOTER_SECTIONS = [
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
-    <>
+    <ThemeProvider defaultTheme="light" defaultProduct={AMEBOGIST_THEME}>
       <SuperNavbar
         logoSrc="/logo.png"
         brandName="AmeboGist"
@@ -62,6 +68,6 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
         animated={true}
         copyright={`© ${new Date().getFullYear()} AmeboGist. A BoldMind Technology Solution.`}
       />
-    </>
+    </ThemeProvider>
   );
 }
