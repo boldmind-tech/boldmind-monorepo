@@ -81,7 +81,7 @@ function VerifyEmailContent() {
                     Check Your Email
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400 text-lg">
-                    We've sent a verification code to <span className="font-bold text-gray-900 dark:text-white">{email || 'your email'}</span>
+                    We've sent a verification codes to <span className="font-bold text-gray-900 dark:text-white">{email || 'your email'}</span>
                 </p>
             </div>
 

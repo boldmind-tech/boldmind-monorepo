@@ -211,7 +211,7 @@ export default function ContactPage() {
                           type="email"
                           required
                           value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, email: e.target.value })}
                           placeholder="name@company.com"
                           className="bg-white/50 dark:bg-black/20"
                         />
@@ -225,7 +225,7 @@ export default function ContactPage() {
                       <Input
                         required
                         value={formData.subject}
-                        onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, subject: e.target.value })}
                         placeholder="What are we discussing?"
                         className="bg-white/50 dark:bg-black/20"
                       />
@@ -238,7 +238,7 @@ export default function ContactPage() {
                       <textarea
                         required
                         value={formData.message}
-                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({ ...formData, message: e.target.value })}
                         rows={5}
                         className="w-full px-4 py-3 rounded-xl border-2 border-gray-100 dark:border-white/10 bg-white/50 dark:bg-black/20 focus:border-[#FFC800] focus:ring-2 focus:ring-[#FFC800]/20 transition-all outline-none resize-none dark:text-white"
                         placeholder="How can BoldMind help you today?"

@@ -5,20 +5,18 @@ import { motion } from 'framer-motion';
 import { Mail, ArrowLeft, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { useAuth } from '@boldmind/auth';
+import { authApi } from '@boldmind/auth';
 
 export default function ResetPasswordPage() {
     const [email, setEmail] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [emailSent, setEmailSent] = useState(false);
-    const { resetPassword } = useAuth();
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
 
         try {
-            await resetPassword(email);
+            await authApi.forgotPassword(email);
             setEmailSent(true);
             toast.success('Password reset email sent!');
         } catch (error: any) {

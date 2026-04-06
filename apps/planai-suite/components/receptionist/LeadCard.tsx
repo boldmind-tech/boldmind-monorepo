@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Mail, Phone, Calendar, User, MoreVertical, Check, X } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 interface Lead {
   id: string;

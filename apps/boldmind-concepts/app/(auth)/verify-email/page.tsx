@@ -5,14 +5,14 @@ import { motion } from 'framer-motion';
 import { Mail, ArrowRight, Inbox, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import { useAuth } from '@boldmind/auth';
+import { useState, useEffect, Suspense } from 'react';
+import { useAuth, authApi } from '@boldmind/auth';
 import { toast } from 'sonner';
 
-export default function VerifyEmailPage() {
+function VerifyEmailContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
-    const { verifyEmailCode, resendVerification, isAuthenticated } = useAuth();
+    const { isAuthenticated } = useAuth();
 
     const email = searchParams.get('email') || '';
     const [code, setCode] = useState('');
@@ -39,7 +39,7 @@ export default function VerifyEmailPage() {
 
         setIsVerifying(true);
         try {
-            await verifyEmailCode(email, code);
+            await authApi.verifyEmail(email, code);
             toast.success('Email verified successfully!');
             router.push('/dashboard');
         } catch (error: any) {
@@ -57,12 +57,8 @@ export default function VerifyEmailPage() {
 
         setIsResending(true);
         try {
-            const result = await resendVerification(email);
-            if (result.success) {
-                toast.success('Verification email resent successfully!');
-            } else {
-                toast.error(result.error || 'Failed to resend email');
-            }
+            await authApi.forgotPassword(email);
+            toast.success('Verification email resent successfully!');
         } catch (error: any) {
             toast.error('Failed to resend email');
         } finally {
@@ -160,6 +156,14 @@ export default function VerifyEmailPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function VerifyEmailPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><Loader2 className="animate-spin h-10 w-10 text-blue-600" /></div>}>
+            <VerifyEmailContent />
+        </Suspense>
     );
 }
 

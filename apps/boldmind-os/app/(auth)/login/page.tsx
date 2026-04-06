@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -24,12 +24,12 @@ const socialLogins = [
   },
 ];
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
 
-  const { signIn, signInWithOAuth, isLoading: authLoading, user, isAuthenticated } = useAuth();
+  const { login, loginWithGoogle, isLoading: authLoading, user, isAuthenticated } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -52,7 +52,7 @@ export default function LoginPage() {
     console.log('🔐 Attempting login for:', email);
 
     try {
-      await signIn(email, password);
+      await login({ email, password });
 
       console.log('✅ Login successful');
       toast.success('Logged in successfully!');
@@ -79,15 +79,11 @@ export default function LoginPage() {
     }
   };
 
-  const handleSocialLogin = async (provider: 'google' | 'github' | 'twitter' | 'facebook') => {
-    console.log('🔐 Attempting OAuth login with:', provider);
-
-    try {
-      await signInWithOAuth(provider);
-      // OAuth redirects automatically, so no need for router.push
-    } catch (error: any) {
-      console.error('❌ OAuth login failed:', error);
-      toast.error(error.message || `Failed to connect with ${provider}`);
+  const handleSocialLogin = (provider: 'google' | 'github' | 'twitter' | 'facebook') => {
+    if (provider === 'google') {
+      loginWithGoogle();
+    } else {
+      toast.error(`${provider} login is not supported yet.`);
     }
   };
 
@@ -258,4 +254,10 @@ export default function LoginPage() {
   );
 }
 
-
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" /></div>}>
+      <LoginContent />
+    </Suspense>
+  );
+}
