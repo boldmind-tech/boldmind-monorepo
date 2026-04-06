@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { Lock, Eye, EyeOff, CheckCircle, AlertCircle } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -8,7 +8,7 @@ import { authApi } from '@boldmind/auth';
 import { toast } from 'sonner';
 import Link from 'next/link';
 
-export default function ChangePasswordPage() {
+function ChangePasswordContent() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -216,3 +216,10 @@ export default function ChangePasswordPage() {
     );
 }
 
+export default function ChangePasswordPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600" /></div>}>
+            <ChangePasswordContent />
+        </Suspense>
+    );
+}

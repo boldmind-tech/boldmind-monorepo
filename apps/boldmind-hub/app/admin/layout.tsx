@@ -78,8 +78,8 @@ function AdminSidebarContent({ pathname, user, onSignOut, onClose }: {
   onSignOut: () => void;
   onClose?: () => void;
 }) {
-  const initials = [user?.firstName?.[0], user?.lastName?.[0]]
-    .filter(Boolean).join('').toUpperCase() || (user?.email?.[0] ?? 'A').toUpperCase();
+  const nameParts = (user?.name ?? '').split(' ');
+  const initials = ([nameParts[0]?.[0], nameParts[1]?.[0]].filter(Boolean).join('').toUpperCase()) || (user?.email?.[0] ?? 'A').toUpperCase();
 
   return (
     <div className="flex flex-col h-full" style={{ backgroundColor: 'var(--product-background)' }}>
@@ -139,7 +139,7 @@ function AdminSidebarContent({ pathname, user, onSignOut, onClose }: {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-bold truncate" style={{ color: 'var(--product-foreground)' }}>
-              {user?.firstName} {user?.lastName}
+              {user?.name}
             </p>
             <span className="text-[10px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded"
                   style={{ backgroundColor: 'var(--product-highlight)', color: 'var(--product-primary)' }}>
@@ -168,14 +168,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname  = usePathname();
   const router    = useRouter();
   const menuRef   = useRef<HTMLDivElement>(null);
-  const { user, isLoading, signOut, hasPermission } = useAuth();
+  const { user, isLoading, logout } = useAuth();
+  const isAdmin = user?.role === 'admin' || user?.role === 'super_admin';
 
   // Auth guard
   useEffect(() => {
-    if (!isLoading && (!user || !hasPermission('admin:access'))) {
+    if (!isLoading && (!user || !isAdmin)) {
       router.replace('/login?redirect=/admin');
     }
-  }, [user, isLoading, router, hasPermission]);
+  }, [user, isLoading, router, isAdmin]);
 
   // Close user menu on outside click
   useEffect(() => {
@@ -193,7 +194,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const handleSignOut = async () => {
     try {
-      await signOut();
+      await logout();
       toast.success('Signed out');
       router.replace('/login');
     } catch {
@@ -210,10 +211,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     );
   }
 
-  if (!user || !hasPermission('admin:access')) return null;
+  if (!user || !isAdmin) return null;
 
   const currentPage = ADMIN_NAV.find(n => n.href === pathname || pathname.startsWith(`${n.href}/`))?.name ?? 'Admin';
-  const initials = [user?.firstName?.[0], user?.lastName?.[0]].filter(Boolean).join('').toUpperCase() || 'A';
+  const initials = (user?.name ?? '').split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase() || 'A';
 
   return (
     <div className="flex min-h-screen" style={{ backgroundColor: 'var(--product-background)' }}>
@@ -290,7 +291,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                      style={{ backgroundColor: 'var(--product-background)', borderColor: 'var(--product-muted)' }}>
                   <div className="px-4 py-3 border-b" style={{ borderColor: 'var(--product-muted)' }}>
                     <p className="text-sm font-bold" style={{ color: 'var(--product-foreground)' }}>
-                      {user?.firstName} {user?.lastName}
+                      {user?.name}
                     </p>
                     <p className="text-xs truncate" style={{ color: 'var(--product-foreground)', opacity: 0.5 }}>
                       {user?.email}

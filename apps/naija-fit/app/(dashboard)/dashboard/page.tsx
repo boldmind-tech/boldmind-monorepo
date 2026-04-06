@@ -78,10 +78,8 @@ export default async function FitDashboardPage() {
           { href: '/dashboard/coach',     emoji: '🤖', label: 'Ask AI Coach',   sub: 'Personalised advice' },
         ].map(q => (
           <Link key={q.href} href={q.href}
-            className="flex items-center gap-3 p-4 rounded-xl border-2 transition-all hover:shadow-sm"
-            style={{ borderColor: 'var(--product-muted)', backgroundColor: 'var(--product-background)' }}
-            onMouseEnter={(e: { currentTarget: HTMLElement; }) => (e.currentTarget as HTMLElement).style.borderColor = 'var(--product-primary)'}
-            onMouseLeave={(e: { currentTarget: HTMLElement; }) => (e.currentTarget as HTMLElement).style.borderColor = 'var(--product-muted)'}>
+            className="quick-link-card flex items-center gap-3 p-4 rounded-xl border-2 transition-all hover:shadow-sm"
+            style={{ borderColor: 'var(--product-muted)', backgroundColor: 'var(--product-background)' }}>
             <span className="text-2xl">{q.emoji}</span>
             <div>
               <p className="font-bold text-sm" style={{ color: 'var(--product-foreground)' }}>{q.label}</p>

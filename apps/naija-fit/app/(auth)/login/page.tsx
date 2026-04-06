@@ -4,12 +4,12 @@
  * NaijaFit login — redirects to BoldMind Hub (the central SSO entry point).
  */
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 const HUB_URL = process.env.NEXT_PUBLIC_HUB_URL || 'https://boldmind.ng';
 
-export default function LoginPage() {
+function LoginContent() {
   const params = useSearchParams();
   const returnUrl =
     params.get('callbackUrl') ||
@@ -24,4 +24,12 @@ export default function LoginPage() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return null;
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginContent />
+    </Suspense>
+  );
 }

@@ -21,9 +21,10 @@ export function PlanaiLandingLayout({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider
       defaultTheme="light"
+      forceProductSlug="planai-suite"
       defaultProduct={PLANAI_THEME}
     >
-      <FontProvider defaultMode="dyslexic">
+      <FontProvider defaultMode="standard">
         {children}
       </FontProvider>
     </ThemeProvider>

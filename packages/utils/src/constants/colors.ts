@@ -241,6 +241,16 @@ export const BOLDMIND_COLOR_SCHEMES: Record<string, ProductColorScheme> = {
 
   // ─── BOLDMIND TOOLS ────────────────────────────────────────────────────────
 
+  'skillgig': {
+    name: 'SkillGig', slug: 'skillgig', category: 'marketplace', icon: '💼',
+    description: 'Freelance and gig economy platform for Nigerian talent',
+    primary: '#7C3AED', secondary: '#F59E0B', accent: '#A78BFA',
+    background: '#FAFAFA', foreground: '#1F2937', muted: '#EDE9FE',
+    success: '#059669', warning: '#D97706', error: '#DC2626', info: '#7C3AED',
+    gradients: { primary: ['#7C3AED', '#6D28D9'], secondary: ['#F59E0B', '#D97706'], background: ['#FAFAFA', '#EDE9FE'] },
+    shadows: buildShadows('#7C3AED'),
+  },
+
   'social-factory': {
     name: 'Social Content Factory', slug: 'social-factory', category: 'ai', icon: '🎬',
     description: 'AI social media content calendar, caption gen & auto-posting',
