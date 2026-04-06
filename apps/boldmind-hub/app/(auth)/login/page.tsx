@@ -20,7 +20,7 @@
  *   Social OAuth  → window.location redirect to NestJS OAuth endpoint
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useLogin, useRegister } from '../../../lib/hooks';
 

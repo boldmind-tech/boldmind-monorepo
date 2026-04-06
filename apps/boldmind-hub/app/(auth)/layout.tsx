@@ -17,7 +17,7 @@
 //   - Mobile: single column, logo bar at top
 // ─────────────────────────────────────────────────────────────────────────────
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';

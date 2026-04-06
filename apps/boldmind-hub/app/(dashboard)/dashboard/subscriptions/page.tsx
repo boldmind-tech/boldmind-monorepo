@@ -8,7 +8,7 @@
  * Handles Paystack redirect flow and post-payment verification.
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
   useSubscriptions,

@@ -14,7 +14,7 @@
  * 60-second resend cooldown with live countdown.
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Loader2, RefreshCw, ArrowLeft, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
