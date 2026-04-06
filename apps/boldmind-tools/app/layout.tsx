@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
-import { ErrorBoundary, CookieConsent } from "@boldmind/ui";
+import { ErrorBoundary, CookieConsent, ThemeProvider } from "@boldmind/ui";
 import "@boldmind/ui/dist/index.css";
 import "./globals.css";
 
@@ -48,10 +48,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 <meta name="theme-color" content="#7C3AED" />
             </head>
             <body className={`${inter.variable} antialiased bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 font-sans`}>
-                <ErrorBoundary>
-                    {children}
-                    <CookieConsent />
-                </ErrorBoundary>
+                <ThemeProvider forceProductSlug="boldmind-tools">
+                    <ErrorBoundary>
+                        {children}
+                        <CookieConsent />
+                    </ErrorBoundary>
+                </ThemeProvider>
             </body>
         </html>
     );

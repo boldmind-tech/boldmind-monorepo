@@ -14,6 +14,8 @@
   --edu-amber:    #F59E0B;
 }
  
+.quick-link-card:hover { border-color: var(--product-primary) !important; }
+
 .question-card {
   border: 2px solid var(--product-muted);
   border-radius: var(--radius-xl);

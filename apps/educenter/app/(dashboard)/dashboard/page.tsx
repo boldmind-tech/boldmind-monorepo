@@ -104,10 +104,8 @@ export default async function EduDashboardPage() {
           { href: '/dashboard/ai-tutor',    emoji: '🤖', label: 'AI Tutor',          sub: 'Get instant help' },
         ].map(q => (
           <Link key={q.href} href={q.href}
-            className="flex items-center gap-3 p-4 rounded-xl border-2 transition-all hover:shadow-md"
-            style={{ borderColor: 'var(--product-muted)', backgroundColor: 'var(--product-background)' }}
-            onMouseEnter={(e: { currentTarget: HTMLElement; }) => (e.currentTarget as HTMLElement).style.borderColor = 'var(--product-primary)'}
-            onMouseLeave={(e: { currentTarget: HTMLElement; }) => (e.currentTarget as HTMLElement).style.borderColor = 'var(--product-muted)'}>
+            className="flex items-center gap-3 p-4 rounded-xl border-2 transition-all hover:shadow-md quick-link-card"
+            style={{ borderColor: 'var(--product-muted)', backgroundColor: 'var(--product-background)' }}>
             <span className="text-2xl">{q.emoji}</span>
             <div>
               <p className="font-bold text-sm" style={{ color: 'var(--product-foreground)' }}>{q.label}</p>

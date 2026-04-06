@@ -2,7 +2,7 @@
 
 import Script from 'next/script';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 
 interface FacebookSDKProps {
     appId?: string | undefined;
@@ -10,23 +10,30 @@ interface FacebookSDKProps {
     debug?: boolean;
 }
 
-export const FacebookSDK = ({ appId, pixelId }: FacebookSDKProps) => {
+function FacebookPageTracker({ pixelId }: { pixelId?: string }) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
     useEffect(() => {
         if (pixelId) {
-            // Track page views on route changes
             if (typeof window !== 'undefined' && (window as any).fbq) {
                 (window as any).fbq('track', 'PageView');
             }
         }
     }, [pathname, searchParams, pixelId]);
 
+    return null;
+}
+
+export const FacebookSDK = ({ appId, pixelId }: FacebookSDKProps) => {
+
     if (!appId && !pixelId) return null;
 
     return (
         <>
+            <Suspense fallback={null}>
+                <FacebookPageTracker pixelId={pixelId} />
+            </Suspense>
             <Script id="fb-sdk" strategy="afterInteractive">
                 {`
           window.fbAsyncInit = function() {

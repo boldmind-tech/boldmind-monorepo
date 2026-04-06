@@ -175,7 +175,7 @@ export default function ProfilePage() {
 
   const isSaving = updateMutation.loading || uploadMutation.loading;
   const avatarSrc = avatarPreview || profile?.avatar;
-  const displayName = profile?.fullName || [profile?.firstName, profile?.lastName].filter(Boolean).join(' ') || profile?.email;
+  const displayName = [profile?.firstName, profile?.lastName].filter(Boolean).join(' ') || profile?.email;
 
   return (
     <div className="max-w-3xl mx-auto space-y-8 py-6 px-4 sm:px-0">
@@ -217,11 +217,6 @@ export default function ProfilePage() {
                   <p className="text-lg font-black text-gray-900 dark:text-white">{displayName || '—'}</p>
                   <p className="text-sm text-gray-400">{profile?.email}</p>
                   <div className="flex items-center gap-2 mt-1.5">
-                    <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
-                      profile?.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                    }`}>
-                      {profile?.isActive ? 'Active' : 'Inactive'}
-                    </span>
                     <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700">
                       {profile?.role ?? 'USER'}
                     </span>

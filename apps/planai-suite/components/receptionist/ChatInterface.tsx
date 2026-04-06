@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 interface Message {
   id: string;

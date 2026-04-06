@@ -4379,7 +4379,7 @@ function CookieConsent({ privacyPolicyUrl = "/privacy", onAcceptAll, onDecline, 
 
 //#endregion
 //#region src/components/analytics/FacebookSDK.tsx
-const FacebookSDK = ({ appId, pixelId }) => {
+function FacebookPageTracker({ pixelId }) {
 	(0, react.useEffect)(() => {
 		if (pixelId) {
 			if (typeof window !== "undefined" && window.fbq) window.fbq("track", "PageView");
@@ -4389,11 +4389,19 @@ const FacebookSDK = ({ appId, pixelId }) => {
 		(0, next_navigation.useSearchParams)(),
 		pixelId
 	]);
+	return null;
+}
+const FacebookSDK = ({ appId, pixelId }) => {
 	if (!appId && !pixelId) return null;
-	return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)(next_script.default, {
-		id: "fb-sdk",
-		strategy: "afterInteractive",
-		children: `
+	return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [
+		/* @__PURE__ */ (0, react_jsx_runtime.jsx)(react.Suspense, {
+			fallback: null,
+			children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(FacebookPageTracker, { pixelId })
+		}),
+		/* @__PURE__ */ (0, react_jsx_runtime.jsx)(next_script.default, {
+			id: "fb-sdk",
+			strategy: "afterInteractive",
+			children: `
           window.fbAsyncInit = function() {
             FB.init({
               appId      : '${appId || ""}',
@@ -4420,10 +4428,11 @@ const FacebookSDK = ({ appId, pixelId }) => {
              fjs.parentNode.insertBefore(js, fjs);
            }(document, 'script', 'facebook-jssdk'));
         `
-	}), pixelId && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(next_script.default, {
-		id: "fb-pixel",
-		strategy: "afterInteractive",
-		children: `
+		}),
+		pixelId && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(next_script.default, {
+			id: "fb-pixel",
+			strategy: "afterInteractive",
+			children: `
             !function(f,b,e,v,n,t,s)
             {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
             n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -4435,7 +4444,8 @@ const FacebookSDK = ({ appId, pixelId }) => {
             fbq('init', '${pixelId}');
             fbq('track', 'PageView');
           `
-	})] });
+		})
+	] });
 };
 
 //#endregion

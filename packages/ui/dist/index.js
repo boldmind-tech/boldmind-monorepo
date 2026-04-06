@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Component, createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, { Component, Suspense, createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
@@ -4347,7 +4347,7 @@ function CookieConsent({ privacyPolicyUrl = "/privacy", onAcceptAll, onDecline, 
 
 //#endregion
 //#region src/components/analytics/FacebookSDK.tsx
-const FacebookSDK = ({ appId, pixelId }) => {
+function FacebookPageTracker({ pixelId }) {
 	useEffect(() => {
 		if (pixelId) {
 			if (typeof window !== "undefined" && window.fbq) window.fbq("track", "PageView");
@@ -4357,11 +4357,19 @@ const FacebookSDK = ({ appId, pixelId }) => {
 		useSearchParams(),
 		pixelId
 	]);
+	return null;
+}
+const FacebookSDK = ({ appId, pixelId }) => {
 	if (!appId && !pixelId) return null;
-	return /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx(Script, {
-		id: "fb-sdk",
-		strategy: "afterInteractive",
-		children: `
+	return /* @__PURE__ */ jsxs(Fragment, { children: [
+		/* @__PURE__ */ jsx(Suspense, {
+			fallback: null,
+			children: /* @__PURE__ */ jsx(FacebookPageTracker, { pixelId })
+		}),
+		/* @__PURE__ */ jsx(Script, {
+			id: "fb-sdk",
+			strategy: "afterInteractive",
+			children: `
           window.fbAsyncInit = function() {
             FB.init({
               appId      : '${appId || ""}',
@@ -4388,10 +4396,11 @@ const FacebookSDK = ({ appId, pixelId }) => {
              fjs.parentNode.insertBefore(js, fjs);
            }(document, 'script', 'facebook-jssdk'));
         `
-	}), pixelId && /* @__PURE__ */ jsx(Script, {
-		id: "fb-pixel",
-		strategy: "afterInteractive",
-		children: `
+		}),
+		pixelId && /* @__PURE__ */ jsx(Script, {
+			id: "fb-pixel",
+			strategy: "afterInteractive",
+			children: `
             !function(f,b,e,v,n,t,s)
             {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
             n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -4403,7 +4412,8 @@ const FacebookSDK = ({ appId, pixelId }) => {
             fbq('init', '${pixelId}');
             fbq('track', 'PageView');
           `
-	})] });
+		})
+	] });
 };
 
 //#endregion

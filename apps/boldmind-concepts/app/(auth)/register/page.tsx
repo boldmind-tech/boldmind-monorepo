@@ -24,7 +24,7 @@ const getPasswordStrength = (password: string) => {
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { signUp, signInWithOAuth, isLoading: authLoading } = useAuth();
+  const { register, loginWithGoogle, isLoading: authLoading } = useAuth();
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -90,14 +90,11 @@ export default function RegisterPage() {
 
     try {
       // Register user
-      await signUp(
-        formData.email,
-        formData.password,
-        {
-          fullName: formData.fullName,
-          subscribeNewsletter: formData.subscribeNewsletter
-        }
-      );
+      await register({
+        name: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+      });
 
       toast.success('Registration successful! Please check your email.');
       router.push(`/verify-email?email=${encodeURIComponent(formData.email)}`);
@@ -108,11 +105,11 @@ export default function RegisterPage() {
     }
   };
 
-  const handleSocialSignup = async (provider: 'google' | 'github' | 'twitter' | 'facebook') => {
-    try {
-      await signInWithOAuth(provider);
-    } catch (error: any) {
-      toast.error(error.message || `Failed to connect with ${provider}`);
+  const handleSocialSignup = (provider: 'google' | 'github' | 'twitter' | 'facebook') => {
+    if (provider === 'google') {
+      loginWithGoogle();
+    } else {
+      toast.error(`${provider} sign-up is not supported yet.`);
     }
   };
 
