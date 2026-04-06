@@ -296,7 +296,7 @@ function SubscriptionsContent() {
       {/* Upgrade section */}
       <section>
         <h2 className="text-base font-bold text-gray-800 dark:text-gray-200 mb-1">
-          Upgrade or Add Products
+          Upgrade or Add Products Boss
         </h2>
         <p className="text-sm text-gray-400 mb-4">Powered by Paystack — instant activation after payment.</p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
