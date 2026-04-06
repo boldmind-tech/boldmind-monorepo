@@ -198,7 +198,7 @@ export default function ContactPage() {
                         <Input
                           required
                           value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, name: e.target.value })}
                           placeholder="Your official name"
                           className="bg-white/50 dark:bg-black/20"
                         />
