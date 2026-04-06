@@ -62,16 +62,8 @@ export default async function PlanaiDashboardPage() {
             <Link
               key={tool.href}
               href={tool.href}
-              className="group flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all hover:shadow-md text-center"
+              className="planai-link-card group flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all hover:shadow-md text-center"
               style={{ borderColor: 'var(--product-muted)', backgroundColor: 'var(--product-background)' }}
-              onMouseEnter={(e: { currentTarget: HTMLElement; }) => {
-                (e.currentTarget as HTMLElement).style.borderColor = 'var(--product-primary)';
-                (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--product-highlight)';
-              }}
-              onMouseLeave={(e: { currentTarget: HTMLElement; }) => {
-                (e.currentTarget as HTMLElement).style.borderColor = 'var(--product-muted)';
-                (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--product-background)';
-              }}
             >
               <span className="text-2xl">{tool.emoji}</span>
               <span className="text-xs font-bold leading-tight" style={{ color: 'var(--product-foreground)' }}>
@@ -95,10 +87,8 @@ export default async function PlanaiDashboardPage() {
                style={{ borderColor: 'var(--product-muted)', backgroundColor: 'var(--product-background)' }}>
             {jobs.map((job: any, i: number) => (
               <div key={job.id ?? i}
-                className="flex items-center justify-between px-5 py-3 transition-colors"
-                style={{ borderBottom: i < jobs.length - 1 ? '1px solid var(--product-muted)' : undefined }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--product-muted)'}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.backgroundColor = ''}>
+                className="planai-job-row flex items-center justify-between px-5 py-3 transition-colors"
+                style={{ borderBottom: i < jobs.length - 1 ? '1px solid var(--product-muted)' : undefined }}>
                 <div>
                   <p className="font-bold text-sm" style={{ color: 'var(--product-foreground)' }}>
                     {job.type ?? job.toolType ?? 'AI Job'}

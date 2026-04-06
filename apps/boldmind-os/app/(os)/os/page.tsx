@@ -46,10 +46,8 @@ export default async function OsDashboardPage() {
           { href: '/os/notes', emoji: '📝', label: 'Knowledge Graph', sub: 'Connected notes' },
         ].map(q => (
           <Link key={q.href} href={q.href}
-            className="flex items-center gap-3 p-5 rounded-2xl border-2 transition-all hover:shadow-md"
-            style={{ borderColor: 'var(--product-muted)', backgroundColor: 'var(--product-background)' }}
-            onMouseEnter={(e: { currentTarget: HTMLElement; }) => (e.currentTarget as HTMLElement).style.borderColor = 'var(--product-primary)'}
-            onMouseLeave={(e: { currentTarget: HTMLElement; }) => (e.currentTarget as HTMLElement).style.borderColor = 'var(--product-muted)'}>
+            className="os-quick-link flex items-center gap-3 p-5 rounded-2xl border-2 transition-all hover:shadow-md"
+            style={{ borderColor: 'var(--product-muted)', backgroundColor: 'var(--product-background)' }}>
             <span className="text-3xl">{q.emoji}</span>
             <div>
               <p className="font-bold" style={{ color: 'var(--product-foreground)' }}>{q.label}</p>
@@ -68,10 +66,8 @@ export default async function OsDashboardPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {workspaces.map((ws: any) => (
               <Link key={ws.id} href={`/os/workspaces/${ws.id}`}
-                className="p-4 rounded-xl border-2 transition-all hover:shadow-sm"
-                style={{ borderColor: 'var(--product-muted)', backgroundColor: 'var(--product-background)' }}
-                onMouseEnter={(e: { currentTarget: HTMLElement; }) => (e.currentTarget as HTMLElement).style.borderColor = 'var(--product-primary)'}
-                onMouseLeave={(e: { currentTarget: HTMLElement; }) => (e.currentTarget as HTMLElement).style.borderColor = 'var(--product-muted)'}>
+                className="os-workspace-card p-4 rounded-xl border-2 transition-all hover:shadow-sm"
+                style={{ borderColor: 'var(--product-muted)', backgroundColor: 'var(--product-background)' }}>
                 <p className="font-bold text-sm" style={{ color: 'var(--product-foreground)' }}>{ws.name}</p>
                 <p className="text-xs mt-1" style={{ color: 'var(--product-foreground)', opacity: 0.5 }}>
                   {ws._count?.members ?? 0} members · {ws._count?.tasks ?? 0} tasks

@@ -9,7 +9,8 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import { BoldMindLayout } from './boldmindLayout';
-import { ErrorBoundary, CookieConsent } from '@boldmind/ui';
+import { CookieConsent } from '@boldmind/ui';
+import { ClientErrorBoundary } from './components/ClientErrorBoundary';
 import { AuthProvider } from '@boldmind/auth';
 import '@boldmind/ui/dist/index.css';
 import './globals.css';
@@ -166,14 +167,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
 
       <body className="antialiased" suppressHydrationWarning>
-        <ErrorBoundary>
+        <ClientErrorBoundary>
           <AuthProvider>
             <BoldMindLayout>
               {children}
             </BoldMindLayout>
           </AuthProvider>
           <CookieConsent />
-        </ErrorBoundary>
+        </ClientErrorBoundary>
       </body>
     </html>
   );

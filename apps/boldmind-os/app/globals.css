@@ -18,6 +18,9 @@
   stroke-linecap: round;
 }
  
+.os-quick-link:hover { border-color: var(--product-primary) !important; }
+.os-workspace-card:hover { border-color: var(--product-primary) !important; }
+
 .focus-mode-overlay {
   position: fixed;
   inset: 0;
