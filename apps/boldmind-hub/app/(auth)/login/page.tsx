@@ -30,7 +30,7 @@ type Flow     = 'login' | 'register';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.boldmind.ng';
 const HUB_URL = process.env.NEXT_PUBLIC_HUB_URL || 'https://boldmind.ng';
 
-export default function LoginPage() {
+function LoginContent() {
   const router      = useRouter();
   const params      = useSearchParams();
   // 'return_url' is set by middleware (cross-app SSO); 'redirect' kept for compat
@@ -505,5 +505,13 @@ function WhatsAppIcon({ size = 18 }: { size?: number }) {
       <circle cx="9" cy="9" r="9" fill="#25D366"/>
       <path d="M13.5 11.5c-.3-.15-1.8-.9-2.1-.975-.3-.075-.525-.15-.75.15-.225.3-.825.975-1.05 1.2-.225.225-.375.225-.675.075-.3-.15-1.275-.45-2.4-1.425-.9-.825-1.5-1.8-1.65-2.1-.15-.3 0-.45.15-.6l.45-.525c.15-.15.15-.3.225-.45.075-.15 0-.3-.075-.45l-.9-2.1c-.225-.525-.45-.45-.675-.45H4.5c-.225 0-.525.075-.825.375C3.375 5.025 2.625 5.7 2.625 7.275c0 1.575 1.2 3.075 1.35 3.3.15.225 2.25 3.525 5.475 4.8.75.3 1.35.45 1.8.6.75.225 1.425.2 1.95.15.6-.075 1.8-.75 2.025-1.5.225-.75.225-1.35.15-1.5-.075-.075-.225-.15-.525-.3z" fill="white"/>
     </svg>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="text-center text-white/50">Loading...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }

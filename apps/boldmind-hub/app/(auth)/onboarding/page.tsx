@@ -9,7 +9,7 @@
  * Added: error handling on the done step, retry button if submission fails.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -139,7 +139,7 @@ async function completeOnboarding(payload: OnboardingState): Promise<void> {
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
-export default function OnboardingPage() {
+function OnboardingContent() {
   const router = useRouter();
 
   const [step,  setStep]  = useState<Step>('role');
@@ -495,5 +495,13 @@ export default function OnboardingPage() {
         </main>
       )}
     </div>
+  );
+}
+
+export default function OnboardingPage() {
+  return (
+    <Suspense fallback={<div className="text-center text-white/50">Loading...</div>}>
+      <OnboardingContent />
+    </Suspense>
   );
 }

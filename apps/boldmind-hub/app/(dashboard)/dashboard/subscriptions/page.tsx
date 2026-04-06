@@ -181,7 +181,7 @@ function UpgradeCard({
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default function SubscriptionsPage() {
+function SubscriptionsContent() {
   const searchParams = useSearchParams();
   const verifyRef    = searchParams.get('reference');   // set by Paystack after redirect
 
@@ -314,5 +314,13 @@ export default function SubscriptionsPage() {
         </p>
       </section>
     </div>
+  );
+}
+
+export default function SubscriptionsPage() {
+  return (
+    <Suspense fallback={<div className="text-center text-gray-500">Loading subscriptions...</div>}>
+      <SubscriptionsContent />
+    </Suspense>
   );
 }

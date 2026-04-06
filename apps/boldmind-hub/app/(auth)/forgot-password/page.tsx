@@ -8,14 +8,14 @@
  * Wired to useForgotPassword hook → POST /auth/forgot-password.
  */
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, ArrowLeft, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { useForgotPassword } from '../../../lib/hooks';
 
-export default function ForgotPasswordPage() {
+function ForgotPasswordContent() {
   const [email,     setEmail]     = useState('');
   const [emailSent, setEmailSent] = useState(false);
 
@@ -131,5 +131,13 @@ export default function ForgotPasswordPage() {
         </Link>
       </div>
     </motion.div>
+  );
+}
+
+export default function ForgotPasswordPage() {
+  return (
+    <Suspense fallback={<div className="text-center text-white/50">Loading...</div>}>
+      <ForgotPasswordContent />
+    </Suspense>
   );
 }

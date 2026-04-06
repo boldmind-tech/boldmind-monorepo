@@ -25,7 +25,7 @@ function validatePassword(pwd: string): string | null {
   return null;
 }
 
-export default function ChangePasswordPage() {
+function ChangePasswordContent() {
   const router       = useRouter();
   const searchParams = useSearchParams();
   const token        = searchParams.get('token') ?? '';
@@ -189,5 +189,13 @@ export default function ChangePasswordPage() {
         </Link>
       </div>
     </motion.div>
+  );
+}
+
+export default function ChangePasswordPage() {
+  return (
+    <Suspense fallback={<div className="text-center text-white/50">Loading...</div>}>
+      <ChangePasswordContent />
+    </Suspense>
   );
 }

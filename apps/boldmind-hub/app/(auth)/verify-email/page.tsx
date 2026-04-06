@@ -61,8 +61,7 @@ function useResendCooldown(seconds = 60) {
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
-
-export default function VerifyEmailPage() {
+ function VerifyEmailContent() {
   const searchParams = useSearchParams();
   const router       = useRouter();
   const email        = searchParams.get('email') ?? '';
@@ -236,5 +235,13 @@ export default function VerifyEmailPage() {
         </Link>
       </div>
     </>
+  );
+}
+
+export default function VerifyEmailPage() {
+  return (
+    <Suspense fallback={<div className="text-center text-white/50">Loading...</div>}>
+      <VerifyEmailContent />
+    </Suspense>
   );
 }
