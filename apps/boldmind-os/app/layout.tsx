@@ -1,5 +1,3 @@
-
-
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { BoldMindOSLayout } from "./boldmindOSLayout";
@@ -25,44 +23,44 @@ const canonicalUrl = getCanonicalUrl();
 export const metadata: Metadata = {
   metadataBase: new URL(canonicalUrl),
   title: {
-    default: "BoldMind OS - Personal Operating System for Neurodivergent Entrepreneurs",
+    default: "BoldMind OS — Personal Operating System for Neurodivergent Entrepreneurs",
     template: "%s | BoldMind OS",
   },
   description:
-    "ADHD-friendly productivity OS with multi-modal capture, visual knowledge graph, Pomodoro timer, and AI content pipeline. Built for neurodivergent entrepreneurs with dyslexia mode and focus tools.",
+    "ADHD-friendly productivity OS built for neurodivergent Nigerian entrepreneurs. Multi-modal thought capture, visual knowledge graph, Pomodoro focus timer, AI content pipeline, and dyslexia mode — finally a system that works WITH your brain.",
   keywords: [
-    "ADHD productivity",
-    "neurodivergent tools",
-    "dyslexia friendly",
-    "knowledge management",
-    "personal OS",
+    "ADHD productivity app",
+    "neurodivergent entrepreneur tools",
+    "dyslexia friendly app",
+    "knowledge management ADHD",
+    "personal OS productivity",
     "BoldMind OS",
-    "productivity system",
-    "ADHD tools",
-    "focus timer",
-    "knowledge graph",
-    "content pipeline",
-    "note taking ADHD",
-    "entrepreneur tools",
-    "neurodiversity",
-    "productivity app",
-    "second brain",
+    "ADHD tools Nigeria",
+    "focus timer ADHD",
+    "knowledge graph app",
+    "AI content pipeline",
+    "second brain app",
     "PKM system",
+    "note taking ADHD",
+    "time blindness tools",
+    "executive function support",
+    "productivity system Nigeria",
+    "neurodiversity app",
+    "Pomodoro timer ADHD",
+    "entrepreneur productivity Nigeria",
+    "BoldMind productivity",
   ],
   authors: [
     { name: "BoldMind OS", url: canonicalUrl },
     { name: "BoldMind Technology Solution Enterprise", url: "https://boldmind.ng" },
   ],
-  creator: "BoldMind OS",
+  creator: "BoldMind Technology Solution Enterprise",
   publisher: "BoldMind Technology Solution Enterprise",
-  formatDetection: {
-    email: true,
-    telephone: true,
-  },
+  formatDetection: { email: false, telephone: false },
+  category: "productivity",
   robots: {
     index: true,
     follow: true,
-    nocache: false,
     googleBot: {
       index: true,
       follow: true,
@@ -72,42 +70,33 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: canonicalUrl,
-    languages: {
-      "en-NG": canonicalUrl,
-      "en-US": canonicalUrl,
-    },
+    languages: { "en-NG": canonicalUrl },
   },
   openGraph: {
     type: "website",
     locale: "en_NG",
     url: canonicalUrl,
-    title: "BoldMind OS - Productivity for Neurodivergent Minds",
+    title: "BoldMind OS — Productivity for Neurodivergent Minds",
     siteName: "BoldMind OS",
     description:
-      "ADHD-friendly personal operating system with multi-modal capture, knowledge graph, and dyslexia mode.",
+      "ADHD-friendly personal operating system with multi-modal capture, visual knowledge graph, dyslexia mode, and focus tools. Built for Nigerian entrepreneurs.",
     images: [
       {
         url: `${canonicalUrl}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: "BoldMind OS - Neurodivergent Productivity",
+        alt: "BoldMind OS — Neurodivergent Productivity System",
         type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "BoldMind OS - Built for Neurodivergent Entrepreneurs",
+    site: "@boldmindtech",
+    title: "BoldMind OS — Built for Neurodivergent Entrepreneurs",
     description:
       "ADHD-friendly productivity with multi-modal capture, visual knowledge graph, and focus tools.",
     images: [`${canonicalUrl}/og-image.png`],
-  },
-  category: "productivity",
-  other: {
-    "application-name": "BoldMind OS",
-    "msapplication-TileColor": "#9C27B0",
-    "apple-mobile-web-app-capable": "yes",
-    "apple-mobile-web-app-title": "BoldMind OS",
   },
   icons: {
     icon: [
@@ -115,15 +104,23 @@ export const metadata: Metadata = {
       { url: "/icon-192x192.png", sizes: "192x192", type: "image/png" },
       { url: "/icon-512x512.png", sizes: "512x512", type: "image/png" },
     ],
-    apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
-    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: "/favicon.ico",
   },
   manifest: "/manifest.webmanifest",
+  appleWebApp: { title: "BoldMind OS", statusBarStyle: "black-translucent" },
+  other: {
+    "application-name": "BoldMind OS",
+    "apple-mobile-web-app-title": "BoldMind OS",
+    "msapplication-TileColor": "#9C27B0",
+  },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#9C27B0",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#9C27B0" },
+    { media: "(prefers-color-scheme: dark)", color: "#6A0080" },
+  ],
   colorScheme: "light dark",
   width: "device-width",
   initialScale: 1,
@@ -138,72 +135,79 @@ const softwareSchema = {
   name: "BoldMind OS",
   applicationCategory: "ProductivityApplication",
   operatingSystem: "Web",
+  url: canonicalUrl,
+  logo: `${canonicalUrl}/logo.png`,
+  description:
+    "Personal operating system for neurodivergent entrepreneurs with ADHD-friendly features, dyslexia mode, and AI-powered productivity tools.",
   offers: {
     "@type": "AggregateOffer",
     priceCurrency: "NGN",
     lowPrice: "0",
-    highPrice: "15000",
+    highPrice: "30000",
   },
-  description:
-    "Personal operating system for neurodivergent entrepreneurs with ADHD-friendly features",
   featureList: [
-    "Multi-modal capture (text, voice, image)",
-    "ADHD-friendly Pomodoro timer",
+    "Multi-modal thought capture (text, voice, image)",
+    "ADHD-friendly Pomodoro focus timer",
     "Visual knowledge graph",
-    "AI content pipeline",
-    "Dyslexia Mode",
-    "Focus analytics",
+    "AI content pipeline manager",
+    "Dyslexia Mode with OpenDyslexic font",
+    "Focus analytics and progress tracking",
+    "Time blindness support tools",
+    "Body doubling sessions",
   ],
   screenshot: `${canonicalUrl}/screenshot.png`,
+  publisher: {
+    "@type": "Organization",
+    name: "BoldMind Technology Solution Enterprise",
+    url: "https://boldmind.ng",
+  },
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "BoldMind OS",
+  url: canonicalUrl,
+  inLanguage: "en-NG",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${canonicalUrl}/search?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+    <html lang="en-NG" className="scroll-smooth" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://cdn.os.boldmind.ng" />
-
-        {/* DNS Prefetch */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
         <link rel="dns-prefetch" href="//cdn.os.boldmind.ng" />
-
+        <link rel="dns-prefetch" href="//api.boldmind.ng" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="geo.region" content="NG-LA" />
+        <meta name="geo.placename" content="Lagos, Nigeria" />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(softwareSchema),
-          }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
         />
-
-        <link
-          rel="preload"
-          href="/_next/static/css/app/layout.css"
-          as="style"
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
-
-        <meta name="apple-mobile-web-app-title" content="BoldMind OS" />
-        <meta name="theme-color" content="#9C27B0" />
       </head>
-      <body
-        className={`${inter.variable} antialiased bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 font-sans`}
-      >
+      <body className={`${inter.variable} antialiased bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 font-sans`}>
         <ClientErrorBoundary>
-          <BoldMindOSLayout>
-            {children}
-          </BoldMindOSLayout>
+          <BoldMindOSLayout>{children}</BoldMindOSLayout>
           <CookieConsent />
         </ClientErrorBoundary>
-
       </body>
     </html>
   );

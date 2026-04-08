@@ -5,7 +5,6 @@ import { ErrorBoundary, CookieConsent } from "@boldmind/ui";
 import "@boldmind/ui/dist/index.css";
 import './globals.css'
 
-
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
@@ -20,117 +19,95 @@ const getCanonicalUrl = () => {
 
 const canonicalUrl = getCanonicalUrl();
 
-
 export const metadata: Metadata = {
-  metadataBase: new URL(canonicalUrl), // ✅ Added to fix warnings
+  metadataBase: new URL(canonicalUrl),
   title: {
-    default: 'PlanAI Suite - AI Business Automation',
-    template: "%s | BoldMind Technology Ecosystem",
+    default: 'PlanAI Suite — Complete AI Business Automation for Nigerian Entrepreneurs',
+    template: "%s | PlanAI Suite",
   },
-  description: 'Complete AI business stack for Nigerian entrepreneurs',
+  description:
+    'Complete AI business stack for Nigerian entrepreneurs. AI Receptionist, Digital Storefront, Marketing Automation, Financial Planning, Investor Readiness, and Branding — everything you need to launch and scale.',
   keywords: [
-    "AI solutions Africa",
-    "Plan AI",
-    "AI Receiptionist",
-    "AI Marketing Automation",
-    "Ai Business Solution"
+    "AI business solutions Nigeria",
+    "PlanAI Suite",
+    "AI receptionist Nigeria",
+    "business automation Nigeria",
+    "marketing automation Nigeria",
+    "digital storefront Nigeria",
+    "financial planning Nigeria",
+    "investor readiness Nigeria",
+    "Nigerian entrepreneur tools",
+    "AI tools for business Nigeria",
+    "branding Nigeria",
+    "BoldMind AI",
+    "business planning Nigeria",
+    "credibility hub Nigeria",
+    "analytics dashboard Nigeria",
+    "African AI business tools",
+    "startup tools Nigeria",
+    "small business AI Nigeria",
   ],
   authors: [
-    { name: "BoldMind Technology Solution Enterprise", url: canonicalUrl },
-    { name: "Charles Uche Chijuka", url: "https://facebook.com/cuche3" },
+    { name: "BoldMind Technology Solution Enterprise", url: "https://boldmind.ng" },
+    { name: "Charles Uche Chijuka" },
   ],
-
+  creator: "BoldMind Technology Solution Enterprise",
+  publisher: "BoldMind Technology Solution Enterprise",
+  formatDetection: { email: false, telephone: false },
+  category: "technology",
   robots: {
     index: true,
     follow: true,
-    nocache: false,
     googleBot: {
       index: true,
       follow: true,
-      noimageindex: false,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
     },
   },
   alternates: {
     canonical: canonicalUrl,
-    languages: {
-      "en-NG": canonicalUrl,
-      "en-US": canonicalUrl,
-    },
+    languages: { "en-NG": canonicalUrl },
   },
   openGraph: {
     type: "website",
     locale: "en_NG",
     url: canonicalUrl,
-    title: "Planai Suite - Complete AI business stack for Nigerian entrepreneurs",
-    siteName: "Planai",
+    title: "PlanAI Suite — Complete AI Business Stack for Nigerian Entrepreneurs",
+    siteName: "PlanAI Suite",
     description:
-      "Complete AI business stack for Nigerian entrepreneurs",
+      "AI Receptionist, Digital Storefront, Marketing Automation, Financial Planning, and more — the complete AI business toolkit for Nigerian entrepreneurs.",
     images: [
       {
         url: `${canonicalUrl}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: "Planai Stuite - Nigerian Tech Ecosystem",
-        type: "image/png",
-        secureUrl: `${canonicalUrl}/og-image.png`,
-      },
-      {
-        url: `${canonicalUrl}/og-image-800x600.png`,
-        width: 800,
-        height: 600,
-        alt: "BoldMind Technology Ecosystem",
-        type: "image/png",
-      },
-      {
-        url: `${canonicalUrl}/og-image-twitter.png`,
-        width: 1200,
-        height: 600,
-        alt: "BoldMind - Empowering Nigerian Entrepreneurs",
+        alt: "PlanAI Suite — AI Business Automation Nigeria",
         type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    site: "@",
-    creator: "@",
-    title: "Planai Suite - Complete AI business stack for Nigerian entrepreneurs",
+    site: "@boldmindtech",
+    creator: "@boldmindtech",
+    title: "PlanAI Suite — AI Business Automation for Nigerian Entrepreneurs",
     description:
-      "Complete AI business stack for Nigerian entrepreneurs",
+      "Complete AI business stack: AI Receptionist, Digital Storefront, Marketing Automation, and Financial Planning.",
     images: [`${canonicalUrl}/og-image.png`],
   },
   verification: {
-    // google: "wN3-VE6VlAJbq9B0KWqG0lysVUdAa5UNi4uApClq0Ws", // Add your Google Search Console code
-    // yandex: "c0693f1167b9c72e", // Optional
+    google: process.env['NEXT_PUBLIC_GOOGLE_SITE_VERIFY'],
     other: {
       me: [
         "https://facebook.com/BoldMindTech",
         "https://instagram.com/boldmindtech",
-        "https://x.com/villagecircl",
+        "https://x.com/villagecircleng",
         "https://linkedin.com/company/boldmind-technology-solution-enterprise",
         "https://github.com/boldmind-tech",
       ],
     },
-  },
-  category: "technology",
-  other: {
-    "application-name": "Planai Suite",
-    "msapplication-TileColor": "#00143C",
-    "msapplication-config": "/browserconfig.xml",
-    "apple-mobile-web-app-capable": "yes",
-    "apple-mobile-web-app-status-bar-style": "black-translucent",
-    "apple-mobile-web-app-title": "Planai Suite",
-    "og:email": "hello@boldmind.ng",
-    "og:phone_number": "+2349138349271",
-    "og:whatsapp_number": "+2349138349271",
-    "og:street-address": "No 5 Olusoji imole str ikosi ketu Lagos Nigeria",
-    "og:locality": "Lagos",
-    "og:region": "NG",
-    "og:postal-code": "100001",
-    "og:country-name": "Nigeria",
   },
   icons: {
     icon: [
@@ -146,17 +123,11 @@ export const metadata: Metadata = {
       { url: "/apple-icon-152x152.png", sizes: "152x152", type: "image/png" },
       { url: "/apple-icon-167x167.png", sizes: "167x167", type: "image/png" },
     ],
-    other: [
-      {
-        rel: "mask-icon",
-        url: "/safari-pinned-tab.svg",
-        color: "#00143C",
-      },
-    ],
+    other: [{ rel: "mask-icon", url: "/safari-pinned-tab.svg", color: "#00143C" }],
   },
   manifest: "/manifest.webmanifest",
   appleWebApp: {
-    title: "Planai Suite",
+    title: "PlanAI Suite",
     statusBarStyle: "black-translucent",
     startupImage: [
       {
@@ -166,10 +137,19 @@ export const metadata: Metadata = {
       },
     ],
   },
-}
+  other: {
+    "application-name": "PlanAI Suite",
+    "msapplication-TileColor": "#00143C",
+    "msapplication-config": "/browserconfig.xml",
+    "apple-mobile-web-app-title": "PlanAI Suite",
+  },
+};
 
 export const viewport: Viewport = {
-  themeColor: "#00143C",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#00143C" },
+    { media: "(prefers-color-scheme: dark)", color: "#000814" },
+  ],
   colorScheme: "light dark",
   width: "device-width",
   initialScale: 1,
@@ -185,20 +165,17 @@ const organizationSchema = {
   name: "BoldMind Technology Solution Enterprise",
   url: canonicalUrl,
   logo: `${canonicalUrl}/logo.png`,
-  description:
-    "Complete AI business stack for Nigerian entrepreneurs",
+  description: "Complete AI business stack for Nigerian entrepreneurs",
   foundingDate: "2025",
   founders: [
     {
       "@type": "Person",
       name: "Charles Uche Chijuka",
-      url: [
+      sameAs: [
         "https://facebook.com/cuche3",
         "https://linkedin.com/in/charliedotcom",
         "https://x.com/charlesuchech",
         "https://instagram.com/charleschijuka",
-        "https://medium.com/@uchecharles223",
-        "https://threads.com/@charleschijuka"
       ],
     },
   ],
@@ -207,15 +184,17 @@ const organizationSchema = {
     addressCountry: "NG",
     addressRegion: "Lagos",
     addressLocality: "Lagos",
+    streetAddress: "No 5 Olusoji Imole Street, Ikosi Ketu",
   },
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "customer service",
     email: "hello@boldmind.ng",
+    telephone: "+2349138349271",
     availableLanguage: ["English"],
   },
   sameAs: [
-    "https://x.com/villagecircl",
+    "https://x.com/villagecircleng",
     "https://facebook.com/boldmindtech",
     "https://linkedin.com/company/boldmind-technology-solution-enterprise",
     "https://github.com/boldmind-tech",
@@ -223,24 +202,6 @@ const organizationSchema = {
     "https://tiktok.com/@villagecircle",
     "https://youtube.com/@BoldMindTech",
   ],
-  brand: [
-
-    "PlanAI",
-    "Credibility-Hub",
-    "Business-Planing",
-    "Digital-Storefront",
-    "Financial-Planning",
-    "Investor-Readiness",
-    "Marketing-Automation",
-    "Analytics-Dashboard",
-    "Branding-Design",
-    "Ai-Recieptionist"
-
-  ],
-  numberOfEmployees: {
-    "@type": "QuantitativeValue",
-    value: "10+",
-  },
   knowsAbout: [
     "Artificial Intelligence",
     "Education Technology",
@@ -251,22 +212,21 @@ const organizationSchema = {
   ],
 };
 
-// Product ecosystem schema
 const productEcosystemSchema = {
   "@context": "https://schema.org",
   "@type": "ItemList",
-  name: "Planai Suite",
+  name: "PlanAI Suite Products",
   description: "Complete AI business stack for Nigerian entrepreneurs",
-  numberOfItems: 31,
+  numberOfItems: 9,
   itemListElement: [
     {
       "@type": "ListItem",
       position: 1,
       item: {
         "@type": "Product",
-        name: "Ai Receiptionist",
-        escription: "",
-        url: `${canonicalUrl}/receiptionist`,
+        name: "AI Receptionist",
+        description: "24/7 AI-powered customer service receptionist for your business",
+        url: `${canonicalUrl}/receptionist`,
       },
     },
     {
@@ -274,10 +234,9 @@ const productEcosystemSchema = {
       position: 2,
       item: {
         "@type": "Product",
-        name: "StoreFronts",
-        description:
-          "",
-        url: `${canonicalUrl}/stronefronts`,
+        name: "Digital Storefront",
+        description: "Build and manage your digital storefront with AI assistance",
+        url: `${canonicalUrl}/storefront`,
       },
     },
     {
@@ -285,172 +244,124 @@ const productEcosystemSchema = {
       position: 3,
       item: {
         "@type": "Product",
-        name: "",
-        description: "",
+        name: "Marketing Automation",
+        description: "AI-powered marketing automation for Nigerian businesses",
         url: `${canonicalUrl}/marketing`,
+      },
+    },
+    {
+      "@type": "ListItem",
+      position: 4,
+      item: {
+        "@type": "Product",
+        name: "Financial Planning",
+        description: "AI-assisted financial planning and business forecasting",
+        url: `${canonicalUrl}/financial-planning`,
+      },
+    },
+    {
+      "@type": "ListItem",
+      position: 5,
+      item: {
+        "@type": "Product",
+        name: "Investor Readiness",
+        description: "Prepare your business for investor presentations and funding rounds",
+        url: `${canonicalUrl}/investor-readiness`,
+      },
+    },
+    {
+      "@type": "ListItem",
+      position: 6,
+      item: {
+        "@type": "Product",
+        name: "Branding & Design",
+        description: "AI-powered branding and visual identity for your business",
+        url: `${canonicalUrl}/branding`,
+      },
+    },
+    {
+      "@type": "ListItem",
+      position: 7,
+      item: {
+        "@type": "Product",
+        name: "Analytics Dashboard",
+        description: "Comprehensive business analytics and performance insights",
+        url: `${canonicalUrl}/analytics`,
+      },
+    },
+    {
+      "@type": "ListItem",
+      position: 8,
+      item: {
+        "@type": "Product",
+        name: "Credibility Hub",
+        description: "Build business credibility and trust signals with customers",
+        url: `${canonicalUrl}/credibility`,
+      },
+    },
+    {
+      "@type": "ListItem",
+      position: 9,
+      item: {
+        "@type": "Product",
+        name: "Business Planning",
+        description: "AI-assisted business plan creation and growth strategy",
+        url: `${canonicalUrl}/business-planning`,
       },
     },
   ],
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <head>
-        {/* Preconnect to critical domains */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link rel="preconnect" href="https://cdn.boldmind.ng" />
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "PlanAI Suite",
+  url: canonicalUrl,
+  inLanguage: "en-NG",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${canonicalUrl}/search?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
+};
 
-        {/* DNS Prefetch */}
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en-NG" className="scroll-smooth" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cdn.boldmind.ng" />
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
         <link rel="dns-prefetch" href="//cdn.boldmind.ng" />
-
-        {/* Structured Data */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organizationSchema),
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(productEcosystemSchema),
-          }}
-        />
-
-        {/* Preload critical assets */}
-        <link
-          rel="preload"
-          href="/_next/static/css/app/layout.css"
-          as="style"
-        />
-
-        {/* Preload hero image */}
-        <link
-          rel="preload"
-          href="/hero-bg.jpg"
-          as="image"
-          type="image/jpeg"
-          media="(min-width: 768px)"
-        />
-
-        {/* Preload LCP image */}
-        <link
-          rel="preload"
-          href="/icon-512x512.png"
-          as="image"
-          type="image/png"
-        />
-
-        {/* PWA meta tags */}
-        <meta name="apple-mobile-web-app-title" content="BoldMind" />
-        <meta name="application-name" content="BoldMind" />
+        <link rel="dns-prefetch" href="//api.boldmind.ng" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta
-          name="apple-mobile-web-app-status-bar-style"
-          content="black-translucent"
-        />
-
-        {/* Theme color for mobile browsers */}
-        <meta
-          name="theme-color"
-          content="#00143C"
-          media="(prefers-color-scheme: light)"
-        />
-        <meta
-          name="theme-color"
-          content="#000814"
-          media="(prefers-color-scheme: dark)"
-        />
-
-        {/* Mobile App Capable */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
-
-        {/* Viewport (already in viewport export, but kept for compatibility) */}
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=5"
-        />
-
-        {/* Additional SEO meta */}
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="geo.region" content="NG-LA" />
-        <meta name="geo.placename" content="Lagos" />
+        <meta name="geo.placename" content="Lagos, Nigeria" />
         <meta name="geo.position" content="6.5244;3.3792" />
         <meta name="ICBM" content="6.5244, 3.3792" />
-
-        {/* Facebook verification (optional) */}
-        <meta
-          name="facebook-domain-verification"
-          content="your-facebook-verification-code"
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
-        <meta name="yandex-verification" content="c0693f1167b9c72e" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(productEcosystemSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
       </head>
-      <body
-        className={`${inter.variable} antialiased bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 font-sans`}
-      >
+      <body className={`${inter.variable} antialiased bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 font-sans`}>
         <ErrorBoundary>
-          <PlanaiLandingLayout
-
-          >
-            {children}
-          </PlanaiLandingLayout>
+          <PlanaiLandingLayout>{children}</PlanaiLandingLayout>
           <CookieConsent />
         </ErrorBoundary>
-
-        {/* Performance monitoring */}
-        {process.env.NODE_ENV === "production" && (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                // Core Web Vitals monitoring
-                if ('webVitals' in window) {
-                  webVitals.getCLS(console.log);
-                  webVitals.getFID(console.log);
-                  webVitals.getLCP(console.log);
-                }
-                
-                // Track page visibility
-                document.addEventListener('visibilitychange', function() {
-                  if (document.visibilityState === 'visible') {
-                    console.log('Page is visible');
-                  }
-                });
-                
-                // Send performance data to analytics
-                window.addEventListener('load', function() {
-                  setTimeout(function() {
-                    const perfData = window.performance && window.performance.timing;
-                    if (perfData) {
-                      const loadTime = perfData.loadEventEnd - perfData.navigationStart;
-                      console.log('Page load time:', loadTime, 'ms');
-                      
-                      // Send to analytics (example with gtag)
-                      if (typeof gtag === 'function') {
-                        gtag('event', 'timing_complete', {
-                          'name': 'page_load',
-                          'value': loadTime,
-                          'event_category': 'Performance'
-                        });
-                      }
-                    }
-                  }, 0);
-                });
-              `,
-            }}
-          />
-        )}
       </body>
     </html>
-  )
+  );
 }

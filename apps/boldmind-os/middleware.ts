@@ -1,5 +1,5 @@
 // apps/boldmind-os/middleware.ts
-// The entire OS is auth-gated — redirect all unauthenticated requests to hub.
+// Public routes are open; OS/dashboard routes require SSO.
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
@@ -9,7 +9,16 @@ const HUB_URL =
 
 const SSO_COOKIE = 'boldmind_sso';
 
+const PUBLIC_PATHS = ['/', '/pricing', '/privacy', '/terms', '/about', '/mission', '/team', '/careers', '/contact'];
+
 export function middleware(request: NextRequest): NextResponse {
+  const { pathname } = request.nextUrl;
+
+  // Allow public marketing pages and auth routes
+  if (PUBLIC_PATHS.includes(pathname) || pathname.startsWith('/login') || pathname.startsWith('/register') || pathname.startsWith('/reset-password') || pathname.startsWith('/verify-email') || pathname.startsWith('/change-password')) {
+    return NextResponse.next();
+  }
+
   const token = request.cookies.get(SSO_COOKIE)?.value;
   if (token) return NextResponse.next();
 

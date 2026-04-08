@@ -1,12 +1,6 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // apps/amebogist/app/layout.tsx
 // ─────────────────────────────────────────────────────────────────────────────
-// FIXES from original:
-//   1. body had `font-sans` className which overrides OpenDyslexic — removed
-//   2. Missing blocking script in <head> for font FOUC prevention
-//   3. themeColor was #FF6B35 (wrong — amebogist primary is #065F46 emerald)
-//   4. preload: true on Inter was blocking — switched to false
-// ─────────────────────────────────────────────────────────────────────────────
 
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
@@ -21,7 +15,7 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter",
-  preload: false, // Don't block on Inter
+  preload: false,
 });
 
 const getCanonicalUrl = () => {
@@ -37,41 +31,98 @@ export const metadata: Metadata = {
     template: "%s | AmeboGist",
   },
   description:
-    "Amebo wey make sense! Nigeria's premier source for authentic gist, AI/Tech, Creator entrepreneurship, Politics, Entertainment, and real-life hustle tips.",
-  keywords: ["Nigerian news", "Pidgin English", "AmeboGist", "Naija gist", "AI Nigeria"],
+    "Amebo wey make sense! Nigeria's premier source for authentic gist, AI/Tech, Creator entrepreneurship, Politics, Entertainment, Sports, and real-life hustle tips — all in Pidgin English.",
+  keywords: [
+    "Nigerian news",
+    "Pidgin English news",
+    "AmeboGist",
+    "Naija gist",
+    "AI Nigeria",
+    "tech news Nigeria",
+    "creator news Nigeria",
+    "Nigerian entrepreneur news",
+    "entertainment Nigeria",
+    "Nigerian politics news",
+    "Nigerian sports news",
+    "Pidgin English platform",
+    "Naija hustle",
+    "BoldMind news",
+    "Nigerian digital media",
+    "Nigerian startup news",
+    "amebo Nigeria",
+    "naija news",
+  ],
   authors: [
     { name: "AmeboGist", url: canonicalUrl },
     { name: "BoldMind Technology Solution Enterprise", url: "https://boldmind.ng" },
   ],
-  robots: { index: true, follow: true },
-  alternates: { canonical: canonicalUrl, languages: { "en-NG": canonicalUrl, "pcm-NG": canonicalUrl } },
+  creator: "BoldMind Technology Solution Enterprise",
+  publisher: "BoldMind Technology Solution Enterprise",
+  formatDetection: { email: false, telephone: false },
+  category: "news",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: canonicalUrl,
+    languages: { "en-NG": canonicalUrl, "pcm-NG": canonicalUrl },
+  },
   openGraph: {
-    type: "website", locale: "en_NG", url: canonicalUrl,
+    type: "website",
+    locale: "en_NG",
+    url: canonicalUrl,
     title: "AmeboGist — Nigeria's #1 Pidgin English Platform",
     siteName: "AmeboGist",
-    description: "Nigeria's #1 platform for AI/Tech, Creator entrepreneurship, Sports, Politics, and Entertainment in Pidgin English.",
-    images: [{ url: `${canonicalUrl}/og-image.png`, width: 1200, height: 630, alt: "AmeboGist" }],
+    description:
+      "Nigeria's #1 platform for AI/Tech, Creator entrepreneurship, Sports, Politics, and Entertainment in Pidgin English.",
+    images: [
+      {
+        url: `${canonicalUrl}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: "AmeboGist — Naija Gist Platform",
+        type: "image/png",
+      },
+    ],
   },
   twitter: {
-    card: "summary_large_image", site: "@amebogist",
+    card: "summary_large_image",
+    site: "@amebogist",
     title: "AmeboGist — Nigeria's #1 Pidgin News Platform",
+    description:
+      "Amebo wey make sense! AI/Tech, Creator entrepreneurship, Entertainment, Sports and Politics in Pidgin English.",
     images: [`${canonicalUrl}/og-image.png`],
   },
   icons: {
-    icon: [{ url: "/favicon.ico" }, { url: "/icon-192x192.png", sizes: "192x192" }],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512x512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: "/favicon.ico",
   },
   manifest: "/manifest.webmanifest",
   appleWebApp: { title: "AmeboGist", statusBarStyle: "black-translucent" },
   other: {
     "application-name": "AmeboGist",
     "apple-mobile-web-app-title": "AmeboGist",
+    "msapplication-TileColor": "#065F46",
   },
 };
 
 export const viewport: Viewport = {
-  // ✅ Corrected: AmeboGist primary is emerald #065F46, not orange
-  themeColor: "#065F46",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#065F46" },
+    { media: "(prefers-color-scheme: dark)", color: "#043D2E" },
+  ],
   colorScheme: "light dark",
   width: "device-width",
   initialScale: 1,
@@ -88,8 +139,16 @@ const organizationSchema = {
   description: "Nigeria's #1 Pidgin English news and creator platform",
   foundingDate: "2025",
   address: { "@type": "PostalAddress", addressCountry: "NG", addressRegion: "Lagos" },
-  contactPoint: { "@type": "ContactPoint", contactType: "customer service", email: "hello@amebogist.ng" },
-  sameAs: ["https://facebook.com/amebogist", "https://instagram.com/amebogist", "https://twitter.com/amebogist"],
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer service",
+    email: "hello@amebogist.ng",
+  },
+  sameAs: [
+    "https://facebook.com/amebogist",
+    "https://instagram.com/amebogist",
+    "https://twitter.com/amebogist",
+  ],
 };
 
 const websiteSchema = {
@@ -110,47 +169,33 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`scroll-smooth ${inter.variable}`} suppressHydrationWarning>
       <head>
         {/*
-          Blocking script — runs before first paint to prevent font flash.
+          Blocking script — runs before first paint to prevent font FOUC.
           Sets data-font AND data-product on <html> synchronously.
         */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var font = localStorage.getItem('boldmind-font-mode') || 'dyslexic';
-                  document.documentElement.setAttribute('data-font', font);
-                  document.documentElement.setAttribute('data-product', 'amebogist');
-                } catch(e) {
-                  document.documentElement.setAttribute('data-font', 'dyslexic');
-                  document.documentElement.setAttribute('data-product', 'amebogist');
-                }
-              })();
-            `,
+            __html: `(function(){try{var f=localStorage.getItem('boldmind-font-mode')||'dyslexic';document.documentElement.setAttribute('data-font',f);document.documentElement.setAttribute('data-product','amebogist');}catch(e){document.documentElement.setAttribute('data-font','dyslexic');document.documentElement.setAttribute('data-product','amebogist');}})();`,
           }}
         />
-
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://fonts.cdnfonts.com" crossOrigin="anonymous" />
-
-        {/* ✅ Corrected theme-color */}
-        <meta name="theme-color" content="#065F46" media="(prefers-color-scheme: light)" />
-        <meta name="theme-color" content="#043D2E" media="(prefers-color-scheme: dark)" />
-        <meta name="geo.region" content="NG-LA" />
-        <meta name="geo.placename" content="Lagos" />
+        <link rel="dns-prefetch" href="//api.boldmind.ng" />
+        <link rel="dns-prefetch" href="//cdn.boldmind.ng" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
+        <meta name="geo.region" content="NG-LA" />
+        <meta name="geo.placename" content="Lagos, Nigeria" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
       </head>
-
-      {/*
-        FIXED: Removed font-sans className — it was overriding OpenDyslexic.
-        Font is controlled entirely via CSS data-font attribute.
-      */}
       <body className="antialiased">
         <ClientErrorBoundary>
           <AmebogistLayout>{children}</AmebogistLayout>
