@@ -1,7 +1,11 @@
 // packages/utils/src/constants/products.ts
-
+// ═══════════════════════════════════════════════════════════════════════════════
+// BoldMind Ecosystem Product Catalog — v2.0
+// Restructured: 4 domains, 4 pillars, clear flywheel ownership.
+// ═══════════════════════════════════════════════════════════════════════════════
 
 export type ProductStatus = 'LIVE' | 'BUILDING' | 'PLANNED' | 'CONCEPT';
+
 export type ProductCategory =
   | 'media'
   | 'education'
@@ -12,20 +16,45 @@ export type ProductCategory =
   | 'marketplace'
   | 'fintech'
   | 'utilities'
-  | 'social';
+  | 'social'
+  | 'community';
+
 export type DatabaseType = 'postgres' | 'mongodb';
- 
+
+/**
+ * The four pillars of the BoldMind flywheel.
+ * Every product belongs to exactly one pillar — this is the organising principle.
+ *
+ *   awareness  → amebogist.ng       (stranger → reader)
+ *   conviction → villagecircle.ng   (reader → believer + concept incubator)
+ *   education  → educenter.com.ng   (believer → student)
+ *   enablement → boldmind.ng        (student → builder)
+ */
+export type EcosystemPillar = 'awareness' | 'conviction' | 'education' | 'enablement';
+
+/**
+ * The four core domains. Products either live at a domain root, on a subdomain
+ * (only if scale potential justifies it), or on a route path.
+ */
+export type CoreDomain =
+  | 'boldmind.ng'
+  | 'amebogist.ng'
+  | 'educenter.com.ng'
+  | 'villagecircle.ng';
+
 export interface Product {
   id: string;
   name: string;
   description: string;
   category: ProductCategory;
   status: ProductStatus;
+  pillar: EcosystemPillar;             // NEW — which flywheel stage
   version: string;
   slug: string;
   icon: string;
-  domain: string;
-  subdomain?: string;
+  domain: CoreDomain;                  // NOW typed — must be one of 4 core domains
+  subdomain?: string;                  // e.g. "planai" → planai.boldmind.ng
+  routePath?: string;                  // e.g. "/kolo" → villagecircle.ng/kolo
   revenueModel: string;
   monthlyRevenue?: number;
   users?: string | number;
@@ -36,6 +65,12 @@ export interface Product {
   teamSize?: number;
   timeline?: string;
   priority: number;
+  /** If a concept graduates, this is where it will move to. */
+  graduationTarget?: {
+    domain: CoreDomain;
+    subdomain?: string;
+    pillar: EcosystemPillar;
+  };
   twa?: {
     packageName: string;
     themeColor: string;
@@ -57,12 +92,11 @@ export interface Product {
   createdAt: string;
   updatedAt: string;
 }
- 
+
 // ─────────────────────────────────────────────────────────────────────────────
 // DERIVED TYPES
 // ─────────────────────────────────────────────────────────────────────────────
- 
-/** Lightweight card representation — safe to send to the client */
+
 export interface ProductCard {
   id: string;
   name: string;
@@ -71,20 +105,19 @@ export interface ProductCard {
   description: string;
   category: ProductCategory;
   status: ProductStatus;
-  domain: string;
+  pillar: EcosystemPillar;
+  domain: CoreDomain;
   monthlyRevenue: number;
   priority: number;
   tags: string[];
 }
- 
-/** Pair of products that share category / integration / dependency */
+
 export interface ProductPair {
   a: Product;
   b: Product;
   reason: string;
 }
- 
-/** Result shape returned by the build-plan generator */
+
 export interface BuildPlan {
   wave: number;
   products: Product[];
@@ -93,8 +126,7 @@ export interface BuildPlan {
   durationWeeks: number;
   dependencies: string[];
 }
- 
-/** Generic paginated response */
+
 export interface PaginatedResult<T> {
   data: T[];
   total: number;
@@ -104,12 +136,11 @@ export interface PaginatedResult<T> {
   hasNext: boolean;
   hasPrev: boolean;
 }
- 
-/** Health score breakdown for a product */
+
 export interface ProductHealthScore {
   productId: string;
   productName: string;
-  overall: number; // 0-100
+  overall: number;
   breakdown: {
     revenueScore: number;
     userScore: number;
@@ -120,16 +151,15 @@ export interface ProductHealthScore {
   rating: 'excellent' | 'good' | 'fair' | 'needs-attention';
   recommendations: string[];
 }
- 
-/** Competitive gap analysis result */
+
 export interface CompetitorGap {
   category: ProductCategory;
   boldmindCount: number;
   estimatedMarketSize: string;
   missingFeatureAreas: string[];
-  opportunityScore: number; // 0-100
+  opportunityScore: number;
 }
- 
+
 export interface ProductStatusSummary {
   total: number;
   live: number;
@@ -140,7 +170,7 @@ export interface ProductStatusSummary {
   teamSize: number;
   upcomingReleases: number;
 }
- 
+
 export interface CategorySummary {
   category: string;
   count: number;
@@ -150,49 +180,113 @@ export interface CategorySummary {
   concept: number;
   revenue: number;
 }
- 
+
+export interface PillarSummary {
+  pillar: EcosystemPillar;
+  domain: CoreDomain;
+  label: string;
+  jobInFlywheel: string;
+  count: number;
+  live: number;
+  building: number;
+  planned: number;
+  concept: number;
+  revenue: number;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// PILLAR METADATA
+// ═══════════════════════════════════════════════════════════════════════════════
+
+export const PILLAR_METADATA: Record<EcosystemPillar, {
+  domain: CoreDomain;
+  label: string;
+  jobInFlywheel: string;
+  audienceState: string;
+  emoji: string;
+  primaryColor: string;
+}> = {
+  awareness: {
+    domain: 'amebogist.ng',
+    label: 'Awareness',
+    jobInFlywheel: 'Turns strangers into readers through Pidgin media and viral content',
+    audienceState: 'stranger → reader',
+    emoji: '📰',
+    primaryColor: '#065F46',
+  },
+  conviction: {
+    domain: 'villagecircle.ng',
+    label: 'Conviction',
+    jobInFlywheel: 'Turns readers into believers through story-driven philosophy; incubates concepts',
+    audienceState: 'reader → believer',
+    emoji: '🌱',
+    primaryColor: '#C9922A',
+  },
+  education: {
+    domain: 'educenter.com.ng',
+    label: 'Education',
+    jobInFlywheel: 'Turns believers into students through structured learning',
+    audienceState: 'believer → student',
+    emoji: '🎓',
+    primaryColor: '#1E40AF',
+  },
+  enablement: {
+    domain: 'boldmind.ng',
+    label: 'Enablement',
+    jobInFlywheel: 'Turns students into builders through AI tools and community',
+    audienceState: 'student → builder',
+    emoji: '🚀',
+    primaryColor: '#00143C',
+  },
+};
+
 export const PRODUCT_CATEGORIES = [
   { id: 'media', name: 'Media & Content', count: 2 },
   { id: 'education', name: 'Education', count: 3 },
   { id: 'ai', name: 'AI Automation', count: 13 },
   { id: 'productivity', name: 'Productivity', count: 5 },
-  { id: 'lead-gen', name: 'Lead Generation', count: 2 },
+  { id: 'community', name: 'Community', count: 2 },
   { id: 'security', name: 'Security', count: 2 },
   { id: 'health', name: 'Health & Wellness', count: 2 },
   { id: 'marketplace', name: 'Marketplaces', count: 6 },
   { id: 'fintech', name: 'Fintech', count: 5 },
   { id: 'utilities', name: 'Utilities', count: 2 },
-  { id: 'marketing', name: 'Marketing', count: 2 },
   { id: 'social', name: 'Social', count: 2 },
 ];
 
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// PRODUCT CATALOG
+// ═══════════════════════════════════════════════════════════════════════════════
+
 export const BOLDMIND_PRODUCTS: Product[] = [
 
-  // ═══════════════════════════════════════════
-  // SECTION 1: LIVE PRODUCTS (priority 0-3)
-  // ═══════════════════════════════════════════
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PILLAR 1: ENABLEMENT — boldmind.ng (student → builder)
+  // ═══════════════════════════════════════════════════════════════════════════
+
   {
     id: 'prod_000',
-    name: 'BoldMind Hub',
-    description: 'Central hub for the BoldMind ecosystem — unified auth, product directory, community, and founder dashboard for 32+ products empowering Nigerian entrepreneurs.',
-    category: 'ai',
+    name: 'BoldMind',
+    description: 'Community + tool house for Nigerian digital builders — unified auth, founder community, tool suite gateway, and builder dashboard. The enablement pillar of the ecosystem.',
+    category: 'community',
     status: 'LIVE',
-    version: '1.0.0',
-    slug: 'boldmind-hub',
+    pillar: 'enablement',
+    version: '2.0.0',
+    slug: 'boldmind',
     domain: 'boldmind.ng',
-    app: 'boldmind-hub',
+    app: 'boldmind-web',
     serviceModule: 'AdminModule',
     icon: '🚀',
-    revenueModel: 'Ecosystem gateway — drives conversion to paid products',
+    revenueModel: 'Gateway to paid tools + community membership (₦2k/month pro tier)',
     database: 'postgres',
     monthlyRevenue: 0,
     users: '100+',
     techStack: ['Next.js 15', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Prisma'],
     teamSize: 1,
-    timeline: 'Launched Q4 2025',
+    timeline: 'Relaunched Q2 2026 as enablement pillar',
     priority: 0,
-    tags: ['ecosystem', 'hub', 'portfolio', 'sso', 'admin'],
+    tags: ['community', 'hub', 'tools-gateway', 'sso', 'builders'],
     links: { website: 'https://boldmind.ng' },
     twa: {
       packageName: 'ng.boldmind.hub',
@@ -200,168 +294,46 @@ export const BOLDMIND_PRODUCTS: Product[] = [
       backgroundColor: '#FAFAF9',
     },
     features: [
-      'SSO — single login across all 10 apps',
-      'Product ecosystem grid (32+ products)',
-      'Personalized user dashboard',
-      'Role-based access',
-      'Cross-product subscription management',
-      'Community feed for founders & entrepreneurs',
+      'SSO — single login across all BoldMind tools',
+      'Builder community feed (founder stories, wins, asks)',
+      'Tool suite gateway (PlanAI, Tools, OS, Fit)',
+      'Personal builder dashboard (all your tools in one view)',
       'Verified business directory',
       'Founder circles & private groups',
-      'Waitlist & early access management',
-      'Business spotlight & featured listings',
+      'Role-based access',
+      'Cross-product subscription management',
       'Admin command center (stats, user mgmt, revenue)',
-      'Real-time activity tracking',
+      'Business spotlight & featured listings',
     ],
     suggestedFeatures: [
-      'Referral program — earn % on products you refer',
-      'BoldMind Points loyalty system (spend on any product)',
+      'BoldMind Wallet — unified balance across all tools',
+      'Affiliate hub — track referral revenue across every tool',
+      'Cross-product AI assistant — "Ask BoldMind" knows your stack',
       'Founder leaderboard (revenue generated via ecosystem)',
       'API marketplace — sell BoldMind APIs to third parties',
-      'Investor pitch deck auto-generator from your product stats',
-      // ── NEW HIGH-DEMAND SUGGESTIONS ──────────────────────────────────────
-      'BoldMind Wallet — unified balance across all 32 products (reduces Paystack fees via internal ledger)',
-      'Cross-product AI assistant — "Ask BoldMind" chatbot that knows all your products, subscriptions, and data',
-      'Affiliate hub — one dashboard to track referral revenue across every BoldMind product',
-      'Open Graph preview cards per product — shareable social cards auto-generated per founder',
-      'BoldMind Academy — free onboarding videos for each product, gated behind free signup',
+      'Investor pitch deck auto-generator from your tool stats',
+      'Open Graph preview cards per founder',
+      'BoldMind Academy hand-off to EduCenter for deep learning',
+      'VillageCircle cross-post integration — share builder stories',
     ],
-    challenges: ['Managing 32+ products', 'SSO consistency across apps'],
-    opportunities: ['Ecosystem network effects', 'Investment showcase'],
+    challenges: ['Keeping community feel as scale grows', 'SSO consistency across 4 domains'],
+    opportunities: ['Ecosystem network effects', 'Investment showcase', 'Cross-sell between tools'],
     createdAt: '2025-01-01',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
- 
-  {
-    id: 'prod_001',
-    name: 'AmeboGist',
-    description: "Nigeria's #1 Pidgin English platform — AI/Tech, Creator entrepreneurship, Sports, Politics, Entertainment, and Trending Gist. 12k+ users, AdSense monetized.",
-    status: 'LIVE',
-    version: '1.0.0',
-    slug: 'amebogist',
-    domain: 'amebogist.ng',
-    category: 'media',
-    app: 'amebogist',
-    serviceModule: 'ContentModule',
-    icon: '📰',
-    database: 'mongodb',
-    revenueModel: 'AdSense + Local Ads + Creator subscriptions (₦1k/month)',
-    monthlyRevenue: 15000,
-    users: '12,000+',
-    techStack: ['Next.js 15', 'MongoDB', 'Mongoose', 'PWA', 'Tailwind CSS'],
-    teamSize: 2,
-    timeline: 'Launched Q2 2025',
-    priority: 1,
-    integrations: ['Google AdSense', 'Meta API', 'Paystack'],
-    tags: ['news', 'pidgin', 'nigeria', 'media', 'content'],
-    links: { website: 'https://amebogist.ng' },
-    twa: {
-      packageName: 'ng.amebogist.app',
-      themeColor: '#065F46',
-      backgroundColor: '#FFFBEB',
-    },
-    features: [
-      'AI & Tech Amebo (Pidgin English)',
-      'Creator Life guidance & entrepreneurship',
-      'Sports coverage',
-      'Politics analysis',
-      'Entertainment & Celebrity gist',
-      'Trending gists + viral content',
-      'SEO-optimized Pidgin articles',
-      'PWA (installable, offline reading)',
-      'Creator dashboard & earnings',
-      'RSS feed for content syndication',
-    ],
-    suggestedFeatures: [
-      'AmeboGist Premium — ad-free reading (₦500/month)',
-      'Live Score widget for Nigerian football (embedded)',
-      'Pidgin audio articles — text-to-speech in Pidgin accent',
-      'Creator tipping — readers tip writers via Paystack',
-      'AmeboGist TV — short video news clips (YouTube integration)',
-      'Breaking news push notifications via Web Push API',
-      'Local Ads — Nigerian SMEs advertise to specific states',
-      // ── NEW HIGH-DEMAND SUGGESTIONS ──────────────────────────────────────
-      'AI-generated Pidgin summaries — auto-summarize 3rd-party news into Pidgin (huge SEO traffic driver)',
-      'AmeboGist Radio — livestream Pidgin commentary during big events (AFCON, elections)',
-      'Gist Club membership — ₦200/month unlock exclusive investigative stories',
-      'Pidgin SEO tool — suggests trending Pidgin keywords for creators to rank on Google',
-      'Branded content studio — Nigerian brands pay ₦50k+ for native Pidgin advertorials',
-    ],
-    challenges: ['Pidgin authenticity', 'Monetization beyond AdSense'],
-    opportunities: ['Video content', 'Premium tier', 'Local ad network'],
-    createdAt: '2025-01-15',
-    updatedAt: '2026-02-27',
-  },
- 
-  {
-    id: 'prod_002',
-    name: 'EduCenter',
-    description: 'Nigerian ed-tech platform: JAMB/WAEC/NECO exam prep with 10k+ past questions, CBT simulator, AI tutoring, and business/digital skills courses.',
-    category: 'education',
-    status: 'LIVE',
-    version: '1.0.0',
-    slug: 'educenter',
-    domain: 'educenter.com.ng',
-    app: 'educenter',
-    serviceModule: 'EduCenterModule',
-    icon: '🎓',
-    database: 'postgres',
-    revenueModel: 'Subscription (₦3k/month) + Course packs (₦1k-₦5k)',
-    monthlyRevenue: 60000,
-    users: '20',
-    techStack: ['Next.js 15', 'Prisma', 'Neon', 'Paystack', 'PWA'],
-    teamSize: 2,
-    timeline: 'Launched Q3 2025',
-    priority: 2,
-    integrations: ['Paystack', 'WhatsApp API', 'Google Analytics'],
-    tags: ['education', 'jamb', 'waec', 'neco', 'nigeria', 'exam-prep'],
-    links: { website: 'https://educenter.com.ng' },
-    twa: {
-      packageName: 'ng.educenter.app',
-      themeColor: '#1E40AF',
-      backgroundColor: '#F8FAFC',
-    },
-    features: [
-      '10,000+ JAMB/WAEC/NECO past questions ALOC API',
-      'CBT simulation',
-      'Performance analytics',
-      'Study streaks',
-      'Leaderboard',
-      'Course library',
-      'Marketing playbooks',
-      'AI tools training',
-    ],
-    suggestedFeatures: [
-      'AI essay marking — WAEC essay practice with AI feedback',
-      'Live group study sessions (video + whiteboard)',
-      'School onboarding — license for 200+ students (B2B)',
-      'Certificate courses (LinkedIn-shareable)',
-      'Post-UTME practice for specific universities',
-      'Teacher dashboard — set assignments, track class progress',
-      'SMS result alerts to parents (₦50 per SMS)',
-      // ── NEW HIGH-DEMAND SUGGESTIONS ──────────────────────────────────────
-      'EduCenter Maths Clinic — AI step-by-step solver for WAEC maths (highest failure rate subject)',
-      'Scholarship radar — auto-alert students about Nigerian/diaspora scholarships they qualify for',
-      'Peer study rooms — 4-student virtual CBT rooms with live chat, massive retention driver',
-      'School dashboard — subscribe schools per-student at ₦500/student/term (B2B goldmine)',
-      'JAMB mock marathon — 24-hour live countdown mock exam, social sharing drives virality',
-    ],
-    challenges: ['User acquisition', 'Content freshness for new exam years'],
-    opportunities: ['School B2B licensing', 'Video tutorials', 'Post-UTME niche'],
-    createdAt: '2025-03-20',
-    updatedAt: '2026-02-27',
-  },
- 
+
   {
     id: 'prod_003',
     name: 'AI Receptionist',
-    description: 'Multi-tenant AI that handles Instagram DMs and Comment, WhatsApp, and Facebook messages and Comment for Nigerian businesses — auto-qualifies leads, books appointments, answers FAQs 24/7.',
+    description: 'Multi-tenant AI that handles Instagram DMs, WhatsApp, and Facebook messages for Nigerian businesses — auto-qualifies leads, books appointments, answers FAQs 24/7.',
     category: 'ai',
     status: 'LIVE',
+    pillar: 'enablement',
     version: '1.0.0',
     slug: 'ai-receptionist',
-    domain: 'planai.boldmind.ng',
-    subdomain: '/receptionist',
+    domain: 'boldmind.ng',
+    subdomain: 'planai',
+    routePath: '/receptionist',
     app: 'planai-suite',
     serviceModule: 'PlanAIModule',
     icon: '🤖',
@@ -398,29 +370,30 @@ export const BOLDMIND_PRODUCTS: Product[] = [
       'CRM export (HubSpot, Google Sheets)',
       'AI sentiment analysis — alert owner when customer is angry',
       'Broadcast campaigns — send promotions to all past leads',
-      // ── NEW HIGH-DEMAND SUGGESTIONS ──────────────────────────────────────
-      'Abandoned cart recovery — AI follows up after 30 minutes if customer goes silent',
-      'AI voice call answering — handles inbound phone calls via Twilio + Nigerian VoIP',
-      'Product catalog bot — AI shows product photos + prices inline in WhatsApp chat',
-      'Upsell engine — AI recommends add-ons based on customer inquiry context',
-      'Competitor mention trigger — when a customer mentions a competitor, AI activates a counter-script',
+      'Abandoned cart recovery — AI follows up after 30 minutes',
+      'AI voice call answering — inbound phone calls via Twilio',
+      'Product catalog bot — AI shows product photos + prices inline',
+      'Upsell engine — AI recommends add-ons based on inquiry context',
+      'Competitor mention trigger — counter-script when customer mentions rival',
     ],
     challenges: ['Meta API policy changes', 'Client onboarding complexity'],
     opportunities: ['Expand to 50+ clients', 'Enterprise tier', 'White-label reseller program'],
     createdAt: '2025-10-15',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
   {
     id: 'prod_004',
     name: 'Social Content Factory',
-    description: 'AI-powered content calendar, caption generator, and multi-platform scheduler. Automates posting to Instagram, TikTok, Facebook, Twitter/X, and LinkedIn.',
+    description: 'AI-powered content calendar, caption generator, and multi-platform scheduler. Powers VillageCircle story videos and customer content for Instagram, TikTok, Facebook, Twitter/X, LinkedIn.',
     category: 'ai',
     status: 'BUILDING',
+    pillar: 'enablement',
     version: '0.5.0',
     slug: 'social-factory',
-    domain: 'tools.boldmind.ng',
-    subdomain: '/social',
+    domain: 'boldmind.ng',
+    subdomain: 'tools',
+    routePath: '/social',
     app: 'boldmind-tools',
     serviceModule: 'AutomationModule',
     icon: '🎬',
@@ -445,19 +418,22 @@ export const BOLDMIND_PRODUCTS: Product[] = [
       'Hashtag research & optimization',
       'Analytics aggregation (all platforms in 1 dashboard)',
       'Bulk content creation (30 posts in one session)',
+      'VillageCircle story → video pipeline (auto-generate concept videos)',
+      'Per-pillar branding (AmeboGist / VillageCircle / EduCenter / BoldMind watermarks)',
     ],
     suggestedFeatures: [
-      'Nigerian trending topics feed — auto-suggest content based on what\'s viral locally',
+      'Nigerian trending topics feed — auto-suggest content based on local virality',
       'Pidgin caption mode — one-click convert English to Pidgin',
       'Reels/TikTok video script generator with on-screen text overlay',
       'Competitor analysis — track competitor posting patterns',
       'White-label — agencies resell under their own brand',
       'Content repurpose AI — turn one blog post into 10 social posts',
+      'source_concept tagging — trace every video back to its VillageCircle story',
     ],
     challenges: ['API rate limits per platform', 'Quality control for AI output'],
-    opportunities: ['Nigerian creator market (huge)', 'Agency white-label', 'BoldMind internal use'],
+    opportunities: ['Nigerian creator market', 'Agency white-label', 'Internal VillageCircle engine'],
     createdAt: '2025-11-01',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -466,9 +442,11 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'Personal operating system for neurodivergent Nigerian entrepreneurs — ADHD-friendly task management, Pomodoro, voice capture, knowledge graph, and Dyslexia Mode.',
     category: 'productivity',
     status: 'BUILDING',
+    pillar: 'enablement',
     version: '0.1.0',
     slug: 'boldmind-os',
-    domain: 'os.boldmind.ng',
+    domain: 'boldmind.ng',
+    subdomain: 'os',
     app: 'boldmind-os',
     serviceModule: 'UserModule',
     icon: '🧠',
@@ -511,7 +489,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     challenges: ['Complex UI/UX (must be simple despite deep features)', 'Nigerian ADHD awareness'],
     opportunities: ['Nigerian therapist partnerships', 'Remote work productivity niche'],
     createdAt: '2025-12-01',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -520,9 +498,11 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'Nigerian fitness and wellness platform — workout plans (gym & outdoor), Nigerian meal tracking (jollof, egusi, suya calories), AI coach, and community challenges.',
     category: 'health',
     status: 'BUILDING',
+    pillar: 'enablement',
     version: '0.1.0',
     slug: 'naija-fit',
-    domain: 'fit.boldmind.ng',
+    domain: 'boldmind.ng',
+    subdomain: 'fit',
     app: 'naija-fit',
     serviceModule: 'FitnessModule',
     icon: '💪',
@@ -560,12 +540,11 @@ export const BOLDMIND_PRODUCTS: Product[] = [
       'Trainer marketplace — certified Nigerian trainers offer 1:1 sessions',
       'Period tracking integration for female-specific workout adjustments',
       'Ramadan fitness mode — workout plans adapted for fasting schedule',
-      'Connect with NaijaGig Matcher — hire local personal trainers',
     ],
     challenges: ['Nigerian nutrition database accuracy', 'User retention post-30-days'],
     opportunities: ['Corporate wellness B2B', 'Instagram fitness creator partnerships'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -574,10 +553,12 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'Nigerian B2B email discovery — find verified contact emails from LinkedIn profiles, business directories, and company websites. Bulk export, API access.',
     category: 'productivity',
     status: 'BUILDING',
+    pillar: 'enablement',
     version: '0.1.0',
     slug: 'emailscraper-pro',
-    domain: 'tools.boldmind.ng',
-    subdomain: '/emailscraper',
+    domain: 'boldmind.ng',
+    subdomain: 'tools',
+    routePath: '/emailscraper',
     app: 'boldmind-tools',
     serviceModule: 'PlanAIModule',
     icon: '🔍',
@@ -588,7 +569,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     teamSize: 2,
     timeline: 'Q2 2026',
     priority: 7,
-    integrations: ['LinkedIn', 'Hunter.io', 'CRC Nigeria Business Registry'],
+    integrations: ['LinkedIn', 'Hunter.io', 'CAC Nigeria Business Registry'],
     tags: ['lead-gen', 'sales', 'email', 'b2b', 'nigeria'],
     links: { website: 'https://tools.boldmind.ng/emailscraper' },
     features: [
@@ -606,13 +587,13 @@ export const BOLDMIND_PRODUCTS: Product[] = [
       'WhatsApp number finder (complementary to email)',
       'Outreach sequence builder (send emails directly from tool)',
       'Duplicate detection across all your lists',
-      'Intent signals — scrape companies that recently raised funding or posted job ads',
+      'Intent signals — scrape companies that recently raised funding or posted jobs',
       'Chrome extension — one-click save while browsing LinkedIn',
     ],
     challenges: ['Privacy regulation compliance', 'LinkedIn rate limiting'],
-    opportunities: ['Sales team subscriptions', 'Recruitment agencies', 'BoldMind internal use'],
+    opportunities: ['Sales team subscriptions', 'Recruitment agencies'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -621,10 +602,12 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'AI-assisted personal branding — instant portfolio site, LinkedIn profile optimizer, and resume generator designed for Nigerian professionals.',
     category: 'ai',
     status: 'BUILDING',
+    pillar: 'enablement',
     version: '0.1.0',
     slug: 'credibility-hubs',
-    domain: 'planai.boldmind.ng',
-    subdomain: '/credibility',
+    domain: 'boldmind.ng',
+    subdomain: 'planai',
+    routePath: '/credibility',
     app: 'planai-suite',
     serviceModule: 'PlanAIModule',
     icon: '💼',
@@ -656,7 +639,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     challenges: ['Nigerian market skepticism around personal branding', 'Template diversity'],
     opportunities: ['University final-year students (huge TAM)', 'Recruiter partnerships'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -665,10 +648,12 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'Generate bank-ready Nigerian business plans, pitch decks, and market analysis using AI — in under 10 minutes.',
     category: 'ai',
     status: 'PLANNED',
+    pillar: 'enablement',
     version: '0.0.1',
     slug: 'business-planning',
-    domain: 'planai.boldmind.ng',
-    subdomain: '/planning',
+    domain: 'boldmind.ng',
+    subdomain: 'planai',
+    routePath: '/planning',
     app: 'planai-suite',
     serviceModule: 'PlanAIModule',
     icon: '📊',
@@ -692,7 +677,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
       'Export to PDF & DOCX (bank/investor ready)',
     ],
     suggestedFeatures: [
-      'TON Bank-compatible format (meets Nigerian bank loan templates)',
+      'Nigerian bank loan template compatibility',
       'SON/NAFDAC regulatory checklist per industry',
       'Investor match — connect plan to Nigerian VCs/angels',
       'Update-as-you-grow (re-generate plan with new data)',
@@ -700,7 +685,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     challenges: ['Nigerian market data accuracy', 'Keeping AI output legally compliant'],
     opportunities: ['Bank loan requirement pipeline', 'Government grant applications'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -709,10 +694,12 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'AI cashflow modeling and revenue forecasting for Nigerian SMEs — visualize your next 12 months, run scenarios, detect financial risks early.',
     category: 'ai',
     status: 'PLANNED',
+    pillar: 'enablement',
     version: '0.0.1',
     slug: 'financial-forecasting',
-    domain: 'planai.boldmind.ng',
-    subdomain: '/finance',
+    domain: 'boldmind.ng',
+    subdomain: 'planai',
+    routePath: '/finance',
     app: 'planai-suite',
     serviceModule: 'PlanAIModule',
     icon: '💰',
@@ -744,7 +731,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     challenges: ['FX volatility makes projections tricky', 'Data import complexity'],
     opportunities: ['Accountant partnerships', 'SME loan pre-qualification tool'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -753,10 +740,12 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'Automated funding documentation for Nigerian startups — SAFE agreements, data room setup, cap table management, and due diligence checklists.',
     category: 'ai',
     status: 'PLANNED',
+    pillar: 'enablement',
     version: '0.0.1',
     slug: 'investor-readiness',
-    domain: 'planai.boldmind.ng',
-    subdomain: '/investor',
+    domain: 'boldmind.ng',
+    subdomain: 'planai',
+    routePath: '/investor',
     app: 'planai-suite',
     serviceModule: 'PlanAIModule',
     icon: '📈',
@@ -787,7 +776,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     challenges: ['Legal compliance (SEC Nigeria)', 'Lawyer partnership needed'],
     opportunities: ['VC partnerships', 'Lagos tech ecosystem positioning'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -796,10 +785,12 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'AI logo generator, brand kit creator, and marketing visual maker — designed for Nigerian SMEs who need professional branding without a designer.',
     category: 'ai',
     status: 'BUILDING',
+    pillar: 'enablement',
     version: '0.1.0',
     slug: 'branding-design',
-    domain: 'planai.boldmind.ng',
-    subdomain: '/design',
+    domain: 'boldmind.ng',
+    subdomain: 'planai',
+    routePath: '/design',
     app: 'planai-suite',
     serviceModule: 'PlanAIModule',
     icon: '🎨',
@@ -831,7 +822,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     challenges: ['AI image quality consistency', 'Nigerian market aesthetic preferences'],
     opportunities: ['Market stalls & informal businesses that can\'t afford designers'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -840,10 +831,12 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'Launch an online store in 5 minutes — Paystack payments, inventory management, WhatsApp order notifications, and a shareable link for Nigerian SMEs.',
     category: 'marketplace',
     status: 'BUILDING',
+    pillar: 'enablement',
     version: '0.1.0',
     slug: 'digital-storefronts',
-    domain: 'planai.boldmind.ng',
-    subdomain: '/store',
+    domain: 'boldmind.ng',
+    subdomain: 'planai',
+    routePath: '/store',
     app: 'planai-suite',
     serviceModule: 'PlanAIModule',
     icon: '🛍️',
@@ -877,7 +870,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     challenges: ['Delivery logistics complexity', 'Payment disputes'],
     opportunities: ['Billions in informal Nigerian commerce moving online'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -886,10 +879,12 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'AI-driven email campaigns, WhatsApp broadcast sequences, and lead nurturing for Nigerian businesses — with local compliance built in.',
     category: 'ai',
     status: 'BUILDING',
+    pillar: 'enablement',
     version: '0.1.0',
     slug: 'marketing-automation',
-    domain: 'planai.boldmind.ng',
-    subdomain: '/marketing',
+    domain: 'boldmind.ng',
+    subdomain: 'planai',
+    routePath: '/marketing',
     app: 'planai-suite',
     serviceModule: 'AutomationModule',
     icon: '📧',
@@ -920,7 +915,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     challenges: ['Email deliverability', 'WhatsApp Business API policy compliance'],
     opportunities: ['Nigerian SME market desperate for affordable CRM'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -929,10 +924,12 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'Cross-platform business intelligence — unify Instagram, TikTok, Paystack, and website analytics into one Nigerian entrepreneur-friendly dashboard.',
     category: 'ai',
     status: 'BUILDING',
+    pillar: 'enablement',
     version: '0.1.0',
     slug: 'analytics-dashboard',
-    domain: 'planai.boldmind.ng',
-    subdomain: '/analytics',
+    domain: 'boldmind.ng',
+    subdomain: 'planai',
+    routePath: '/analytics',
     app: 'planai-suite',
     serviceModule: 'PlanAIModule',
     icon: '📊',
@@ -961,136 +958,293 @@ export const BOLDMIND_PRODUCTS: Product[] = [
       'Competitor benchmarking for your industry in Nigeria',
     ],
     challenges: ['API data freshness', 'Multiple platform auth complexity'],
-    opportunities: ['Nigerian agency market (they need this)'],
+    opportunities: ['Nigerian agency market'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
-  {
-    id: 'prod_016',
-    name: 'SAFE AI',
-    description: 'AI-powered security intelligence for Nigerian law enforcement — digital incident reporting, criminal pattern analysis, and officer communication platform.',
-    category: 'security',
-    status: 'CONCEPT',
-    version: '0.0.1',
-    slug: 'safe-ai',
-    domain: 'concept.boldmind.ng',
-    subdomain: '/safe',
-    app: 'boldmind-concepts',
-    serviceModule: 'ConceptModule',
-    icon: '🛡️',
-    database: 'postgres',
-    revenueModel: 'Government contracts (₦5M+ deployment)',
-    monthlyRevenue: 0,
-    techStack: ['React Native', 'NestJS', 'PostgreSQL', 'TensorFlow', 'Offline-first'],
-    teamSize: 5,
-    timeline: 'Q1 2027 (requires government partnership)',
-    priority: 16,
-    integrations: ['NIN database (NIMC)', 'GIS/Mapping', 'Body camera APIs'],
-    tags: ['security', 'law-enforcement', 'ai', 'government', 'nigeria'],
-    links: { website: 'https://concept.boldmind.ng/safe' },
-    features: [
-      'Digital incident reporting (replaces paper)',
-      'Criminal pattern analysis by AI',
-      'Predictive crime hotspot mapping',
-      'Officer communication & dispatch',
-      'Evidence management (photos, GPS)',
-      'Offline-first (works without internet)',
-    ],
-    suggestedFeatures: [
-      'Body camera footage tagging & storage',
-      'Civilian tip line (anonymous reporting)',
-      'Court case management integration',
-      'Corruption alert system (anonymous officer reporting)',
-    ],
-    challenges: ['Government bureaucracy', 'Privacy & civil liberties concerns', '18-24 month sales cycle'],
-    opportunities: ['₦100B+ Nigerian government tech spending', 'Private security firms'],
-    createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
-  },
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PILLAR 2: AWARENESS — amebogist.ng (stranger → reader)
+  // ═══════════════════════════════════════════════════════════════════════════
 
   {
-    id: 'prod_017',
-    name: 'AfroHustle OS',
-    description: 'Notion-style workspace with 100 proven side-hustle blueprints for Nigerian entrepreneurs — step-by-step guides to start, grow, and monetize.',
-    category: 'education',
-    status: 'CONCEPT',
-    version: '0.0.1',
-    slug: 'afrohustle-os',
-    domain: 'concept.boldmind.ng',
-    subdomain: '/afrohustle',
-    app: 'boldmind-concepts',
-    serviceModule: 'ConceptModule',
-    icon: '💼',
+    id: 'prod_001',
+    name: 'AmeboGist',
+    description: "Nigeria's #1 Pidgin English platform — AI/Tech, Creator entrepreneurship, Sports, Politics, Entertainment, and Trending Gist. 12k+ users, AdSense monetized.",
+    status: 'LIVE',
+    pillar: 'awareness',
+    version: '1.0.0',
+    slug: 'amebogist',
+    domain: 'amebogist.ng',
+    category: 'media',
+    app: 'amebogist-web',
+    serviceModule: 'ContentModule',
+    icon: '📰',
     database: 'mongodb',
-    revenueModel: 'One-time: ₦5k | Monthly: ₦2k',
-    monthlyRevenue: 0,
-    techStack: ['Next.js 15', 'MongoDB', 'Block editor (Tiptap)'],
+    revenueModel: 'AdSense + Local Ads + Creator subscriptions (₦1k/month)',
+    monthlyRevenue: 15000,
+    users: '12,000+',
+    techStack: ['Next.js 15', 'MongoDB', 'Mongoose', 'PWA', 'Tailwind CSS'],
     teamSize: 2,
-    timeline: 'Q3 2026',
-    priority: 17,
-    tags: ['side-hustle', 'education', 'templates', 'entrepreneur', 'nigeria'],
-    links: { website: 'https://concept.boldmind.ng/afrohustle' },
+    timeline: 'Launched Q2 2025',
+    priority: 1,
+    integrations: ['Google AdSense', 'Meta API', 'Paystack'],
+    tags: ['news', 'pidgin', 'nigeria', 'media', 'content', 'awareness'],
+    links: { website: 'https://amebogist.ng' },
+    twa: {
+      packageName: 'ng.amebogist.app',
+      themeColor: '#065F46',
+      backgroundColor: '#FFFBEB',
+    },
     features: [
-      '100 Nigerian side-hustle blueprints',
-      'Income tracker per hustle',
-      'Community hustle circles',
-      'Step-by-step launch guides',
-      'Resource library (tools, vendors, platforms)',
+      'AI & Tech Amebo (Pidgin English)',
+      'Creator Life guidance & entrepreneurship',
+      'Sports coverage',
+      'Politics analysis',
+      'Entertainment & Celebrity gist',
+      'Trending gists + viral content',
+      'SEO-optimized Pidgin articles',
+      'PWA (installable, offline reading)',
+      'Creator dashboard & earnings (at studio.amebogist.ng)',
+      'RSS feed for content syndication',
+      'Cross-promo slots for VillageCircle concept stories',
     ],
     suggestedFeatures: [
-      'Hustle matchmaking — "based on your skills, try these 5"',
-      'Revenue showcase — real users sharing actual income',
-      'WhatsApp hustle mentor (AI-powered)',
-      'Hustle bootcamp challenges (30 days to ₦100k)',
+      'AmeboGist Premium — ad-free reading (₦500/month)',
+      'Live Score widget for Nigerian football (embedded)',
+      'Pidgin audio articles — text-to-speech in Pidgin accent',
+      'Creator tipping — readers tip writers via Paystack',
+      'AmeboGist TV — short video news clips (YouTube integration)',
+      'Breaking news push notifications via Web Push API',
+      'Local Ads — Nigerian SMEs advertise to specific states',
+      'AI-generated Pidgin summaries of 3rd-party news',
+      'AmeboGist Radio — livestream Pidgin commentary during big events',
+      'Gist Club membership — ₦200/month unlock exclusive stories',
+      'Pidgin SEO tool — suggests trending Pidgin keywords',
+      'Branded content studio — Nigerian brands pay ₦50k+ for advertorials',
     ],
-    challenges: ['Content creation volume', 'Keeping blueprints current'],
-    opportunities: ['Nigeria has 40M+ informal entrepreneurs — massive TAM'],
-    createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    challenges: ['Pidgin authenticity', 'Monetization beyond AdSense'],
+    opportunities: ['Video content', 'Premium tier', 'Local ad network', 'VillageCircle cross-traffic'],
+    createdAt: '2025-01-15',
+    updatedAt: '2026-04-18',
   },
 
   {
-    id: 'prod_018',
-    name: 'NaijaGig Matcher',
-    description: 'Hyper-local gig marketplace for Nigerian artisans and service providers — plumbers, tailors, makeup artists, electricians — matched by location, same-day payout.',
+    id: 'prod_027',
+    name: 'AmeboGist TWA',
+    description: 'Android app (Trusted Web Activity) — AmeboGist as a Play Store app with push notifications, offline reading, and mobile AdSense.',
+    category: 'media',
+    status: 'PLANNED',
+    pillar: 'awareness',
+    version: '0.1.0',
+    slug: 'amebogist-twa',
+    domain: 'amebogist.ng',
+    app: 'amebogist-web',
+    serviceModule: 'ContentModule',
+    icon: '📱',
+    database: 'mongodb',
+    revenueModel: 'Mobile AdSense + in-app creator subscriptions',
+    monthlyRevenue: 0,
+    techStack: ['PWA', 'Bubblewrap TWA', 'Android'],
+    teamSize: 1,
+    timeline: 'Q2 2026 — HIGH PRIORITY (12k users → app store)',
+    priority: 27,
+    dependencies: ['amebogist'],
+    integrations: ['Google Play', 'Mobile AdSense'],
+    tags: ['mobile', 'pwa', 'android', 'news', 'twa'],
+    features: ['Push notifications', 'Offline reading cache', 'Mobile-optimized UI', 'App store listing'],
+    createdAt: '2025-12-26',
+    updatedAt: '2026-04-18',
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PILLAR 3: EDUCATION — educenter.com.ng (believer → student)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  {
+    id: 'prod_002',
+    name: 'EduCenter',
+    description: 'Nigerian ed-tech platform: JAMB/WAEC/NECO exam prep with 10k+ past questions, CBT simulator, AI tutoring, and business/digital skills courses.',
+    category: 'education',
+    status: 'LIVE',
+    pillar: 'education',
+    version: '1.0.0',
+    slug: 'educenter',
+    domain: 'educenter.com.ng',
+    app: 'educenter-web',
+    serviceModule: 'EduCenterModule',
+    icon: '🎓',
+    database: 'postgres',
+    revenueModel: 'Subscription (₦3k/month) + Course packs (₦1k-₦5k)',
+    monthlyRevenue: 60000,
+    users: '20',
+    techStack: ['Next.js 15', 'Prisma', 'Neon', 'Paystack', 'PWA'],
+    teamSize: 2,
+    timeline: 'Launched Q3 2025',
+    priority: 2,
+    integrations: ['Paystack', 'WhatsApp API', 'Google Analytics'],
+    tags: ['education', 'jamb', 'waec', 'neco', 'nigeria', 'exam-prep'],
+    links: { website: 'https://educenter.com.ng' },
+    twa: {
+      packageName: 'ng.educenter.app',
+      themeColor: '#1E40AF',
+      backgroundColor: '#F8FAFC',
+    },
+    features: [
+      '10,000+ JAMB/WAEC/NECO past questions (ALOC API)',
+      'CBT simulation',
+      'Performance analytics',
+      'Study streaks',
+      'Leaderboard',
+      'Course library',
+      'Marketing playbooks',
+      'AI tools training',
+    ],
+    suggestedFeatures: [
+      'AI essay marking — WAEC essay practice with AI feedback',
+      'Live group study sessions (video + whiteboard)',
+      'School onboarding — license for 200+ students (B2B)',
+      'Certificate courses (LinkedIn-shareable)',
+      'Post-UTME practice for specific universities',
+      'Teacher dashboard — set assignments, track class progress',
+      'SMS result alerts to parents (₦50 per SMS)',
+      'EduCenter Maths Clinic — AI step-by-step solver for WAEC maths',
+      'Scholarship radar — auto-alert students about scholarships',
+      'Peer study rooms — 4-student virtual CBT rooms',
+      'School dashboard — subscribe schools per-student at ₦500/student/term',
+      'JAMB mock marathon — 24-hour live countdown mock exam',
+    ],
+    challenges: ['User acquisition', 'Content freshness for new exam years'],
+    opportunities: ['School B2B licensing', 'Video tutorials', 'Post-UTME niche'],
+    createdAt: '2025-03-20',
+    updatedAt: '2026-04-18',
+  },
+
+  {
+    id: 'prod_025',
+    name: 'Skill2Cash Board',
+    description: 'Skill marketplace for Nigerian youth — post a 30-second video of your skill (DJ, makeup, tailoring, catering), get booked instantly. Pipeline from EduCenter courses into real income.',
     category: 'marketplace',
     status: 'CONCEPT',
+    pillar: 'education',
     version: '0.0.1',
-    slug: 'naijagig-matcher',
-    domain: 'concept.boldmind.ng',
-    subdomain: '/naijagig',
-    app: 'boldmind-concepts',
-    serviceModule: 'ConceptModule',
-    icon: '🔧',
+    slug: 'skill2cash',
+    domain: 'educenter.com.ng',
+    subdomain: 'skills',
+    app: 'skill2cash-web',
+    serviceModule: 'EduCenterModule',
+    icon: '🎭',
     database: 'mongodb',
-    revenueModel: 'Commission: 10-15% per booking',
+    revenueModel: 'Listing: ₦500/month | Commission: 10% per booking',
     monthlyRevenue: 0,
-    techStack: ['Next.js 15', 'Google Maps API', 'Paystack', 'BullMQ'],
+    techStack: ['Next.js 15', 'Cloudflare Stream (video)', 'Paystack escrow', 'MongoDB'],
     teamSize: 3,
-    timeline: 'Q3 2026',
-    priority: 18,
-    integrations: ['Google Maps', 'Paystack', 'WhatsApp notifications'],
-    tags: ['marketplace', 'gigs', 'artisans', 'local', 'nigeria'],
-    links: { website: 'https://concept.boldmind.ng/naijagig' },
+    timeline: 'Q4 2026',
+    priority: 25,
+    integrations: ['Cloudflare Stream', 'Paystack (escrow)', 'EduCenter courses'],
+    tags: ['marketplace', 'gigs', 'youth', 'creative', 'video', 'nigeria', 'learn-to-earn'],
+    links: { website: 'https://skills.educenter.com.ng' },
     features: [
-      'Location-based gig worker matching',
-      'Instant same-day wallet payout (Paystack)',
-      'Worker profiles & portfolio photos',
-      'Client reviews & ratings',
-      'Job posting & bidding',
-      'Dispute resolution system',
+      '30-second video skill showcase (no CV)',
+      'Skills: DJ, makeup, tailoring, photography, catering',
+      'Instant booking & scheduling',
+      'Paystack escrow (safe payments)',
+      'Optional anonymous profiles',
+      'Skill categories & search',
+      'EduCenter course completion → automatic skill badge',
     ],
     suggestedFeatures: [
-      'Background verification (NIN check)',
-      'Skills training integration (EduCenter courses → NaijaGig jobs)',
-      'Corporate contracts — companies hire vetted artisan pools',
-      '"On my way" real-time tracking',
+      'EduCenter integration — course → certificate → skill → job pipeline',
+      'Skill verification challenges (prove you can do what you claim)',
+      'Collab matching — DJ + photographer + makeup artist for an event',
+      'Student income tracker for university financial aid proof',
     ],
-    challenges: ['Worker vetting & quality', 'Payment disputes'],
-    opportunities: ['Nigeria\'s informal sector is worth trillions'],
+    challenges: ['Video hosting cost', 'Safety/vetting of anonymous users'],
+    opportunities: ['Nigeria\'s youth unemployment crisis — millions of skilled youth'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
+  },
+
+  {
+    id: 'prod_028',
+    name: 'EduCenter TWA',
+    description: 'Android app for EduCenter — JAMB/WAEC practice on mobile with offline question packs, in-app subscriptions, and parent tracking.',
+    category: 'education',
+    status: 'BUILDING',
+    pillar: 'education',
+    version: '0.1.0',
+    slug: 'educenter-twa',
+    domain: 'educenter.com.ng',
+    app: 'educenter-web',
+    serviceModule: 'EduCenterModule',
+    icon: '📚',
+    database: 'postgres',
+    revenueModel: 'In-app subscriptions (Google Play Billing)',
+    monthlyRevenue: 0,
+    techStack: ['PWA', 'Bubblewrap TWA', 'Android', 'Google Play Billing'],
+    teamSize: 1,
+    timeline: 'Q2 2026 — HIGH PRIORITY (students on mobile)',
+    priority: 28,
+    dependencies: ['educenter'],
+    integrations: ['Google Play Billing', 'Google Play Console'],
+    tags: ['mobile', 'education', 'android', 'jamb', 'twa'],
+    features: ['Offline question packs', 'In-app subscriptions', 'Push study reminders', 'Progress sync'],
+    createdAt: '2025-12-26',
+    updatedAt: '2026-04-18',
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PILLAR 4: CONVICTION — villagecircle.ng (reader → believer + concept incubator)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  {
+    id: 'prod_033',
+    name: 'VillageCircle',
+    description: 'Story-driven philosophy hub of the BoldMind ecosystem — daily drops, the 5 Rivers doctrine, and concept incubator where tomorrow\'s products grow as stories before they become code.',
+    category: 'community',
+    status: 'BUILDING',
+    pillar: 'conviction',
+    version: '0.1.0',
+    slug: 'villagecircle',
+    domain: 'villagecircle.ng',
+    app: 'villagecircle-web',
+    serviceModule: 'ContentModule',
+    icon: '🌱',
+    database: 'mongodb',
+    revenueModel: 'Waitlist-first (no direct revenue) — drives traffic to other pillars',
+    monthlyRevenue: 0,
+    users: '0',
+    techStack: ['Next.js 15', 'MongoDB', 'Framer Motion', 'Resend', 'Social Content Factory'],
+    teamSize: 1,
+    timeline: 'Q2 2026 launch',
+    priority: 2,
+    integrations: ['Resend (email)', 'Meta API', 'TikTok', 'Social Content Factory', 'AmeboGist cross-posts'],
+    tags: ['philosophy', 'community', 'storytelling', 'waitlist', 'concept-incubator'],
+    links: { website: 'https://villagecircle.ng' },
+    features: [
+      'Daily drops (8:30 AM Africa/Lagos) — short philosophical texts',
+      '5 Rivers taxonomy (Religion & Culture, History, Economic Liberation, Technology Leap, Pan-African Governance)',
+      'Concept showcases as story pages (10+ concepts)',
+      'Unified waitlist per concept',
+      'Story → auto-video pipeline via Social Content Factory',
+      'Per-pillar watermarks ("Tool from BoldMind. Story from VillageCircle.")',
+      'Newsletter (quiet cadence — only when seed breaks ground)',
+      'OpenDyslexic + Playfair/Lora dual typography system',
+      'Achebe-style narrative voice (no hustle-theatre)',
+    ],
+    suggestedFeatures: [
+      'Audio daily drops — voice of the circle (Pidgin + English)',
+      'Community contribution — approved elders write drops',
+      'Proverb library — searchable by theme',
+      'Annual printed Village Circle book (bundled drops of the year)',
+      'Physical gatherings (Lagos, Abuja, Port Harcourt)',
+      'Patron tier — ₦5k/month to sustain the circle',
+      'Concept graduation announcements — when a concept moves to boldmind.ng',
+    ],
+    challenges: ['Staying philosophical without becoming preachy', 'Narrative discipline at scale'],
+    opportunities: ['Unique brand moat', 'Trojan horse for waitlists', 'Cultural leadership'],
+    createdAt: '2026-03-01',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -1099,15 +1253,16 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'Digital Ajo/Esusu thrift collector with AI default prediction — manage group savings, auto-pause risky members, send reminders, and track contributions.',
     category: 'fintech',
     status: 'CONCEPT',
+    pillar: 'conviction',
     version: '0.0.1',
     slug: 'kolo-ai',
-    domain: 'concept.boldmind.ng',
-    subdomain: '/kolo',
-    app: 'boldmind-concepts',
+    domain: 'villagecircle.ng',
+    routePath: '/kolo',
+    app: 'villagecircle-web',
     serviceModule: 'ConceptModule',
-    icon: '👥',
+    icon: '🪙',
     database: 'postgres',
-    revenueModel: 'Per group: ₦5k-₦10k/month',
+    revenueModel: 'Per group: ₦5k-₦10k/month (after graduation)',
     monthlyRevenue: 0,
     techStack: ['Next.js 15', 'Prisma', 'OpenAI', 'Paystack'],
     teamSize: 3,
@@ -1115,7 +1270,8 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     priority: 19,
     integrations: ['Paystack', 'WhatsApp notifications', 'BVN verification'],
     tags: ['fintech', 'thrift', 'ajo', 'esusu', 'savings', 'ai'],
-    links: { website: 'https://concept.boldmind.ng/kolo' },
+    links: { website: 'https://villagecircle.ng/kolo' },
+    graduationTarget: { domain: 'boldmind.ng', subdomain: 'kolo', pillar: 'enablement' },
     features: [
       'Digital Ajo/Esusu group management',
       'AI default risk prediction per member',
@@ -1133,7 +1289,140 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     challenges: ['CBN regulation for fintech', 'Trust & fraud prevention'],
     opportunities: ['₦500B+ informal thrift market in Nigeria', 'Microfinance bank partnership'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
+  },
+
+  {
+    id: 'prod_016',
+    name: 'SAFE AI',
+    description: 'AI-powered security intelligence for Nigerian law enforcement — digital incident reporting, criminal pattern analysis, and officer communication platform.',
+    category: 'security',
+    status: 'CONCEPT',
+    pillar: 'conviction',
+    version: '0.0.1',
+    slug: 'safe-ai',
+    domain: 'villagecircle.ng',
+    routePath: '/safe',
+    app: 'villagecircle-web',
+    serviceModule: 'ConceptModule',
+    icon: '🛡️',
+    database: 'postgres',
+    revenueModel: 'Government contracts (₦5M+ deployment) after graduation',
+    monthlyRevenue: 0,
+    techStack: ['React Native', 'NestJS', 'PostgreSQL', 'TensorFlow', 'Offline-first'],
+    teamSize: 5,
+    timeline: 'Q1 2027 (requires government partnership)',
+    priority: 16,
+    integrations: ['NIN database (NIMC)', 'GIS/Mapping', 'Body camera APIs'],
+    tags: ['security', 'law-enforcement', 'ai', 'government', 'nigeria'],
+    links: { website: 'https://villagecircle.ng/safe' },
+    graduationTarget: { domain: 'boldmind.ng', subdomain: 'safe', pillar: 'enablement' },
+    features: [
+      'Digital incident reporting (replaces paper)',
+      'Criminal pattern analysis by AI',
+      'Predictive crime hotspot mapping',
+      'Officer communication & dispatch',
+      'Evidence management (photos, GPS)',
+      'Offline-first (works without internet)',
+    ],
+    suggestedFeatures: [
+      'Body camera footage tagging & storage',
+      'Civilian tip line (anonymous reporting)',
+      'Court case management integration',
+      'Corruption alert system (anonymous officer reporting)',
+    ],
+    challenges: ['Government bureaucracy', 'Privacy & civil liberties concerns', '18-24 month sales cycle'],
+    opportunities: ['Nigerian government tech spending', 'Private security firms'],
+    createdAt: '2025-12-26',
+    updatedAt: '2026-04-18',
+  },
+
+  {
+    id: 'prod_017',
+    name: 'AfroHustle OS',
+    description: 'Notion-style workspace with 100 proven side-hustle blueprints for Nigerian entrepreneurs — step-by-step guides to start, grow, and monetize.',
+    category: 'education',
+    status: 'CONCEPT',
+    pillar: 'conviction',
+    version: '0.0.1',
+    slug: 'afrohustle-os',
+    domain: 'villagecircle.ng',
+    routePath: '/afrohustle',
+    app: 'villagecircle-web',
+    serviceModule: 'ConceptModule',
+    icon: '⚡',
+    database: 'mongodb',
+    revenueModel: 'One-time: ₦5k | Monthly: ₦2k (after graduation)',
+    monthlyRevenue: 0,
+    techStack: ['Next.js 15', 'MongoDB', 'Block editor (Tiptap)'],
+    teamSize: 2,
+    timeline: 'Q3 2026',
+    priority: 17,
+    tags: ['side-hustle', 'education', 'templates', 'entrepreneur', 'nigeria'],
+    links: { website: 'https://villagecircle.ng/afrohustle' },
+    graduationTarget: { domain: 'educenter.com.ng', subdomain: 'hustle', pillar: 'education' },
+    features: [
+      '100 Nigerian side-hustle blueprints',
+      'Income tracker per hustle',
+      'Community hustle circles',
+      'Step-by-step launch guides',
+      'Resource library (tools, vendors, platforms)',
+    ],
+    suggestedFeatures: [
+      'Hustle matchmaking — "based on your skills, try these 5"',
+      'Revenue showcase — real users sharing actual income',
+      'WhatsApp hustle mentor (AI-powered)',
+      'Hustle bootcamp challenges (30 days to ₦100k)',
+    ],
+    challenges: ['Content creation volume', 'Keeping blueprints current'],
+    opportunities: ['Nigeria has 40M+ informal entrepreneurs — massive TAM'],
+    createdAt: '2025-12-26',
+    updatedAt: '2026-04-18',
+  },
+
+  {
+    id: 'prod_018',
+    name: 'NaijaGig Matcher',
+    description: 'Hyper-local gig marketplace for Nigerian artisans and service providers — plumbers, tailors, makeup artists, electricians — matched by location, same-day payout.',
+    category: 'marketplace',
+    status: 'CONCEPT',
+    pillar: 'conviction',
+    version: '0.0.1',
+    slug: 'naijagig-matcher',
+    domain: 'villagecircle.ng',
+    routePath: '/naijagig',
+    app: 'villagecircle-web',
+    serviceModule: 'ConceptModule',
+    icon: '🎭',
+    database: 'mongodb',
+    revenueModel: 'Commission: 10-15% per booking (after graduation)',
+    monthlyRevenue: 0,
+    techStack: ['Next.js 15', 'Google Maps API', 'Paystack', 'BullMQ'],
+    teamSize: 3,
+    timeline: 'Q3 2026',
+    priority: 18,
+    integrations: ['Google Maps', 'Paystack', 'WhatsApp notifications'],
+    tags: ['marketplace', 'gigs', 'artisans', 'local', 'nigeria'],
+    links: { website: 'https://villagecircle.ng/naijagig' },
+    graduationTarget: { domain: 'boldmind.ng', subdomain: 'gig', pillar: 'enablement' },
+    features: [
+      'Location-based gig worker matching',
+      'Instant same-day wallet payout (Paystack)',
+      'Worker profiles & portfolio photos',
+      'Client reviews & ratings',
+      'Job posting & bidding',
+      'Dispute resolution system',
+    ],
+    suggestedFeatures: [
+      'Background verification (NIN check)',
+      'Skills training integration (EduCenter courses → NaijaGig jobs)',
+      'Corporate contracts — companies hire vetted artisan pools',
+      '"On my way" real-time tracking',
+    ],
+    challenges: ['Worker vetting & quality', 'Payment disputes'],
+    opportunities: ['Nigeria\'s informal sector is worth trillions'],
+    createdAt: '2025-12-26',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -1142,13 +1431,14 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'Real-time Nigerian remittance rate comparison — bank rates vs parallel market, receipt generator, affiliate links, and rate alerts for diaspora.',
     category: 'fintech',
     status: 'BUILDING',
+    pillar: 'conviction',
     version: '0.1.0',
     slug: 'borderless-remit',
-    domain: 'concept.boldmind.ng',
-    subdomain: '/remit',
-    app: 'boldmind-concepts',
+    domain: 'villagecircle.ng',
+    routePath: '/remit',
+    app: 'villagecircle-web',
     serviceModule: 'ConceptModule',
-    icon: '💱',
+    icon: '🌍',
     database: 'mongodb',
     revenueModel: 'Affiliate commissions (₦2k-₦10k per referred transfer)',
     monthlyRevenue: 0,
@@ -1158,7 +1448,8 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     priority: 20,
     integrations: ['Remita', 'Wise API', 'WorldRemit affiliate'],
     tags: ['fintech', 'remittance', 'diaspora', 'forex', 'nigeria'],
-    links: { website: 'https://concept.boldmind.ng/remit' },
+    links: { website: 'https://villagecircle.ng/remit' },
+    graduationTarget: { domain: 'boldmind.ng', subdomain: 'remit', pillar: 'enablement' },
     features: [
       'Live rate comparison (bank vs parallel market vs remittance apps)',
       'Rate alert notifications (email + WhatsApp)',
@@ -1175,7 +1466,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     challenges: ['Parallel market rate accuracy (changes hourly)', 'CBN regulatory risk'],
     opportunities: ['$25B+ remittances to Nigeria annually — massive affiliate market'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -1184,15 +1475,16 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'Instant VAT-compliant invoice and receipt generator for Nigerian SMEs — create, send via SMS/WhatsApp/email, and track all transactions in one place.',
     category: 'fintech',
     status: 'BUILDING',
+    pillar: 'conviction',
     version: '0.1.0',
     slug: 'receipt-genius',
-    domain: 'concept.boldmind.ng',
-    subdomain: '/receipt',
-    app: 'boldmind-concepts',
+    domain: 'villagecircle.ng',
+    routePath: '/receipt',
+    app: 'villagecircle-web',
     serviceModule: 'ConceptModule',
     icon: '🧾',
     database: 'postgres',
-    revenueModel: 'Subscription: ₦1k/month | ₦10k/year',
+    revenueModel: 'Subscription: ₦1k/month | ₦10k/year (after graduation)',
     monthlyRevenue: 0,
     techStack: ['Next.js 15', 'Prisma', 'Resend', 'Termii SMS', 'PDF generation'],
     teamSize: 2,
@@ -1200,7 +1492,8 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     priority: 21,
     integrations: ['Termii (SMS)', 'Resend (email)', 'FIRS TIN validation'],
     tags: ['fintech', 'invoicing', 'receipts', 'vat', 'nigeria', 'sme'],
-    links: { website: 'https://concept.boldmind.ng/receipt' },
+    links: { website: 'https://villagecircle.ng/receipt' },
+    graduationTarget: { domain: 'boldmind.ng', subdomain: 'receipt', pillar: 'enablement' },
     features: [
       'VAT-compliant receipts (7.5% FIRS compliant)',
       'Professional invoice generation',
@@ -1218,7 +1511,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     challenges: ['FIRS e-invoicing regulation changes', 'User adoption over WhatsApp screenshots'],
     opportunities: ['10M+ Nigerian SMEs that currently use hand-written receipts'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -1227,15 +1520,16 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'Crowd-sourced NEPA/EKEDC light availability tracker by area + solar calculator — know when light is on near you before going home.',
     category: 'utilities',
     status: 'CONCEPT',
+    pillar: 'conviction',
     version: '0.0.1',
     slug: 'power-alert',
-    domain: 'concept.boldmind.ng',
-    subdomain: '/power',
-    app: 'boldmind-concepts',
+    domain: 'villagecircle.ng',
+    routePath: '/power',
+    app: 'villagecircle-web',
     serviceModule: 'ConceptModule',
     icon: '⚡',
     database: 'mongodb',
-    revenueModel: 'Lead gen to solar installers (₦2k-₦5k/lead)',
+    revenueModel: 'Lead gen to solar installers (₦2k-₦5k/lead) after graduation',
     monthlyRevenue: 0,
     techStack: ['Next.js 15', 'Google Maps API', 'MongoDB', 'Push notifications'],
     teamSize: 2,
@@ -1243,7 +1537,8 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     priority: 22,
     integrations: ['Google Maps', 'Solar installer directory', 'Push notifications'],
     tags: ['utilities', 'energy', 'nepa', 'solar', 'nigeria', 'crowdsource'],
-    links: { website: 'https://concept.boldmind.ng/power' },
+    links: { website: 'https://villagecircle.ng/power' },
+    graduationTarget: { domain: 'boldmind.ng', subdomain: 'power', pillar: 'enablement' },
     features: [
       'Real-time NEPA/EKEDC status by street/area',
       'Solar calculator (how much you need + cost)',
@@ -1261,7 +1556,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     challenges: ['Crowdsourcing data accuracy at launch (cold start)', 'Area granularity'],
     opportunities: ['Nigerian generator fuel cost ($10B+ market) → solar conversion'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -1270,15 +1565,16 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'Direct farmer-to-buyer marketplace — cuts out middlemen, farmers post produce, buyers (hotels, restaurants, markets) buy directly with quality guarantee.',
     category: 'marketplace',
     status: 'CONCEPT',
+    pillar: 'conviction',
     version: '0.0.1',
     slug: 'farmgate-direct',
-    domain: 'concept.boldmind.ng',
-    subdomain: '/farmgate',
-    app: 'boldmind-concepts',
+    domain: 'villagecircle.ng',
+    routePath: '/farmgate',
+    app: 'villagecircle-web',
     serviceModule: 'ConceptModule',
     icon: '🌾',
     database: 'mongodb',
-    revenueModel: 'Commission: 3-5% | Listing: ₦3k/season',
+    revenueModel: 'Commission: 3-5% | Listing: ₦3k/season (after graduation)',
     monthlyRevenue: 0,
     techStack: ['Next.js 15', 'MongoDB', 'GIG Logistics API', 'Paystack'],
     teamSize: 4,
@@ -1286,7 +1582,8 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     priority: 23,
     integrations: ['GIG Logistics', 'Paystack', 'WeatherAPI'],
     tags: ['agriculture', 'marketplace', 'farmers', 'food-security', 'nigeria'],
-    links: { website: 'https://concept.boldmind.ng/farmgate' },
+    links: { website: 'https://villagecircle.ng/farmgate' },
+    graduationTarget: { domain: 'boldmind.ng', subdomain: 'farm', pillar: 'enablement' },
     features: [
       'Farmers post produce listings with photos',
       'Direct buyer contact (restaurants, hotels, markets)',
@@ -1302,9 +1599,9 @@ export const BOLDMIND_PRODUCTS: Product[] = [
       'Farmer credit scoring based on sales history (KoloAI integration)',
     ],
     challenges: ['Quality consistency', 'Logistics last-mile in rural areas'],
-    opportunities: ['$6B+ Nigerian agricultural trade, massive inefficiencies to fix'],
+    opportunities: ['$6B+ Nigerian agricultural trade, massive inefficiencies'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -1313,22 +1610,24 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'African-first AI copywriting tool — generates ads, captions, emails, and blog posts in Pidgin English, Yoruba, Igbo, Hausa, and local marketing voice.',
     category: 'ai',
     status: 'CONCEPT',
+    pillar: 'conviction',
     version: '0.0.1',
     slug: 'afrocopy-ai',
-    domain: 'concept.boldmind.ng',
-    subdomain: '/afrocopy',
-    app: 'boldmind-concepts',
+    domain: 'villagecircle.ng',
+    routePath: '/afrocopy',
+    app: 'villagecircle-web',
     serviceModule: 'ConceptModule',
     icon: '✍️',
     database: 'mongodb',
-    revenueModel: 'Subscription: ₦2k/month (Solo) | ₦5k (Agency)',
+    revenueModel: 'Subscription: ₦2k/month (Solo) | ₦5k (Agency) after graduation',
     monthlyRevenue: 0,
     techStack: ['Next.js 15', 'OpenAI fine-tuned', 'MongoDB'],
     teamSize: 3,
     timeline: 'Q4 2026',
     priority: 24,
     tags: ['ai', 'copywriting', 'pidgin', 'yoruba', 'igbo', 'african', 'marketing'],
-    links: { website: 'https://concept.boldmind.ng/afrocopy' },
+    links: { website: 'https://villagecircle.ng/afrocopy' },
+    graduationTarget: { domain: 'boldmind.ng', subdomain: 'planai', pillar: 'enablement' },
     features: [
       'Pidgin English copy generation',
       'Yoruba, Igbo, Hausa translations',
@@ -1346,50 +1645,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     challenges: ['Training data quality for Nigerian languages', 'Language accuracy validation'],
     opportunities: ['No good African-trained copywriting AI exists yet — first mover'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
-  },
-
-  {
-    id: 'prod_025',
-    name: 'Skill2Cash Board',
-    description: 'Anonymous skill marketplace for Gen-Z Nigerians — post a 30-second video of your skill (DJ, makeup, tailoring), get booked instantly, no CV required.',
-    category: 'marketplace',
-    status: 'CONCEPT',
-    version: '0.0.1',
-    slug: 'skill2cash',
-    domain: 'concept.boldmind.ng',
-    subdomain: '/skill2cash',
-    app: 'boldmind-concepts',
-    serviceModule: 'ConceptModule',
-    icon: '🎭',
-    database: 'mongodb',
-    revenueModel: 'Listing: ₦500/month | Commission: 10% per booking',
-    monthlyRevenue: 0,
-    techStack: ['Next.js 15', 'Cloudflare Stream (video)', 'Paystack escrow', 'MongoDB'],
-    teamSize: 3,
-    timeline: 'Q4 2026',
-    priority: 25,
-    integrations: ['Cloudflare Stream', 'Paystack (escrow)'],
-    tags: ['marketplace', 'gigs', 'gen-z', 'creative', 'video', 'nigeria'],
-    links: { website: 'https://concept.boldmind.ng/skill2cash' },
-    features: [
-      '30-second video skill showcase (no CV)',
-      'Skills: DJ, makeup, tailoring, photography, catering',
-      'Instant booking & scheduling',
-      'Paystack escrow (safe payments)',
-      'Optional anonymous profiles',
-      'Skill categories & search',
-    ],
-    suggestedFeatures: [
-      'EduCenter integration — skill → course → job pipeline',
-      'Skill verification challenges (prove you can do what you claim)',
-      'Collab matching — DJ + photographer + makeup artist for an event',
-      'Student income tracker for university financial aid proof',
-    ],
-    challenges: ['Video hosting cost', 'Safety/vetting of anonymous users'],
-    opportunities: ['Nigeria\'s youth unemployment crisis — millions of skilled Gen-Z'],
-    createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -1398,22 +1654,24 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'Temporary anonymous audio drops for whistleblowers — voice-distorted, auto-deleted, location-targeted truth drops that expire in 24-72 hours.',
     category: 'social',
     status: 'CONCEPT',
+    pillar: 'conviction',
     version: '0.0.1',
     slug: 'anontruth-mic',
-    domain: 'concept.boldmind.ng',
-    subdomain: '/anon',
-    app: 'boldmind-concepts',
+    domain: 'villagecircle.ng',
+    routePath: '/anon',
+    app: 'villagecircle-web',
     serviceModule: 'ConceptModule',
     icon: '🎤',
     database: 'mongodb',
-    revenueModel: 'Boost feature (₦500-₦1k per boost)',
+    revenueModel: 'Boost feature (₦500-₦1k per boost) after graduation',
     monthlyRevenue: 0,
     techStack: ['Next.js 15', 'Audio encryption', 'Geolocation', 'Auto-delete jobs (BullMQ)'],
     teamSize: 4,
     timeline: 'Q4 2026 (HIGH RISK — requires legal review)',
     priority: 26,
     tags: ['social', 'anonymous', 'audio', 'whistleblower', 'journalism'],
-    links: { website: 'https://concept.boldmind.ng/anon' },
+    links: { website: 'https://villagecircle.ng/anon' },
+    graduationTarget: { domain: 'amebogist.ng', subdomain: 'studio', pillar: 'awareness' },
     features: [
       'Anonymous audio drop (no account required)',
       'Voice distortion (pitch shift + background noise removal)',
@@ -1428,64 +1686,14 @@ export const BOLDMIND_PRODUCTS: Product[] = [
       'Text drops in addition to audio',
     ],
     challenges: ['Nigerian cybercrime law (EFCC risk)', 'Moderation of abuse', 'Platform liability'],
-    opportunities: ['Whistleblower journalism is underserved in Nigeria', 'Partnership with investigative outlets'],
+    opportunities: ['Whistleblower journalism is underserved', 'Partnership with investigative outlets'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
-  {
-    id: 'prod_027',
-    name: 'AmeboGist TWA',
-    description: 'Android app (Trusted Web Activity) — AmeboGist as a Play Store app with push notifications, offline reading, and mobile AdSense.',
-    category: 'media',
-    status: 'PLANNED',
-    version: '0.1.0',
-    slug: 'amebogist-twa',
-    domain: 'amebogist.ng',
-    app: 'amebogist',
-    serviceModule: 'ContentModule',
-    icon: '📱',
-    database: 'mongodb',
-    revenueModel: 'Mobile AdSense + in-app creator subscriptions',
-    monthlyRevenue: 0,
-    techStack: ['PWA', 'Bubblewrap TWA', 'Android'],
-    teamSize: 1,
-    timeline: 'Q2 2026 — HIGH PRIORITY (12k users → app store)',
-    priority: 27,
-    dependencies: ['amebogist'],
-    integrations: ['Google Play', 'Mobile AdSense'],
-    tags: ['mobile', 'pwa', 'android', 'news', 'twa'],
-    features: ['Push notifications', 'Offline reading cache', 'Mobile-optimized UI', 'App store listing'],
-    createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
-  },
-
-  {
-    id: 'prod_028',
-    name: 'EduCenter TWA',
-    description: 'Android app for EduCenter — JAMB/WAEC practice on mobile with offline question packs, in-app subscriptions, and parent tracking.',
-    category: 'education',
-    status: 'BUILDING',
-    version: '0.1.0',
-    slug: 'educenter-twa',
-    domain: 'educenter.com.ng',
-    app: 'educenter',
-    serviceModule: 'EduCenterModule',
-    icon: '📚',
-    database: 'postgres',
-    revenueModel: 'In-app subscriptions (Google Play Billing)',
-    monthlyRevenue: 0,
-    techStack: ['PWA', 'Bubblewrap TWA', 'Android', 'Google Play Billing'],
-    teamSize: 1,
-    timeline: 'Q2 2026 — HIGH PRIORITY (students on mobile)',
-    priority: 28,
-    dependencies: ['educenter'],
-    integrations: ['Google Play Billing', 'Google Play Console'],
-    tags: ['mobile', 'education', 'android', 'jamb', 'twa'],
-    features: ['Offline question packs', 'In-app subscriptions', 'Push study reminders', 'Progress sync'],
-    createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
-  },
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TWA COMPANIONS (inherit pillar from parent)
+  // ═══════════════════════════════════════════════════════════════════════════
 
   {
     id: 'prod_029',
@@ -1493,9 +1701,11 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'Android companion for BoldMind OS — mobile focus timer, voice capture, quick task add, and offline sync.',
     category: 'productivity',
     status: 'PLANNED',
+    pillar: 'enablement',
     version: '0.1.0',
     slug: 'boldmind-os-twa',
-    domain: 'os.boldmind.ng',
+    domain: 'boldmind.ng',
+    subdomain: 'os',
     app: 'boldmind-os',
     serviceModule: 'UserModule',
     icon: '🧠',
@@ -1511,7 +1721,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     tags: ['mobile', 'productivity', 'adhd', 'android', 'twa'],
     features: ['Mobile Pomodoro', 'Voice capture → sync to desktop', 'Quick task add', 'Offline mode'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -1520,9 +1730,11 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'Android app for NaijaFit — mobile workouts, Nigerian meal logging, progress photos, community challenges, and AI coach chat on mobile.',
     category: 'health',
     status: 'PLANNED',
+    pillar: 'enablement',
     version: '0.1.0',
     slug: 'naija-fit-twa',
-    domain: 'fit.boldmind.ng',
+    domain: 'boldmind.ng',
+    subdomain: 'fit',
     app: 'naija-fit',
     serviceModule: 'FitnessModule',
     icon: '💪',
@@ -1538,7 +1750,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     priority: 30,
     features: ['Mobile workouts', 'Meal photo logging', 'Progress photos', 'Community challenges'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -1547,9 +1759,11 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'Android app for EmailScraper Pro — business card scanning, contact lookup, and lead list management on mobile.',
     category: 'productivity',
     status: 'PLANNED',
+    pillar: 'enablement',
     version: '0.1.0',
     slug: 'emailscraper-twa',
-    domain: 'tools.boldmind.ng',
+    domain: 'boldmind.ng',
+    subdomain: 'tools',
     app: 'boldmind-tools',
     serviceModule: 'PlanAIModule',
     icon: '🔍',
@@ -1565,7 +1779,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     tags: ['mobile', 'sales', 'lead-gen', 'android', 'twa'],
     features: ['Business card scanner (OCR)', 'Lead list management', 'Quick search'],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 
   {
@@ -1574,10 +1788,12 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     description: 'Full React Native app for police officers — offline-first incident reporting, GPS evidence tagging, voice-to-text (Pidgin + English), and photo evidence management.',
     category: 'security',
     status: 'PLANNED',
+    pillar: 'conviction',
     version: '0.1.0',
     slug: 'safe-ai-native',
-    domain: 'concept.boldmind.ng',
-    app: 'boldmind-concepts',
+    domain: 'villagecircle.ng',
+    routePath: '/safe/native',
+    app: 'villagecircle-web',
     serviceModule: 'ConceptModule',
     icon: '📱',
     database: 'postgres',
@@ -1590,6 +1806,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
     dependencies: ['safe-ai'],
     integrations: ['Mobile cameras', 'GPS', 'Offline SQLite', 'Whisper (voice)'],
     tags: ['mobile', 'security', 'react-native', 'ios', 'android', 'government'],
+    graduationTarget: { domain: 'boldmind.ng', subdomain: 'safe', pillar: 'enablement' },
     features: [
       'Offline incident reporting (works without internet)',
       'Voice-to-text in Pidgin & English (Whisper)',
@@ -1598,7 +1815,7 @@ export const BOLDMIND_PRODUCTS: Product[] = [
       'Secure evidence chain of custody',
     ],
     createdAt: '2025-12-26',
-    updatedAt: '2026-02-27',
+    updatedAt: '2026-04-18',
   },
 ];
 
@@ -1606,27 +1823,26 @@ export const BOLDMIND_PRODUCTS: Product[] = [
 // ═══════════════════════════════════════════════════════════════════════════════
 // SECTION A: BASIC LOOKUP HELPERS
 // ═══════════════════════════════════════════════════════════════════════════════
- 
-/** O(1) lookup map built once at module load — never iterate the array for IDs */
+
 const _byId = new Map<string, Product>(
   BOLDMIND_PRODUCTS.map((p) => [p.id, p]),
 );
 const _bySlug = new Map<string, Product>(
   BOLDMIND_PRODUCTS.map((p) => [p.slug, p]),
 );
- 
+
 export function getProductById(id: string): Product | undefined {
   return _byId.get(id);
 }
- 
+
 export function getProductBySlug(slug: string): Product | undefined {
   return _bySlug.get(slug);
 }
- 
-export function getProductByDomain(domain: string): Product | undefined {
-  return BOLDMIND_PRODUCTS.find((p) => p.domain === domain);
+
+export function getProductByDomain(domain: CoreDomain): Product | undefined {
+  return BOLDMIND_PRODUCTS.find((p) => p.domain === domain && !p.subdomain && !p.routePath);
 }
- 
+
 export function getProductByFullDomain(fullDomain: string): Product | undefined {
   return BOLDMIND_PRODUCTS.find((product) => {
     const full = product.subdomain
@@ -1635,16 +1851,15 @@ export function getProductByFullDomain(fullDomain: string): Product | undefined 
     return full === fullDomain;
   });
 }
- 
-/** Returns the canonical URL for a product */
+
+/** Returns the canonical URL for a product, honouring subdomain and routePath */
 export function getProductWebsiteUrl(product: Product): string {
-  if (product.subdomain) {
-    return `https://${product.domain}${product.subdomain}`;
-  }
-  return `https://${product.domain}`;
+  const host = product.subdomain
+    ? `${product.subdomain}.${product.domain}`
+    : product.domain;
+  return `https://${host}${product.routePath ?? ''}`;
 }
- 
-/** Lightweight card — safe for API responses and SSR props */
+
 export function toProductCard(p: Product): ProductCard {
   return {
     id: p.id,
@@ -1654,92 +1869,125 @@ export function toProductCard(p: Product): ProductCard {
     description: p.description,
     category: p.category,
     status: p.status,
+    pillar: p.pillar,
     domain: p.domain,
     monthlyRevenue: p.monthlyRevenue ?? 0,
     priority: p.priority,
     tags: p.tags,
   };
 }
- 
+
 export function toProductCards(products: Product[]): ProductCard[] {
   return products.map(toProductCard);
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
-// SECTION B: STATUS FILTERS
+// SECTION B: PILLAR FILTERS (NEW)
 // ═══════════════════════════════════════════════════════════════════════════════
- 
+
+export function getProductsByPillar(pillar: EcosystemPillar): Product[] {
+  return BOLDMIND_PRODUCTS.filter((p) => p.pillar === pillar);
+}
+
+export const getAwarenessProducts  = (): Product[] => getProductsByPillar('awareness');
+export const getConvictionProducts = (): Product[] => getProductsByPillar('conviction');
+export const getEducationProducts  = (): Product[] => getProductsByPillar('education');
+export const getEnablementProducts = (): Product[] => getProductsByPillar('enablement');
+
+/** Products that live at villagecircle.ng but will graduate to another pillar */
+export function getGraduatingConcepts(): Product[] {
+  return BOLDMIND_PRODUCTS.filter(
+    (p) => p.pillar === 'conviction' && p.graduationTarget !== undefined,
+  );
+}
+
+/** Products whose graduation target is the given domain */
+export function getConceptsGraduatingTo(domain: CoreDomain): Product[] {
+  return BOLDMIND_PRODUCTS.filter(
+    (p) => p.graduationTarget?.domain === domain,
+  );
+}
+
+export function getPillarSummary(): PillarSummary[] {
+  return (Object.keys(PILLAR_METADATA) as EcosystemPillar[]).map((pillar) => {
+    const products = getProductsByPillar(pillar);
+    const meta = PILLAR_METADATA[pillar];
+    return {
+      pillar,
+      domain: meta.domain,
+      label: meta.label,
+      jobInFlywheel: meta.jobInFlywheel,
+      count: products.length,
+      live: products.filter((p) => p.status === 'LIVE').length,
+      building: products.filter((p) => p.status === 'BUILDING').length,
+      planned: products.filter((p) => p.status === 'PLANNED').length,
+      concept: products.filter((p) => p.status === 'CONCEPT').length,
+      revenue: products.reduce((sum, p) => sum + (p.monthlyRevenue ?? 0), 0),
+    };
+  });
+}
+
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION C: STATUS FILTERS
+// ═══════════════════════════════════════════════════════════════════════════════
+
 export function getProductsByStatus(status: ProductStatus): Product[] {
   return BOLDMIND_PRODUCTS.filter((p) => p.status === status);
 }
- 
+
 export const getLiveProducts     = (): Product[] => getProductsByStatus('LIVE');
 export const getBuildingProducts = (): Product[] => getProductsByStatus('BUILDING');
 export const getPlannedProducts  = (): Product[] => getProductsByStatus('PLANNED');
 export const getConceptProducts  = (): Product[] => getProductsByStatus('CONCEPT');
- 
-/** Products that are actionable right now (LIVE or BUILDING) */
+
 export function getActiveProducts(): Product[] {
   return BOLDMIND_PRODUCTS.filter(
     (p) => p.status === 'LIVE' || p.status === 'BUILDING',
   );
 }
- 
-/** Products not yet in production (PLANNED or CONCEPT) */
+
 export function getInactiveProducts(): Product[] {
   return BOLDMIND_PRODUCTS.filter(
     (p) => p.status === 'PLANNED' || p.status === 'CONCEPT',
   );
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
-// SECTION C: CATEGORY & TAG FILTERS
+// SECTION D: CATEGORY & TAG FILTERS
 // ═══════════════════════════════════════════════════════════════════════════════
- 
+
 export function getProductsByCategory(category: ProductCategory): Product[] {
   return BOLDMIND_PRODUCTS.filter((p) => p.category === category);
 }
- 
-/**
- * Multi-category filter — returns products matching ANY of the supplied categories.
- * @example getProductsByCategories(['ai', 'fintech'])
- */
+
 export function getProductsByCategories(categories: ProductCategory[]): Product[] {
   const set = new Set<ProductCategory>(categories);
   return BOLDMIND_PRODUCTS.filter((p) => set.has(p.category));
 }
- 
-/**
- * Tag-based search — all supplied tags must be present (AND).
- * @example getProductsByTags(['whatsapp', 'ai'])
- */
+
 export function getProductsByTags(tags: string[]): Product[] {
   const lower = tags.map((t) => t.toLowerCase());
   return BOLDMIND_PRODUCTS.filter((p) =>
     lower.every((tag) => p.tags.some((t) => t.toLowerCase().includes(tag))),
   );
 }
- 
-/**
- * Tag-based search — any supplied tag matches (OR).
- */
+
 export function getProductsByAnyTag(tags: string[]): Product[] {
   const lower = tags.map((t) => t.toLowerCase());
   return BOLDMIND_PRODUCTS.filter((p) =>
     lower.some((tag) => p.tags.some((t) => t.toLowerCase().includes(tag))),
   );
 }
- 
-/** All unique tags across all products, sorted alphabetically */
+
 export function getAllTags(): string[] {
   const set = new Set<string>();
   BOLDMIND_PRODUCTS.forEach((p) => p.tags.forEach((t) => set.add(t)));
   return Array.from(set).sort();
 }
- 
-/** Tag frequency map — tag → count of products using it */
+
 export function getTagFrequency(): Record<string, number> {
   const freq: Record<string, number> = {};
   BOLDMIND_PRODUCTS.forEach((p) =>
@@ -1749,78 +1997,29 @@ export function getTagFrequency(): Record<string, number> {
   );
   return freq;
 }
- 
-/** Top N most-used tags */
+
 export function getTopTags(n = 10): Array<{ tag: string; count: number }> {
   return Object.entries(getTagFrequency())
     .map(([tag, count]) => ({ tag, count }))
     .sort((a, b) => b.count - a.count)
     .slice(0, n);
 }
- 
- 
-// ═══════════════════════════════════════════════════════════════════════════════
-// SECTION D: PRIORITY & SORTING
-// ═══════════════════════════════════════════════════════════════════════════════
- 
-export function getProductsByPriority(
-  minPriority: number,
-  maxPriority?: number,
-): Product[] {
-  return BOLDMIND_PRODUCTS.filter((p) =>
-    p.priority >= minPriority &&
-    (maxPriority === undefined || p.priority <= maxPriority),
-  ).sort((a, b) => a.priority - b.priority);
-}
- 
-export function getHighPriorityProducts(threshold = 10): Product[] {
-  return BOLDMIND_PRODUCTS.filter((p) => p.priority <= threshold).sort(
-    (a, b) => a.priority - b.priority,
-  );
-}
- 
-export function getLowPriorityProducts(threshold = 20): Product[] {
-  return BOLDMIND_PRODUCTS.filter((p) => p.priority > threshold).sort(
-    (a, b) => a.priority - b.priority,
-  );
-}
- 
-/**
- * Sort any product array by an arbitrary key.
- * @example sortProducts(getLiveProducts(), 'monthlyRevenue', 'desc')
- */
-export function sortProducts(
-  products: Product[],
-  key: keyof Product,
-  direction: 'asc' | 'desc' = 'asc',
-): Product[] {
-  return [...products].sort((a, b) => {
-    const av = a[key] ?? 0;
-    const bv = b[key] ?? 0;
-    if (av < bv) return direction === 'asc' ? -1 : 1;
-    if (av > bv) return direction === 'asc' ? 1 : -1;
-    return 0;
-  });
-}
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // SECTION E: SEARCH & FULL-TEXT
 // ═══════════════════════════════════════════════════════════════════════════════
- 
-/**
- * Full-text search across name, description, tags, category, and slug.
- * Supports multi-word queries — all words must match (AND).
- */
+
 export function searchProducts(query: string): Product[] {
   const words = query.toLowerCase().split(/\s+/).filter(Boolean);
   if (!words.length) return [...BOLDMIND_PRODUCTS];
- 
+
   return BOLDMIND_PRODUCTS.filter((p) => {
     const haystack = [
       p.name,
       p.description,
       p.category,
+      p.pillar,
       p.slug,
       ...p.tags,
       ...(p.techStack ?? []),
@@ -1830,11 +2029,7 @@ export function searchProducts(query: string): Product[] {
     return words.every((word) => haystack.includes(word));
   });
 }
- 
-/**
- * Fuzzy search — returns products with a relevance score.
- * Score = number of matched fields (higher = more relevant).
- */
+
 export function fuzzySearchProducts(
   query: string,
 ): Array<{ product: Product; score: number }> {
@@ -1845,16 +2040,14 @@ export function fuzzySearchProducts(
     if (p.slug.toLowerCase().includes(q)) score += 8;
     if (p.description.toLowerCase().includes(q)) score += 5;
     if (p.category.toLowerCase().includes(q)) score += 4;
+    if (p.pillar.toLowerCase().includes(q)) score += 3;
     p.tags.forEach((t) => { if (t.toLowerCase().includes(q)) score += 2; });
     p.techStack.forEach((t) => { if (t.toLowerCase().includes(q)) score += 1; });
     return { product: p, score };
   });
   return scored.filter((s) => s.score > 0).sort((a, b) => b.score - a.score);
 }
- 
-/**
- * Paginated product list with optional pre-filter.
- */
+
 export function paginateProducts(
   products: Product[],
   page = 1,
@@ -1873,31 +2066,29 @@ export function paginateProducts(
     hasPrev: page > 1,
   };
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // SECTION F: TECH STACK & DATABASE ANALYSIS
 // ═══════════════════════════════════════════════════════════════════════════════
- 
+
 export function getProductsByTech(tech: string): Product[] {
   const q = tech.toLowerCase();
   return BOLDMIND_PRODUCTS.filter((p) =>
     p.techStack.some((t) => t.toLowerCase().includes(q)),
   );
 }
- 
+
 export function getProductsByDatabase(dbType: DatabaseType): Product[] {
   return BOLDMIND_PRODUCTS.filter((p) => p.database === dbType);
 }
- 
-/** All unique tech-stack entries across all products */
+
 export function getAllTechStack(): string[] {
   const set = new Set<string>();
   BOLDMIND_PRODUCTS.forEach((p) => p.techStack.forEach((t) => set.add(t)));
   return Array.from(set).sort();
 }
- 
-/** Tech stack frequency map — technology → number of products using it */
+
 export function getTechStackFrequency(): Record<string, number> {
   const freq: Record<string, number> = {};
   BOLDMIND_PRODUCTS.forEach((p) =>
@@ -1907,8 +2098,7 @@ export function getTechStackFrequency(): Record<string, number> {
   );
   return freq;
 }
- 
-/** Products that share at least one tech-stack item with the given product */
+
 export function getProductsBySimilarStack(slug: string): Product[] {
   const product = getProductBySlug(slug);
   if (!product) return [];
@@ -1919,16 +2109,23 @@ export function getProductsBySimilarStack(slug: string): Product[] {
       p.techStack.some((t) => stackSet.has(t.toLowerCase())),
   );
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // SECTION G: DOMAIN & URL UTILITIES
 // ═══════════════════════════════════════════════════════════════════════════════
- 
-export function getAllDomains(): string[] {
+
+export const CORE_DOMAINS: CoreDomain[] = [
+  'boldmind.ng',
+  'amebogist.ng',
+  'educenter.com.ng',
+  'villagecircle.ng',
+];
+
+export function getAllDomains(): CoreDomain[] {
   return Array.from(new Set(BOLDMIND_PRODUCTS.map((p) => p.domain)));
 }
- 
+
 export function getAllSubdomains(): string[] {
   return Array.from(
     new Set(
@@ -1936,45 +2133,52 @@ export function getAllSubdomains(): string[] {
     ),
   );
 }
- 
-export function getProductsByDomainName(domain: string): Product[] {
+
+export function getProductsByDomainName(domain: CoreDomain): Product[] {
   return BOLDMIND_PRODUCTS.filter((p) => p.domain === domain);
 }
- 
+
 export function getProductsBySubdomain(subdomain: string): Product[] {
   return BOLDMIND_PRODUCTS.filter((p) => p.subdomain === subdomain);
 }
- 
+
 export function getProductsWithSubdomain(): Product[] {
   return BOLDMIND_PRODUCTS.filter((p) => p.subdomain !== undefined);
 }
- 
+
 export function getProductsWithoutSubdomain(): Product[] {
   return BOLDMIND_PRODUCTS.filter((p) => p.subdomain === undefined);
 }
- 
+
 /** Detect which product a request belongs to from an incoming Host header */
 export function detectProductFromHost(host: string): Product | undefined {
-  // Strip port if present
   const clean = host.split(':')[0] ?? host;
-  return (
-    getProductByDomain(clean) ??
-    BOLDMIND_PRODUCTS.find((p) => clean.endsWith(p.domain))
+
+  // Exact match with subdomain
+  const withSub = BOLDMIND_PRODUCTS.find((p) => {
+    if (!p.subdomain) return false;
+    return `${p.subdomain}.${p.domain}` === clean;
+  });
+  if (withSub) return withSub;
+
+  // Fall back to root domain (product with no subdomain/routePath)
+  return BOLDMIND_PRODUCTS.find(
+    (p) => p.domain === clean && !p.subdomain && !p.routePath,
   );
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // SECTION H: INTEGRATION & DEPENDENCY GRAPH
 // ═══════════════════════════════════════════════════════════════════════════════
- 
+
 export function getProductsWithIntegration(integration: string): Product[] {
   const q = integration.toLowerCase();
   return BOLDMIND_PRODUCTS.filter((p) =>
     p.integrations?.some((i) => i.toLowerCase().includes(q)),
   );
 }
- 
+
 export function getAllIntegrations(): string[] {
   const set = new Set<string>();
   BOLDMIND_PRODUCTS.forEach((p) =>
@@ -1982,8 +2186,7 @@ export function getAllIntegrations(): string[] {
   );
   return Array.from(set).sort();
 }
- 
-/** Returns the direct dependency products for a given product slug */
+
 export function getProductDependencies(productSlug: string): Product[] {
   const product = getProductBySlug(productSlug);
   if (!product?.dependencies?.length) return [];
@@ -1991,25 +2194,20 @@ export function getProductDependencies(productSlug: string): Product[] {
     .map((dep) => getProductBySlug(dep))
     .filter((dep): dep is Product => dep !== undefined);
 }
- 
-/** Returns products that depend ON the given product slug (reverse deps) */
+
 export function getProductDependents(productSlug: string): Product[] {
   return BOLDMIND_PRODUCTS.filter((p) =>
     p.dependencies?.includes(productSlug),
   );
 }
- 
-/**
- * Full dependency tree for a product (recursive, cycle-safe).
- * Returns a flat de-duplicated list of all transitive dependencies.
- */
+
 export function getTransitiveDependencies(
   productSlug: string,
   visited = new Set<string>(),
 ): Product[] {
   if (visited.has(productSlug)) return [];
   visited.add(productSlug);
- 
+
   const directDeps = getProductDependencies(productSlug);
   const transitive = directDeps.flatMap((dep) =>
     getTransitiveDependencies(dep.slug, visited),
@@ -2018,58 +2216,67 @@ export function getTransitiveDependencies(
     (p, i, arr) => arr.findIndex((x) => x.id === p.id) === i,
   );
 }
- 
-/**
- * Products that live on the same app bundle (same `app` field).
- */
+
 export function getProductsByApp(app: string): Product[] {
   return BOLDMIND_PRODUCTS.filter((p) => p.app === app);
 }
- 
-/**
- * All unique app bundles across the ecosystem.
- */
+
 export function getAllApps(): string[] {
   return Array.from(new Set(BOLDMIND_PRODUCTS.map((p) => p.app))).sort();
 }
- 
+
 export function getPlanAISuiteProducts(): Product[] {
   return getProductsByApp('planai-suite');
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // SECTION I: REVENUE & FINANCIAL ANALYSIS
 // ═══════════════════════════════════════════════════════════════════════════════
- 
+
 export function calculateTotalMonthlyRevenue(): number {
   return BOLDMIND_PRODUCTS.reduce(
     (sum, p) => sum + (p.monthlyRevenue ?? 0),
     0,
   );
 }
- 
+
 export function calculateAnnualRevenue(): number {
   return calculateTotalMonthlyRevenue() * 12;
 }
- 
+
 export function getRevenueGeneratingProducts(): Product[] {
   return BOLDMIND_PRODUCTS.filter((p) => (p.monthlyRevenue ?? 0) > 0).sort(
     (a, b) => (b.monthlyRevenue ?? 0) - (a.monthlyRevenue ?? 0),
   );
 }
- 
+
 export function getTopRevenueProducts(limit = 5): Product[] {
   return getRevenueGeneratingProducts().slice(0, limit);
 }
- 
+
 export function getZeroRevenueProducts(): Product[] {
   return BOLDMIND_PRODUCTS.filter((p) => (p.monthlyRevenue ?? 0) === 0);
 }
- 
-/**
- * Revenue by category — returns a sorted array.
- */
+
+export function getRevenueByPillar(): Array<{
+  pillar: EcosystemPillar;
+  monthlyRevenue: number;
+  productCount: number;
+}> {
+  const map = new Map<EcosystemPillar, { monthlyRevenue: number; productCount: number }>();
+  BOLDMIND_PRODUCTS.forEach((p) => {
+    const existing = map.get(p.pillar) ?? { monthlyRevenue: 0, productCount: 0 };
+    map.set(p.pillar, {
+      monthlyRevenue: existing.monthlyRevenue + (p.monthlyRevenue ?? 0),
+      productCount: existing.productCount + 1,
+    });
+  });
+  return Array.from(map.entries())
+    .map(([pillar, v]) => ({ pillar, ...v }))
+    .sort((a, b) => b.monthlyRevenue - a.monthlyRevenue);
+}
+
 export function getRevenueByCategory(): Array<{
   category: ProductCategory;
   monthlyRevenue: number;
@@ -2087,80 +2294,56 @@ export function getRevenueByCategory(): Array<{
     .map(([category, v]) => ({ category, ...v }))
     .sort((a, b) => b.monthlyRevenue - a.monthlyRevenue);
 }
- 
-/**
- * Revenue CAGR estimate (compound annual growth rate) given a growth percentage.
- * @param annualGrowthRate e.g. 0.5 = 50% YoY
- */
-export function projectRevenue(
-  months: number,
-  annualGrowthRate = 0.5,
-): number {
+
+export function projectRevenue(months: number, annualGrowthRate = 0.5): number {
   const baseMonthly = calculateTotalMonthlyRevenue();
   const monthlyGrowthRate = Math.pow(1 + annualGrowthRate, 1 / 12) - 1;
   return baseMonthly * Math.pow(1 + monthlyGrowthRate, months);
 }
- 
-/**
- * Payback period (months) for a product — how long until revenue covers dev cost.
- * Returns Infinity if the product has no revenue.
- */
+
 export function getPaybackPeriod(product: Product): number {
   const cost = estimateDevelopmentCost(product);
   const monthly = product.monthlyRevenue ?? 0;
   if (monthly === 0) return Infinity;
   return Math.ceil(cost / monthly);
 }
- 
-/**
- * Return on investment for a product as a percentage (annual revenue / dev cost).
- */
+
 export function calculateROI(product: Product): number {
   const cost = estimateDevelopmentCost(product);
   if (cost === 0) return 0;
   return ((product.monthlyRevenue ?? 0) * 12) / cost * 100;
 }
- 
-/**
- * Average monthly revenue per live product.
- */
+
 export function getAverageRevenuePerLiveProduct(): number {
   const live = getLiveProducts();
   if (!live.length) return 0;
   return live.reduce((sum, p) => sum + (p.monthlyRevenue ?? 0), 0) / live.length;
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // SECTION J: TEAM & COST ANALYSIS
 // ═══════════════════════════════════════════════════════════════════════════════
- 
+
 export function calculateTotalTeamSize(): number {
   const raw = BOLDMIND_PRODUCTS.reduce(
     (sum, p) => sum + (p.teamSize ?? 0),
     0,
   );
-  return Math.ceil(raw / 2); // Account for overlapping team members
+  return Math.ceil(raw / 2);
 }
- 
-export function getProductsByTeamSize(
-  minSize: number,
-  maxSize?: number,
-): Product[] {
+
+export function getProductsByTeamSize(minSize: number, maxSize?: number): Product[] {
   return BOLDMIND_PRODUCTS.filter((p) => {
     const ts = p.teamSize ?? 0;
     return ts >= minSize && (maxSize === undefined || ts <= maxSize);
   });
 }
- 
-/**
- * Solo-founder products (teamSize === 1).
- */
+
 export function getSoloProducts(): Product[] {
   return BOLDMIND_PRODUCTS.filter((p) => p.teamSize === 1);
 }
- 
-/** Monthly dev cost using configurable rate (default ₦500k/dev/month) */
+
 export function estimateDevelopmentCost(
   product: Product,
   monthlyRatePerDev = 500_000,
@@ -2169,22 +2352,19 @@ export function estimateDevelopmentCost(
   const months = getTimelineMonths(product.timeline);
   return teamSize * months * monthlyRatePerDev;
 }
- 
-export function calculateTotalDevelopmentCost(
-  monthlyRatePerDev = 500_000,
-): number {
+
+export function calculateTotalDevelopmentCost(monthlyRatePerDev = 500_000): number {
   return BOLDMIND_PRODUCTS.reduce(
     (sum, p) => sum + estimateDevelopmentCost(p, monthlyRatePerDev),
     0,
   );
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // SECTION K: TIMELINE ANALYSIS
 // ═══════════════════════════════════════════════════════════════════════════════
- 
-/** Parse a timeline string into a month count */
+
 function getTimelineMonths(timeline?: string): number {
   if (!timeline) return 3;
   const weeks = timeline.match(/(\d+)\s*weeks?/);
@@ -2193,12 +2373,12 @@ function getTimelineMonths(timeline?: string): number {
   if (months) return parseInt(months[1]!);
   return 3;
 }
- 
+
 export function getUpcomingReleases(months = 6): Product[] {
   const now = new Date();
   const cutoff = new Date();
   cutoff.setMonth(cutoff.getMonth() + months);
- 
+
   return BOLDMIND_PRODUCTS.filter((p) => {
     if (!p.timeline) return false;
     const m = p.timeline.match(/Q(\d)\s+(\d{4})/);
@@ -2211,7 +2391,7 @@ export function getUpcomingReleases(months = 6): Product[] {
     return releaseDate >= now && releaseDate <= cutoff;
   }).sort((a, b) => a.priority - b.priority);
 }
- 
+
 export function getProductsLaunchingThisYear(year = 2026): Product[] {
   return BOLDMIND_PRODUCTS.filter((p) => {
     if (!p.timeline) return false;
@@ -2219,11 +2399,7 @@ export function getProductsLaunchingThisYear(year = 2026): Product[] {
     return m ? parseInt(m[1]!) === year : false;
   });
 }
- 
-/**
- * Classify products by launch quarter.
- * @returns Map of "Q1 2026" → Product[]
- */
+
 export function groupByQuarter(): Map<string, Product[]> {
   const map = new Map<string, Product[]>();
   BOLDMIND_PRODUCTS.forEach((p) => {
@@ -2235,12 +2411,12 @@ export function groupByQuarter(): Map<string, Product[]> {
   });
   return map;
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // SECTION L: SUMMARY & REPORTING
 // ═══════════════════════════════════════════════════════════════════════════════
- 
+
 export function getProductStatusSummary(): ProductStatusSummary {
   return {
     total: BOLDMIND_PRODUCTS.length,
@@ -2253,7 +2429,7 @@ export function getProductStatusSummary(): ProductStatusSummary {
     upcomingReleases: getUpcomingReleases(6).length,
   };
 }
- 
+
 export function getCategorySummary(): CategorySummary[] {
   const map: Record<string, CategorySummary> = {};
   BOLDMIND_PRODUCTS.forEach((p) => {
@@ -2275,7 +2451,7 @@ export function getCategorySummary(): CategorySummary[] {
   });
   return Object.values(map).sort((a, b) => b.count - a.count);
 }
- 
+
 export function getQuickStats() {
   const totalRevenue = calculateTotalMonthlyRevenue();
   const developmentCost = calculateTotalDevelopmentCost();
@@ -2289,35 +2465,32 @@ export function getQuickStats() {
     averageROI: `${developmentCost > 0 ? ((totalRevenue * 12 / developmentCost) * 100).toFixed(1) : 0}%`,
     revenueGeneratingCount: getRevenueGeneratingProducts().length,
     zeroRevenueCount: getZeroRevenueProducts().length,
+    pillars: getPillarSummary(),
   };
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // SECTION M: HEALTH SCORE ENGINE
 // ═══════════════════════════════════════════════════════════════════════════════
- 
-/**
- * Calculates a 0-100 health score for each product based on:
- * revenue, users, team size, tech stack diversity, and priority.
- */
+
 export function getProductHealthScore(product: Product): ProductHealthScore {
   const maxRevenue = Math.max(
     ...BOLDMIND_PRODUCTS.map((p) => p.monthlyRevenue ?? 0),
     1,
   );
- 
+
   const revenueScore = Math.min(100, ((product.monthlyRevenue ?? 0) / maxRevenue) * 100);
- 
+
   const rawUsers = typeof product.users === 'string'
     ? parseInt(product.users.replace(/[^0-9]/g, ''), 10) || 0
     : (product.users ?? 0);
-  const userScore = Math.min(100, (rawUsers / 100_000) * 100); // 100k as benchmark
- 
+  const userScore = Math.min(100, (rawUsers / 100_000) * 100);
+
   const teamScore = Math.min(100, ((product.teamSize ?? 0) / 5) * 100);
   const techScore = Math.min(100, (product.techStack.length / 8) * 100);
   const priorityScore = Math.max(0, 100 - product.priority * 3);
- 
+
   const overall = Math.round(
     revenueScore * 0.35 +
     userScore * 0.25 +
@@ -2325,20 +2498,23 @@ export function getProductHealthScore(product: Product): ProductHealthScore {
     techScore * 0.1 +
     priorityScore * 0.15,
   );
- 
+
   const rating: ProductHealthScore['rating'] =
     overall >= 75 ? 'excellent' :
     overall >= 50 ? 'good' :
     overall >= 25 ? 'fair' :
     'needs-attention';
- 
+
   const recommendations: string[] = [];
   if (revenueScore < 20) recommendations.push('Implement a paid tier or charge for setup');
   if (userScore < 10) recommendations.push('Run a WhatsApp/Instagram growth campaign');
   if (teamScore < 20) recommendations.push('Consider hiring a co-founder or contractor');
   if (product.status === 'CONCEPT') recommendations.push('Validate with 5 paying customers before building');
   if (!product.integrations?.length) recommendations.push('Add at least one external integration');
- 
+  if (product.pillar === 'conviction' && !product.graduationTarget) {
+    recommendations.push('Define a graduationTarget — where this concept will move when it ships');
+  }
+
   return {
     productId: product.id,
     productName: product.name,
@@ -2348,45 +2524,37 @@ export function getProductHealthScore(product: Product): ProductHealthScore {
     recommendations,
   };
 }
- 
-/** Health scores for all products, sorted by overall score descending */
+
 export function getAllHealthScores(): ProductHealthScore[] {
   return BOLDMIND_PRODUCTS.map(getProductHealthScore).sort(
     (a, b) => b.overall - a.overall,
   );
 }
- 
-/** Products that need the most attention (health score below threshold) */
+
 export function getProductsNeedingAttention(threshold = 25): Product[] {
   return BOLDMIND_PRODUCTS.filter(
     (p) => getProductHealthScore(p).overall < threshold,
   );
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // SECTION N: RELATIONSHIP & RECOMMENDATION ENGINE
 // ═══════════════════════════════════════════════════════════════════════════════
- 
-/**
- * Products related to a given product by category or shared tags.
- * Sorted by relevance (shared tag count).
- */
-export function getRelatedProducts(
-  slug: string,
-  limit = 5,
-): Product[] {
+
+export function getRelatedProducts(slug: string, limit = 5): Product[] {
   const target = getProductBySlug(slug);
   if (!target) return [];
- 
+
   const targetTags = new Set(target.tags);
- 
+
   return BOLDMIND_PRODUCTS
     .filter((p) => p.slug !== slug)
     .map((p) => ({
       product: p,
       score:
         (p.category === target.category ? 5 : 0) +
+        (p.pillar === target.pillar ? 3 : 0) +
         p.tags.filter((t) => targetTags.has(t)).length,
     }))
     .filter((x) => x.score > 0)
@@ -2394,27 +2562,31 @@ export function getRelatedProducts(
     .slice(0, limit)
     .map((x) => x.product);
 }
- 
-/**
- * Natural product pairs that could cross-sell or integrate well.
- * Useful for bundle pricing or upsell flows.
- */
+
 export function suggestProductPairs(): ProductPair[] {
   const pairs: ProductPair[] = [];
   const products = BOLDMIND_PRODUCTS;
- 
+
   for (let i = 0; i < products.length; i++) {
     for (let j = i + 1; j < products.length; j++) {
       const a = products[i]!;
       const b = products[j]!;
- 
-      // Same category
+
       if (a.category === b.category && a.status === 'LIVE' && b.status === 'LIVE') {
         pairs.push({ a, b, reason: `Both are ${a.category} products` });
         continue;
       }
- 
-      // Shared integration
+
+      // Cross-pillar flywheel pairs are especially valuable
+      if (a.pillar !== b.pillar && a.status === 'LIVE' && b.status === 'LIVE') {
+        pairs.push({
+          a,
+          b,
+          reason: `Cross-pillar flywheel: ${a.pillar} → ${b.pillar}`,
+        });
+        continue;
+      }
+
       const sharedIntegrations = a.integrations?.filter((i) =>
         b.integrations?.includes(i),
       );
@@ -2427,17 +2599,13 @@ export function suggestProductPairs(): ProductPair[] {
       }
     }
   }
- 
-  return pairs.slice(0, 20); // Cap for performance
+
+  return pairs.slice(0, 20);
 }
- 
-/**
- * Recommended next product to build based on ecosystem gaps.
- * Scores concepts by: market opportunity keywords, dependencies already live, and priority.
- */
+
 export function getRecommendedNextBuild(): Product[] {
   const liveSlugs = new Set(getLiveProducts().map((p) => p.slug));
- 
+
   return getConceptProducts()
     .map((p) => {
       const depsReady = (p.dependencies ?? []).every((d) => liveSlugs.has(d));
@@ -2448,33 +2616,25 @@ export function getRecommendedNextBuild(): Product[] {
     .sort((a, b) => b.score - a.score)
     .map((x) => x.product);
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // SECTION O: BUILD WAVE PLANNER
 // ═══════════════════════════════════════════════════════════════════════════════
- 
-/**
- * Groups BUILDING + PLANNED products into sequential build waves.
- * Wave 1 = products with no unresolved dependencies.
- * Wave 2 = products whose dependencies are resolved by Wave 1.
- * And so on.
- *
- * Returns an ordered array of BuildPlan objects.
- */
+
 export function generateBuildPlan(): BuildPlan[] {
   const pending = [...getBuildingProducts(), ...getPlannedProducts()];
   const launched = new Set(getLiveProducts().map((p) => p.slug));
   const waves: BuildPlan[] = [];
   let waveNumber = 1;
- 
+
   while (pending.length > 0) {
     const readyThisWave = pending.filter((p) =>
       (p.dependencies ?? []).every((d) => launched.has(d)),
     );
- 
-    if (!readyThisWave.length) break; // Circular dep guard
- 
+
+    if (!readyThisWave.length) break;
+
     const sorted = readyThisWave.sort((a, b) => a.priority - b.priority);
     const estimatedCost = sorted.reduce(
       (sum, p) => sum + estimateDevelopmentCost(p),
@@ -2488,7 +2648,7 @@ export function generateBuildPlan(): BuildPlan[] {
       ...sorted.map((p) => getTimelineMonths(p.timeline) * 4),
       4,
     );
- 
+
     waves.push({
       wave: waveNumber++,
       products: sorted,
@@ -2499,21 +2659,21 @@ export function generateBuildPlan(): BuildPlan[] {
         new Set(sorted.flatMap((p) => p.dependencies ?? [])),
       ),
     });
- 
+
     sorted.forEach((p) => {
       launched.add(p.slug);
       pending.splice(pending.indexOf(p), 1);
     });
   }
- 
+
   return waves;
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // SECTION P: COMPETITIVE GAP ANALYSIS
 // ═══════════════════════════════════════════════════════════════════════════════
- 
+
 const CATEGORY_MARKET_SIZES: Record<string, string> = {
   ai: '₦500B+ (Nigerian AI services market)',
   fintech: '₦2T+ (Nigerian fintech market)',
@@ -2525,26 +2685,28 @@ const CATEGORY_MARKET_SIZES: Record<string, string> = {
   security: '₦100B+ (Nigerian security tech)',
   utilities: '₦200B+ (Nigerian utilities disruption)',
   social: '₦30B+ (Nigerian creator economy)',
+  community: '₦20B+ (Nigerian creator community)',
 };
- 
+
 const CATEGORY_MISSING_FEATURES: Record<string, string[]> = {
   ai: ['AI voice agents in Pidgin/Yoruba', 'Offline AI inference for low-data areas', 'AI compliance checker for Nigerian regulations'],
-  fintech: ['Crypto off-ramp to Naira', 'BNPL (Buy Now Pay Later) for SMEs', 'Group insurance pooling'],
-  education: ['Tertiary institution CBT mock (OAU, UNILAG)', 'Trade skills (plumbing, electrical) certification', 'Scholarship tracker & application assistant'],
-  marketplace: ['Logistics tracking API (GIG, DHL, Kwik)', 'Escrow-first payments for high-value items', 'Bulk wholesale ordering'],
-  health: ['Mental health chatbot (Pidgin-aware)', 'Telehealth appointments (NHIS-compatible)', 'Malaria & typhoid symptom checker'],
-  media: ['Nollywood streaming micro-payment layer', 'Local language podcast hosting', 'Creator NFT / digital collectibles for fans'],
-  productivity: ['Offline-first document editor (no Google dependency)', 'Multi-currency expense tracker', 'Automated Nigerian tax filing'],
-  security: ['Community safety reports (crowd-sourced)', 'Digital identity vault (NIN + BVN secured)', 'Fraud alert for Naira transactions'],
-  utilities: ['Water availability tracker (similar to PowerAlert)', 'Internet service comparison tool', 'Fuel price aggregator near me'],
-  social: ['Nigerian language keyboard + autocorrect', 'Private family group photo/video sharing', 'Local event discovery & ticketing'],
+  fintech: ['Crypto off-ramp to Naira', 'BNPL for SMEs', 'Group insurance pooling'],
+  education: ['Tertiary institution CBT mock', 'Trade skills certification', 'Scholarship tracker'],
+  marketplace: ['Logistics tracking API', 'Escrow-first payments', 'Bulk wholesale ordering'],
+  health: ['Mental health chatbot (Pidgin-aware)', 'Telehealth appointments', 'Malaria & typhoid symptom checker'],
+  media: ['Nollywood streaming micro-payment', 'Local language podcast hosting', 'Creator NFT collectibles'],
+  productivity: ['Offline-first document editor', 'Multi-currency expense tracker', 'Automated Nigerian tax filing'],
+  security: ['Community safety reports', 'Digital identity vault', 'Fraud alert for Naira transactions'],
+  utilities: ['Water availability tracker', 'Internet service comparison', 'Fuel price aggregator'],
+  social: ['Nigerian language keyboard', 'Private family group sharing', 'Local event ticketing'],
+  community: ['Elder-led story circles', 'Village square digital meet-ups', 'Intergenerational mentorship'],
 };
- 
+
 export function getCompetitorGaps(): CompetitorGap[] {
   const categories = Array.from(
     new Set(BOLDMIND_PRODUCTS.map((p) => p.category)),
   ) as ProductCategory[];
- 
+
   return categories.map((category) => {
     const products = getProductsByCategory(category);
     const liveCount = products.filter((p) => p.status === 'LIVE').length;
@@ -2552,7 +2714,7 @@ export function getCompetitorGaps(): CompetitorGap[] {
       100,
       100 - liveCount * 15 + products.length * 5,
     );
- 
+
     return {
       category,
       boldmindCount: products.length,
@@ -2562,20 +2724,16 @@ export function getCompetitorGaps(): CompetitorGap[] {
     };
   }).sort((a, b) => b.opportunityScore - a.opportunityScore);
 }
- 
-/** Returns the single highest-opportunity category gap */
+
 export function getTopOpportunityGap(): CompetitorGap | undefined {
   return getCompetitorGaps()[0];
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // SECTION Q: VERSION & DATE UTILITIES
 // ═══════════════════════════════════════════════════════════════════════════════
- 
-/**
- * Products updated within the last N days.
- */
+
 export function getRecentlyUpdatedProducts(days = 30): Product[] {
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - days);
@@ -2585,10 +2743,7 @@ export function getRecentlyUpdatedProducts(days = 30): Product[] {
     (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
   );
 }
- 
-/**
- * Products created within the last N days.
- */
+
 export function getRecentlyCreatedProducts(days = 30): Product[] {
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - days);
@@ -2598,10 +2753,7 @@ export function getRecentlyCreatedProducts(days = 30): Product[] {
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   );
 }
- 
-/**
- * Products that haven't been updated in more than N days — staleness alert.
- */
+
 export function getStaleProducts(days = 90): Product[] {
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - days);
@@ -2609,16 +2761,14 @@ export function getStaleProducts(days = 90): Product[] {
     (p) => new Date(p.updatedAt) < cutoff,
   );
 }
- 
-/** Parse semver from version string */
+
 function parseSemver(version: string): [number, number, number] {
   const [major = 0, minor = 0, patch = 0] = version
     .split('.')
     .map((n) => parseInt(n, 10));
   return [major, minor, patch];
 }
- 
-/** Products with version >= the given version string */
+
 export function getProductsByMinVersion(minVersion: string): Product[] {
   const [minMaj, minMin, minPat] = parseSemver(minVersion);
   return BOLDMIND_PRODUCTS.filter((p) => {
@@ -2628,70 +2778,56 @@ export function getProductsByMinVersion(minVersion: string): Product[] {
     return pat >= minPat;
   });
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
-// SECTION R: TWA (TRUSTED WEB ACTIVITY) HELPERS
+// SECTION R: TWA HELPERS
 // ═══════════════════════════════════════════════════════════════════════════════
- 
+
 export function getProductsWithTWA(): Product[] {
   return BOLDMIND_PRODUCTS.filter((p) => p.twa !== undefined);
 }
- 
+
 export function getTWAByPackageName(packageName: string): Product | undefined {
   return BOLDMIND_PRODUCTS.find((p) => p.twa?.packageName === packageName);
 }
- 
+
 export function getAllTWAPackageNames(): string[] {
   return BOLDMIND_PRODUCTS.filter((p) => p.twa).map((p) => p.twa!.packageName);
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // SECTION S: SERVICE MODULE HELPERS
 // ═══════════════════════════════════════════════════════════════════════════════
- 
+
 export function getProductsByServiceModule(module: string): Product[] {
   return BOLDMIND_PRODUCTS.filter((p) => p.serviceModule === module);
 }
- 
+
 export function getAllServiceModules(): string[] {
   return Array.from(new Set(BOLDMIND_PRODUCTS.map((p) => p.serviceModule))).sort();
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // SECTION T: SERIALIZATION & API HELPERS
 // ═══════════════════════════════════════════════════════════════════════════════
- 
-/**
- * Serializes the full product catalog to a JSON string.
- * Use in getStaticProps or API routes.
- */
+
 export function serializeProducts(products: Product[]): string {
   return JSON.stringify(products);
 }
- 
-/**
- * Converts a product to a Next.js-safe static props shape
- * (dates as ISO strings, no undefined values).
- */
+
 export function toStaticProps(product: Product): Record<string, unknown> {
   return JSON.parse(JSON.stringify(product));
 }
- 
-/**
- * Returns a map of slug → ProductCard for O(1) lookups in UI components.
- */
+
 export function buildProductCardMap(): Record<string, ProductCard> {
   return Object.fromEntries(
     BOLDMIND_PRODUCTS.map((p) => [p.slug, toProductCard(p)]),
   );
 }
- 
-/**
- * Returns a sitemap-compatible array of all product URLs.
- */
+
 export function getAllProductUrls(): Array<{
   url: string;
   lastModified: string;
@@ -2705,62 +2841,38 @@ export function getAllProductUrls(): Array<{
     priority: p.status === 'LIVE' ? 1.0 : 0.7,
   }));
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // SECTION U: FONT CONFIGURATION
-// NOTE: OpenDyslexic is the DEFAULT font across ALL BoldMind products.
-// Override per-product only where a different aesthetic is required.
 // ═══════════════════════════════════════════════════════════════════════════════
- 
+
 export const BOLDMIND_FONT_CONFIG = {
-  /**
-   * Global default — OpenDyslexic for accessibility-first reading.
-   * Load via: https://cdn.jsdelivr.net/npm/open-dyslexic@latest/
-   * Or self-host in /public/fonts/OpenDyslexic/
-   */
   default: 'OpenDyslexic, "Comic Sans MS", sans-serif',
- 
-  /** Headings (can override per product) */
   heading: 'OpenDyslexic, "Plus Jakarta Sans", "Inter", sans-serif',
- 
-  /** Monospace for code blocks — keep readable for devs */
   mono: '"JetBrains Mono", "Fira Code", monospace',
- 
-  /** Optional override for products with strong brand typography requirements */
   overrides: {
-    'amebogist':    'OpenDyslexic, "Plus Jakarta Sans", sans-serif', // news needs readability
-    'educenter':    'OpenDyslexic, "Inter", sans-serif',             // students benefit most
-    'boldmind-os':  'OpenDyslexic, sans-serif',                      // ADHD users — primary use case
-    'naija-fit':    'OpenDyslexic, "Inter", sans-serif',
-    'boldmind-hub': 'OpenDyslexic, "Plus Jakarta Sans", sans-serif',
+    'amebogist':     'OpenDyslexic, "Plus Jakarta Sans", sans-serif',
+    'educenter':     'OpenDyslexic, "Inter", sans-serif',
+    'boldmind-os':   'OpenDyslexic, sans-serif',
+    'naija-fit':     'OpenDyslexic, "Inter", sans-serif',
+    'boldmind':      'OpenDyslexic, "Plus Jakarta Sans", sans-serif',
+    'villagecircle': '"Playfair Display", "Lora", Georgia, serif',
   } as Record<string, string>,
- 
-  /** CSS custom property to inject into :root */
   cssVariable: '--font-body',
- 
-  /** Dyslexia-mode letter/word spacing (BoldMind OS feature) */
   dyslexiaSpacing: {
     letterSpacing: '0.12em',
     wordSpacing: '0.25em',
     lineHeight: '1.8',
   },
 } as const;
- 
-/**
- * Returns the font family string for a given product slug.
- * Falls back to the global OpenDyslexic default.
- */
+
 export function getProductFont(slug: string): string {
   return (
     BOLDMIND_FONT_CONFIG.overrides[slug] ?? BOLDMIND_FONT_CONFIG.default
   );
 }
- 
-/**
- * Generates a <style> tag string for injecting the product font into SSR.
- * Use inside Next.js layout.tsx `<head>`.
- */
+
 export function generateFontCSS(slug: string): string {
   const font = getProductFont(slug);
   return `
@@ -2768,16 +2880,16 @@ export function generateFontCSS(slug: string): string {
     body, * { font-family: var(${BOLDMIND_FONT_CONFIG.cssVariable}); }
   `.trim();
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
-// SECTION V: LEGACY HELPERS (unchanged API — kept for backwards compatibility)
+// SECTION V: LEGACY HELPERS (unchanged API — backwards compatibility)
 // ═══════════════════════════════════════════════════════════════════════════════
- 
-export function getProductsByDomainNameLegacy(domain: string): Product[] {
+
+export function getProductsByDomainNameLegacy(domain: CoreDomain): Product[] {
   return getProductsByDomainName(domain);
 }
- 
+
 export function calculateProjectedRevenue(months = 12): number {
   const liveRevenue = getLiveProducts().reduce(
     (sum, p) => sum + (p.monthlyRevenue ?? 0) * months,
@@ -2788,18 +2900,18 @@ export function calculateProjectedRevenue(months = 12): number {
   const conceptRevenue  = getConceptProducts().length  * 25_000  * months * 0.1;
   return liveRevenue + buildingRevenue + plannedRevenue + conceptRevenue;
 }
- 
+
 export function estimateDevelopmentCostLegacy(product: Product): number {
   return estimateDevelopmentCost(product);
 }
- 
+
 export function searchProductsLegacy(query: string): Product[] {
   return searchProducts(query);
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // DEFAULT EXPORT
 // ═══════════════════════════════════════════════════════════════════════════════
- 
+
 export default BOLDMIND_PRODUCTS;
